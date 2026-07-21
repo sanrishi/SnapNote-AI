@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnapNote AI</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>SnapNote AI</h1>
+      <span id="credits-badge">-- credits</span>
+    </header>
+
+    <div id="auth-section" class="section">
+      <button id="login-btn" class="btn-primary">Sign in with Google</button>
+    </div>
+
+    <div id="main-section" class="section" style="display:none">
+      <div class="shortcuts-card">
+        <div class="shortcut-row">
+          <kbd>Ctrl+Shift+T</kbd>
+          <span class="label">Text / Table <span class="free-badge">Free</span></span>
+        </div>
+        <div class="shortcut-row">
+          <kbd>Ctrl+Shift+D</kbd>
+          <span class="label">Diagram <span class="credit-badge">5 credits</span></span>
+        </div>
+      </div>
+
+      <div id="last-extraction" class="extraction-card" style="display:none">
+        <h3>Last Capture</h3>
+        <div id="tags-container" class="tags"></div>
+        <pre id="markdown-preview"></pre>
+        <div class="btn-row">
+          <button id="copy-btn" class="btn-secondary">Copy Markdown</button>
+          <button id="download-btn" class="btn-secondary">Download .md</button>
+        </div>
+      </div>
+
+      <button id="logout-btn" class="btn-outline">Sign Out</button>
+    </div>
+  </div>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
