@@ -1,0 +1,13 @@
+.env
+firebase-credentials.json
+*.key
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+.vercel/
+.vscode/
+.idea/
+*.log
+.DS_Store

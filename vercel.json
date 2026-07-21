@@ -1,0 +1,13 @@
+{
+  "buildCommand": "pip install -r backend/requirements.txt",
+  "outputDirectory": "backend",
+  "functions": {
+    "api/**/*.py": {
+      "maxDuration": 30,
+      "memory": 512
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/backend/api/$1" }
+  ]
+}
