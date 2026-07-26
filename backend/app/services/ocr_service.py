@@ -1,25 +1,35 @@
-import os
+import logging
 import threading
-from functools import lru_cache
 from typing import Any
 
-os.environ["EASYOCR_VERBOSE"] = "0"
-
-import easyocr
+logger = logging.getLogger(__name__)
 
 _reader_lock = threading.Lock()
 OCRResult = list[tuple[list[list[float]], str, float]]
 ROW_TOLERANCE = 15.0
 CONF_THRESHOLD = 0.3
 
+_reader = None
 
-@lru_cache(maxsize=1)
-def _get_reader() -> easyocr.Reader:
-    return easyocr.Reader(["en"], gpu=False, verbose=False)
+
+def _get_reader():
+    global _reader
+    if _reader is not None:
+        return _reader
+    try:
+        import easyocr
+        _reader = easyocr.Reader(["en"], gpu=False, verbose=False)
+        logger.info("EasyOCR reader initialized")
+    except ImportError:
+        logger.warning("EasyOCR not available — will escalate all extraction to Gemini")
+        _reader = None
+    return _reader
 
 
 def read_raw(image_np: Any) -> OCRResult:
     reader = _get_reader()
+    if reader is None:
+        return []
     with _reader_lock:
         return reader.readtext(image_np)
 
