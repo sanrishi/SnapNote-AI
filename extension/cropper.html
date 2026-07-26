@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #000; overflow: hidden; user-select: none; }
+#container { position: relative; display: inline-block; }
+#overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; cursor: crosshair; z-index: 10; }
+#selection { position: fixed; border: 2px dashed #fff; background: rgba(99,102,241,0.15); display: none; z-index: 20; }
+#toolbar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: none; gap: 10px; z-index: 30; background: #1e293b; padding: 12px 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+#toolbar button { padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; }
+#btn-text { background: #6366f1; color: #fff; }
+#btn-diagram { background: #f59e0b; color: #fff; }
+#btn-cancel { background: #475569; color: #fff; }
+#coords { color: #94a3b8; font-size: 12px; text-align: center; padding: 4px; display: none; }
+</style>
+</head>
+<body>
+<div id="container">
+  <img id="screenshot" style="max-width:100vw;max-height:100vh" />
+</div>
+<div id="overlay"></div>
+<div id="selection"></div>
+<div id="coords"></div>
+<div id="toolbar">
+  <button id="btn-text">Extract Text / Table</button>
+  <button id="btn-diagram">Extract Diagram</button>
+  <button id="btn-cancel">Cancel</button>
+</div>
+
+<script>
+const img = document.getElementById("screenshot");
+const overlay = document.getElementById("overlay");
+const sel = document.getElementById("selection");
+const toolbar = document.getElementById("toolbar");
+const coords = document.getElementById("coords");
+
+let startX, startY, endX, endY, isDragging = false;
+let scale = 1, imgNaturalW, imgNaturalH;
+let mode = "";
+
+// Load screenshot from URL param
+const params = new URLSearchParams(location.search);
+const dataUrl = params.get("img");
+if (dataUrl) {
+  img.onload = () => {
+    imgNaturalW = img.naturalWidth;
+    imgNaturalH = img.naturalHeight;
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    scale = Math.min(winW / imgNaturalW, winH / imgNaturalH, 1);
+    img.style.width = (imgNaturalW * scale) + "px";
+    img.style.height = (imgNaturalH * scale) + "px";
+  };
+  img.src = dataUrl;
+}
+
+overlay.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  startX = e.clientX;
+  startY = e.clientY;
+  sel.style.left = startX + "px";
+  sel.style.top = startY + "px";
+  sel.style.width = "0px";
+  sel.style.height = "0px";
+  sel.style.display = "block";
+  toolbar.style.display = "none";
+  coords.style.display = "none";
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+  endX = e.clientX;
+  endY = e.clientY;
+  const x = Math.min(startX, endX);
+  const y = Math.min(startY, endY);
+  const w = Math.abs(endX - startX);
+  const h = Math.abs(endY - startY);
+  sel.style.left = x + "px";
+  sel.style.top = y + "px";
+  sel.style.width = w + "px";
+  sel.style.height = h + "px";
+  const nw = Math.round(w / scale);
+  const nh = Math.round(h / scale);
+  coords.textContent = `${nw} × ${nh} px`;
+  coords.style.display = "block";
+});
+
+document.addEventListener("mouseup", () => {
+  if (!isDragging) return;
+  isDragging = false;
+  const w = Math.abs(endX - startX);
+  const h = Math.abs(endY - startY);
+  if (w > 10 && h > 10) {
+    toolbar.style.display = "flex";
+  } else {
+    sel.style.display = "none";
+    coords.style.display = "none";
+  }
+});
+
+function crop() {
+  const x = Math.round(Math.min(startX, endX) / scale);
+  const y = Math.round(Math.min(startY, endY) / scale);
+  const w = Math.round(Math.abs(endX - startX) / scale);
+  const h = Math.round(Math.abs(endY - startY) / scale);
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, x, y, w, h, 0, 0, w, h);
+  return canvas.toDataURL("image/png");
+}
+
+document.getElementById("btn-text").onclick = () => {
+  const cropped = crop();
+  chrome.runtime.sendMessage({ action: "processCropped", imageData: cropped, mode: "text" });
+  window.close();
+};
+
+document.getElementById("btn-diagram").onclick = () => {
+  const cropped = crop();
+  chrome.runtime.sendMessage({ action: "processCropped", imageData: cropped, mode: "diagram" });
+  window.close();
+};
+
+document.getElementById("btn-cancel").onclick = () => window.close();
+</script>
+</body>
+</html>
