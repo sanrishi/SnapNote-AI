@@ -2,9 +2,9 @@ services:
   - type: web
     name: snapnote-api
     env: docker
-    repo: https://github.com/anomalyco/SnapNote-AI
-    branch: main
-    dockerfilePath: backend/Dockerfile
+    repo: https://github.com/sanrishi/SnapNote-AI
+    branch: master
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /health
     disk:
       name: credits-data
@@ -17,19 +17,7 @@ services:
         value: SnapNote AI
       - key: DEBUG
         value: false
-      - key: FIREBASE_CREDENTIALS_PATH
-        value: firebase-credentials.json
       - key: GEMINI_API_KEY
-        sync: false
-      - key: R2_ACCOUNT_ID
-        sync: false
-      - key: R2_ACCESS_KEY_ID
-        sync: false
-      - key: R2_SECRET_ACCESS_KEY
-        sync: false
-      - key: R2_BUCKET_NAME
-        value: snapnote-diagrams
-      - key: R2_PUBLIC_URL
         sync: false
       - key: RAZORPAY_KEY_ID
         sync: false
