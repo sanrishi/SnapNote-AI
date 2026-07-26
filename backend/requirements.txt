@@ -3,10 +3,7 @@ uvicorn
 python-multipart
 Pillow
 opencv-python-headless
-firebase-admin
-boto3
 pydantic
 pydantic-settings
 google-generativeai
 httpx
-razorpay

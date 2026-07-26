@@ -1,11 +1,8 @@
 import logging
 from functools import lru_cache
 
-import firebase_admin
 import httpx
 from fastapi import APIRouter
-from firebase_admin import auth as firebase_auth
-from firebase_admin import credentials
 from pydantic import BaseModel
 
 from app.config import settings
@@ -19,6 +16,12 @@ router = APIRouter()
 
 @lru_cache(maxsize=1)
 def _get_firebase_app():
+    try:
+        import firebase_admin
+        from firebase_admin import credentials
+    except ImportError:
+        logger.warning("firebase-admin not installed")
+        return None
     if firebase_admin._apps:
         return firebase_admin.get_app()
     try:
@@ -35,8 +38,8 @@ async def google_auth(req: GoogleAuthRequest) -> AuthResponse:
     app = _get_firebase_app()
     if app is None:
         raise AuthError(message="Firebase not configured on server")
-
     try:
+        from firebase_admin import auth as firebase_auth
         decoded = firebase_auth.verify_id_token(req.idToken)
     except ValueError as e:
         raise AuthError(message=f"Invalid token: {str(e)}")
