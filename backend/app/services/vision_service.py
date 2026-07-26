@@ -20,12 +20,12 @@ TEXT_SYSTEM_PROMPT = """You are a precise note extraction assistant. Given a scr
 2. For worked solutions: write question then each step sequentially, preserving derivation order
 3. Format tables using Markdown table syntax
 4. Format lists as Markdown bullets
-5. Use LaTeX for all mathematical notation
+5. Use LaTeX for mathematical notation only — not for plain words, names, or labels
 6. Output ONLY the formatted markdown, no explanations, no greetings
 7. Never describe the image — just transcribe
 8. Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
 
-DIAGRAM_SYSTEM_PROMPT = """You transcribe screenshots into study notes. Determine the content type, then output ONLY the format specified below — nothing else.
+DIAGRAM_SYSTEM_PROMPT = """You transcribe screenshots into study notes. Default to direct, sequential transcription of all visible text in the order it appears — write it the way a student would jot notes. Determine the content type, then output ONLY the format specified below — nothing else.
 
 **Case A — Worked solution / derivation / sequential reasoning** (math, physics, proof, step-by-step):
 Format:
@@ -37,19 +37,15 @@ Format:
 2. [step 2]
 ...
 
-Use LaTeX for math. No headings like "Diagram Type", "Description", or "Labels & Text". No meta-commentary. Just the solution.
+Use LaTeX for mathematical notation only — not for plain words, names, or labels. No headings like "Diagram Type", "Description", or "Labels & Text". No meta-commentary. Just the solution.
 
 **Case B — Visual diagram** (flowchart, circuit, graph, schematic, mind map):
 Format:
 **Type:** [one-line diagram type]
 
-[2-3 sentence description of structure and relationships]
+[2-3 sentence plain-text description of what the diagram shows]
 
-- [label] → [connected to]
-- [label] → [connected to]
-...
-
-Preserve hierarchy and connections.
+For the specific portion of the image that has a genuine drawn arrow or flow, express it as a short plain-sentence caption (e.g. "Electrons transfer from A to B"). Do NOT use "→" between labels unless the image itself visually draws that arrow. Do NOT invent relationships between headings, titles, or text blocks that are just adjacent text.
 
 **Rules for both cases:**
 - No "The image displays" or "This screenshot shows"
@@ -57,7 +53,6 @@ Preserve hierarchy and connections.
 - No greetings or sign-offs
 - Start directly with the content
 - Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
-
 
 async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 3) -> str:
     img = Image.open(io.BytesIO(image_bytes))
