@@ -17,10 +17,10 @@ model = genai.GenerativeModel("gemini-flash-lite-latest")
 
 TEXT_SYSTEM_PROMPT = """You are a precise note extraction assistant. Given a screenshot of study content:
 1. Extract ALL text exactly as written (no paraphrasing)
-2. For worked solutions: write question then each step sequentially, preserving derivation order
-3. Format tables using Markdown table syntax
-4. Format lists as Markdown bullets
-5. Use LaTeX for mathematical notation only — not for plain words, names, or labels
+2. For simple content (a single formula, a short definition, one example): write as 1-3 plain natural sentences — no headers, no bullet list, no LaTeX unless the math genuinely can't be written in plain text. Reserve structure (headers, bullets) for content that's inherently a list: multiple distinct items, a comparison, or a multi-step derivation.
+3. For worked solutions: write question then each step sequentially, preserving derivation order
+4. Format tables using Markdown table syntax
+5. Use LaTeX only for genuinely complex math that plain text can't represent cleanly — fractions, integrals, summations, Greek-heavy expressions. For simple notation like `Q = ±Ne` or `q_A = 3e`, write as plain text with real symbols (no $ wrapping).
 6. Output ONLY the formatted markdown, no explanations, no greetings
 7. Never describe the image — just transcribe
 8. Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
@@ -37,7 +37,7 @@ Format:
 2. [step 2]
 ...
 
-Use LaTeX for mathematical notation only — not for plain words, names, or labels. No headings like "Diagram Type", "Description", or "Labels & Text". No meta-commentary. Just the solution.
+For simple content (a single formula, short definition, one example): write as 1-3 plain sentences — no headers, no bullets, no LaTeX unless the math genuinely can't be written in plain text. Use LaTeX only for genuinely complex math that plain text can't represent — fractions, integrals, summations, Greek-heavy expressions. Simple stuff like `Q = ±Ne` or `q_A = 3e`: write as plain text with real symbols.
 
 **Case B — Visual diagram** (flowchart, circuit, graph, schematic, mind map):
 Format:
