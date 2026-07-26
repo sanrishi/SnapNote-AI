@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routes import auth, extract
+from app.routes import auth, extract, payments
 from app.exceptions import SnapNoteError
 
 logging.basicConfig(
@@ -17,7 +17,7 @@ app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*", "null"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,6 +25,7 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(extract.router, prefix="/api/extract", tags=["extract"])
+app.include_router(payments.router, prefix="/api/payments", tags=["payments"])
 
 
 @app.exception_handler(HTTPException)

@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
 
     FIREBASE_CREDENTIALS_PATH: str = "firebase-credentials.json"
-    OPENAI_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
 
     R2_ACCOUNT_ID: str = ""
     R2_ACCESS_KEY_ID: str = ""
@@ -24,6 +24,17 @@ class Settings(BaseSettings):
     DAILY_REQ_LIMIT: int = 50
     RATE_LIMIT_PER_MIN: int = 10
     MAX_IMAGE_SIZE_MB: int = 10
+    CREDITS_DB_PATH: str = "credits.db"
+
+    RAZORPAY_KEY_ID: str = ""
+    RAZORPAY_KEY_SECRET: str = ""
+
+    CREDIT_PACKS: dict = {
+        "starter": {"credits": 50, "price_paise": 4900},
+        "popular": {"credits": 120, "price_paise": 9900},
+        "pro": {"credits": 300, "price_paise": 19900},
+        "unlimited": {"credits": 1000, "price_paise": 49900},
+    }
 
 
 settings = Settings()

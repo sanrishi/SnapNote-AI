@@ -1,105 +1,89 @@
-import base64
+import asyncio
+import io
 import logging
-from openai import AsyncOpenAI
+import time
+
+import google.generativeai as genai
+from PIL import Image
 
 from app.config import settings
-from app.models.schemas import DiagramResult
 from app.exceptions import UpstreamError
+from app.models.schemas import DiagramResult
 
 logger = logging.getLogger(__name__)
 
-client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
+genai.configure(api_key=settings.GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-flash-lite-latest")
 
-TEXT_SYSTEM_PROMPT = """You are a precise note extraction assistant. Given a screenshot from a lecture video:
+TEXT_SYSTEM_PROMPT = """You are a precise note extraction assistant. Given a screenshot of study content:
 1. Extract ALL text exactly as written (no paraphrasing)
-2. Format tables using Markdown table syntax
-3. Format lists as Markdown bullets
-4. Output ONLY the formatted markdown, no explanations, no greetings
+2. For worked solutions: write question then each step sequentially, preserving derivation order
+3. Format tables using Markdown table syntax
+4. Format lists as Markdown bullets
+5. Use LaTeX for all mathematical notation
+6. Output ONLY the formatted markdown, no explanations, no greetings
+7. Never describe the image — just transcribe
+8. Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
 
-Rules:
-- Preserve mathematical notation using LaTeX where appropriate
-- Keep bullet points and numbering intact
-- If the content has columns/rows structure, output as a Markdown table
-- Do NOT add any text outside the markdown content"""
+DIAGRAM_SYSTEM_PROMPT = """You transcribe screenshots into study notes. Determine the content type, then output ONLY the format specified below — nothing else.
 
-DIAGRAM_SYSTEM_PROMPT = """You are a diagram extraction assistant. Given a screenshot containing a diagram/graph:
-1. Extract all text labels and legends as a markdown list
-2. Identify the diagram type (flowchart, graph, chart, schematic, etc.)
-3. Provide a brief description of the diagram structure
-4. Do NOT generate SVG or Mermaid code
-5. Do NOT add greetings or explanations
+**Case A — Worked solution / derivation / sequential reasoning** (math, physics, proof, step-by-step):
+Format:
+## Question
+[the problem statement]
 
-Output format:
-## Diagram Type: [type]
-### Description
-[2-3 sentence description of what the diagram shows]
+## Solution
+1. [step 1]
+2. [step 2]
+...
 
-### Labels & Text
-- [label 1]
-- [label 2]
-..."""
+Use LaTeX for math. No headings like "Diagram Type", "Description", or "Labels & Text". No meta-commentary. Just the solution.
+
+**Case B — Visual diagram** (flowchart, circuit, graph, schematic, mind map):
+Format:
+**Type:** [one-line diagram type]
+
+[2-3 sentence description of structure and relationships]
+
+- [label] → [connected to]
+- [label] → [connected to]
+...
+
+Preserve hierarchy and connections.
+
+**Rules for both cases:**
+- No "The image displays" or "This screenshot shows"
+- No SVG, Mermaid, or code
+- No greetings or sign-offs
+- Start directly with the content
+- Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
+
+
+async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 3) -> str:
+    img = Image.open(io.BytesIO(image_bytes))
+    last_error = None
+    for attempt in range(max_retries):
+        try:
+            response = await model.generate_content_async([prompt, img])
+            return response.text.strip()
+        except Exception as e:
+            last_error = e
+            err_str = str(e)
+            if "RESOURCE_EXHAUSTED" in err_str or "429" in err_str:
+                delay = min(2 ** attempt * 2, 30)
+                logger.warning("Gemini rate limited (attempt %d/%d). Retrying in %ds...", attempt + 1, max_retries, delay)
+                await asyncio.sleep(delay)
+            else:
+                logger.error("Gemini call failed: %s", str(e))
+                raise UpstreamError(service="Gemini Vision", detail=str(e))
+    logger.error("Gemini call failed after %d retries: %s", max_retries, last_error)
+    raise UpstreamError(service="Gemini Vision", detail=str(last_error))
 
 
 async def extract_text_with_llm(image_bytes: bytes) -> str:
-    b64 = base64.b64encode(image_bytes).decode("utf-8")
-    data_uri = f"data:image/png;base64,{b64}"
-
-    try:
-        resp = await client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": TEXT_SYSTEM_PROMPT},
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": data_uri,
-                                "detail": "high",
-                            },
-                        },
-                    ],
-                },
-            ],
-            max_tokens=2048,
-            temperature=0.1,
-        )
-    except Exception as e:
-        logger.error("Vision LLM call failed: %s", str(e))
-        raise UpstreamError(service="OpenAI Vision", detail=str(e))
-
-    return resp.choices[0].message.content.strip()
+    return await _call_gemini(TEXT_SYSTEM_PROMPT, image_bytes)
 
 
 async def extract_diagram(image_bytes: bytes) -> DiagramResult:
-    b64 = base64.b64encode(image_bytes).decode("utf-8")
-    data_uri = f"data:image/png;base64,{b64}"
-
-    try:
-        resp = await client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": DIAGRAM_SYSTEM_PROMPT},
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": data_uri,
-                                "detail": "high",
-                            },
-                        },
-                    ],
-                },
-            ],
-            max_tokens=1024,
-            temperature=0.1,
-        )
-    except Exception as e:
-        logger.error("Vision LLM diagram call failed: %s", str(e))
-        raise UpstreamError(service="OpenAI Vision (diagram)", detail=str(e))
-
-    content = resp.choices[0].message.content.strip()
-    return DiagramResult(markdown=content)
+    markdown = await _call_gemini(DIAGRAM_SYSTEM_PROMPT, image_bytes)
+    return DiagramResult(markdown=markdown)

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnapNote AI</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0f172a; --surface: #1e293b; --border: #334155;
+      --text: #f1f5f9; --muted: #94a3b8; --accent: #6366f1;
+      --green: #22c55e; --amber: #f59e0b; --danger: #ef4444;
+    }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; flex-direction: column;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 24px 16px; width: 100%; flex: 1; display: flex; flex-direction: column; }
+
+    header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+    header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+    header h1 span { color: var(--accent); }
+    #credits-area { display: flex; align-items: center; gap: 8px; }
+    #credits-badge {
+      background: var(--surface); color: var(--accent); padding: 6px 14px;
+      border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid var(--border);
+    }
+    #buy-btn {
+      background: var(--green); color: #fff; border: none; padding: 6px 14px;
+      border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .15s;
+    }
+    #buy-btn:hover { opacity: .8; }
+
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 100; align-items: center; justify-content: center; }
+    .overlay.open { display: flex; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 28px; max-width: 420px; width: 90%; max-height: 90vh; overflow-y: auto;
+    }
+    .modal h2 { font-size: 20px; margin-bottom: 4px; }
+    .modal .sub { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+    .packs { display: flex; flex-direction: column; gap: 10px; }
+    .pack {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px;
+      background: var(--bg); cursor: pointer; transition: all .15s;
+    }
+    .pack:hover { border-color: var(--accent); }
+    .pack.selected { border-color: var(--green); background: rgba(34,197,94,.08); }
+    .pack .credits { font-size: 16px; font-weight: 700; }
+    .pack .price { font-size: 14px; color: var(--muted); }
+    .pack .price strong { color: var(--text); }
+    .pack .per-credit { font-size: 11px; color: var(--muted); }
+    .modal .pay-btn {
+      width: 100%; margin-top: 18px; padding: 12px; border: none; border-radius: 10px;
+      background: var(--green); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+    .modal .pay-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .modal .close-btn {
+      float: right; background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer;
+    }
+    .modal .close-btn:hover { color: var(--text); }
+    #payment-status { margin-top: 12px; font-size: 13px; text-align: center; }
+
+    .mode-toggle { display: flex; gap: 8px; margin: 20px 0; }
+    .mode-toggle button {
+      flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 10px;
+      background: var(--surface); color: var(--muted); font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .15s;
+    }
+    .mode-toggle button:hover { border-color: var(--accent); }
+    .mode-toggle button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .mode-toggle .cost { font-weight: 400; font-size: 12px; opacity: .7; }
+
+    #drop-zone {
+      border: 2px dashed var(--border); border-radius: 16px; padding: 48px 24px;
+      text-align: center; cursor: pointer; transition: all .2s; position: relative;
+      background: var(--surface); flex-shrink: 0;
+    }
+    #drop-zone:hover, #drop-zone.dragover { border-color: var(--accent); background: rgba(99,102,241,.08); }
+    #drop-zone .icon { font-size: 36px; margin-bottom: 12px; color: var(--muted); }
+    #drop-zone p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    #drop-zone .shortcut { margin-top: 8px; display: inline-block; background: var(--bg); padding: 3px 10px; border-radius: 6px; font-size: 11px; color: var(--muted); }
+    #drop-zone .shortcut kbd { background: var(--surface); padding: 1px 5px; border-radius: 4px; font-family: inherit; border: 1px solid var(--border); }
+    #drop-zone.paste-flash { border-color: var(--green) !important; background: rgba(34,197,94,.1) !important; transition: none; }
+    #drop-zone.has-image { padding: 0; border-style: solid; }
+    #drop-zone.has-image img { max-width: 100%; max-height: 400px; border-radius: 14px; display: block; }
+    #drop-zone input[type=file] { display: none; }
+    #preview-actions { display: none; gap: 8px; margin-top: 12px; justify-content: center; }
+    #preview-actions.show { display: flex; }
+    #preview-actions button {
+      padding: 10px 24px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    #submit-btn { background: var(--accent); color: #fff; }
+    #submit-btn:disabled { opacity: .5; cursor: not-allowed; }
+    #clear-btn { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+    #submit-btn.loading { pointer-events: none; }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 6px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #result-panel { display: none; margin-top: 24px; flex: 1; }
+    #result-panel.show { display: block; }
+    #result-panel .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    #result-panel .result-header .type-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    #result-panel .result-header .type-badge.text { background: rgba(99,102,241,.15); color: var(--accent); }
+    #result-panel .result-header .type-badge.diagram { background: rgba(245,158,11,.15); color: var(--amber); }
+    #result-panel .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    #result-panel .tags span { background: var(--surface); padding: 3px 10px; border-radius: 20px; font-size: 12px; color: var(--muted); border: 1px solid var(--border); }
+    #result-panel pre {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px; font-size: 14px; line-height: 1.7; overflow-x: auto;
+      white-space: pre-wrap; max-height: 400px; overflow-y: auto;
+    }
+    #result-panel .btn-row { display: flex; gap: 8px; margin-top: 12px; }
+    #result-panel .btn-row button {
+      padding: 9px 18px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s;
+    }
+    #copy-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    #copy-btn:hover { border-color: var(--accent); }
+    #copy-btn.copied { background: var(--green); color: #fff; border-color: var(--green); }
+    #download-btn { background: var(--accent); color: #fff; }
+    #download-btn:hover { opacity: .9; }
+
+    #error-msg { display: none; margin-top: 12px; padding: 12px 16px; background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 10px; color: var(--danger); font-size: 13px; }
+
+    footer { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 24px; }
+
+    @media (max-width: 600px) {
+      .container { padding: 16px 12px; }
+      header h1 { font-size: 18px; }
+      #drop-zone { padding: 32px 16px; }
+      #drop-zone .icon { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>SnapNote <span>AI</span></h1>
+      <div id="credits-area">
+        <span id="credits-badge">--</span>
+        <button id="buy-btn">Buy Credits</button>
+      </div>
+    </header>
+
+    <div class="overlay" id="buy-modal">
+      <div class="modal">
+        <button class="close-btn" id="modal-close">&times;</button>
+        <h2>Buy Credits</h2>
+        <p class="sub">Each extraction costs 1&ndash;5 credits. Credits never expire.</p>
+        <div class="packs" id="packs-container"></div>
+        <div id="payment-status"></div>
+      </div>
+    </div>
+
+    <div class="mode-toggle">
+      <button id="mode-text" class="active" data-mode="text">Text / Table <span class="cost">(free)</span></button>
+      <button id="mode-diagram" data-mode="diagram">Diagram <span class="cost">(5 credits)</span></button>
+    </div>
+
+    <div id="drop-zone">
+      <div id="drop-content">
+        <div class="icon">&#128247;</div>
+        <p><strong>Drop image here</strong> or click to upload</p>
+        <p style="margin-top:4px;">Supports PNG, JPG, WEBP (max 10 MB)</p>
+        <span class="shortcut">Press <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste from clipboard</span>
+      </div>
+      <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" />
+    </div>
+
+    <div id="preview-actions">
+      <button id="clear-btn">Clear</button>
+      <button id="submit-btn">Extract Notes</button>
+    </div>
+
+    <div id="error-msg"></div>
+
+    <div id="result-panel">
+      <div class="result-header">
+        <span id="result-type" class="type-badge text">Text</span>
+        <span id="result-credits" style="font-size:13px;color:var(--muted);"></span>
+      </div>
+      <div id="tags-container" class="tags"></div>
+      <pre id="markdown-preview"></pre>
+      <div class="btn-row">
+        <button id="copy-btn">Copy Markdown</button>
+        <button id="download-btn">Download .md</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>Powered by EasyOCR + Gemini</footer>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    const BASE = "http://localhost:8000";
+
+    // ── State ──
+    let currentBlob = null;
+    let currentMode = "text";
+
+    // ── DOM refs ──
+    const dropZone = document.getElementById("drop-zone");
+    const dropContent = document.getElementById("drop-content");
+    const fileInput = document.getElementById("file-input");
+    const previewActions = document.getElementById("preview-actions");
+    const submitBtn = document.getElementById("submit-btn");
+    const clearBtn = document.getElementById("clear-btn");
+    const errorMsg = document.getElementById("error-msg");
+    const resultPanel = document.getElementById("result-panel");
+    const resultType = document.getElementById("result-type");
+    const resultCredits = document.getElementById("result-credits");
+    const tagsContainer = document.getElementById("tags-container");
+    const markdownPreview = document.getElementById("markdown-preview");
+    const copyBtn = document.getElementById("copy-btn");
+    const downloadBtn = document.getElementById("download-btn");
+    const creditsBadge = document.getElementById("credits-badge");
+
+    // ── Device Auth ──
+    async function initDevice() {
+      let deviceId = localStorage.getItem("snapnote_deviceId");
+      if (!deviceId) {
+        deviceId = crypto.randomUUID();
+        localStorage.setItem("snapnote_deviceId", deviceId);
+      }
+      try {
+        const resp = await fetch(`${BASE}/api/auth/device`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ deviceId }),
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          creditsBadge.textContent = `${data.creditsRemaining} credits`;
+        } else {
+          creditsBadge.textContent = "offline";
+        }
+      } catch {
+        creditsBadge.textContent = "offline";
+      }
+    }
+
+    function getDeviceId() {
+      return localStorage.getItem("snapnote_deviceId");
+    }
+
+    // ── Payments ──
+    let selectedPlan = null;
+    const buyBtn = document.getElementById("buy-btn");
+    const buyModal = document.getElementById("buy-modal");
+    const modalClose = document.getElementById("modal-close");
+    const packsContainer = document.getElementById("packs-container");
+    const paymentStatus = document.getElementById("payment-status");
+
+    buyBtn.addEventListener("click", async () => {
+      selectedPlan = null;
+      paymentStatus.textContent = "";
+      buyModal.classList.add("open");
+      packsContainer.innerHTML = "<p style='color:var(--muted);'>Loading plans...</p>";
+      try {
+        const resp = await fetch(`${BASE}/api/payments/plans`);
+        if (!resp.ok) throw new Error("Failed to load plans");
+        const data = await resp.json();
+        renderPacks(data.plans);
+      } catch (err) {
+        packsContainer.innerHTML = `<p style='color:var(--danger);'>${err.message}</p>`;
+      }
+    });
+
+    modalClose.addEventListener("click", () => buyModal.classList.remove("open"));
+    buyModal.addEventListener("click", (e) => { if (e.target === buyModal) buyModal.classList.remove("open"); });
+
+    function renderPacks(plans) {
+      const labels = { starter: "Starter", popular: "Popular", pro: "Pro", unlimited: "Unlimited" };
+      packsContainer.innerHTML = plans.map((p) => {
+        const per = (p.price_paise / p.credits / 100).toFixed(2);
+        const badge = p.slug === "popular" ? " <span style='font-size:11px;color:var(--green);font-weight:600;'>Best value</span>" : "";
+        return `
+          <div class="pack" data-plan="${p.slug}">
+            <div>
+              <div class="credits">${p.credits} credits${badge}</div>
+              <div class="per-credit">₹${per}/credit</div>
+            </div>
+            <div class="price"><strong>₹${Math.round(p.price_paise / 100)}</strong></div>
+          </div>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".pack").forEach((el) => {
+        el.addEventListener("click", () => {
+          document.querySelectorAll(".pack").forEach((x) => x.classList.remove("selected"));
+          el.classList.add("selected");
+          selectedPlan = el.dataset.plan;
+          addPayButton();
+        });
+      });
+    }
+
+    function addPayButton() {
+      const existing = packsContainer.querySelector(".pay-btn");
+      if (existing) existing.remove();
+      const btn = document.createElement("button");
+      btn.className = "pay-btn";
+      btn.textContent = "Pay & Add Credits";
+      btn.addEventListener("click", startPayment);
+      packsContainer.appendChild(btn);
+    }
+
+    async function startPayment() {
+      if (!selectedPlan) return;
+      const deviceId = getDeviceId();
+      if (!deviceId) { paymentStatus.textContent = "Device not initialized. Refresh."; return; }
+
+      paymentStatus.textContent = "Creating order...";
+      paymentStatus.style.color = "var(--muted)";
+
+      try {
+        const orderResp = await fetch(`${BASE}/api/payments/create-order`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ deviceId, plan: selectedPlan }),
+        });
+        if (!orderResp.ok) {
+          const err = await orderResp.json().catch(() => ({}));
+          throw new Error(err.error || "Failed to create order");
+        }
+        const order = await orderResp.json();
+
+        if (order.mock) {
+          doMockPayment(order, deviceId);
+        } else {
+          doRazorpayPayment(order, deviceId);
+        }
+      } catch (err) {
+        paymentStatus.textContent = err.message;
+        paymentStatus.style.color = "var(--danger)";
+      }
+    }
+
+    async function doRazorpayPayment(order, deviceId) {
+      const options = {
+        key: order.keyId,
+        amount: order.amount,
+        currency: order.currency,
+        name: "SnapNote AI",
+        description: `${order.credits} credits`,
+        order_id: order.orderId,
+        handler: async function (response) {
+          await verifyAndFinish(response.razorpay_order_id, response.razorpay_payment_id, response.razorpay_signature, deviceId);
+        },
+        modal: { ondismiss: function () { paymentStatus.textContent = ""; } },
+        prefill: {},
+        theme: { color: "#22c55e" },
+      };
+      const rzp = new Razorpay(options);
+      rzp.open();
+      paymentStatus.textContent = "";
+    }
+
+    async function doMockPayment(order, deviceId) {
+      paymentStatus.textContent = "";
+      const existing = packsContainer.querySelector(".pay-btn");
+      if (existing) existing.textContent = "Simulate Payment (test mode)";
+      const btn = document.createElement("button");
+      btn.className = "pay-btn";
+      btn.textContent = "Simulate Payment";
+      btn.addEventListener("click", async () => {
+        btn.disabled = true;
+        btn.textContent = "Simulating...";
+        await verifyAndFinish(order.orderId, "mock_pay_" + Date.now(), "mock_sig_" + Date.now(), deviceId);
+      });
+      packsContainer.appendChild(btn);
+    }
+
+    async function verifyAndFinish(razorpay_order_id, razorpay_payment_id, razorpay_signature, deviceId) {
+      paymentStatus.textContent = "Verifying payment...";
+      paymentStatus.style.color = "var(--muted)";
+      try {
+        const verifyResp = await fetch(`${BASE}/api/payments/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ razorpay_order_id, razorpay_payment_id, razorpay_signature, deviceId }),
+        });
+        if (!verifyResp.ok) {
+          const err = await verifyResp.json().catch(() => ({}));
+          throw new Error(err.error || "Verification failed");
+        }
+        const result = await verifyResp.json();
+        if (result.success) {
+          paymentStatus.textContent = `${result.creditsAdded} credits added!`;
+          paymentStatus.style.color = "var(--green)";
+          creditsBadge.textContent = `${result.creditsRemaining} credits`;
+          setTimeout(() => buyModal.classList.remove("open"), 2000);
+        } else {
+          paymentStatus.textContent = "Payment could not be verified. Contact support.";
+          paymentStatus.style.color = "var(--danger)";
+        }
+      } catch (err) {
+        paymentStatus.textContent = err.message;
+        paymentStatus.style.color = "var(--danger)";
+      }
+    }
+
+    // ── Image handlers ──
+    function handleImage(blob) {
+      if (blob.size > 10 * 1024 * 1024) {
+        showError("Image too large. Max 10 MB.");
+        return;
+      }
+      currentBlob = blob;
+      const url = URL.createObjectURL(blob);
+      dropZone.classList.add("has-image");
+      dropContent.innerHTML = `<img src="${url}" alt="Preview" />`;
+      previewActions.classList.add("show");
+      errorMsg.style.display = "none";
+      resultPanel.classList.remove("show");
+    }
+
+    // Click to upload
+    dropZone.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files[0]) handleImage(fileInput.files[0]);
+    });
+
+    // Drag & drop
+    dropZone.addEventListener("dragover", (e) => { e.preventDefault(); dropZone.classList.add("dragover"); });
+    dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith("image/")) handleImage(file);
+    });
+
+    // Clipboard paste
+    document.addEventListener("paste", (e) => {
+      const items = e.clipboardData.items;
+      for (const item of items) {
+        if (item.type.startsWith("image/")) {
+          handleImage(item.getAsFile());
+          dropZone.classList.add("paste-flash");
+          setTimeout(() => dropZone.classList.remove("paste-flash"), 400);
+          break;
+        }
+      }
+    });
+
+    // ── Mode toggle ──
+    document.querySelectorAll(".mode-toggle button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".mode-toggle button").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentMode = btn.dataset.mode;
+      });
+    });
+
+    // ── Clear ──
+    clearBtn.addEventListener("click", () => {
+      currentBlob = null;
+      dropZone.classList.remove("has-image");
+      dropContent.innerHTML = `
+        <div class="icon">&#128247;</div>
+        <p><strong>Drop image here</strong> or click to upload</p>
+        <p style="margin-top:4px;">Supports PNG, JPG, WEBP (max 10 MB)</p>
+        <span class="shortcut">Press <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste from clipboard</span>
+      `;
+      previewActions.classList.remove("show");
+      resultPanel.classList.remove("show");
+      errorMsg.style.display = "none";
+      fileInput.value = "";
+    });
+
+    // ── Submit with retry on 429 ──
+    submitBtn.addEventListener("click", async () => {
+      if (!currentBlob) return;
+      const deviceId = getDeviceId();
+      if (!deviceId) { showError("Device not initialized. Refresh the page."); return; }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
+      errorMsg.style.display = "none";
+
+      const formData = new FormData();
+      formData.append("image", currentBlob, "capture.png");
+      formData.append("context", JSON.stringify({
+        title: document.title,
+        url: location.href,
+        week: "",
+      }));
+      formData.append("deviceId", deviceId);
+
+      const endpoint = currentMode === "text" ? `${BASE}/api/extract/text` : `${BASE}/api/extract/diagram`;
+      const maxRetries = 3;
+      const statusMsg = document.createElement("div");
+      statusMsg.style.cssText = "text-align:center;color:var(--muted);font-size:13px;margin-top:8px;";
+      submitBtn.parentNode.appendChild(statusMsg);
+
+      let lastError = null;
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const resp = await fetch(endpoint, { method: "POST", body: formData });
+
+          if (resp.status === 429) {
+            throw new Error("429");
+          }
+          if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err.error || `Server error (${resp.status})`);
+          }
+
+          const result = await resp.json();
+
+          resultType.textContent = result.type.charAt(0).toUpperCase() + result.type.slice(1);
+          resultType.className = `type-badge ${result.type === "diagram" ? "diagram" : "text"}`;
+          resultCredits.textContent = `${result.creditsUsed} credits used`;
+
+          tagsContainer.innerHTML = result.tags.map((t) => `<span>${t}</span>`).join("");
+          markdownPreview.textContent = result.markdown;
+          resultPanel.classList.add("show");
+
+          await initDevice();
+          lastError = null;
+          break;
+        } catch (err) {
+          lastError = err.message || "Something went wrong.";
+          if (attempt < maxRetries && err.message === "429") {
+            submitBtn.innerHTML = `<span class="spinner"></span> Retrying (${attempt+1}/${maxRetries})...`;
+            statusMsg.textContent = "High demand — hang tight...";
+            await new Promise(r => setTimeout(r, Math.min(2000 * Math.pow(2, attempt), 10000)));
+          } else {
+            break;
+          }
+        }
+      }
+
+      statusMsg.remove();
+      if (lastError) showError(lastError);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Extract Notes";
+    });
+
+    // ── Copy / Download ──
+    copyBtn.addEventListener("click", async () => {
+      const text = markdownPreview.textContent;
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.textContent = "Copied!";
+        copyBtn.classList.add("copied");
+        setTimeout(() => { copyBtn.textContent = "Copy Markdown"; copyBtn.classList.remove("copied"); }, 2000);
+      } catch {
+        showError("Failed to copy.");
+      }
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      const text = markdownPreview.textContent;
+      if (!text) return;
+      const blob = new Blob([text], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `snapnote-${Date.now()}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // ── Helpers ──
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.style.display = "block";
+    }
+
+    // ── Init ──
+    initDevice();
+  </script>
+</body>
+</html>

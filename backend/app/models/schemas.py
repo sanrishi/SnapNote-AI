@@ -41,5 +41,16 @@ class AuthResponse(BaseModel):
     creditsRemaining: int
 
 
+class DeviceAuthRequest(BaseModel):
+    deviceId: str
+
+
+class DeviceAuthResponse(BaseModel):
+    deviceId: str
+    creditsRemaining: int
+    creditsUsed: int
+    plan: str = "free"
+
+
 class DiagramResult(BaseModel):
     markdown: str

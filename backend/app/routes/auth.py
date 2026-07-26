@@ -1,12 +1,17 @@
 import logging
 from functools import lru_cache
+
 import firebase_admin
-from firebase_admin import credentials, auth as firebase_auth
+import httpx
 from fastapi import APIRouter
+from firebase_admin import auth as firebase_auth
+from firebase_admin import credentials
+from pydantic import BaseModel
 
 from app.config import settings
-from app.models.schemas import GoogleAuthRequest, AuthResponse
 from app.exceptions import AuthError
+from app.models.schemas import AuthResponse, DeviceAuthRequest, DeviceAuthResponse, GoogleAuthRequest
+from app.utils.credits_store import get_credits, init_device
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -45,4 +50,43 @@ async def google_auth(req: GoogleAuthRequest) -> AuthResponse:
         email=decoded.get("email", ""),
         name=decoded.get("name", "User"),
         creditsRemaining=settings.FREE_CREDITS_MONTHLY,
+    )
+
+
+class ChromeAuthRequest(BaseModel):
+    googleAccessToken: str
+
+
+@router.post("/chrome", response_model=AuthResponse)
+async def chrome_auth(req: ChromeAuthRequest) -> AuthResponse:
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(
+                "https://www.googleapis.com/oauth2/v3/tokeninfo",
+                params={"access_token": req.googleAccessToken},
+            )
+            if resp.status_code != 200:
+                raise AuthError(message="Invalid Google token")
+            data = resp.json()
+    except httpx.RequestError as e:
+        logger.error("Google token verification failed: %s", str(e))
+        raise AuthError(message="Failed to verify Google token")
+
+    return AuthResponse(
+        accessToken=req.googleAccessToken,
+        uid=data["sub"],
+        email=data.get("email", ""),
+        name=data.get("name", data.get("email", "User")),
+        creditsRemaining=settings.FREE_CREDITS_MONTHLY,
+    )
+
+
+@router.post("/device", response_model=DeviceAuthResponse)
+async def device_auth(req: DeviceAuthRequest) -> DeviceAuthResponse:
+    remaining, used = init_device(req.deviceId)
+    logger.info("Device auth: %s -> %d credits remaining", req.deviceId[:8], remaining)
+    return DeviceAuthResponse(
+        deviceId=req.deviceId,
+        creditsRemaining=remaining,
+        creditsUsed=used,
     )

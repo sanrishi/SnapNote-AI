@@ -24,6 +24,84 @@ def read_raw(image_np: Any) -> OCRResult:
         return reader.readtext(image_np)
 
 
+def _is_english_like(word: str) -> bool:
+    vowels = set("aeiou")
+    chars = word.lower()
+    has_vowel = any(c in vowels for c in chars)
+    consonant_run = 0
+    for c in chars:
+        if c.isalpha() and c not in vowels:
+            consonant_run += 1
+            if consonant_run >= 5:
+                return False
+        else:
+            consonant_run = 0
+    return has_vowel and len(chars) >= 3
+
+
+def low_quality_result(ocr_results: OCRResult) -> bool:
+    if not ocr_results:
+        return True
+
+    tokens = [text.strip() for _, text, _ in ocr_results]
+
+    total_chars = sum(len(t) for t in tokens)
+    if total_chars < 10:
+        return True
+
+    confs = [conf for _, _, conf in ocr_results]
+    avg_conf = sum(confs) / len(confs)
+    if avg_conf < 0.4:
+        return True
+
+    low_conf_ratio = sum(1 for c in confs if c < 0.3) / len(confs)
+    if low_conf_ratio > 0.3:
+        return True
+
+    all_text = " ".join(tokens)
+
+    # Garbled text: high ratio of non-alphanumeric chars
+    alpha_chars = sum(c.isalpha() or c.isdigit() or c.isspace() for c in all_text)
+    if len(all_text) > 0 and alpha_chars / len(all_text) < 0.5:
+        return True
+
+    # Structural: high ratio of single-char tokens (OCR fragmentation)
+    single_char = sum(1 for t in tokens if len(t) == 1 and t.isalnum())
+    if len(tokens) > 0 and single_char / len(tokens) > 0.3:
+        return True
+
+    # English-likeness: check tokens that look like real English words
+    alpha_tokens = [t.lower().strip(".,;:!?)}]>\"'-") for t in tokens]
+    alpha_tokens = [t for t in alpha_tokens if len(t) >= 3 and t.isalpha()]
+    if alpha_tokens:
+        eng_like = sum(1 for t in alpha_tokens if _is_english_like(t))
+        if eng_like / len(alpha_tokens) < 0.4:
+            return True
+
+    # Structural: average alpha token length — garbled OCR fragments are short
+    if alpha_tokens:
+        avg_len = sum(len(t) for t in alpha_tokens) / len(alpha_tokens)
+        if avg_len < 4.5:
+            return True
+
+    # Structural: high ratio of tokens ending with closing symbols
+    end_sym = sum(1 for t in tokens if t and t[-1] in "})]>")
+    if len(tokens) > 0 and end_sym / len(tokens) > 0.15:
+        return True
+
+    # Structural: high ratio of tokens containing special symbols
+    symbol_tokens = sum(1 for t in tokens if any(c in t for c in "}{()[]=+/\\|<>*^"))
+    if len(tokens) > 0 and symbol_tokens / len(tokens) > 0.3:
+        return True
+
+    # Mixed digit-letter ratio: garbled formulas mix digits and letters oddly
+    mixed = sum(1 for t in tokens if any(c.isdigit() for c in t) and any(c.isalpha() for c in t))
+    if len(tokens) > 0 and mixed / len(tokens) > 0.2:
+        return True
+
+    return False
+
+
 def raw_to_lines(ocr_results: OCRResult) -> list[str]:
     lines: list[tuple[float, str]] = []
     for bbox, text, conf in ocr_results:

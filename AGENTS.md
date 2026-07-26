@@ -181,4 +181,45 @@ Before every PR, check:
 
 ---
 
+---
+
+## 8. OCR Confidence Gate Architecture
+
+### Rule 8.1 — Nine heuristics in `low_quality_result()`
+The gate checks in order:
+1. Empty result → escalate
+2. Total chars < 10 → escalate
+3. Average confidence < 0.4 → escalate
+4. Low-confidence (< 0.3) ratio > 0.3 → escalate
+5. Non-alphanumeric char ratio > 0.5 → escalate
+6. Single-char token ratio > 0.3 → escalate
+7. English-likeness ratio < 0.4 (vowel + no 5-consonant run, tokens ≥ 3 chars) → escalate
+8. Average alpha-token length < 4.5 → escalate
+9. Token ending with `})]>` ratio > 0.15 → escalate
+10. Symbol-containing token ratio > 0.3 → escalate
+11. Mixed digit-letter token ratio > 0.2 → escalate
+
+### Rule 8.2 — Known soft spots
+- **CS/algorithms content**: Big-O notation (`O(n)`, `O(log n)`) pushes `symbol_ratio` toward 0.3 threshold but is legitimate, not garbled. Gate may under-trigger on clean-format CS slides with heavy notation.
+- **Fluent-looking wrong text**: OCR can produce high-confidence wrong output (e.g., `"ecture"` at conf=1.0). No structural heuristic catches this. Gate relies on symbol/mixed-digit signals catching formula-heavy slides.
+- **Dark-themed slides**: OCR performs reasonably well (high confidence), so detection quality isn't degraded — but dark backgrounds can change character detection patterns.
+
+### Rule 8.3 — Pricing model
+- `/extract/text`: 1 credit if OCR succeeds standalone; **5 credits if escalation to Gemini fires** (credit check before Gemini call, line 55-57 of extract.py)
+- `/extract/diagram`: 5 credits always
+- 50 free credits/month = **50 OCR-only requests** or **10 Gemini-escalated requests**
+- When Gemini returns 429 (rate limit), text endpoint falls back to OCR + a note, charged 1 credit. Diagram endpoint returns a clean "high demand" message.
+
+### Rule 8.4 — Test fixtures
+9 fixtures in `stress_test_fixtures/`:
+1. Stats probability table (dense formulas) → escalate
+2. PID controller flowchart → escalate
+3. Engineering math formulas → escalate
+4. Hindi Devanagari coaching slide → escalate
+5. YouTube coaching slide (Physics Wallah style) → escalate
+6. Plain economics prose → stay OCR
+7. Biology cell theory prose → stay OCR (untuned, passed cold)
+8. Chemistry equilibrium formulas → escalate (untuned, passed cold)
+9. Dark-theme CS BST slide (Unacademy style) → escalate (untuned, passed cold)
+
 *Last updated: July 2026*
