@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from fastapi import APIRouter, Form, UploadFile, File, Request
+from fastapi import APIRouter, Form, UploadFile, File
 
 from app.config import settings
 from app.models.schemas import ExtractionResponse, ExtractionType
@@ -93,7 +93,6 @@ async def extract_text_route(
 
 @router.post("/diagram", response_model=ExtractionResponse)
 async def extract_diagram_route(
-    request: Request,
     image: UploadFile = File(...),
     context: str = Form("{}"),
     deviceId: str = Form(...),
@@ -121,14 +120,11 @@ async def extract_diagram_route(
     tags = generate_tags(ctx)
 
     if uploaded_url:
-        base_url = str(request.base_url).rstrip("/")
-        full_image_url = f"{base_url}{uploaded_url}"
         full_markdown = (
             f"{result.markdown}\n\n"
-            f"![Diagram]({full_image_url})"
+            f"![Diagram]({uploaded_url})"
         )
     else:
-        full_image_url = None
         full_markdown = result.markdown
 
     use_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
@@ -136,7 +132,7 @@ async def extract_diagram_route(
     return ExtractionResponse(
         type=ExtractionType.DIAGRAM,
         markdown=full_markdown,
-        imageUrl=full_image_url,
+        imageUrl=uploaded_url,
         tags=tags,
         creditsUsed=settings.DIAGRAM_CREDIT_COST,
     )

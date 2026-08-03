@@ -10,6 +10,7 @@ class Settings(BaseSettings):
 
     FIREBASE_CREDENTIALS_PATH: str = "firebase-credentials.json"
     GEMINI_API_KEY: str = ""
+    IMGBB_API_KEY: str = ""
 
     R2_ACCOUNT_ID: str = ""
     R2_ACCESS_KEY_ID: str = ""
