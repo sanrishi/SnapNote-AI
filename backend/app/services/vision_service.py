@@ -27,30 +27,37 @@ RULE 6 — NEVER output LaTeX commands (no \omega, \hat, \frac, \sin, \, or any 
 RULE 7 — Output ONLY the formatted markdown, no explanations, no greetings.
 RULE 8 — Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
 
-DIAGRAM_SYSTEM_PROMPT = """You extract study notes from a screenshot. RULES — follow them in order:
+DIAGRAM_SYSTEM_PROMPT = """You turn a lecture screenshot into exam-ready study notes. RULES — follow them in order:
 
-RULE 1 — NEVER describe the image. START DIRECTLY with the transcribed content. No "The image shows", "This screenshot displays", "An illustration of", "A cone is shown", "The angle between", "An arrow points", or any framing or spatial-narration sentence. Just the content. No diagram type label, no description header — just the notes.
+RULE 1 — NEVER describe the image. START DIRECTLY with the content. No "The image shows", "This screenshot displays", "An illustration of", "A cone is shown", "The angle between", "An arrow points", or any framing or spatial-narration sentence.
 
-RULE 2 — Default to direct, sequential transcription of all visible text in the order it appears. Write it the way a student would jot notes.
+RULE 2 — Transcribe only what is visibly written. Do NOT invent, solve, complete, or extend anything beyond what is on the screen. NEVER claim exam frequency (no "appeared in GATE 2022", no "frequently asked in JEE") — that kills trust. If content is cut off, say so.
 
-**Case A — Worked solution / derivation / sequential reasoning** (math, physics, proof, step-by-step):
-Format:
-## Question
-[the problem statement]
+RULE 3 — Write ALL math as plain text with real Unicode symbols — Greek letters (ω θ φ α), superscripts/subscripts (², ₁), ±, ∞, →, ≤, ×, ÷. NEVER output LaTeX commands (no \omega, \hat, \frac, \sin, \, or any backslash) and NEVER wrap math in $...$. Examples: `ω_net = ω r̂₁ + ω_z k̂`, `ω sinθ = ω_z`, `Q = ±Ne`. A fraction may be written as `a/b`, an integral as `∫`, a summation as `Σ`. Only if a construct genuinely cannot be represented in plain Unicode (e.g. a tall stacked fraction or a matrix) may you use minimal LaTeX — otherwise plain text always.
 
-## Solution
-1. [step 1]
-2. [step 2]
-...
+RULE 4 — No SVG, Mermaid, ASCII box-drawing, or code fences. No greetings or sign-offs.
 
-For simple content (a single formula, short definition, one example): write as 1-3 plain sentences — no headers, no bullets. NEVER output LaTeX commands (no \omega, \hat, \frac, \sin, \, or any backslash) and NEVER wrap math in $...$. Write ALL math as plain text with real Unicode symbols — Greek letters (ω θ φ α), superscripts/subscripts (², ₁), ±, ∞, →, ≤, ×, ÷. Example: `ω_net = ω r̂₁ + ω_z k̂`, `ω sinθ = ω_z`, `Q = ±Ne`. A fraction may be written as `a/b`, an integral as `∫`, a summation as `Σ`. Only if a construct genuinely cannot be represented in plain Unicode (e.g. a tall stacked fraction or a matrix) may you use minimal LaTeX — otherwise plain text always.
+RULE 5 — FORMAT THE OUTPUT as these sections. Use each section ONLY if the content genuinely supports it — if a section doesn't apply, OMIT it entirely (do not write "None" or invent content):
 
-**Case B — Visual diagram** (flowchart, circuit, graph, schematic, mind map, geometry):
-Transcribe ONLY the visible text labels, symbols, and equations — as a plain list or short lines. Do NOT describe the drawing itself: no "a cone is shown", no "the angle between the axes", no "an arrow points", no spatial narration of shapes, axes, or positions. The embedded image already shows all of that — your text carries only what is readable as text. If the image has a genuine drawn arrow AND its direction is essential to meaning, note it in one short plain sentence (e.g. "Electrons transfer from A to B") — otherwise omit. Do NOT use "→" between labels unless the image itself visually draws that arrow.
+## 📘 Topic
+The concept the screenshot covers, in 3-6 words.
 
-RULE 3 — No SVG, Mermaid, ASCII box-drawing, or code fences.
-RULE 4 — No greetings or sign-offs.
-RULE 5 — Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
+## 📖 Simple Explanation
+2-4 plain sentences explaining the concept the way a good tutor would — grounded ONLY in what's visibly on the screen.
+
+## 📦 Formula Box
+Every formula/equation from the screen, each on its own line, Unicode math.
+
+## ⚠️ Common Mistakes
+2-3 bullets of mistakes students typically make with THIS concept, if you can derive them from the visible content.
+
+## 🧠 Memory Trick
+One short sentence mnemonic to remember the key formula — only if you can produce one that genuinely helps.
+
+## 📄 Notes
+The clean sequential transcription of all visible text — labels, definitions, derivation steps, exactly as written.
+
+For visual diagrams (flowcharts, circuits, graphs, geometry): in the Notes section transcribe ONLY the visible text labels, symbols, and equations. Do NOT narrate the drawing — no "a cone is shown", no spatial description. The embedded image shows all of that. Do NOT use "→" between labels unless the image itself visually draws that arrow."""
 
 async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 3) -> str:
     img = Image.open(io.BytesIO(image_bytes))
