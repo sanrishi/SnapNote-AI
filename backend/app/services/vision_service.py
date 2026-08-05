@@ -1,70 +1,93 @@
 import asyncio
 import io
+import json
 import logging
-import time
+import re
 
 import google.generativeai as genai
 from PIL import Image
 
 from app.config import settings
 from app.exceptions import UpstreamError
-from app.models.schemas import DiagramResult
+from app.models.schemas import StudyNotes
+from pydantic import ValidationError
 
 logger = logging.getLogger(__name__)
 
 genai.configure(api_key=settings.GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-flash-lite-latest")
 
-TEXT_SYSTEM_PROMPT = """You extract study notes from a screenshot. RULES — follow them in order:
+TEXT_SYSTEM_PROMPT = r"""You extract study notes from a screenshot. RULES — follow them in order:
 
 RULE 1 — NEVER describe the image. START DIRECTLY with the transcribed content. No "The image shows", "This screenshot displays", "An illustration of", or any framing sentence. Just the content.
 
 RULE 2 — Extract ALL text exactly as written (no paraphrasing).
-RULE 3 — For simple content (a single formula, a short definition, one example): write as 1-3 plain natural sentences — no headers, no bullet list, no LaTeX unless the math genuinely can't be written in plain text. Reserve structure (headers, bullets) for content that's inherently a list: multiple distinct items, a comparison, or a multi-step derivation.
+RULE 3 — For simple content (a single formula, a short definition, one example): write as 1-3 plain natural sentences — no headers, no bullet list. Reserve structure (headers, bullets) for content that's inherently a list: multiple distinct items, a comparison, or a multi-step derivation.
 RULE 4 — For worked solutions: write question then each step sequentially, preserving derivation order.
 RULE 5 — Format tables using Markdown table syntax.
 RULE 6 — NEVER output LaTeX commands (no \omega, \hat, \frac, \sin, \, or any backslash) and NEVER wrap math in $...$. Write ALL math as plain text using real Unicode symbols — Greek letters (ω θ φ α), superscripts/subscripts where they exist (², ₁, etc.), ±, ∞, →, ≤, ×, ÷. Example: `ω_net = ω r̂₁ + ω_z k̂` and `ω sinθ = ω_z`. A fraction may be written as `a/b`, an integral as `∫`, a summation as `Σ`. Only if a construct genuinely cannot be represented in plain Unicode (e.g. a tall stacked fraction or a matrix) may you use minimal LaTeX — otherwise plain text always.
 RULE 7 — Output ONLY the formatted markdown, no explanations, no greetings.
 RULE 8 — Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
 
-DIAGRAM_SYSTEM_PROMPT = """You turn a lecture screenshot into exam-ready study notes. RULES — follow them in order:
+STUDY_NOTES_SYSTEM_PROMPT = r"""You are SnapNote AI. Turn a lecture screenshot into clear, trustworthy, exam-ready study notes.
 
-RULE 1 — NEVER describe the image. START DIRECTLY with the content. No "The image shows", "This screenshot displays", "An illustration of", "A cone is shown", "The angle between", "An arrow points", or any framing or spatial-narration sentence.
+FUNDAMENTAL RULES:
+1. Separate what is VISIBLE in the image from your INTERPRETATION. Never present inference as fact.
+2. Transcribe only what is visibly written. NEVER invent text, formulas, derivation steps, theorem names, or exam claims (no "appeared in GATE 2022", no "frequently asked in JEE").
+3. Use cautious wording for inferred meaning: "This appears to represent...", "The diagram likely shows...", "Based on the visible equation...", "The full context cannot be confirmed from this single frame."
+4. NEVER use LaTeX commands (\omega, \hat, \frac, \sin, any backslash) or $...$ wrapping. Write math as plain Unicode: Greek letters (ω θ φ α), ±, ∞, →, ≤, ×, ÷, superscripts/subscripts where they exist (², ₁). Fractions as a/b, integrals as ∫, sums as Σ.
+5. Preserve equations exactly as written.
+6. Do NOT narrate the image ("The image shows", "A cone is shown", "An arrow points"). For diagrams, transcribe only readable labels and symbols.
+7. Avoid generic filler. Every line preserves info, explains a relationship, improves revision, or discloses uncertainty.
+8. Do NOT dump meaningless OCR fragments. Group related labels logically.
+9. No SVG, Mermaid, ASCII box-drawing, or code fences.
 
-RULE 2 — Transcribe only what is visibly written. Do NOT invent, solve, complete, or extend anything beyond what is on the screen. NEVER claim exam frequency (no "appeared in GATE 2022", no "frequently asked in JEE") — that kills trust. If content is cut off, say so.
+OUTPUT: ONLY a JSON object with exactly this structure:
+{
+  "topic": {"title": "concise title 3-6 words", "is_probable": false},
+  "visible_content": {"headings": [], "equations": [], "labels": [], "statements": []},
+  "study_notes": ["well-organized note line", "..."],
+  "simple_explanation": "2-4 plain sentences using cautious wording",
+  "formula_box": [{"formula": "exact formula", "explanation": "meaning, only if reasonably clear", "uncertain_symbols": []}],
+  "diagram_interpretation": {"present": false, "visible_elements": [], "likely_interpretation": []},
+  "uncertainties": ["anything cropped, unreadable, ambiguous, or inferred"],
+  "key_takeaway": "one concise sentence the student should remember"
+}
 
-RULE 3 — Write ALL math as plain text with real Unicode symbols — Greek letters (ω θ φ α), superscripts/subscripts (², ₁), ±, ∞, →, ≤, ×, ÷. NEVER output LaTeX commands (no \omega, \hat, \frac, \sin, \, or any backslash) and NEVER wrap math in $...$. Examples: `ω_net = ω r̂₁ + ω_z k̂`, `ω sinθ = ω_z`, `Q = ±Ne`. A fraction may be written as `a/b`, an integral as `∫`, a summation as `Σ`. Only if a construct genuinely cannot be represented in plain Unicode (e.g. a tall stacked fraction or a matrix) may you use minimal LaTeX — otherwise plain text always.
+SECTION RULES:
+- topic: if the exact topic cannot be safely confirmed, set is_probable to true.
+- visible_content: ONLY what is clearly visible. No outside knowledge. Skip sections with nothing meaningful.
+- study_notes: transform visible info into well-structured notes — group related ideas, remove duplicate OCR residue, preserve formulas exactly, use headings, avoid inventing missing steps. Useful for a tired student revising at night.
+- simple_explanation: explain what the visible material appears to mean. Base it on visible content. Use cautious wording. Never invent missing formulas, definitions, or theorem names.
+- formula_box: for each formula include exact expression, explain symbols only when reasonably clear, list unclear symbols in uncertain_symbols.
+- diagram_interpretation: only when a diagram exists (set present=true). List visible axes, arrows, objects, angles, labeled directions, visible relationships. Distinguish visible facts from likely interpretation.
+- uncertainties: ALWAYS include an entry when anything is cropped, unreadable, ambiguous, or inferred. Empty list if nothing is uncertain.
+- key_takeaway: one concise statement of what to remember from this screenshot."""
 
-RULE 4 — No SVG, Mermaid, ASCII box-drawing, or code fences. No greetings or sign-offs.
+REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
+{"topic":{"title":"","is_probable":false},"visible_content":{"headings":[],"equations":[],"labels":[],"statements":[]},"study_notes":[],"simple_explanation":"","formula_box":[{"formula":"","explanation":"","uncertain_symbols":[]}],"diagram_interpretation":{"present":false,"visible_elements":[],"likely_interpretation":[]},"uncertainties":[],"key_takeaway":""}
 
-RULE 5 — FORMAT THE OUTPUT as these sections. Use each section ONLY if the content genuinely supports it — if a section doesn't apply, OMIT it entirely (do not write "None" or invent content):
+Previous (invalid) response:
+{{RAW}}"""
 
-## 📘 Topic
-The concept the screenshot covers, in 3-6 words.
 
-## 📖 Simple Explanation
-2-4 plain sentences explaining the concept the way a good tutor would — grounded ONLY in what's visibly on the screen.
+def _extract_json(text: str) -> dict:
+    text = text.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
+        text = re.sub(r"\n?```$", "", text)
+    return json.loads(text)
 
-## 📦 Formula Box
-Every formula/equation from the screen, each on its own line, Unicode math.
-
-## ⚠️ Common Mistakes
-2-3 bullets of mistakes students typically make with THIS concept, if you can derive them from the visible content.
-
-## 🧠 Memory Trick
-One short sentence mnemonic to remember the key formula — only if you can produce one that genuinely helps.
-
-## 📄 Notes
-The clean sequential transcription of all visible text — labels, definitions, derivation steps, exactly as written.
-
-For visual diagrams (flowcharts, circuits, graphs, geometry): in the Notes section transcribe ONLY the visible text labels, symbols, and equations. Do NOT narrate the drawing — no "a cone is shown", no spatial description. The embedded image shows all of that. Do NOT use "→" between labels unless the image itself visually draws that arrow."""
 
 async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 3) -> str:
     img = Image.open(io.BytesIO(image_bytes))
     last_error = None
     for attempt in range(max_retries):
         try:
-            response = await model.generate_content_async([prompt, img])
+            response = await model.generate_content_async(
+                [prompt, img],
+                generation_config={"response_mime_type": "application/json"},
+            )
             return response.text.strip()
         except Exception as e:
             last_error = e
@@ -84,6 +107,22 @@ async def extract_text_with_llm(image_bytes: bytes) -> str:
     return await _call_gemini(TEXT_SYSTEM_PROMPT, image_bytes)
 
 
-async def extract_diagram(image_bytes: bytes) -> DiagramResult:
-    markdown = await _call_gemini(DIAGRAM_SYSTEM_PROMPT, image_bytes)
-    return DiagramResult(markdown=markdown)
+async def extract_study_notes(image_bytes: bytes) -> StudyNotes:
+    raw = await _call_gemini(STUDY_NOTES_SYSTEM_PROMPT, image_bytes)
+    try:
+        data = _extract_json(raw)
+        return StudyNotes(**data)
+    except (json.JSONDecodeError, ValidationError) as first_err:
+        logger.warning("StudyNotes JSON parse failed (attempt 1): %s", first_err)
+        try:
+            repaired = await _call_gemini(
+                REPAIR_PROMPT.replace("{{RAW}}", raw), image_bytes
+            )
+            data = _extract_json(repaired)
+            return StudyNotes(**data)
+        except (json.JSONDecodeError, ValidationError, UpstreamError) as repair_err:
+            logger.error("StudyNotes repair failed: %s", repair_err)
+            raise UpstreamError(
+                service="SnapNote AI",
+                detail="AI could not structure this image's notes cleanly. Please try again.",
+            )

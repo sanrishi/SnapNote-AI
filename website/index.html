@@ -107,11 +107,42 @@
     #result-panel .result-header .type-badge.diagram { background: rgba(245,158,11,.15); color: var(--amber); }
     #result-panel .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
     #result-panel .tags span { background: var(--surface); padding: 3px 10px; border-radius: 20px; font-size: 12px; color: var(--muted); border: 1px solid var(--border); }
+
+    .note-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 18px; margin-bottom: 14px;
+    }
+    .note-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .note-card p, .note-card li { font-size: 14px; line-height: 1.7; color: var(--text); }
+    .note-card ul { padding-left: 20px; }
+    .note-card .formula {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 8px 12px; margin: 6px 0; font-size: 14px; overflow-x: auto; white-space: pre-wrap;
+    }
+    .note-card .formula .f-explain { color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .note-card .uncertain-symbols { color: var(--amber); font-size: 12px; margin-top: 4px; }
+    .note-card.uncertain-card { border-color: rgba(245,158,11,.5); background: rgba(245,158,11,.06); }
+    .note-card.uncertain-card h3 { color: var(--amber); }
+    .note-card.takeaway-card { border-color: rgba(34,197,94,.4); background: rgba(34,197,94,.05); }
+    .note-card.takeaway-card h3 { color: var(--green); }
+    .note-card.diagram-card img {
+      max-width: 100%; border-radius: 10px; border: 1px solid var(--border); margin-top: 4px;
+    }
+    .note-card .muted { color: var(--muted); font-size: 13px; }
+
     #result-panel pre {
       background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
       padding: 20px; font-size: 14px; line-height: 1.7; overflow-x: auto;
       white-space: pre-wrap; max-height: 400px; overflow-y: auto;
     }
+    #raw-toggle-btn {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; margin-bottom: 10px;
+    }
+    #raw-toggle-btn:hover { border-color: var(--accent); color: var(--text); }
+    #raw-markdown { display: none; }
+    #raw-markdown.show { display: block; }
     #result-panel .btn-row { display: flex; gap: 8px; margin-top: 12px; }
     #result-panel .btn-row button {
       padding: 9px 18px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s;
@@ -182,9 +213,11 @@
         <span id="result-credits" style="font-size:13px;color:var(--muted);"></span>
       </div>
       <div id="tags-container" class="tags"></div>
-      <pre id="markdown-preview"></pre>
+      <div id="notes-cards"></div>
+      <button id="raw-toggle-btn">View extracted text</button>
+      <pre id="raw-markdown"></pre>
       <div class="btn-row">
-        <button id="copy-btn">Copy Markdown</button>
+        <button id="copy-btn">Copy Notes</button>
         <button id="download-btn">Download .md</button>
       </div>
     </div>
@@ -212,7 +245,9 @@
     const resultType = document.getElementById("result-type");
     const resultCredits = document.getElementById("result-credits");
     const tagsContainer = document.getElementById("tags-container");
-    const markdownPreview = document.getElementById("markdown-preview");
+    const notesCards = document.getElementById("notes-cards");
+    const rawToggleBtn = document.getElementById("raw-toggle-btn");
+    const rawMarkdown = document.getElementById("raw-markdown");
     const copyBtn = document.getElementById("copy-btn");
     const downloadBtn = document.getElementById("download-btn");
     const creditsBadge = document.getElementById("credits-badge");
@@ -516,7 +551,7 @@
           resultCredits.textContent = `${result.creditsUsed} credits used`;
 
           tagsContainer.innerHTML = result.tags.map((t) => `<span>${t}</span>`).join("");
-          markdownPreview.textContent = result.markdown;
+          renderResult(result);
           resultPanel.classList.add("show");
 
           await initDevice();
@@ -540,24 +575,100 @@
       submitBtn.textContent = "Extract Notes";
     });
 
+    // ── Render result ──
+    let currentMarkdown = "";
+
+    function esc(s) {
+      const div = document.createElement("div");
+      div.textContent = s;
+      return div.innerHTML;
+    }
+
+    function renderResult(result) {
+      currentMarkdown = result.markdown || "";
+      rawMarkdown.textContent = currentMarkdown;
+      rawMarkdown.classList.remove("show");
+      rawToggleBtn.textContent = "View extracted text";
+
+      const notes = result.studyNotes;
+      notesCards.innerHTML = "";
+      if (!notes) {
+        const card = document.createElement("div");
+        card.className = "note-card";
+        card.innerHTML = `<h3>📄 Notes</h3><pre style="white-space:pre-wrap;font-size:14px;line-height:1.7;">${esc(currentMarkdown)}</pre>`;
+        notesCards.appendChild(card);
+        return;
+      }
+
+      const cards = [];
+
+      if (notes.topic && notes.topic.title) {
+        const prefix = notes.topic.is_probable ? "Probable topic" : "Topic";
+        cards.push(`<div class="note-card"><h3>📘 ${prefix}</h3><p>${esc(notes.topic.title)}</p></div>`);
+      }
+
+      if (notes.simple_explanation) {
+        cards.push(`<div class="note-card"><h3>📖 Simple Explanation</h3><p>${esc(notes.simple_explanation)}</p></div>`);
+      }
+
+      if (notes.formula_box && notes.formula_box.length) {
+        const formulas = notes.formula_box.map((f) => {
+          let html = `<div class="formula">${esc(f.formula)}`;
+          if (f.explanation) html += `<div class="f-explain">${esc(f.explanation)}</div>`;
+          if (f.uncertain_symbols && f.uncertain_symbols.length) html += `<div class="uncertain-symbols">Uncertain: ${esc(f.uncertain_symbols.join(", "))}</div>`;
+          return html + `</div>`;
+        }).join("");
+        cards.push(`<div class="note-card"><h3>📦 Formula Box</h3>${formulas}</div>`);
+      }
+
+      if (notes.study_notes && notes.study_notes.length) {
+        const items = notes.study_notes.map((n) => `<li>${esc(n)}</li>`).join("");
+        cards.push(`<div class="note-card"><h3>📄 Study Notes</h3><ul>${items}</ul></div>`);
+      }
+
+      if (notes.diagram_interpretation && notes.diagram_interpretation.present) {
+        let inner = "";
+        if (notes.diagram_interpretation.visible_elements && notes.diagram_interpretation.visible_elements.length) {
+          inner += `<ul>${notes.diagram_interpretation.visible_elements.map((el) => `<li>${esc(el)}</li>`).join("")}</ul>`;
+        }
+        if (notes.diagram_interpretation.likely_interpretation && notes.diagram_interpretation.likely_interpretation.length) {
+          inner += `<p class="muted" style="margin-top:6px;">Likely interpretation:</p><ul>${notes.diagram_interpretation.likely_interpretation.map((el) => `<li>${esc(el)}</li>`).join("")}</ul>`;
+        }
+        cards.push(`<div class="note-card diagram-card"><h3>📐 Diagram</h3>${inner}${result.imageUrl ? `<img src="${esc(result.imageUrl)}" alt="Diagram" />` : ""}</div>`);
+      }
+
+      if (notes.uncertainties && notes.uncertainties.length) {
+        cards.push(`<div class="note-card uncertain-card"><h3>⚠️ Unclear or Uncertain</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
+      }
+
+      if (notes.key_takeaway) {
+        cards.push(`<div class="note-card takeaway-card"><h3>🎯 Key Takeaway</h3><p>${esc(notes.key_takeaway)}</p></div>`);
+      }
+
+      notesCards.innerHTML = cards.join("");
+    }
+
+    rawToggleBtn.addEventListener("click", () => {
+      const showing = rawMarkdown.classList.toggle("show");
+      rawToggleBtn.textContent = showing ? "Hide extracted text" : "View extracted text";
+    });
+
     // ── Copy / Download ──
     copyBtn.addEventListener("click", async () => {
-      const text = markdownPreview.textContent;
-      if (!text) return;
+      if (!currentMarkdown) return;
       try {
-        await navigator.clipboard.writeText(text);
+        await navigator.clipboard.writeText(currentMarkdown);
         copyBtn.textContent = "Copied!";
         copyBtn.classList.add("copied");
-        setTimeout(() => { copyBtn.textContent = "Copy Markdown"; copyBtn.classList.remove("copied"); }, 2000);
+        setTimeout(() => { copyBtn.textContent = "Copy Notes"; copyBtn.classList.remove("copied"); }, 2000);
       } catch {
         showError("Failed to copy.");
       }
     });
 
     downloadBtn.addEventListener("click", () => {
-      const text = markdownPreview.textContent;
-      if (!text) return;
-      const blob = new Blob([text], { type: "text/markdown" });
+      if (!currentMarkdown) return;
+      const blob = new Blob([currentMarkdown], { type: "text/markdown" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

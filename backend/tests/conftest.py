@@ -1,4 +1,5 @@
 import io
+import json
 from unittest.mock import AsyncMock
 
 import pytest
@@ -95,20 +96,36 @@ def invalid_image():
 
 @pytest.fixture
 def mock_vision(monkeypatch):
-    mock_create = AsyncMock()
-    mock_create.return_value.choices = [
-        type("obj", (), {"message": type("msg", (), {"content": "## Diagram Type: flowchart\n### Description\nA simple flow\n\n### Labels\n- Process A\n- Component B"})()})()
-    ]
-    mock_client = AsyncMock()
-    mock_client.chat.completions.create = mock_create
-    monkeypatch.setattr("app.services.vision_service.client", mock_client)
-    return mock_create
+    mock_response = type("obj", (), {"text": "## Diagram Type: flowchart\n### Description\nA simple flow\n\n### Labels\n- Process A\n- Component B"})()
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(return_value=mock_response)
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+    return mock_model.generate_content_async
+
+
+@pytest.fixture
+def mock_study_notes(monkeypatch):
+    """Mock the structured JSON Gemini response used by the diagram tier."""
+    payload = json.dumps({
+        "topic": {"title": "System Architecture", "is_probable": False},
+        "visible_content": {"headings": ["System Architecture Diagram"], "equations": [], "labels": ["Process A", "Component B"], "statements": []},
+        "study_notes": ["Process A is a rectangle.", "Component B is an ellipse.", "Process A connects to Component B."],
+        "simple_explanation": "This appears to represent a system with two main components linked together.",
+        "formula_box": [],
+        "diagram_interpretation": {"present": True, "visible_elements": ["Process A", "Component B", "connecting line"], "likely_interpretation": ["The line likely shows a data flow from Process A to Component B."]},
+        "uncertainties": ["The exact meaning of the connecting line cannot be confirmed from this frame."],
+        "key_takeaway": "A system with two linked components.",
+    })
+    mock_response = type("obj", (), {"text": payload})()
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(return_value=mock_response)
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+    return mock_model.generate_content_async
 
 
 @pytest.fixture
 def mock_vision_failure(monkeypatch):
-    mock_create = AsyncMock(side_effect=Exception("OpenAI API timeout"))
-    mock_client = AsyncMock()
-    mock_client.chat.completions.create = mock_create
-    monkeypatch.setattr("app.services.vision_service.client", mock_client)
-    return mock_create
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(side_effect=Exception("Gemini API timeout"))
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+    return mock_model.generate_content_async

@@ -13,8 +13,9 @@ from app.services.ocr_service import (
     format_as_table,
     low_quality_result,
 )
-from app.services.vision_service import extract_diagram, extract_text_with_llm
+from app.services.vision_service import extract_study_notes, extract_text_with_llm
 from app.services.storage_service import upload_image
+from app.utils.render_notes import render_study_notes
 from app.utils.tags import parse_context, generate_tags
 from app.utils.validation import validate_image_size
 from app.exceptions import InvalidInputError, CreditLimitError, UpstreamError
@@ -107,10 +108,10 @@ async def extract_diagram_route(
         raise InvalidInputError(message=str(e))
 
     try:
-        result = await extract_diagram(enhanced)
+        study_notes = await extract_study_notes(enhanced)
     except Exception as e:
         err_str = str(e)
-        logger.error("Gemini diagram failed: type=%s msg=%s", type(e).__name__, err_str)
+        logger.error("Gemini study notes failed: type=%s msg=%s", type(e).__name__, err_str)
         if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
             logger.warning("Gemini rate-limited on diagram (device=%s).", deviceId[:8])
             raise UpstreamError(service="SnapNote AI", detail="AI extraction is at high demand right now. Try again in a few minutes.")
@@ -119,20 +120,17 @@ async def extract_diagram_route(
     ctx = parse_context(context)
     tags = generate_tags(ctx)
 
+    markdown = render_study_notes(study_notes)
     if uploaded_url:
-        full_markdown = (
-            f"{result.markdown}\n\n"
-            f"![Diagram]({uploaded_url})"
-        )
-    else:
-        full_markdown = result.markdown
+        markdown += f"\n\n![Diagram]({uploaded_url})"
 
     use_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
 
     return ExtractionResponse(
         type=ExtractionType.DIAGRAM,
-        markdown=full_markdown,
+        markdown=markdown,
         imageUrl=uploaded_url,
         tags=tags,
         creditsUsed=settings.DIAGRAM_CREDIT_COST,
+        studyNotes=study_notes,
     )
