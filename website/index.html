@@ -152,11 +152,12 @@
     }
     .before-img img { width: 100%; height: 100%; object-fit: contain; display: block; min-height: 220px; }
     .before-img::after {
-      content: 'confusing, right?'; position: absolute; right: 10px; top: 10px;
-      background: rgba(248,113,113,.9); color: #fff; font-size: 10px; font-weight: 700;
-      padding: 4px 10px; border-radius: 20px;
+      content: 'What did the professor just do?'; position: absolute; right: 10px; top: 10px;
+      background: rgba(248,113,113,.92); color: #fff; font-size: 10.5px; font-weight: 700;
+      padding: 4px 10px; border-radius: 20px; max-width: 70%;
     }
     .demo-cta-row { text-align: center; margin-top: 22px; }
+    .demo-cta-row .cta-sub { color: var(--muted-2); font-size: 12.5px; margin-top: 10px; }
     .demo-card {
       background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px;
       padding: 13px 15px; margin-bottom: 9px; animation: rise .35s ease both;
@@ -494,7 +495,8 @@
       </div>
 
       <div class="demo-cta-row">
-        <button class="btn-primary" id="demo-cta-btn">Try it with your own lecture →</button>
+        <button class="btn-primary" id="demo-cta-btn">Try your own screenshot →</button>
+        <p class="cta-sub">50 free credits. No signup. Works on the ugliest lecture slides.</p>
       </div>
     </section>
 
@@ -1179,25 +1181,18 @@
         push(`<h5><span class="bar"></span>🎯 What You Should Remember</h5><p>${esc(notes.what_you_should_remember)}</p>`, d += 40);
       }
       if (notes.key_formulas && notes.key_formulas.length) {
-        const formulas = notes.key_formulas.slice(0, 3).map((f) => {
+        const formulas = notes.key_formulas.slice(0, 2).map((f) => {
           let html = `<div class="formula">${esc(f.formula)}`;
           if (f.explanation) html += `<div class="f-explain">${esc(f.explanation)}</div>`;
-          if (f.confidence === "context_needed") html += '<div class="f-explain" style="color:var(--amber)">Context needed: formula is readable, but surrounding lecture context is missing.</div>';
           return html + "</div>";
         }).join("");
         push(`<h5><span class="bar"></span>📦 Key Formulas</h5>${formulas}`, d += 40);
       }
       if (notes.understand_it && notes.understand_it.length) {
-        push(`<h5><span class="bar"></span>🧠 Understand It</h5>${notes.understand_it.slice(0, 2).map((p) => `<p>${esc(p)}</p>`).join("")}`, d += 40);
+        push(`<h5><span class="bar"></span>🧠 Understand It</h5>${notes.understand_it.slice(0, 1).map((p) => `<p>${esc(p)}</p>`).join("")}`, d += 40);
       }
       if (notes.common_mistakes && notes.common_mistakes.length) {
-        push(`<h5><span class="bar"></span>⚠️ Common Mistakes</h5><ul>${notes.common_mistakes.slice(0, 2).map((m) => `<li>${esc(m)}</li>`).join("")}</ul>`, d += 40);
-      }
-      if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
-        push(`<h5><span class="bar"></span>⏱️ 30-Second Revision</h5><ul>${notes.thirty_second_revision.slice(0, 3).map((b) => `<li>${esc(b)}</li>`).join("")}</ul>`, d += 40);
-      }
-      if (notes.verify_before_studying && notes.verify_before_studying.length) {
-        push(`<h5><span class="bar"></span>🛡️ Verify Before Studying</h5><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul>`, d += 40);
+        push(`<h5><span class="bar"></span>⚠️ Watch Out</h5><ul>${notes.common_mistakes.slice(0, 1).map((m) => `<li>${esc(m)}</li>`).join("")}</ul>`, d += 40);
       }
       return cards.join("");
     }
