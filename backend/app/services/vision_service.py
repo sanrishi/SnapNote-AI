@@ -112,14 +112,15 @@ def _extract_json(text: str) -> dict:
     return json.loads(text)
 
 
-async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 3) -> str:
+async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 3, json_mode: bool = False) -> str:
     img = Image.open(io.BytesIO(image_bytes))
     last_error = None
     for attempt in range(max_retries):
         try:
+            config = {"response_mime_type": "application/json"} if json_mode else None
             response = await model.generate_content_async(
                 [prompt, img],
-                generation_config={"response_mime_type": "application/json"},
+                generation_config=config,
             )
             return response.text.strip()
         except Exception as e:
@@ -143,7 +144,7 @@ async def extract_text_with_llm(image_bytes: bytes) -> str:
 async def _extract_structured(
     primary_prompt: str, repair_prompt: str, image_bytes: bytes, model_cls: type
 ) -> BaseModel:
-    raw = await _call_gemini(primary_prompt, image_bytes)
+    raw = await _call_gemini(primary_prompt, image_bytes, json_mode=True)
     try:
         data = _extract_json(raw)
         return model_cls(**data)
@@ -151,7 +152,7 @@ async def _extract_structured(
         logger.warning("%s JSON parse failed (attempt 1): %s", model_cls.__name__, first_err)
         try:
             repaired = await _call_gemini(
-                repair_prompt.replace("{{RAW}}", raw), image_bytes
+                repair_prompt.replace("{{RAW}}", raw), image_bytes, json_mode=True
             )
             data = _extract_json(repaired)
             return model_cls(**data)
