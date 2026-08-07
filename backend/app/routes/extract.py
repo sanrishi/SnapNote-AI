@@ -125,8 +125,6 @@ async def extract_diagram_route(
     tags = generate_tags(ctx)
 
     markdown = render_study_notes(study_notes)
-    if uploaded_url:
-        markdown += f"\n\n![Diagram]({uploaded_url})"
 
     use_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
 

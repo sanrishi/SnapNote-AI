@@ -133,6 +133,7 @@ async def test_diagram_extraction(sample_diagram_image, mock_study_notes):
     assert "## 📦 Key Formulas" in parsed.markdown
     assert "## 🧠 Understand It" in parsed.markdown
     assert "## ⏱️ 30-Second Revision" in parsed.markdown
+    assert "![Diagram](" not in parsed.markdown
     assert parsed.creditsUsed == 5
     assert mock_study_notes.call_count == 1
 

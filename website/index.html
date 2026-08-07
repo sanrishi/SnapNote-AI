@@ -361,6 +361,15 @@
     #download-btn { background: var(--grad); color: #fff; box-shadow: 0 6px 18px -8px rgba(139,92,246,.7); }
     #download-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
 
+    #result-panel .view-orig-btn {
+      display: block; margin: 14px auto 0; background: none; border: 1px dashed var(--border); color: var(--muted);
+      padding: 9px 16px; border-radius: 10px; font-size: 12.5px; cursor: pointer; font-family: inherit; transition: all .15s;
+    }
+    #result-panel .view-orig-btn:hover { border-color: var(--accent); color: var(--text); }
+
+    .orig-modal { max-width: 720px; }
+    .orig-modal img { display: block; width: 100%; border-radius: 10px; margin-top: 10px; }
+
     #error-msg { display: none; margin-top: 14px; padding: 13px 16px; background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.3); border-radius: 12px; color: var(--danger); font-size: 13px; }
 
     footer { text-align: center; padding: 28px 20px; color: var(--muted-2); font-size: 12.5px; border-top: 1px solid var(--border); margin-top: 40px; }
@@ -550,6 +559,7 @@
         <button id="copy-btn">📋 Copy Notes</button>
         <button id="download-btn">⬇️ Download .md</button>
       </div>
+      <button id="view-orig-btn" class="view-orig-btn" style="display:none;">📷 View original screenshot</button>
     </div>
   </div>
 
@@ -562,6 +572,13 @@
       <p class="sub">Text = 1 credit &middot; Revision enhancement = 1 credit &middot; Diagram = 5 credits. Credits never expire.</p>
       <div class="packs" id="packs-container"></div>
       <div id="payment-status"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="orig-modal">
+    <div class="modal orig-modal">
+      <button class="close-btn" id="orig-modal-close">&times;</button>
+      <img id="orig-img" src="" alt="Original screenshot" />
     </div>
   </div>
 
@@ -602,6 +619,10 @@
     const rawMarkdown = document.getElementById("raw-markdown");
     const copyBtn = document.getElementById("copy-btn");
     const downloadBtn = document.getElementById("download-btn");
+    const viewOrigBtn = document.getElementById("view-orig-btn");
+    const origModal = document.getElementById("orig-modal");
+    const origModalClose = document.getElementById("orig-modal-close");
+    const origImg = document.getElementById("orig-img");
     const creditsBadge = document.getElementById("credits-badge");
     const heroUploadBtn = document.getElementById("hero-upload-btn");
     const processingOverlay = document.getElementById("processing-overlay");
@@ -1143,6 +1164,7 @@
 
     // ── Render result ──
     let currentMarkdown = "";
+    let currentImageUrl = null;
 
     function esc(s) {
       const div = document.createElement("div");
@@ -1217,6 +1239,8 @@
 
     function renderResult(result, fromHistory) {
       currentMarkdown = result.markdown || "";
+      currentImageUrl = result.imageUrl || null;
+      viewOrigBtn.style.display = currentImageUrl ? "block" : "none";
       rawMarkdown.textContent = currentMarkdown;
       rawMarkdown.classList.remove("show");
       rawToggleBtn.textContent = "View extracted text";
@@ -1283,9 +1307,7 @@
       }
 
       if (notes.visual_context && notes.visual_context.present && notes.visual_context.summary) {
-        cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="bar"></span>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p>${result.imageUrl ? `<img src="${esc(result.imageUrl)}" alt="Diagram" style="max-width:100%;border-radius:10px;border:1px solid var(--border);margin-top:8px;" />` : ""}</div>`);
-      } else if (result.imageUrl) {
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:240ms"><h3><span class="bar"></span>📐 Diagram</h3><img src="${esc(result.imageUrl)}" alt="Diagram" /></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="bar"></span>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
@@ -1330,6 +1352,22 @@
       a.download = `snapnote-${Date.now()}.md`;
       a.click();
       URL.revokeObjectURL(url);
+    });
+
+    viewOrigBtn.addEventListener("click", () => {
+      if (!currentImageUrl) return;
+      origImg.src = currentImageUrl;
+      origModal.classList.add("open");
+    });
+    origModalClose.addEventListener("click", () => {
+      origModal.classList.remove("open");
+      origImg.src = "";
+    });
+    origModal.addEventListener("click", (e) => {
+      if (e.target === origModal) {
+        origModal.classList.remove("open");
+        origImg.src = "";
+      }
     });
 
     // ── Helpers ──

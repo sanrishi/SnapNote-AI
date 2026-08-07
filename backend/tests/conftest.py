@@ -113,7 +113,7 @@ def mock_study_notes(monkeypatch):
         "understand_it": ["This appears to represent a system with two main components linked together."],
         "common_mistakes": ["General thing to watch for: assuming the link implies a power connection rather than a data flow."],
         "thirty_second_revision": ["Two components, one link.", "Data flows between them."],
-        "visual_context": {"present": True, "summary": "The diagram connects a rectangle and an ellipse with a single line."},
+        "visual_context": {"present": True, "summary": "The connecting line represents a data flow, not power: one component passes information to the other, which is what links them into a single system."},
         "verify_before_studying": [],
         "uncertainties": ["The exact meaning of the connecting line cannot be confirmed from this frame."],
         "analogy": "",

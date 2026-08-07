@@ -54,7 +54,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "understand_it": ["plain-English explanation of what this concept is teaching", "intuition built from visible evidence or safe inference"],
   "common_mistakes": ["mistake students commonly make with this concept, with the correct way"],
   "thirty_second_revision": ["3-5 short bullets a student could scan 30 seconds before the exam"],
-  "visual_context": {"present": false, "summary": "1-2 sentences on how the diagram relates to the concept, only if a diagram exists and it helps understanding"},
+  "visual_context": {"present": false, "summary": "1-2 sentences teaching what the diagram MEANS conceptually for the concept, only if a diagram exists and it helps understanding"},
   "verify_before_studying": ["specific equation or symbol that may have been misread, with what was ambiguous"],
   "uncertainties": ["anything cropped, unreadable, ambiguous, or missing"],
   "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
@@ -71,7 +71,7 @@ SECTION RULES:
 - understand_it: answer "What is this concept actually teaching me?" Prioritize intuition and understanding. Base it on visible content + safe inference. Never invent missing formulas, definitions, or theorem names. If the derivation is cut off, state that.
 - common_mistakes: do NOT fabricate mistakes. Only include a mistake when it is genuinely supported by the visible material, or clearly frame it as "a general thing to watch for with this type of problem." Never pretend a mistake was taught by the professor unless it is visible.
 - thirty_second_revision: 3-5 tight bullets. Include the key formula if one is visible.
-- visual_context: 1-2 sentences maximum, ONLY if a diagram exists AND explaining it helps understanding. Never list detected objects, axes, arrows, or labels.
+- visual_context: 1-2 sentences maximum, ONLY if a diagram exists AND explaining it helps understanding. Explain what the diagram MEANS conceptually and why it matters for the concept — never list what objects, axes, arrows, or labels are visible. It must teach the relationship, not describe the picture. Example (GOOD): "The diagram represents a closed-loop control system: the reference input is compared with feedback to form an error signal, which the controller uses to drive the plant toward the desired output." Example (BAD): "Block diagrams illustrate closed-loop control systems with reference inputs, summing junctions, controllers, processes."
 - verify_before_studying: ONLY genuinely uncertain equations/symbols (confidence "possible_extraction_issue"). Empty unless truly needed.
 - uncertainties: only genuinely ambiguous/missing material. Empty if nothing is uncertain.
 - analogy: use an everyday comparison ONLY if it is genuinely helpful and accurate. Otherwise empty string. Never force one.
@@ -100,7 +100,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "understand_it": ["plain-English explanation", "intuition"],
   "common_mistakes": ["mistake with the correct way, only when genuinely useful"],
   "thirty_second_revision": ["3-5 short bullets"],
-  "visual_context": {"present": false, "summary": "1-2 sentences, only if a diagram exists and helps"},
+  "visual_context": {"present": false, "summary": "1-2 sentences teaching what the diagram MEANS conceptually, only if a diagram exists and helps"},
   "verify_before_studying": ["equation or symbol that may have been misread"],
   "uncertainties": ["anything ambiguous or missing"],
   "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
@@ -110,7 +110,7 @@ SECTION RULES:
 - what_you_should_remember: THE core payoff. Answer "what am I supposed to remember for my exam?"
 - common_mistakes: do NOT fabricate. Frame as "a general thing to watch for" unless the mistake is visibly taught.
 - thirty_second_revision: 3-5 tight bullets. Include the key formula if visible.
-- visual_context: never list detected objects/axes/labels. 1-2 sentences max, only if helpful.
+- visual_context: 1-2 sentences max, only if a diagram exists and helps. Explain what the diagram MEANS conceptually (teach the relationship), never list what objects/axes/labels are visible.
 - analogy: only if genuinely helpful and accurate, otherwise empty string."""  # noqa: E501
 
 REVISION_REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
