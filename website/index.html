@@ -3,42 +3,316 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SnapNote AI</title>
+  <meta name="theme-color" content="#0b1120" />
+  <meta name="description" content="SnapNote AI turns confusing lecture screenshots into exam-ready study notes. Understand formulas, remember the key takeaways, revise in 30 seconds." />
+  <title>SnapNote AI — Screenshot it. Understand it.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #0f172a; --surface: #1e293b; --border: #334155;
-      --text: #f1f5f9; --muted: #94a3b8; --accent: #6366f1;
-      --green: #22c55e; --amber: #f59e0b; --danger: #ef4444;
+      --bg: #0b1120; --surface: #151d31; --surface-2: #1c2740; --border: rgba(148,163,184,.14);
+      --text: #eef2ff; --muted: #94a3b8; --muted-2: #64748b;
+      --accent: #6366f1; --accent-2: #8b5cf6; --green: #34d399; --amber: #fbbf24; --danger: #f87171;
+      --grad: linear-gradient(135deg, #6366f1, #8b5cf6 55%, #d946ef);
+      --shadow: 0 20px 60px -20px rgba(0,0,0,.6);
+      --radius: 16px;
     }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: var(--bg); color: var(--text);
       min-height: 100vh; display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased; overflow-x: hidden;
     }
-    .container { max-width: 800px; margin: 0 auto; padding: 24px 16px; width: 100%; flex: 1; display: flex; flex-direction: column; }
+    .bg-glow {
+      position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(600px 400px at 15% -10%, rgba(99,102,241,.22), transparent 60%),
+        radial-gradient(700px 500px at 90% 10%, rgba(139,92,246,.16), transparent 60%),
+        radial-gradient(600px 500px at 50% 120%, rgba(217,70,239,.10), transparent 60%);
+    }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 20px; width: 100%; flex: 1; display: flex; flex-direction: column; }
 
-    header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-    header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-    header h1 span { color: var(--accent); }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 0; margin-bottom: 12px;
+      background: rgba(11,17,32,.75); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-mark {
+      width: 34px; height: 34px; border-radius: 10px; background: var(--grad);
+      display: grid; place-items: center; font-size: 17px; color: #fff;
+      box-shadow: 0 6px 20px -6px rgba(139,92,246,.7);
+    }
+    header h1 { font-size: 19px; font-weight: 800; letter-spacing: -.4px; font-family: 'Space Grotesk', sans-serif; }
+    header h1 span { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     #credits-area { display: flex; align-items: center; gap: 8px; }
     #credits-badge {
-      background: var(--surface); color: var(--accent); padding: 6px 14px;
-      border-radius: 20px; font-size: 13px; font-weight: 600; border: 1px solid var(--border);
+      background: var(--surface); color: var(--green); padding: 6px 14px;
+      border-radius: 20px; font-size: 13px; font-weight: 700; border: 1px solid rgba(52,211,153,.25);
+      display: flex; align-items: center; gap: 6px;
     }
+    #credits-badge::before { content: '●'; font-size: 8px; }
     #buy-btn {
-      background: var(--green); color: #fff; border: none; padding: 6px 14px;
-      border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: opacity .15s;
+      background: var(--grad); color: #fff; border: none; padding: 8px 16px;
+      border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer;
+      transition: transform .15s, box-shadow .15s, filter .15s;
+      box-shadow: 0 6px 20px -8px rgba(139,92,246,.7);
     }
-    #buy-btn:hover { opacity: .8; }
+    #buy-btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
 
-    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 100; align-items: center; justify-content: center; }
+    /* ── Hero ── */
+    .hero { text-align: center; padding: 44px 8px 30px; }
+    .hero .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.3);
+      color: #a5b4fc; font-size: 12px; font-weight: 600; letter-spacing: .3px;
+      padding: 6px 14px; border-radius: 20px; margin-bottom: 22px;
+    }
+    .hero .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+    .hero h2 {
+      font-size: clamp(30px, 6vw, 48px); font-weight: 900; letter-spacing: -1.4px; line-height: 1.08;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .hero h2 .grad {
+      background: linear-gradient(120deg, #818cf8, #c084fc 60%, #f0abfc);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p.sub { color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 560px; margin: 18px auto 0; }
+    .hero .cta-row { display: flex; gap: 12px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--grad); color: #fff; border: none; padding: 13px 28px; border-radius: 14px;
+      font-size: 15px; font-weight: 700; cursor: pointer; transition: transform .15s, box-shadow .15s, filter .15s;
+      box-shadow: 0 12px 30px -10px rgba(139,92,246,.8);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.07); }
+    .btn-ghost {
+      background: var(--surface); color: var(--text); border: 1px solid var(--border); padding: 13px 24px;
+      border-radius: 14px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all .15s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-ghost:hover { border-color: var(--accent); background: var(--surface-2); transform: translateY(-2px); }
+    .hero .trust {
+      display: flex; gap: 20px; justify-content: center; margin-top: 26px; flex-wrap: wrap;
+      color: var(--muted-2); font-size: 12.5px; font-weight: 500;
+    }
+    .hero .trust span { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* ── How it works ── */
+    .how {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 26px 0 8px;
+    }
+    .how .step {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px 16px; text-align: center; transition: all .2s;
+    }
+    .how .step:hover { transform: translateY(-3px); border-color: rgba(99,102,241,.4); background: var(--surface-2); }
+    .how .step .num {
+      width: 26px; height: 26px; margin: 0 auto 10px; border-radius: 8px;
+      background: rgba(99,102,241,.16); color: #a5b4fc; font-size: 13px; font-weight: 800;
+      display: grid; place-items: center;
+    }
+    .how .step .ic { font-size: 22px; margin-bottom: 8px; }
+    .how .step h4 { font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+    .how .step p { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+
+    /* ── Mode toggle ── */
+    .mode-toggle { display: flex; gap: 8px; margin: 22px 0 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 5px; }
+    .mode-toggle button {
+      flex: 1; padding: 10px; border: none; border-radius: 10px;
+      background: transparent; color: var(--muted); font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .18s; font-family: inherit;
+    }
+    .mode-toggle button:hover { color: var(--text); }
+    .mode-toggle button.active { background: var(--grad); color: #fff; box-shadow: 0 6px 16px -6px rgba(139,92,246,.7); }
+    .mode-toggle .cost { font-weight: 500; font-size: 12px; opacity: .75; }
+
+    /* ── Drop zone ── */
+    #drop-zone {
+      border: 2px dashed rgba(148,163,184,.28); border-radius: 20px; padding: 56px 24px;
+      text-align: center; cursor: pointer; transition: all .25s; position: relative;
+      background: linear-gradient(180deg, rgba(28,39,64,.55), rgba(21,29,49,.35));
+      flex-shrink: 0; overflow: hidden;
+    }
+    #drop-zone::before {
+      content: ''; position: absolute; inset: -2px; border-radius: 20px; padding: 2px;
+      background: var(--grad); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      opacity: 0; transition: opacity .25s;
+    }
+    #drop-zone:hover::before, #drop-zone.dragover::before { opacity: 1; }
+    #drop-zone:hover, #drop-zone.dragover { transform: translateY(-2px); }
+    #drop-zone .icon {
+      font-size: 46px; margin-bottom: 14px; color: var(--accent);
+      filter: drop-shadow(0 8px 20px rgba(99,102,241,.5));
+      animation: bob 3s ease-in-out infinite;
+    }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    #drop-zone p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    #drop-zone p strong { color: var(--text); font-size: 16px; }
+    #drop-zone .shortcut { margin-top: 12px; display: inline-block; background: rgba(11,17,32,.6); padding: 4px 12px; border-radius: 8px; font-size: 11.5px; color: var(--muted-2); border: 1px solid var(--border); }
+    #drop-zone .shortcut kbd { background: var(--surface-2); padding: 1px 6px; border-radius: 5px; font-family: inherit; border: 1px solid var(--border); font-weight: 600; color: var(--text); }
+    #drop-zone.paste-flash { border-color: var(--green) !important; background: rgba(52,211,153,.1) !important; }
+    #drop-zone.has-image { padding: 12px; border-style: solid; border-color: rgba(52,211,153,.4); }
+    #drop-zone.has-image img { max-width: 100%; max-height: 420px; border-radius: 14px; display: block; margin: 0 auto; }
+    #drop-zone input[type=file] { display: none; }
+    .hint-chips { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+    .hint-chips span {
+      font-size: 11.5px; color: var(--muted-2); background: rgba(148,163,184,.08);
+      border: 1px solid var(--border); padding: 4px 10px; border-radius: 20px;
+    }
+
+    #preview-actions { display: none; gap: 10px; margin-top: 14px; justify-content: center; }
+    #preview-actions.show { display: flex; }
+    #preview-actions button {
+      padding: 11px 26px; border: none; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .15s;
+    }
+    #submit-btn { background: var(--grad); color: #fff; box-shadow: 0 8px 24px -8px rgba(139,92,246,.8); }
+    #submit-btn:hover { filter: brightness(1.07); transform: translateY(-1px); }
+    #submit-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    #clear-btn { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
+    #clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Processing overlay ── */
+    #processing-overlay {
+      display: none; position: fixed; inset: 0; z-index: 90;
+      background: rgba(11,17,32,.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    #processing-overlay.show { display: flex; }
+    .proc-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      padding: 34px 30px; max-width: 400px; width: 100%; text-align: center; box-shadow: var(--shadow);
+    }
+    .proc-orb {
+      width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 50%;
+      background: conic-gradient(from 0deg, #6366f1, #d946ef, #34d399, #6366f1);
+      animation: spin 1.2s linear infinite;
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 7px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 8px), #000 calc(100% - 7px));
+    }
+    .proc-card h3 { font-size: 17px; font-weight: 800; margin-bottom: 6px; }
+    .proc-card p.hint { color: var(--muted); font-size: 13.5px; margin-bottom: 20px; }
+    .proc-steps { text-align: left; display: flex; flex-direction: column; gap: 10px; }
+    .proc-step { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--muted-2); transition: color .2s; }
+    .proc-step .tick { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); display: grid; place-items: center; font-size: 10px; color: transparent; flex-shrink: 0; transition: all .2s; }
+    .proc-step.done { color: var(--green); }
+    .proc-step.done .tick { background: var(--green); border-color: var(--green); color: #06281c; }
+    .proc-step.active { color: var(--text); font-weight: 600; }
+    .proc-step.active .tick { border-color: var(--accent); border-top-color: #a5b4fc; animation: spin .8s linear infinite; }
+    .proc-step.pending .tick { border-color: var(--border); }
+
+    /* ── History ── */
+    #history-section { display: none; margin-top: 26px; }
+    #history-section.show { display: block; }
+    #history-section h3 { font-size: 13px; font-weight: 700; color: var(--muted); letter-spacing: .4px; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .history-list { display: flex; flex-direction: column; gap: 8px; }
+    .history-item {
+      display: flex; align-items: center; gap: 12px; width: 100%;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 14px; cursor: pointer; text-align: left; transition: all .15s; font-family: inherit; color: var(--text);
+    }
+    .history-item:hover { border-color: var(--accent); background: var(--surface-2); transform: translateX(3px); }
+    .history-item .hic { font-size: 18px; }
+    .history-item .h-title { font-size: 13.5px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .history-item .h-meta { font-size: 11.5px; color: var(--muted-2); white-space: nowrap; }
+    .history-item .type-badge.small { padding: 2px 8px; font-size: 10px; }
+
+    /* ── Result ── */
+    #result-panel { display: none; margin-top: 26px; flex: 1; }
+    #result-panel.show { display: block; }
+    #result-panel .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
+    #result-panel .result-header .type-badge { padding: 5px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    #result-panel .result-header .type-badge.text { background: rgba(99,102,241,.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,.3); }
+    #result-panel .result-header .type-badge.diagram { background: rgba(251,191,36,.12); color: var(--amber); border: 1px solid rgba(251,191,36,.3); }
+    #result-panel .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+    #result-panel .tags span { background: var(--surface); padding: 4px 12px; border-radius: 20px; font-size: 12px; color: var(--muted); border: 1px solid var(--border); }
+
+    .note-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px 20px; margin-bottom: 12px;
+      animation: rise .4s ease both;
+    }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .note-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 8px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .note-card h3 .bar { width: 3px; height: 15px; border-radius: 2px; background: var(--grad); }
+    .note-card p, .note-card li { font-size: 14px; line-height: 1.75; color: #cbd5e1; }
+    .note-card ul { padding-left: 20px; }
+    .note-card .formula {
+      font-family: 'Space Grotesk', ui-monospace, monospace;
+      background: linear-gradient(135deg, rgba(99,102,241,.1), rgba(139,92,246,.05));
+      border: 1px solid rgba(99,102,241,.25); border-radius: 10px;
+      padding: 10px 14px; margin: 8px 0; font-size: 15px; overflow-x: auto; white-space: pre-wrap;
+      font-weight: 600; letter-spacing: .2px;
+    }
+    .note-card .formula .f-explain { color: var(--muted); font-size: 13px; font-weight: 400; margin-top: 6px; letter-spacing: 0; }
+    .note-card .uncertain-symbols { color: var(--amber); font-size: 12.5px; margin-top: 5px; }
+    .note-card.uncertain-card { border-color: rgba(251,191,36,.45); background: linear-gradient(180deg, rgba(251,191,36,.06), var(--surface)); }
+    .note-card.uncertain-card h3 { color: var(--amber); }
+    .note-card.verify-card { border-color: rgba(248,113,113,.5); background: linear-gradient(180deg, rgba(248,113,113,.06), var(--surface)); }
+    .note-card.verify-card h3 { color: var(--danger); }
+    .note-card.takeaway-card { border-color: rgba(52,211,153,.4); background: linear-gradient(180deg, rgba(52,211,153,.07), var(--surface)); }
+    .note-card.takeaway-card h3 { color: var(--green); }
+    .note-card.diagram-card img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border); margin-top: 8px; }
+    .note-card .muted { color: var(--muted); font-size: 13px; }
+
+    #revise-btn {
+      display: none; width: 100%; margin: 6px 0 14px; padding: 14px 16px;
+      background: linear-gradient(135deg, rgba(99,102,241,.22), rgba(217,70,239,.18));
+      border: 1px dashed var(--accent); border-radius: 14px; color: var(--text);
+      font-size: 15px; font-weight: 700; cursor: pointer; transition: all .2s; font-family: inherit;
+    }
+    #revise-btn em { display: block; font-style: normal; font-size: 12.5px; font-weight: 500; color: var(--muted); margin-top: 3px; }
+    #revise-btn:hover { border-style: solid; box-shadow: 0 8px 24px -10px rgba(139,92,246,.6); }
+    #revise-btn:disabled { opacity: .55; cursor: not-allowed; }
+    #revision-cards .revision-header {
+      font-size: 13px; font-weight: 700; color: var(--accent-2); margin: 4px 0 10px;
+      display: flex; align-items: center; gap: 6px; letter-spacing: .2px;
+    }
+
+    #result-panel pre {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px; font-size: 13.5px; line-height: 1.7; overflow-x: auto;
+      white-space: pre-wrap; max-height: 400px; overflow-y: auto; color: #cbd5e1;
+    }
+    #raw-toggle-btn {
+      background: none; border: 1px solid var(--border); color: var(--muted);
+      padding: 7px 14px; border-radius: 10px; font-size: 12.5px; cursor: pointer; margin-bottom: 12px; font-family: inherit; transition: all .15s;
+    }
+    #raw-toggle-btn:hover { border-color: var(--accent); color: var(--text); }
+    #raw-markdown { display: none; }
+    #raw-markdown.show { display: block; }
+    #result-panel .btn-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    #result-panel .btn-row button {
+      padding: 11px 20px; border: none; border-radius: 12px; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: all .15s; font-family: inherit;
+    }
+    #copy-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    #copy-btn:hover { border-color: var(--accent); }
+    #copy-btn.copied { background: var(--green); color: #052e22; border-color: var(--green); }
+    #download-btn { background: var(--grad); color: #fff; box-shadow: 0 6px 18px -8px rgba(139,92,246,.7); }
+    #download-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+    #error-msg { display: none; margin-top: 14px; padding: 13px 16px; background: rgba(248,113,113,.1); border: 1px solid rgba(248,113,113,.3); border-radius: 12px; color: var(--danger); font-size: 13px; }
+
+    footer { text-align: center; padding: 28px 20px; color: var(--muted-2); font-size: 12.5px; border-top: 1px solid var(--border); margin-top: 40px; }
+    footer .brand { color: var(--muted); font-weight: 700; }
+
+    /* ── Buy modal ── */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(5,9,20,.72); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 100; align-items: center; justify-content: center; }
     .overlay.open { display: flex; }
     .modal {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-      padding: 28px; max-width: 420px; width: 90%; max-height: 90vh; overflow-y: auto;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      padding: 28px; max-width: 420px; width: 90%; max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow);
+      animation: rise .3s ease both;
     }
-    .modal h2 { font-size: 20px; margin-bottom: 4px; }
+    .modal h2 { font-size: 20px; margin-bottom: 4px; font-family: 'Space Grotesk', sans-serif; }
     .modal .sub { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
     .packs { display: flex; flex-direction: column; gap: 10px; }
     .pack {
@@ -46,161 +320,83 @@
       padding: 14px 18px; border: 1px solid var(--border); border-radius: 12px;
       background: var(--bg); cursor: pointer; transition: all .15s;
     }
-    .pack:hover { border-color: var(--accent); }
-    .pack.selected { border-color: var(--green); background: rgba(34,197,94,.08); }
+    .pack:hover { border-color: var(--accent); transform: translateY(-1px); }
+    .pack.selected { border-color: var(--green); background: rgba(52,211,153,.08); }
     .pack .credits { font-size: 16px; font-weight: 700; }
     .pack .price { font-size: 14px; color: var(--muted); }
     .pack .price strong { color: var(--text); }
     .pack .per-credit { font-size: 11px; color: var(--muted); }
     .modal .pay-btn {
-      width: 100%; margin-top: 18px; padding: 12px; border: none; border-radius: 10px;
-      background: var(--green); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+      width: 100%; margin-top: 18px; padding: 13px; border: none; border-radius: 12px;
+      background: var(--grad); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit;
+      box-shadow: 0 8px 24px -8px rgba(139,92,246,.8); transition: all .15s;
     }
+    .modal .pay-btn:hover { filter: brightness(1.08); }
     .modal .pay-btn:disabled { opacity: .5; cursor: not-allowed; }
-    .modal .close-btn {
-      float: right; background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer;
-    }
+    .modal .close-btn { float: right; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; line-height: 1; }
     .modal .close-btn:hover { color: var(--text); }
     #payment-status { margin-top: 12px; font-size: 13px; text-align: center; }
 
-    .mode-toggle { display: flex; gap: 8px; margin: 20px 0; }
-    .mode-toggle button {
-      flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: 10px;
-      background: var(--surface); color: var(--muted); font-size: 14px; font-weight: 600;
-      cursor: pointer; transition: all .15s;
-    }
-    .mode-toggle button:hover { border-color: var(--accent); }
-    .mode-toggle button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .mode-toggle .cost { font-weight: 400; font-size: 12px; opacity: .7; }
-
-    #drop-zone {
-      border: 2px dashed var(--border); border-radius: 16px; padding: 48px 24px;
-      text-align: center; cursor: pointer; transition: all .2s; position: relative;
-      background: var(--surface); flex-shrink: 0;
-    }
-    #drop-zone:hover, #drop-zone.dragover { border-color: var(--accent); background: rgba(99,102,241,.08); }
-    #drop-zone .icon { font-size: 36px; margin-bottom: 12px; color: var(--muted); }
-    #drop-zone p { color: var(--muted); font-size: 14px; line-height: 1.6; }
-    #drop-zone .shortcut { margin-top: 8px; display: inline-block; background: var(--bg); padding: 3px 10px; border-radius: 6px; font-size: 11px; color: var(--muted); }
-    #drop-zone .shortcut kbd { background: var(--surface); padding: 1px 5px; border-radius: 4px; font-family: inherit; border: 1px solid var(--border); }
-    #drop-zone.paste-flash { border-color: var(--green) !important; background: rgba(34,197,94,.1) !important; transition: none; }
-    #drop-zone.has-image { padding: 0; border-style: solid; }
-    #drop-zone.has-image img { max-width: 100%; max-height: 400px; border-radius: 14px; display: block; }
-    #drop-zone input[type=file] { display: none; }
-    #preview-actions { display: none; gap: 8px; margin-top: 12px; justify-content: center; }
-    #preview-actions.show { display: flex; }
-    #preview-actions button {
-      padding: 10px 24px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
-    }
-    #submit-btn { background: var(--accent); color: #fff; }
-    #submit-btn:disabled { opacity: .5; cursor: not-allowed; }
-    #clear-btn { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
-    #submit-btn.loading { pointer-events: none; }
-    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 6px; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    #result-panel { display: none; margin-top: 24px; flex: 1; }
-    #result-panel.show { display: block; }
-    #result-panel .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    #result-panel .result-header .type-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-    #result-panel .result-header .type-badge.text { background: rgba(99,102,241,.15); color: var(--accent); }
-    #result-panel .result-header .type-badge.diagram { background: rgba(245,158,11,.15); color: var(--amber); }
-    #result-panel .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
-    #result-panel .tags span { background: var(--surface); padding: 3px 10px; border-radius: 20px; font-size: 12px; color: var(--muted); border: 1px solid var(--border); }
-
-    .note-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
-      padding: 16px 18px; margin-bottom: 14px;
-    }
-    .note-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; color: var(--text); display: flex; align-items: center; gap: 8px; }
-    .note-card p, .note-card li { font-size: 14px; line-height: 1.7; color: var(--text); }
-    .note-card ul { padding-left: 20px; }
-    .note-card .formula {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
-      padding: 8px 12px; margin: 6px 0; font-size: 14px; overflow-x: auto; white-space: pre-wrap;
-    }
-    .note-card .formula .f-explain { color: var(--muted); font-size: 13px; margin-top: 4px; }
-    .note-card .uncertain-symbols { color: var(--amber); font-size: 12px; margin-top: 4px; }
-    .note-card.uncertain-card { border-color: rgba(245,158,11,.5); background: rgba(245,158,11,.06); }
-    .note-card.uncertain-card h3 { color: var(--amber); }
-    .note-card.verify-card { border-color: rgba(239,68,68,.5); background: rgba(239,68,68,.06); }
-    .note-card.verify-card h3 { color: var(--danger); }
-    .note-card.verify-card p { color: var(--muted); font-size: 13px; margin-bottom: 4px; }
-    .note-card.takeaway-card { border-color: rgba(34,197,94,.4); background: rgba(34,197,94,.05); }
-    .note-card.takeaway-card h3 { color: var(--green); }
-    .note-card.diagram-card img {
-      max-width: 100%; border-radius: 10px; border: 1px solid var(--border); margin-top: 4px;
-    }
-    .note-card .muted { color: var(--muted); font-size: 13px; }
-
-    #revise-btn {
-      display: none; width: 100%; margin: 6px 0 14px; padding: 12px 16px;
-      background: linear-gradient(135deg, rgba(99,102,241,.18), rgba(168,85,247,.18));
-      border: 1px dashed var(--accent); border-radius: 12px; color: var(--text);
-      font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;
-    }
-    #revise-btn em { display: block; font-style: normal; font-size: 12px; font-weight: 400; color: var(--muted); margin-top: 3px; }
-    #revise-btn:hover { border-style: solid; opacity: .92; }
-    #revise-btn:disabled { opacity: .55; cursor: not-allowed; }
-    #revision-cards .revision-header {
-      font-size: 13px; font-weight: 700; color: var(--accent); margin: 4px 0 10px;
-      display: flex; align-items: center; gap: 6px;
-    }
-
-    #result-panel pre {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 20px; font-size: 14px; line-height: 1.7; overflow-x: auto;
-      white-space: pre-wrap; max-height: 400px; overflow-y: auto;
-    }
-    #raw-toggle-btn {
-      background: none; border: 1px solid var(--border); color: var(--muted);
-      padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; margin-bottom: 10px;
-    }
-    #raw-toggle-btn:hover { border-color: var(--accent); color: var(--text); }
-    #raw-markdown { display: none; }
-    #raw-markdown.show { display: block; }
-    #result-panel .btn-row { display: flex; gap: 8px; margin-top: 12px; }
-    #result-panel .btn-row button {
-      padding: 9px 18px; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s;
-    }
-    #copy-btn { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-    #copy-btn:hover { border-color: var(--accent); }
-    #copy-btn.copied { background: var(--green); color: #fff; border-color: var(--green); }
-    #download-btn { background: var(--accent); color: #fff; }
-    #download-btn:hover { opacity: .9; }
-
-    #error-msg { display: none; margin-top: 12px; padding: 12px 16px; background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 10px; color: var(--danger); font-size: 13px; }
-
-    footer { text-align: center; padding: 24px; color: var(--muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 24px; }
-
     @media (max-width: 600px) {
-      .container { padding: 16px 12px; }
-      header h1 { font-size: 18px; }
-      #drop-zone { padding: 32px 16px; }
-      #drop-zone .icon { font-size: 28px; }
+      .container { padding: 0 14px; }
+      .how { grid-template-columns: 1fr; }
+      .hero { padding-top: 28px; }
+      .hero .trust { gap: 10px; }
+      #drop-zone { padding: 40px 16px; }
+      #drop-zone .icon { font-size: 36px; }
+      .proc-card { padding: 26px 20px; }
     }
   </style>
 </head>
 <body>
+  <div class="bg-glow"></div>
   <div class="container">
     <header>
-      <h1>SnapNote <span>AI</span></h1>
+      <a class="logo" href="#" onclick="return false;">
+        <div class="logo-mark">⚡</div>
+        <h1>SnapNote <span>AI</span></h1>
+      </a>
       <div id="credits-area">
         <span id="credits-badge">--</span>
-        <button id="buy-btn">Buy Credits</button>
+        <button id="buy-btn">+ Buy Credits</button>
       </div>
     </header>
 
-    <div class="overlay" id="buy-modal">
-      <div class="modal">
-        <button class="close-btn" id="modal-close">&times;</button>
-        <h2>Buy Credits</h2>
-        <p class="sub">Text = 1 credit &middot; Revision enhancement = 1 credit &middot; Diagram = 5 credits. Credits never expire.</p>
-        <div class="packs" id="packs-container"></div>
-        <div id="payment-status"></div>
+    <section class="hero">
+      <span class="eyebrow"><span class="dot"></span> Stuck on a lecture slide? Just screenshot it.</span>
+      <h2>Turn confusion into<br /><span class="grad">exam-ready understanding.</span></h2>
+      <p class="sub">Drop any lecture screenshot — a messy formula slide, a whiteboard, a diagram. SnapNote reads it, explains it in plain language, and hands you a revision sheet you can actually use.</p>
+      <div class="cta-row">
+        <button class="btn-primary" id="hero-upload-btn">📸 Upload a screenshot</button>
+        <button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">How it works</button>
       </div>
-    </div>
+      <div class="trust">
+        <span>⚡ 50 free credits</span>
+        <span>🔒 No signup</span>
+        <span>🧠 Built for JEE / NEET / Engineering</span>
+      </div>
+    </section>
+
+    <section class="how" id="how">
+      <div class="step">
+        <div class="num">1</div>
+        <div class="ic">📸</div>
+        <h4>Screenshot</h4>
+        <p>Capture the slide that lost you — formulas, diagrams, handwritten notes.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <div class="ic">🧠</div>
+        <h4>Understand</h4>
+        <p>SnapNote reads it and explains the concept the way a good teacher would.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <div class="ic">⏱️</div>
+        <h4>Revise</h4>
+        <p>Get key formulas, common mistakes, and a 30-second revision sheet.</p>
+      </div>
+    </section>
 
     <div class="mode-toggle">
       <button id="mode-text" class="active" data-mode="text">Text / Table <span class="cost">(1 credit)</span></button>
@@ -209,20 +405,30 @@
 
     <div id="drop-zone">
       <div id="drop-content">
-        <div class="icon">&#128247;</div>
+        <div class="icon">📷</div>
         <p><strong>Drop image here</strong> or click to upload</p>
-        <p style="margin-top:4px;">Supports PNG, JPG, WEBP (max 10 MB)</p>
+        <p style="margin-top:6px;">Supports PNG, JPG, WEBP (max 10 MB)</p>
         <span class="shortcut">Press <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste from clipboard</span>
       </div>
       <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" />
     </div>
+    <div class="hint-chips">
+      <span>🧪 Works on handwritten slides</span>
+      <span>🧮 Reads formulas &amp; Greek symbols</span>
+      <span>📱 Lecture whiteboard photos OK</span>
+    </div>
 
     <div id="preview-actions">
       <button id="clear-btn">Clear</button>
-      <button id="submit-btn">Extract Notes</button>
+      <button id="submit-btn">Extract Notes →</button>
     </div>
 
     <div id="error-msg"></div>
+
+    <section id="history-section">
+      <h3>🕘 Your recent study sheets</h3>
+      <div class="history-list" id="history-list"></div>
+    </section>
 
     <div id="result-panel">
       <div class="result-header">
@@ -239,13 +445,32 @@
       <button id="raw-toggle-btn">View extracted text</button>
       <pre id="raw-markdown"></pre>
       <div class="btn-row">
-        <button id="copy-btn">Copy Notes</button>
-        <button id="download-btn">Download .md</button>
+        <button id="copy-btn">📋 Copy Notes</button>
+        <button id="download-btn">⬇️ Download .md</button>
       </div>
     </div>
   </div>
 
-  <footer>Powered by EasyOCR + Gemini</footer>
+  <footer>Made for students who'd rather <span class="brand">understand</span> than memorize. · Powered by EasyOCR + Gemini</footer>
+
+  <div class="overlay" id="buy-modal">
+    <div class="modal">
+      <button class="close-btn" id="modal-close">&times;</button>
+      <h2>Buy Credits</h2>
+      <p class="sub">Text = 1 credit &middot; Revision enhancement = 1 credit &middot; Diagram = 5 credits. Credits never expire.</p>
+      <div class="packs" id="packs-container"></div>
+      <div id="payment-status"></div>
+    </div>
+  </div>
+
+  <div id="processing-overlay">
+    <div class="proc-card">
+      <div class="proc-orb"></div>
+      <h3 id="proc-title">Studying your screenshot…</h3>
+      <p class="hint" id="proc-hint">This usually takes a few seconds. Don't close the tab.</p>
+      <div class="proc-steps" id="proc-steps"></div>
+    </div>
+  </div>
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
@@ -276,6 +501,12 @@
     const copyBtn = document.getElementById("copy-btn");
     const downloadBtn = document.getElementById("download-btn");
     const creditsBadge = document.getElementById("credits-badge");
+    const heroUploadBtn = document.getElementById("hero-upload-btn");
+    const processingOverlay = document.getElementById("processing-overlay");
+    const procSteps = document.getElementById("proc-steps");
+    const procTitle = document.getElementById("proc-title");
+    const historySection = document.getElementById("history-section");
+    const historyList = document.getElementById("history-list");
 
     // ── Device Auth ──
     async function initDevice() {
@@ -411,7 +642,7 @@
         },
         modal: { ondismiss: function () { paymentStatus.textContent = ""; } },
         prefill: {},
-        theme: { color: "#22c55e" },
+        theme: { color: "#34d399" },
       };
       const rzp = new Razorpay(options);
       rzp.open();
@@ -462,6 +693,89 @@
       }
     }
 
+    // ── Processing overlay ──
+    let procTimer = null;
+    function showProcessing(steps, title, hint) {
+      procTitle.textContent = title || "Studying your screenshot…";
+      if (hint) document.getElementById("proc-hint").textContent = hint;
+      procSteps.innerHTML = steps.map((s) => `<div class="proc-step pending"><span class="tick"></span>${esc(s)}</div>`).join("");
+      processingOverlay.classList.add("show");
+      const els = procSteps.querySelectorAll(".proc-step");
+      let idx = 0;
+      if (procTimer) clearInterval(procTimer);
+      procTimer = setInterval(() => {
+        els.forEach((el, i) => {
+          el.classList.remove("active", "done");
+          if (i < idx) el.classList.add("done");
+        });
+        if (idx < els.length) {
+          els[idx].classList.add("active");
+          idx++;
+        }
+      }, 700);
+      els[0].classList.add("active");
+    }
+    function hideProcessing() {
+      if (procTimer) clearInterval(procTimer);
+      procTimer = null;
+      processingOverlay.classList.remove("show");
+    }
+
+    // ── History (localStorage) ──
+    const HISTORY_KEY = "snapnote_history";
+    function getHistory() {
+      try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; }
+    }
+    function saveHistory(entry) {
+      const hist = getHistory();
+      hist.unshift(entry);
+      const trimmed = hist.slice(0, 5);
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
+      renderHistory();
+    }
+    function timeAgo(ts) {
+      const s = Math.floor((Date.now() - ts) / 1000);
+      if (s < 60) return "just now";
+      const m = Math.floor(s / 60);
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      const d = Math.floor(h / 24);
+      return `${d}d ago`;
+    }
+    function renderHistory() {
+      const hist = getHistory();
+      if (!hist.length) { historySection.classList.remove("show"); return; }
+      historySection.classList.add("show");
+      historyList.innerHTML = hist.map((h, i) => {
+        const typeClass = h.type === "diagram" ? "diagram" : "text";
+        return `
+          <button class="history-item" data-i="${i}">
+            <span class="hic">${h.type === "diagram" ? "📐" : "📝"}</span>
+            <span class="h-title">${esc(h.topic || "Study sheet")}</span>
+            <span class="type-badge small ${typeClass}">${h.type}</span>
+            <span class="h-meta">${timeAgo(h.at)}</span>
+          </button>
+        `;
+      }).join("");
+      historyList.querySelectorAll(".history-item").forEach((el) => {
+        el.addEventListener("click", () => openHistory(parseInt(el.dataset.i, 10)));
+      });
+    }
+    function openHistory(i) {
+      const hist = getHistory();
+      const h = hist[i];
+      if (!h) return;
+      currentBlob = null;
+      currentMarkdown = h.markdown || "";
+      rawMarkdown.textContent = currentMarkdown;
+      rawMarkdown.classList.remove("show");
+      rawToggleBtn.textContent = "View extracted text";
+      renderResult({ type: h.type, creditsUsed: h.creditsUsed, studyNotes: h.studyNotes, markdown: h.markdown, imageUrl: h.imageUrl }, true);
+      resultPanel.classList.add("show");
+      resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
     // ── Image handlers ──
     function handleImage(blob) {
       if (blob.size > 10 * 1024 * 1024) {
@@ -475,9 +789,10 @@
       previewActions.classList.add("show");
       errorMsg.style.display = "none";
       resultPanel.classList.remove("show");
+      dropZone.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
-    // Click to upload
+    heroUploadBtn.addEventListener("click", () => fileInput.click());
     dropZone.addEventListener("click", () => fileInput.click());
     fileInput.addEventListener("change", () => {
       if (fileInput.files[0]) handleImage(fileInput.files[0]);
@@ -520,9 +835,9 @@
       currentBlob = null;
       dropZone.classList.remove("has-image");
       dropContent.innerHTML = `
-        <div class="icon">&#128247;</div>
+        <div class="icon">📷</div>
         <p><strong>Drop image here</strong> or click to upload</p>
-        <p style="margin-top:4px;">Supports PNG, JPG, WEBP (max 10 MB)</p>
+        <p style="margin-top:6px;">Supports PNG, JPG, WEBP (max 10 MB)</p>
         <span class="shortcut">Press <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste from clipboard</span>
       `;
       previewActions.classList.remove("show");
@@ -544,6 +859,15 @@
       submitBtn.innerHTML = '<span class="spinner"></span> Processing...';
       errorMsg.style.display = "none";
 
+      const isDiagram = currentMode === "diagram";
+      showProcessing(
+        isDiagram
+          ? ["Reading your screenshot", "Understanding the concept", "Extracting formulas & context", "Building your study notes"]
+          : ["Reading text with OCR", "Structuring formulas & labels"],
+        isDiagram ? "Analyzing your diagram…" : "Extracting your notes…",
+        isDiagram ? "Turning the image into real understanding. Hang tight." : "This usually takes a few seconds."
+      );
+
       const formData = new FormData();
       formData.append("image", currentBlob, "capture.png");
       formData.append("context", JSON.stringify({
@@ -553,11 +877,8 @@
       }));
       formData.append("deviceId", deviceId);
 
-      const endpoint = currentMode === "text" ? `${BASE}/api/extract/text` : `${BASE}/api/extract/diagram`;
+      const endpoint = isDiagram ? `${BASE}/api/extract/diagram` : `${BASE}/api/extract/text`;
       const maxRetries = 3;
-      const statusMsg = document.createElement("div");
-      statusMsg.style.cssText = "text-align:center;color:var(--muted);font-size:13px;margin-top:8px;";
-      submitBtn.parentNode.appendChild(statusMsg);
 
       let lastError = null;
       for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -582,6 +903,19 @@
           renderResult(result);
           resultPanel.classList.add("show");
 
+          const topic = (result.studyNotes && result.studyNotes.topic && result.studyNotes.topic.title) || "Study sheet";
+          saveHistory({
+            type: result.type,
+            topic,
+            creditsUsed: result.creditsUsed,
+            studyNotes: result.studyNotes || null,
+            markdown: result.markdown || "",
+            imageUrl: result.imageUrl || null,
+            at: Date.now(),
+          });
+
+          hideProcessing();
+          resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
           await initDevice();
           lastError = null;
           break;
@@ -589,7 +923,7 @@
           lastError = err.message || "Something went wrong.";
           if (attempt < maxRetries && err.message === "429") {
             submitBtn.innerHTML = `<span class="spinner"></span> Retrying (${attempt+1}/${maxRetries})...`;
-            statusMsg.textContent = "High demand — hang tight...";
+            procTitle.textContent = "High demand — hang tight…";
             await new Promise(r => setTimeout(r, Math.min(2000 * Math.pow(2, attempt), 10000)));
           } else {
             break;
@@ -597,10 +931,12 @@
         }
       }
 
-      statusMsg.remove();
-      if (lastError) showError(lastError);
+      if (lastError) {
+        hideProcessing();
+        showError(lastError);
+      }
       submitBtn.disabled = false;
-      submitBtn.textContent = "Extract Notes";
+      submitBtn.innerHTML = "Extract Notes →";
     });
 
     // ── Enhance for Revision ──
@@ -613,6 +949,12 @@
       reviseBtn.innerHTML = '<span class="spinner"></span> Making this revision-ready...';
       errorMsg.style.display = "none";
 
+      showProcessing(
+        ["Understanding the concept", "Turning it into a revision sheet"],
+        "Building your revision sheet…",
+        "This is a separate AI pass — a few more seconds."
+      );
+
       const formData = new FormData();
       formData.append("image", currentBlob, "capture.png");
       formData.append("context", currentContext);
@@ -622,6 +964,7 @@
         const resp = await fetch(`${BASE}/api/extract/revision`, { method: "POST", body: formData });
         if (resp.status === 429) {
           const err = await resp.json().catch(() => ({}));
+          hideProcessing();
           showError(err.error || "High demand — try again in a few minutes.");
           return;
         }
@@ -630,9 +973,11 @@
           throw new Error(err.error || `Server error (${resp.status})`);
         }
         const result = await resp.json();
+        hideProcessing();
         renderRevision(result.study_notes, result.creditsUsed);
         await initDevice();
       } catch (err) {
+        hideProcessing();
         showError(err.message || "Enhancement failed. Try again.");
       } finally {
         reviseBtn.disabled = false;
@@ -647,10 +992,10 @@
 
       if (notes.topic && notes.topic.title) {
         const title = notes.topic.title.toUpperCase();
-        cards.push(`<div class="note-card"><h3>🏷 ${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:0ms"><h3><span class="bar"></span>🏷 ${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
       }
       if (notes.what_you_should_remember) {
-        cards.push(`<div class="note-card takeaway-card"><h3>🎯 What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
+        cards.push(`<div class="note-card takeaway-card" style="animation-delay:40ms"><h3><span class="bar"></span>🎯 What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
       }
       if (notes.key_formulas && notes.key_formulas.length) {
         const formulas = notes.key_formulas.map((f) => {
@@ -665,28 +1010,28 @@
           if (f.confidence === "possible_extraction_issue") html += '<div class="uncertain-symbols">Possible extraction issue: the mathematical symbols are ambiguous. See Verify Before Studying below.</div>';
           return html + `</div>`;
         }).join("");
-        cards.push(`<div class="note-card"><h3>📦 Key Formulas</h3>${formulas}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="bar"></span>📦 Key Formulas</h3>${formulas}</div>`);
       }
       if (notes.understand_it && notes.understand_it.length) {
-        cards.push(`<div class="note-card"><h3>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:120ms"><h3><span class="bar"></span>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
       }
       if (notes.common_mistakes && notes.common_mistakes.length) {
-        cards.push(`<div class="note-card"><h3>⚠️ Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:160ms"><h3><span class="bar"></span>⚠️ Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
       }
       if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
-        cards.push(`<div class="note-card takeaway-card"><h3>⏱️ 30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card takeaway-card" style="animation-delay:200ms"><h3><span class="bar"></span>⏱️ 30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
       }
       if (notes.visual_context && notes.visual_context.present && notes.visual_context.summary) {
-        cards.push(`<div class="note-card"><h3>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="bar"></span>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
       }
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
-        cards.push(`<div class="note-card verify-card"><h3>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card verify-card" style="animation-delay:280ms"><h3><span class="bar"></span>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
       }
       if (notes.uncertainties && notes.uncertainties.length) {
-        cards.push(`<div class="note-card uncertain-card"><h3>⚠️ Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card uncertain-card" style="animation-delay:320ms"><h3><span class="bar"></span>⚠️ Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
       }
       if (notes.analogy) {
-        cards.push(`<div class="note-card"><h3>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:360ms"><h3><span class="bar"></span>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
       }
 
       cards.push(`<p style="font-size:12px;color:var(--muted);margin-top:6px;">${creditsUsed} credit used</p>`);
@@ -703,14 +1048,14 @@
       return div.innerHTML;
     }
 
-    function renderResult(result) {
+    function renderResult(result, fromHistory) {
       currentMarkdown = result.markdown || "";
       rawMarkdown.textContent = currentMarkdown;
       rawMarkdown.classList.remove("show");
       rawToggleBtn.textContent = "View extracted text";
       revisionCards.innerHTML = "";
       const isText = result.type !== "diagram";
-      reviseBtn.style.display = isText ? "block" : "none";
+      reviseBtn.style.display = (isText && !fromHistory) ? "block" : "none";
       reviseBtn.disabled = false;
       reviseBtn.innerHTML = '<span>✨ Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>';
 
@@ -726,7 +1071,7 @@
       if (!notes) {
         const card = document.createElement("div");
         card.className = "note-card";
-        card.innerHTML = `<h3>📄 Notes</h3><pre style="white-space:pre-wrap;font-size:14px;line-height:1.7;">${esc(currentMarkdown)}</pre>`;
+        card.innerHTML = `<h3><span class="bar"></span>📄 Notes</h3><pre style="white-space:pre-wrap;font-size:14px;line-height:1.7;">${esc(currentMarkdown)}</pre>`;
         notesCards.appendChild(card);
         return;
       }
@@ -735,11 +1080,11 @@
 
       if (notes.topic && notes.topic.title) {
         const title = notes.topic.title.toUpperCase();
-        cards.push(`<div class="note-card"><h3>🏷 ${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:0ms"><h3><span class="bar"></span>🏷 ${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
       }
 
       if (notes.what_you_should_remember) {
-        cards.push(`<div class="note-card takeaway-card"><h3>🎯 What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
+        cards.push(`<div class="note-card takeaway-card" style="animation-delay:40ms"><h3><span class="bar"></span>🎯 What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
       }
 
       if (notes.key_formulas && notes.key_formulas.length) {
@@ -755,37 +1100,37 @@
           if (f.confidence === "possible_extraction_issue") html += '<div class="uncertain-symbols">Possible extraction issue: the mathematical symbols are ambiguous. See Verify Before Studying below.</div>';
           return html + `</div>`;
         }).join("");
-        cards.push(`<div class="note-card"><h3>📦 Key Formulas</h3>${formulas}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="bar"></span>📦 Key Formulas</h3>${formulas}</div>`);
       }
 
       if (notes.understand_it && notes.understand_it.length) {
-        cards.push(`<div class="note-card"><h3>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:120ms"><h3><span class="bar"></span>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
       }
 
       if (notes.common_mistakes && notes.common_mistakes.length) {
-        cards.push(`<div class="note-card"><h3>⚠️ Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:160ms"><h3><span class="bar"></span>⚠️ Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
       }
 
       if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
-        cards.push(`<div class="note-card takeaway-card"><h3>⏱️ 30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card takeaway-card" style="animation-delay:200ms"><h3><span class="bar"></span>⏱️ 30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
       }
 
       if (notes.visual_context && notes.visual_context.present && notes.visual_context.summary) {
-        cards.push(`<div class="note-card"><h3>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p>${result.imageUrl ? `<img src="${esc(result.imageUrl)}" alt="Diagram" style="max-width:100%;border-radius:10px;border:1px solid var(--border);margin-top:8px;" />` : ""}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="bar"></span>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p>${result.imageUrl ? `<img src="${esc(result.imageUrl)}" alt="Diagram" style="max-width:100%;border-radius:10px;border:1px solid var(--border);margin-top:8px;" />` : ""}</div>`);
       } else if (result.imageUrl) {
-        cards.push(`<div class="note-card diagram-card"><h3>📐 Diagram</h3><img src="${esc(result.imageUrl)}" alt="Diagram" /></div>`);
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:240ms"><h3><span class="bar"></span>📐 Diagram</h3><img src="${esc(result.imageUrl)}" alt="Diagram" /></div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
-        cards.push(`<div class="note-card verify-card"><h3>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card verify-card" style="animation-delay:280ms"><h3><span class="bar"></span>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
       }
 
       if (notes.uncertainties && notes.uncertainties.length) {
-        cards.push(`<div class="note-card uncertain-card"><h3>⚠️ Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card uncertain-card" style="animation-delay:320ms"><h3><span class="bar"></span>⚠️ Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
       }
 
       if (notes.analogy) {
-        cards.push(`<div class="note-card"><h3>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:360ms"><h3><span class="bar"></span>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
       }
 
       notesCards.innerHTML = cards.join("");
@@ -801,9 +1146,9 @@
       if (!currentMarkdown) return;
       try {
         await navigator.clipboard.writeText(currentMarkdown);
-        copyBtn.textContent = "Copied!";
+        copyBtn.textContent = "✓ Copied!";
         copyBtn.classList.add("copied");
-        setTimeout(() => { copyBtn.textContent = "Copy Notes"; copyBtn.classList.remove("copied"); }, 2000);
+        setTimeout(() => { copyBtn.textContent = "📋 Copy Notes"; copyBtn.classList.remove("copied"); }, 2000);
       } catch {
         showError("Failed to copy.");
       }
@@ -828,6 +1173,7 @@
 
     // ── Init ──
     initDevice();
+    renderHistory();
   </script>
 </body>
 </html>
