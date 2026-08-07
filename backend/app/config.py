@@ -20,6 +20,7 @@ class Settings(BaseSettings):
 
     FREE_CREDITS_MONTHLY: int = 50
     TEXT_CREDIT_COST: int = 1
+    REVISION_CREDIT_COST: int = 1
     DIAGRAM_CREDIT_COST: int = 5
 
     DAILY_REQ_LIMIT: int = 50

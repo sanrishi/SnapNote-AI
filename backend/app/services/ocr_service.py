@@ -174,6 +174,52 @@ def format_as_markdown(text_lines: list[str]) -> str:
     return "\n\n".join(lines)
 
 
+def _classify_line(text: str) -> str:
+    math_symbols = "ωθφαπλμ∑∫=±∞×÷→≤≥√Σ∏≠≈Δγβδ°²³₁₂₀"
+    sym_count = sum(1 for c in text if c in math_symbols or c in "+-*/^=")
+    if sym_count >= 2 and len(text) <= 60:
+        return "formula"
+    if len(text.split()) == 1 and len(text) <= 12:
+        return "label"
+    return "text"
+
+
+def format_structured_text(text_lines: list[str]) -> str:
+    if not text_lines:
+        return ""
+
+    cleaned = [ln.strip() for ln in text_lines if ln.strip()]
+    if not cleaned:
+        return ""
+
+    formulas: list[str] = []
+    labels: list[str] = []
+    statements: list[str] = []
+    seen: set[str] = set()
+
+    for line in cleaned:
+        if line in seen:
+            continue
+        seen.add(line)
+        cls = _classify_line(line)
+        if cls == "formula":
+            formulas.append(line)
+        elif cls == "label":
+            labels.append(line)
+        else:
+            statements.append(line)
+
+    parts: list[str] = []
+    if formulas:
+        parts.append("## Visible Formulas\n\n" + "\n\n".join(f"`{f}`" for f in formulas))
+    if labels:
+        parts.append("## Visible Labels\n\n" + "\n".join(f"- {lbl}" for lbl in labels))
+    if statements:
+        parts.append("## Extracted Text\n\n" + "\n\n".join(statements))
+
+    return "\n\n".join(parts)
+
+
 def _cluster_rows(
     ocr_results: OCRResult,
 ) -> list[list[tuple[float, str]]]:

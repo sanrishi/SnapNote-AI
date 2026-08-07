@@ -131,6 +131,20 @@
     }
     .note-card .muted { color: var(--muted); font-size: 13px; }
 
+    #revise-btn {
+      display: none; width: 100%; margin: 6px 0 14px; padding: 12px 16px;
+      background: linear-gradient(135deg, rgba(99,102,241,.18), rgba(168,85,247,.18));
+      border: 1px dashed var(--accent); border-radius: 12px; color: var(--text);
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s;
+    }
+    #revise-btn em { display: block; font-style: normal; font-size: 12px; font-weight: 400; color: var(--muted); margin-top: 3px; }
+    #revise-btn:hover { border-style: solid; opacity: .92; }
+    #revise-btn:disabled { opacity: .55; cursor: not-allowed; }
+    #revision-cards .revision-header {
+      font-size: 13px; font-weight: 700; color: var(--accent); margin: 4px 0 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
     #result-panel pre {
       background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
       padding: 20px; font-size: 14px; line-height: 1.7; overflow-x: auto;
@@ -179,14 +193,14 @@
       <div class="modal">
         <button class="close-btn" id="modal-close">&times;</button>
         <h2>Buy Credits</h2>
-        <p class="sub">Each extraction costs 1&ndash;5 credits. Credits never expire.</p>
+        <p class="sub">Text = 1 credit &middot; Revision enhancement = 1 credit &middot; Diagram = 5 credits. Credits never expire.</p>
         <div class="packs" id="packs-container"></div>
         <div id="payment-status"></div>
       </div>
     </div>
 
     <div class="mode-toggle">
-      <button id="mode-text" class="active" data-mode="text">Text / Table <span class="cost">(free)</span></button>
+      <button id="mode-text" class="active" data-mode="text">Text / Table <span class="cost">(1 credit)</span></button>
       <button id="mode-diagram" data-mode="diagram">Diagram <span class="cost">(5 credits)</span></button>
     </div>
 
@@ -213,6 +227,11 @@
         <span id="result-credits" style="font-size:13px;color:var(--muted);"></span>
       </div>
       <div id="tags-container" class="tags"></div>
+      <button id="revise-btn" class="revise-btn">
+        <span>✨ Enhance for Revision</span>
+        <em>Turn this into exam-ready learning material</em>
+      </button>
+      <div id="revision-cards"></div>
       <div id="notes-cards"></div>
       <button id="raw-toggle-btn">View extracted text</button>
       <pre id="raw-markdown"></pre>
@@ -232,6 +251,7 @@
     // ── State ──
     let currentBlob = null;
     let currentMode = "text";
+    let currentContext = "";
 
     // ── DOM refs ──
     const dropZone = document.getElementById("drop-zone");
@@ -246,6 +266,8 @@
     const resultCredits = document.getElementById("result-credits");
     const tagsContainer = document.getElementById("tags-container");
     const notesCards = document.getElementById("notes-cards");
+    const reviseBtn = document.getElementById("revise-btn");
+    const revisionCards = document.getElementById("revision-cards");
     const rawToggleBtn = document.getElementById("raw-toggle-btn");
     const rawMarkdown = document.getElementById("raw-markdown");
     const copyBtn = document.getElementById("copy-btn");
@@ -504,6 +526,9 @@
       resultPanel.classList.remove("show");
       errorMsg.style.display = "none";
       fileInput.value = "";
+      revisionCards.innerHTML = "";
+      reviseBtn.style.display = "none";
+      reviseBtn.disabled = false;
     });
 
     // ── Submit with retry on 429 ──
@@ -575,6 +600,77 @@
       submitBtn.textContent = "Extract Notes";
     });
 
+    // ── Enhance for Revision ──
+    reviseBtn.addEventListener("click", async () => {
+      if (!currentBlob) return;
+      const deviceId = getDeviceId();
+      if (!deviceId) { showError("Device not initialized. Refresh the page."); return; }
+
+      reviseBtn.disabled = true;
+      reviseBtn.innerHTML = '<span class="spinner"></span> Enhancing for revision...';
+      errorMsg.style.display = "none";
+
+      const formData = new FormData();
+      formData.append("image", currentBlob, "capture.png");
+      formData.append("context", currentContext);
+      formData.append("deviceId", deviceId);
+
+      try {
+        const resp = await fetch(`${BASE}/api/extract/revision`, { method: "POST", body: formData });
+        if (resp.status === 429) {
+          const err = await resp.json().catch(() => ({}));
+          showError(err.error || "High demand — try again in a few minutes.");
+          return;
+        }
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          throw new Error(err.error || `Server error (${resp.status})`);
+        }
+        const result = await resp.json();
+        renderRevision(result.revision_guide, result.creditsUsed);
+        await initDevice();
+      } catch (err) {
+        showError(err.message || "Enhancement failed. Try again.");
+      } finally {
+        reviseBtn.disabled = false;
+        reviseBtn.innerHTML = '<span>✨ Enhance for Revision</span><em>Turn this into exam-ready learning material</em>';
+      }
+    });
+
+    function renderRevision(guide, creditsUsed) {
+      if (!guide) return;
+      const cards = [];
+      cards.push('<div class="revision-header">✨ Explain Like I\'m Revising Tomorrow</div>');
+
+      if (guide.why_it_matters) {
+        cards.push(`<div class="note-card"><h3>🎯 Why It Matters</h3><p>${esc(guide.why_it_matters)}</p></div>`);
+      }
+      if (guide.intuition) {
+        cards.push(`<div class="note-card"><h3>🧠 Intuition</h3><p>${esc(guide.intuition)}</p></div>`);
+      }
+      if (guide.common_mistakes && guide.common_mistakes.length) {
+        cards.push(`<div class="note-card"><h3>⚠️ Common Mistakes</h3><ul>${guide.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
+      }
+      if (guide.thirty_second_revision) {
+        cards.push(`<div class="note-card takeaway-card"><h3>⏱️ 30-Second Revision</h3><p>${esc(guide.thirty_second_revision)}</p></div>`);
+      }
+      if (guide.analogy) {
+        cards.push(`<div class="note-card"><h3>💡 Easy Analogy</h3><p>${esc(guide.analogy)}</p></div>`);
+      }
+
+      cards.push(`<p style="font-size:12px;color:var(--muted);margin-top:6px;">${creditsUsed} credit used</p>`);
+      revisionCards.innerHTML = cards.join("");
+      revisionCards.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      currentMarkdown = currentMarkdown.trim() + "\n\n---\n\n## Explain Like I'm Revising Tomorrow\n\n"
+        + `### Why It Matters\n${guide.why_it_matters}\n\n`
+        + `### Intuition\n${guide.intuition}\n\n`
+        + `### Common Mistakes\n${guide.common_mistakes.map((m) => `- ${m}`).join("\n")}\n\n`
+        + `### 30-Second Revision\n${guide.thirty_second_revision}`
+        + (guide.analogy ? `\n\n### Easy Analogy\n${guide.analogy}` : "");
+      rawMarkdown.textContent = currentMarkdown;
+    }
+
     // ── Render result ──
     let currentMarkdown = "";
 
@@ -589,6 +685,17 @@
       rawMarkdown.textContent = currentMarkdown;
       rawMarkdown.classList.remove("show");
       rawToggleBtn.textContent = "View extracted text";
+      revisionCards.innerHTML = "";
+      reviseBtn.style.display = "block";
+      reviseBtn.disabled = false;
+      reviseBtn.innerHTML = '<span>✨ Enhance for Revision</span><em>Turn this into exam-ready learning material</em>';
+
+      const topic = (result.studyNotes && result.studyNotes.topic && result.studyNotes.topic.title) || "";
+      currentContext = JSON.stringify({
+        topic,
+        type: result.type || "",
+        notes: (result.studyNotes && result.studyNotes.study_notes) || [],
+      });
 
       const notes = result.studyNotes;
       notesCards.innerHTML = "";
@@ -615,7 +722,11 @@
         const formulas = notes.formula_box.map((f) => {
           let html = `<div class="formula">${esc(f.formula)}`;
           if (f.explanation) html += `<div class="f-explain">${esc(f.explanation)}</div>`;
-          if (f.uncertain_symbols && f.uncertain_symbols.length) html += `<div class="uncertain-symbols">Uncertain: ${esc(f.uncertain_symbols.join(", "))}</div>`;
+          if (f.uncertain_symbols && f.uncertain_symbols.length) {
+            html += f.uncertain_symbols.map((s) =>
+              `<div class="uncertain-symbols">${esc(`The meaning of ${s} cannot be confirmed from this screenshot because the surrounding lecture context is missing.`)}</div>`
+            ).join("");
+          }
           return html + `</div>`;
         }).join("");
         cards.push(`<div class="note-card"><h3>📦 Formula Box</h3>${formulas}</div>`);

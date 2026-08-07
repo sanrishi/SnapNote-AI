@@ -9,8 +9,8 @@ from PIL import Image
 
 from app.config import settings
 from app.exceptions import UpstreamError
-from app.models.schemas import StudyNotes
-from pydantic import ValidationError
+from app.models.schemas import RevisionGuide, StudyNotes
+from pydantic import BaseModel, ValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +64,39 @@ SECTION RULES:
 - uncertainties: ALWAYS include an entry when anything is cropped, unreadable, ambiguous, or inferred. Empty list if nothing is uncertain.
 - key_takeaway: one concise statement of what to remember from this screenshot."""
 
+REVISION_SYSTEM_PROMPT = r"""You are SnapNote AI. A student already extracted notes from a lecture screenshot. Now help them revise the concept for an exam tomorrow.
+
+FUNDAMENTAL RULES:
+1. Only teach what the image actually shows. Never invent content, formulas, theorem names, derivation steps, or exam claims (no "appeared in GATE", no "frequently asked in JEE").
+2. Use cautious wording when the meaning is inferred from limited context: "This appears to...", "Based on the visible equation...", "The full context cannot be confirmed from this single frame."
+3. NEVER use LaTeX commands (\omega, \hat, \frac, \sin, any backslash) or $...$ wrapping. Write math as plain Unicode: Greek letters (ω θ φ α), ±, ∞, →, ≤, ×, ÷, superscripts/subscripts where they exist (², ₁). Fractions as a/b.
+4. Preserve formulas exactly as they appear in the image. Explain only what is reasonably clear; mark the rest as uncertain.
+5. Keep everything concrete and student-friendly. No generic filler, no vague motivational language.
+6. Do NOT describe the image ("The image shows", "A diagram is drawn"). Focus on the concept.
+
+OUTPUT: ONLY a JSON object with exactly this structure:
+{
+  "why_it_matters": "2-4 sentences on why this concept is important to understand",
+  "intuition": "2-4 sentences building intuition, using cautious wording where needed",
+  "common_mistakes": ["common student mistake with correction", "..."],
+  "thirty_second_revision": "a tight 2-5 sentence summary a student could read 30 seconds before the exam",
+  "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
+}
+
+SECTION RULES:
+- why_it_matters: base it on the visible material. Explain the role the concept plays in the subject (e.g. how it connects to related ideas that appear in the image). Do not invent exam frequency or importance claims.
+- intuition: explain the mechanism in plain words. When the exact meaning is uncertain, say so.
+- common_mistakes: each entry must be a concrete mistake a student actually makes (e.g. swapping sin/cos while resolving components) followed by the correct way. Never invent mistakes unrelated to the visible content.
+- thirty_second_revision: the most condensed useful summary possible. Include the key formula if one is visible.
+- analogy: use an everyday comparison ONLY if it is genuinely helpful and accurate. Otherwise leave it as an empty string. Never force an analogy.
+- If a section cannot be filled without inventing content, keep it minimal and honest rather than guessing."""  # noqa: E501
+
+REVISION_REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
+{"why_it_matters":"","intuition":"","common_mistakes":[],"thirty_second_revision":"","analogy":""}
+
+Previous (invalid) response:
+{{RAW}}"""
+
 REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
 {"topic":{"title":"","is_probable":false},"visible_content":{"headings":[],"equations":[],"labels":[],"statements":[]},"study_notes":[],"simple_explanation":"","formula_box":[{"formula":"","explanation":"","uncertain_symbols":[]}],"diagram_interpretation":{"present":false,"visible_elements":[],"likely_interpretation":[]},"uncertainties":[],"key_takeaway":""}
 
@@ -107,22 +140,41 @@ async def extract_text_with_llm(image_bytes: bytes) -> str:
     return await _call_gemini(TEXT_SYSTEM_PROMPT, image_bytes)
 
 
-async def extract_study_notes(image_bytes: bytes) -> StudyNotes:
-    raw = await _call_gemini(STUDY_NOTES_SYSTEM_PROMPT, image_bytes)
+async def _extract_structured(
+    primary_prompt: str, repair_prompt: str, image_bytes: bytes, model_cls: type
+) -> BaseModel:
+    raw = await _call_gemini(primary_prompt, image_bytes)
     try:
         data = _extract_json(raw)
-        return StudyNotes(**data)
+        return model_cls(**data)
     except (json.JSONDecodeError, ValidationError) as first_err:
-        logger.warning("StudyNotes JSON parse failed (attempt 1): %s", first_err)
+        logger.warning("%s JSON parse failed (attempt 1): %s", model_cls.__name__, first_err)
         try:
             repaired = await _call_gemini(
-                REPAIR_PROMPT.replace("{{RAW}}", raw), image_bytes
+                repair_prompt.replace("{{RAW}}", raw), image_bytes
             )
             data = _extract_json(repaired)
-            return StudyNotes(**data)
+            return model_cls(**data)
         except (json.JSONDecodeError, ValidationError, UpstreamError) as repair_err:
-            logger.error("StudyNotes repair failed: %s", repair_err)
+            logger.error("%s repair failed: %s", model_cls.__name__, repair_err)
             raise UpstreamError(
                 service="SnapNote AI",
                 detail="AI could not structure this image's notes cleanly. Please try again.",
             )
+
+
+async def extract_study_notes(image_bytes: bytes) -> StudyNotes:
+    result = await _extract_structured(
+        STUDY_NOTES_SYSTEM_PROMPT, REPAIR_PROMPT, image_bytes, StudyNotes
+    )
+    return result
+
+
+async def extract_revision_guide(image_bytes: bytes, context_hint: str = "") -> RevisionGuide:
+    prompt = REVISION_SYSTEM_PROMPT
+    if context_hint:
+        prompt += "\n\nEXTRACTED CONTEXT (use it to focus, but only teach what the image shows):\n" + context_hint
+    result = await _extract_structured(
+        prompt, REVISION_REPAIR_PROMPT, image_bytes, RevisionGuide
+    )
+    return result

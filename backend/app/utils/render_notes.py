@@ -1,6 +1,10 @@
 from app.models.schemas import StudyNotes
 
 
+def uncertainty_sentence(symbol: str) -> str:
+    return f"The meaning of {symbol} cannot be confirmed from this screenshot because the surrounding lecture context is missing."
+
+
 def render_study_notes(notes: StudyNotes) -> str:
     lines: list[str] = []
 
@@ -19,7 +23,9 @@ def render_study_notes(notes: StudyNotes) -> str:
             if f.explanation:
                 line += f"\n{f.explanation}"
             if f.uncertain_symbols:
-                line += f"\n*Uncertain: {', '.join(f.uncertain_symbols)}*"
+                line += "\n" + "\n".join(
+                    f"*{uncertainty_sentence(s)}*" for s in f.uncertain_symbols
+                )
             lines.append(line)
 
     if notes.study_notes:

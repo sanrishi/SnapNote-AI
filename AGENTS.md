@@ -206,8 +206,9 @@ The gate checks in order:
 
 ### Rule 8.3 — Pricing model
 - `/extract/text`: 1 credit if OCR succeeds standalone; **5 credits if escalation to Gemini fires** (credit check before Gemini call, line 55-57 of extract.py)
+- `/extract/revision`: 1 credit (separate Gemini call for the learning layer)
 - `/extract/diagram`: 5 credits always
-- 50 free credits/month = **50 OCR-only requests** or **10 Gemini-escalated requests**
+- 50 free credits/month = **50 OCR-only requests**, **50 revision enhancements**, or **10 Gemini-escalated requests**
 - When Gemini returns 429 (rate limit), text endpoint falls back to OCR + a note, charged 1 credit. Diagram endpoint returns a clean "high demand" message.
 
 ### Rule 8.4 — Test fixtures

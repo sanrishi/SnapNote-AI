@@ -88,5 +88,18 @@ class DeviceAuthResponse(BaseModel):
     plan: str = "free"
 
 
+class RevisionGuide(BaseModel):
+    why_it_matters: str = ""
+    intuition: str = ""
+    common_mistakes: list[str] = []
+    thirty_second_revision: str = ""
+    analogy: str = ""
+
+
+class RevisionResponse(BaseModel):
+    revision_guide: RevisionGuide
+    creditsUsed: int
+
+
 class DiagramResult(BaseModel):
     markdown: str
