@@ -10,6 +10,7 @@ from PIL import Image
 from app.config import settings
 from app.exceptions import UpstreamError
 from app.models.schemas import StudyNotes
+from app.utils.latex_clean import latex_to_unicode
 from pydantic import BaseModel, ValidationError
 
 logger = logging.getLogger(__name__)
@@ -39,7 +40,7 @@ FUNDAMENTAL RULES:
    If a derivation or equation is cut off, say so. Do NOT complete the professor's missing steps and present them as the professor's work.
 2. Never invent text, formulas, derivation steps, theorem names, or exam claims (no "appeared in GATE 2022", no "frequently asked in JEE").
 3. Use cautious wording for inferred meaning: "This appears to...", "Based on the visible equation...", "The full context cannot be confirmed from this single frame."
-4. NEVER use LaTeX commands (\omega, \hat, \frac, \sin, any backslash) or $...$ wrapping. Write math as plain Unicode: Greek letters (ω θ φ α), ±, ∞, →, ≤, ×, ÷, superscripts/subscripts where they exist (², ₁). Fractions as a/b, integrals as ∫, sums as Σ.
+4. NEVER use LaTeX commands (\omega, \hat, \frac, \sin, any backslash) or $...$ wrapping. Write math as plain Unicode: Greek letters (ω θ φ α), ±, ∞, →, ≤, ×, ÷, superscripts/subscripts where they exist (², ₁). Fractions as a/b, integrals as ∫, sums as Σ. Every formula string MUST contain zero backslash (\) characters.
 5. Preserve equations exactly as written.
 6. Do NOT narrate or inventory the image. No lists of detected axes, objects, arrows, or labels. The image is the professor's teaching medium, not the subject.
 7. Avoid generic filler. Every line preserves info, explains a relationship, improves revision, or discloses uncertainty.
@@ -162,12 +163,22 @@ async def extract_text_with_llm(image_bytes: bytes) -> str:
     return await _call_gemini(TEXT_SYSTEM_PROMPT, image_bytes)
 
 
+def _clean_latex_in_dict(value: object) -> object:
+    if isinstance(value, str):
+        return latex_to_unicode(value)
+    if isinstance(value, list):
+        return [_clean_latex_in_dict(item) for item in value]
+    if isinstance(value, dict):
+        return {key: _clean_latex_in_dict(item) for key, item in value.items()}
+    return value
+
+
 async def _extract_structured(
     primary_prompt: str, repair_prompt: str, image_bytes: bytes, model_cls: type
 ) -> BaseModel:
     raw = await _call_gemini(primary_prompt, image_bytes, json_mode=True)
     try:
-        data = _extract_json(raw)
+        data = _clean_latex_in_dict(_extract_json(raw))
         return model_cls(**data)
     except (json.JSONDecodeError, ValidationError) as first_err:
         logger.warning("%s JSON parse failed (attempt 1): %s", model_cls.__name__, first_err)
@@ -175,7 +186,7 @@ async def _extract_structured(
             repaired = await _call_gemini(
                 repair_prompt.replace("{{RAW}}", raw), image_bytes, json_mode=True
             )
-            data = _extract_json(repaired)
+            data = _clean_latex_in_dict(_extract_json(repaired))
             return model_cls(**data)
         except (json.JSONDecodeError, ValidationError, UpstreamError) as repair_err:
             logger.error("%s repair failed: %s", model_cls.__name__, repair_err)
