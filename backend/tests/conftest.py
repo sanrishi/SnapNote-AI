@@ -105,17 +105,18 @@ def mock_vision(monkeypatch):
 
 @pytest.fixture
 def mock_study_notes(monkeypatch):
-    """Mock the structured JSON Gemini response used by the diagram tier."""
+    """Mock the structured JSON Gemini response used by the diagram tier (learning-first schema)."""
     payload = json.dumps({
         "topic": {"title": "System Architecture", "is_probable": False},
-        "visible_content": {"headings": ["System Architecture Diagram"], "equations": [], "labels": ["Process A", "Component B"], "statements": []},
-        "study_notes": ["Process A is a rectangle.", "Component B is an ellipse.", "Process A connects to Component B."],
-        "simple_explanation": "This appears to represent a system with two main components linked together.",
-        "formula_box": [],
-        "diagram_interpretation": {"present": True, "visible_elements": ["Process A", "Component B", "connecting line"], "likely_interpretation": ["The line likely shows a data flow from Process A to Component B."]},
-        "uncertainties": ["The exact meaning of the connecting line cannot be confirmed from this frame."],
+        "what_you_should_remember": "A system with two linked components.",
+        "key_formulas": [{"formula": "a = αR", "explanation": "linear acceleration links to angular acceleration through the radius", "uncertain_symbols": [], "confidence": "clear"}],
+        "understand_it": ["This appears to represent a system with two main components linked together."],
+        "common_mistakes": ["General thing to watch for: assuming the link implies a power connection rather than a data flow."],
+        "thirty_second_revision": ["Two components, one link.", "Data flows between them."],
+        "visual_context": {"present": True, "summary": "The diagram connects a rectangle and an ellipse with a single line."},
         "verify_before_studying": [],
-        "key_takeaway": "A system with two linked components.",
+        "uncertainties": ["The exact meaning of the connecting line cannot be confirmed from this frame."],
+        "analogy": "",
     })
     mock_response = type("obj", (), {"text": payload})()
     mock_model = AsyncMock()

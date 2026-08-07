@@ -153,7 +153,7 @@ async def extract_revision_route(
     context_hint = context.strip()[:2000] if context.strip() not in ("", "{}", "null") else ""
 
     try:
-        revision_guide = await extract_revision_guide(image_bytes, context_hint)
+        study_notes = await extract_revision_guide(image_bytes, context_hint)
     except Exception as e:
         err_str = str(e)
         logger.error("Revision guide failed: type=%s msg=%s", type(e).__name__, err_str)
@@ -165,6 +165,6 @@ async def extract_revision_route(
     use_credits(deviceId, settings.REVISION_CREDIT_COST)
 
     return RevisionResponse(
-        revision_guide=revision_guide,
+        study_notes=study_notes,
         creditsUsed=settings.REVISION_CREDIT_COST,
     )

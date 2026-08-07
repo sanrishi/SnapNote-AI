@@ -231,8 +231,8 @@
       </div>
       <div id="tags-container" class="tags"></div>
       <button id="revise-btn" class="revise-btn">
-        <span>✨ Enhance for Revision</span>
-        <em>Turn this into exam-ready learning material</em>
+        <span>✨ Make This Revision-Ready</span>
+        <em>Turn this into exam-ready learning material (+1 credit)</em>
       </button>
       <div id="revision-cards"></div>
       <div id="notes-cards"></div>
@@ -610,7 +610,7 @@
       if (!deviceId) { showError("Device not initialized. Refresh the page."); return; }
 
       reviseBtn.disabled = true;
-      reviseBtn.innerHTML = '<span class="spinner"></span> Enhancing for revision...';
+      reviseBtn.innerHTML = '<span class="spinner"></span> Making this revision-ready...';
       errorMsg.style.display = "none";
 
       const formData = new FormData();
@@ -630,48 +630,68 @@
           throw new Error(err.error || `Server error (${resp.status})`);
         }
         const result = await resp.json();
-        renderRevision(result.revision_guide, result.creditsUsed);
+        renderRevision(result.study_notes, result.creditsUsed);
         await initDevice();
       } catch (err) {
         showError(err.message || "Enhancement failed. Try again.");
       } finally {
         reviseBtn.disabled = false;
-        reviseBtn.innerHTML = '<span>✨ Enhance for Revision</span><em>Turn this into exam-ready learning material</em>';
+        reviseBtn.innerHTML = '<span>✨ Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>';
       }
     });
 
-    function renderRevision(guide, creditsUsed) {
-      if (!guide) return;
+    function renderRevision(notes, creditsUsed) {
+      if (!notes) return;
       const cards = [];
-      cards.push('<div class="revision-header">✨ Explain Like I\'m Revising Tomorrow</div>');
+      cards.push('<div class="revision-header">✨ Make This Revision-Ready</div>');
 
-      if (guide.why_it_matters) {
-        cards.push(`<div class="note-card"><h3>🎯 Why It Matters</h3><p>${esc(guide.why_it_matters)}</p></div>`);
+      if (notes.topic && notes.topic.title) {
+        const title = notes.topic.title.toUpperCase();
+        cards.push(`<div class="note-card"><h3>🏷 ${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
       }
-      if (guide.intuition) {
-        cards.push(`<div class="note-card"><h3>🧠 Intuition</h3><p>${esc(guide.intuition)}</p></div>`);
+      if (notes.what_you_should_remember) {
+        cards.push(`<div class="note-card takeaway-card"><h3>🎯 What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
       }
-      if (guide.common_mistakes && guide.common_mistakes.length) {
-        cards.push(`<div class="note-card"><h3>⚠️ Common Mistakes</h3><ul>${guide.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
+      if (notes.key_formulas && notes.key_formulas.length) {
+        const formulas = notes.key_formulas.map((f) => {
+          let html = `<div class="formula">${esc(f.formula)}`;
+          if (f.explanation) html += `<div class="f-explain">${esc(f.explanation)}</div>`;
+          if (f.uncertain_symbols && f.uncertain_symbols.length) {
+            html += f.uncertain_symbols.map((s) =>
+              `<div class="uncertain-symbols">${esc(`The meaning of ${s} cannot be confirmed from this screenshot because the surrounding lecture context is missing.`)}</div>`
+            ).join("");
+          }
+          if (f.confidence === "context_needed") html += '<div class="uncertain-symbols">Context needed: the formula is readable, but the surrounding lecture context is missing.</div>';
+          if (f.confidence === "possible_extraction_issue") html += '<div class="uncertain-symbols">Possible extraction issue: the mathematical symbols are ambiguous. See Verify Before Studying below.</div>';
+          return html + `</div>`;
+        }).join("");
+        cards.push(`<div class="note-card"><h3>📦 Key Formulas</h3>${formulas}</div>`);
       }
-      if (guide.thirty_second_revision) {
-        cards.push(`<div class="note-card takeaway-card"><h3>⏱️ 30-Second Revision</h3><p>${esc(guide.thirty_second_revision)}</p></div>`);
+      if (notes.understand_it && notes.understand_it.length) {
+        cards.push(`<div class="note-card"><h3>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
       }
-      if (guide.analogy) {
-        cards.push(`<div class="note-card"><h3>💡 Easy Analogy</h3><p>${esc(guide.analogy)}</p></div>`);
+      if (notes.common_mistakes && notes.common_mistakes.length) {
+        cards.push(`<div class="note-card"><h3>⚠️ Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
+      }
+      if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
+        cards.push(`<div class="note-card takeaway-card"><h3>⏱️ 30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
+      }
+      if (notes.visual_context && notes.visual_context.present && notes.visual_context.summary) {
+        cards.push(`<div class="note-card"><h3>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
+      }
+      if (notes.verify_before_studying && notes.verify_before_studying.length) {
+        cards.push(`<div class="note-card verify-card"><h3>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
+      }
+      if (notes.uncertainties && notes.uncertainties.length) {
+        cards.push(`<div class="note-card uncertain-card"><h3>⚠️ Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
+      }
+      if (notes.analogy) {
+        cards.push(`<div class="note-card"><h3>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
       }
 
       cards.push(`<p style="font-size:12px;color:var(--muted);margin-top:6px;">${creditsUsed} credit used</p>`);
       revisionCards.innerHTML = cards.join("");
       revisionCards.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-      currentMarkdown = currentMarkdown.trim() + "\n\n---\n\n## Explain Like I'm Revising Tomorrow\n\n"
-        + `### Why It Matters\n${guide.why_it_matters}\n\n`
-        + `### Intuition\n${guide.intuition}\n\n`
-        + `### Common Mistakes\n${guide.common_mistakes.map((m) => `- ${m}`).join("\n")}\n\n`
-        + `### 30-Second Revision\n${guide.thirty_second_revision}`
-        + (guide.analogy ? `\n\n### Easy Analogy\n${guide.analogy}` : "");
-      rawMarkdown.textContent = currentMarkdown;
     }
 
     // ── Render result ──
@@ -689,15 +709,16 @@
       rawMarkdown.classList.remove("show");
       rawToggleBtn.textContent = "View extracted text";
       revisionCards.innerHTML = "";
-      reviseBtn.style.display = "block";
+      const isText = result.type !== "diagram";
+      reviseBtn.style.display = isText ? "block" : "none";
       reviseBtn.disabled = false;
-      reviseBtn.innerHTML = '<span>✨ Enhance for Revision</span><em>Turn this into exam-ready learning material</em>';
+      reviseBtn.innerHTML = '<span>✨ Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>';
 
       const topic = (result.studyNotes && result.studyNotes.topic && result.studyNotes.topic.title) || "";
       currentContext = JSON.stringify({
         topic,
         type: result.type || "",
-        notes: (result.studyNotes && result.studyNotes.study_notes) || [],
+        notes: (result.studyNotes && result.studyNotes.understand_it) || [],
       });
 
       const notes = result.studyNotes;
@@ -713,16 +734,16 @@
       const cards = [];
 
       if (notes.topic && notes.topic.title) {
-        const prefix = notes.topic.is_probable ? "Probable topic" : "Topic";
-        cards.push(`<div class="note-card"><h3>📘 ${prefix}</h3><p>${esc(notes.topic.title)}</p></div>`);
+        const title = notes.topic.title.toUpperCase();
+        cards.push(`<div class="note-card"><h3>🏷 ${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
       }
 
-      if (notes.simple_explanation) {
-        cards.push(`<div class="note-card"><h3>📖 Simple Explanation</h3><p>${esc(notes.simple_explanation)}</p></div>`);
+      if (notes.what_you_should_remember) {
+        cards.push(`<div class="note-card takeaway-card"><h3>🎯 What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
       }
 
-      if (notes.formula_box && notes.formula_box.length) {
-        const formulas = notes.formula_box.map((f) => {
+      if (notes.key_formulas && notes.key_formulas.length) {
+        const formulas = notes.key_formulas.map((f) => {
           let html = `<div class="formula">${esc(f.formula)}`;
           if (f.explanation) html += `<div class="f-explain">${esc(f.explanation)}</div>`;
           if (f.uncertain_symbols && f.uncertain_symbols.length) {
@@ -730,37 +751,41 @@
               `<div class="uncertain-symbols">${esc(`The meaning of ${s} cannot be confirmed from this screenshot because the surrounding lecture context is missing.`)}</div>`
             ).join("");
           }
+          if (f.confidence === "context_needed") html += '<div class="uncertain-symbols">Context needed: the formula is readable, but the surrounding lecture context is missing.</div>';
+          if (f.confidence === "possible_extraction_issue") html += '<div class="uncertain-symbols">Possible extraction issue: the mathematical symbols are ambiguous. See Verify Before Studying below.</div>';
           return html + `</div>`;
         }).join("");
-        cards.push(`<div class="note-card"><h3>📦 Formula Box</h3>${formulas}</div>`);
+        cards.push(`<div class="note-card"><h3>📦 Key Formulas</h3>${formulas}</div>`);
+      }
+
+      if (notes.understand_it && notes.understand_it.length) {
+        cards.push(`<div class="note-card"><h3>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
+      }
+
+      if (notes.common_mistakes && notes.common_mistakes.length) {
+        cards.push(`<div class="note-card"><h3>⚠️ Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
+      }
+
+      if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
+        cards.push(`<div class="note-card takeaway-card"><h3>⏱️ 30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
+      }
+
+      if (notes.visual_context && notes.visual_context.present && notes.visual_context.summary) {
+        cards.push(`<div class="note-card"><h3>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p>${result.imageUrl ? `<img src="${esc(result.imageUrl)}" alt="Diagram" style="max-width:100%;border-radius:10px;border:1px solid var(--border);margin-top:8px;" />` : ""}</div>`);
+      } else if (result.imageUrl) {
+        cards.push(`<div class="note-card diagram-card"><h3>📐 Diagram</h3><img src="${esc(result.imageUrl)}" alt="Diagram" /></div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
-        cards.push(`<div class="note-card verify-card"><h3>⚠️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
-      }
-
-      if (notes.study_notes && notes.study_notes.length) {
-        const items = notes.study_notes.map((n) => `<li>${esc(n)}</li>`).join("");
-        cards.push(`<div class="note-card"><h3>📄 Study Notes</h3><ul>${items}</ul></div>`);
-      }
-
-      if (notes.diagram_interpretation && notes.diagram_interpretation.present) {
-        let inner = "";
-        if (notes.diagram_interpretation.visible_elements && notes.diagram_interpretation.visible_elements.length) {
-          inner += `<ul>${notes.diagram_interpretation.visible_elements.map((el) => `<li>${esc(el)}</li>`).join("")}</ul>`;
-        }
-        if (notes.diagram_interpretation.likely_interpretation && notes.diagram_interpretation.likely_interpretation.length) {
-          inner += `<p class="muted" style="margin-top:6px;">Likely interpretation:</p><ul>${notes.diagram_interpretation.likely_interpretation.map((el) => `<li>${esc(el)}</li>`).join("")}</ul>`;
-        }
-        cards.push(`<div class="note-card diagram-card"><h3>📐 Diagram</h3>${inner}${result.imageUrl ? `<img src="${esc(result.imageUrl)}" alt="Diagram" />` : ""}</div>`);
+        cards.push(`<div class="note-card verify-card"><h3>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
       }
 
       if (notes.uncertainties && notes.uncertainties.length) {
-        cards.push(`<div class="note-card uncertain-card"><h3>⚠️ Unclear or Uncertain</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card uncertain-card"><h3>⚠️ Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
       }
 
-      if (notes.key_takeaway) {
-        cards.push(`<div class="note-card takeaway-card"><h3>🎯 Key Takeaway</h3><p>${esc(notes.key_takeaway)}</p></div>`);
+      if (notes.analogy) {
+        cards.push(`<div class="note-card"><h3>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
       }
 
       notesCards.innerHTML = cards.join("");

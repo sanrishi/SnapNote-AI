@@ -22,29 +22,46 @@ def _valid_png() -> bytes:
 
 @pytest.fixture(autouse=True)
 def seed_credits():
-    from app.utils.credits_store import init_device
-    init_device(TEST_DEVICE_ID)
+    from app.utils.credits_store import _get_conn
+    conn = _get_conn()
+    conn.execute(
+        "INSERT OR REPLACE INTO device_credits (device_id, credits_remaining, credits_used) VALUES (?, 999, 0)",
+        (TEST_DEVICE_ID,),
+    )
+    conn.commit()
+
+
+def _learning_payload(**overrides):
+    payload = {
+        "topic": {"title": "Angular Velocity", "is_probable": False},
+        "what_you_should_remember": "Project the velocity vector; use sin/cos for components.",
+        "key_formulas": [{"formula": "ω_z = ω sinθ", "explanation": "vertical component of angular velocity", "uncertain_symbols": [], "confidence": "clear"}],
+        "understand_it": ["Think of a vector projected onto an axis."],
+        "common_mistakes": ["Swapping sin and cos while resolving components."],
+        "thirty_second_revision": ["Project the vector.", "Use sin/cos for components."],
+        "visual_context": {"present": False, "summary": ""},
+        "verify_before_studying": [],
+        "uncertainties": [],
+        "analogy": "Like splitting a diagonal force into horizontal and vertical pulls.",
+    }
+    payload.update(overrides)
+    return payload
 
 
 # ── Unit: extract_revision_guide happy path ──
 
 @pytest.mark.asyncio
 async def test_extract_revision_guide_valid(monkeypatch):
-    payload = {
-        "why_it_matters": "This concept underpins how angular velocity splits into components.",
-        "intuition": "Think of a vector projected onto an axis.",
-        "common_mistakes": ["Swapping sin and cos while resolving components."],
-        "thirty_second_revision": "Project the velocity vector; use sin/cos for components.",
-        "analogy": "Like splitting a diagonal force into horizontal and vertical pulls.",
-    }
     mock_model = AsyncMock()
-    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(payload)})())
+    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_learning_payload())})())
     monkeypatch.setattr("app.services.vision_service.model", mock_model)
 
     guide = await extract_revision_guide(_valid_png(), context_hint='{"topic": "Angular Velocity"}')
-    assert guide.why_it_matters
+    assert guide.what_you_should_remember
+    assert guide.key_formulas
     assert guide.common_mistakes
     assert guide.thirty_second_revision
+    assert guide.analogy
     assert mock_model.generate_content_async.call_count == 1
 
 
@@ -52,13 +69,7 @@ async def test_extract_revision_guide_valid(monkeypatch):
 
 @pytest.mark.asyncio
 async def test_extract_revision_guide_repair(monkeypatch):
-    good = {
-        "why_it_matters": "W",
-        "intuition": "I",
-        "common_mistakes": [],
-        "thirty_second_revision": "T",
-        "analogy": "",
-    }
+    good = _learning_payload()
     bad_response = type("o", (), {"text": "not json"})()
     good_response = type("o", (), {"text": json.dumps(good)})()
     mock_model = AsyncMock()
@@ -66,7 +77,7 @@ async def test_extract_revision_guide_repair(monkeypatch):
     monkeypatch.setattr("app.services.vision_service.model", mock_model)
 
     guide = await extract_revision_guide(_valid_png())
-    assert guide.why_it_matters == "W"
+    assert guide.what_you_should_remember == good["what_you_should_remember"]
     assert mock_model.generate_content_async.call_count == 2
 
 
@@ -85,21 +96,14 @@ async def test_extract_revision_guide_repair_fails(monkeypatch):
         await extract_revision_guide(_valid_png())
 
 
-# ── Route: revision endpoint charges 1 credit and returns guide ──
+# ── Route: revision endpoint charges 1 credit and returns learning sheet ──
 
 @pytest.mark.asyncio
 async def test_revision_route_ok(sample_diagram_image):
     from unittest.mock import patch
 
-    payload = {
-        "why_it_matters": "Architecture matters for system design.",
-        "intuition": "Components exchange data through links.",
-        "common_mistakes": ["Assuming the arrow is a power line."],
-        "thirty_second_revision": "Two components, one link, data flows left to right.",
-        "analogy": "Like two offices connected by a corridor.",
-    }
     mock_model = AsyncMock()
-    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(payload)})())
+    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_learning_payload())})())
     with patch("app.services.vision_service.model", mock_model):
         async with AsyncClient(transport=transport, base_url="http://test") as client:
             resp = await client.post(
@@ -110,8 +114,8 @@ async def test_revision_route_ok(sample_diagram_image):
     assert resp.status_code == 200
     body = resp.json()
     assert body["creditsUsed"] == 1
-    assert body["revision_guide"]["why_it_matters"]
-    assert body["revision_guide"]["thirty_second_revision"]
+    assert body["study_notes"]["what_you_should_remember"]
+    assert body["study_notes"]["key_formulas"]
 
 
 # ── Route: revision failure does not charge credits ──
@@ -156,11 +160,11 @@ def test_render_verify_before_studying():
 
     notes = StudyNotes(
         topic={"title": "Rotational Motion", "is_probable": True},
-        formula_box=[{"formula": "t = Iα", "explanation": "", "uncertain_symbols": []}],
+        key_formulas=[{"formula": "t = Iα", "explanation": "", "uncertain_symbols": [], "confidence": "possible_extraction_issue"}],
         verify_before_studying=["τ = Iα may have been misread as 't = Iα' because the tau was blurry."],
     )
     md = render_study_notes(notes)
-    assert "⚠️ Verify Before Studying" in md
+    assert "🛡️ Verify Before Studying" in md
     assert "τ = Iα may have been misread" in md
     assert "Verify these against the original lecture" in md
 
@@ -172,6 +176,31 @@ def test_render_verify_empty_omitted():
     notes = StudyNotes(topic={"title": "T", "is_probable": False})
     md = render_study_notes(notes)
     assert "Verify Before Studying" not in md
+
+
+# ── Unit: render learning-first ordering ──
+
+def test_render_learning_first_order():
+    from app.models.schemas import StudyNotes
+    from app.utils.render_notes import render_study_notes
+
+    notes = StudyNotes(
+        topic={"title": "Rotational Motion", "is_probable": False},
+        what_you_should_remember="Remember the takeaway.",
+        key_formulas=[{"formula": "ω = v/r", "explanation": "", "uncertain_symbols": [], "confidence": "clear"}],
+        understand_it=["Understand this concept."],
+        common_mistakes=["A mistake."],
+        thirty_second_revision=["Bullet one."],
+        visual_context={"present": True, "summary": "Compact context."},
+    )
+    md = render_study_notes(notes)
+    idx_remember = md.index("What You Should Remember")
+    idx_formulas = md.index("Key Formulas")
+    idx_understand = md.index("Understand It")
+    idx_mistakes = md.index("Common Mistakes")
+    idx_30 = md.index("30-Second Revision")
+    idx_visual = md.index("Visual Context")
+    assert idx_remember < idx_formulas < idx_understand < idx_mistakes < idx_30 < idx_visual
 
 
 # ── Unit: structured text formatting groups content ──

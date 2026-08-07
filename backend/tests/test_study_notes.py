@@ -51,14 +51,15 @@ def test_extract_json_raises_on_invalid():
 async def test_extract_study_notes_valid(monkeypatch):
     payload = {
         "topic": {"title": "Rotational Motion", "is_probable": False},
-        "visible_content": {"headings": [], "equations": ["ω = v/r"], "labels": [], "statements": []},
-        "study_notes": ["Angular velocity is the rate of change of angle."],
-        "simple_explanation": "This appears to relate angular velocity to linear velocity.",
-        "formula_box": [{"formula": "ω = v/r", "explanation": "angular velocity equals linear velocity over radius", "uncertain_symbols": []}],
-        "diagram_interpretation": {"present": False, "visible_elements": [], "likely_interpretation": []},
-        "uncertainties": [],
+        "what_you_should_remember": "Angular velocity relates linear velocity to radius.",
+        "key_formulas": [{"formula": "ω = v/r", "explanation": "angular velocity equals linear velocity over radius", "uncertain_symbols": [], "confidence": "clear"}],
+        "understand_it": ["Angular velocity is the rate of change of angle."],
+        "common_mistakes": [],
+        "thirty_second_revision": ["ω = v/r"],
+        "visual_context": {"present": False, "summary": ""},
         "verify_before_studying": ["ω = v/r may have been misread because the omega was blurry."],
-        "key_takeaway": "ω = v/r",
+        "uncertainties": [],
+        "analogy": "",
     }
     mock_model = AsyncMock()
     mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(payload)})())
@@ -66,7 +67,8 @@ async def test_extract_study_notes_valid(monkeypatch):
 
     notes = await extract_study_notes(_valid_png())
     assert notes.topic.title == "Rotational Motion"
-    assert notes.formula_box[0].formula == "ω = v/r"
+    assert notes.key_formulas[0].formula == "ω = v/r"
+    assert notes.what_you_should_remember
     assert notes.verify_before_studying
     assert mock_model.generate_content_async.call_count == 1  # no repair retry
 
@@ -77,14 +79,15 @@ async def test_extract_study_notes_valid(monkeypatch):
 async def test_extract_study_notes_repair(monkeypatch):
     good = {
         "topic": {"title": "T", "is_probable": True},
-        "visible_content": {"headings": [], "equations": [], "labels": [], "statements": []},
-        "study_notes": [],
-        "simple_explanation": "",
-        "formula_box": [],
-        "diagram_interpretation": {"present": False, "visible_elements": [], "likely_interpretation": []},
-        "uncertainties": [],
+        "what_you_should_remember": "",
+        "key_formulas": [],
+        "understand_it": [],
+        "common_mistakes": [],
+        "thirty_second_revision": [],
+        "visual_context": {"present": False, "summary": ""},
         "verify_before_studying": [],
-        "key_takeaway": "",
+        "uncertainties": [],
+        "analogy": "",
     }
     bad_response = type("o", (), {"text": "this is not json"})()
     good_response = type("o", (), {"text": json.dumps(good)})()
@@ -121,14 +124,15 @@ async def test_extract_study_notes_repair_fails(monkeypatch):
 async def test_diagram_route_structured(sample_diagram_image):
     payload = {
         "topic": {"title": "Architecture", "is_probable": False},
-        "visible_content": {"headings": [], "equations": [], "labels": ["Process A"], "statements": []},
-        "study_notes": ["Two components linked."],
-        "simple_explanation": "This appears to show a system with two linked components.",
-        "formula_box": [],
-        "diagram_interpretation": {"present": True, "visible_elements": ["Process A"], "likely_interpretation": []},
-        "uncertainties": ["One arrow's meaning is unclear."],
+        "what_you_should_remember": "Two components are linked.",
+        "key_formulas": [{"formula": "a = αR", "explanation": "link between accelerations", "uncertain_symbols": [], "confidence": "clear"}],
+        "understand_it": ["This appears to show a system with two linked components."],
+        "common_mistakes": ["General thing to watch for: assuming the link means a power connection."],
+        "thirty_second_revision": ["Two components, one link."],
+        "visual_context": {"present": True, "summary": "A rectangle and an ellipse connected by a line."},
         "verify_before_studying": ["The label near the top may have been misread."],
-        "key_takeaway": "Remember the link between components.",
+        "uncertainties": ["One arrow's meaning is unclear."],
+        "analogy": "",
     }
     mock_model = AsyncMock()
     mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(payload)})())
@@ -143,11 +147,12 @@ async def test_diagram_route_structured(sample_diagram_image):
     assert resp.status_code == 200
     body = resp.json()
     assert body["studyNotes"]["topic"]["title"] == "Architecture"
-    assert body["studyNotes"]["diagram_interpretation"]["present"] is True
-    assert body["studyNotes"]["uncertainties"] == ["One arrow's meaning is unclear."]
+    assert body["studyNotes"]["what_you_should_remember"]
+    assert body["studyNotes"]["key_formulas"]
+    assert body["studyNotes"]["visual_context"]["present"] is True
     assert body["studyNotes"]["verify_before_studying"]
     assert "Verify Before Studying" in body["markdown"]
-    assert "## Key Takeaway" in body["markdown"] or "Key takeaway" in body["markdown"]
+    assert "## 🎯 What You Should Remember" in body["markdown"]
 
 
 # ── Route: diagram failure does not charge credits ──

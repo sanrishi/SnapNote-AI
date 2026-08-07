@@ -204,12 +204,18 @@ The gate checks in order:
 - **Fluent-looking wrong text**: OCR can produce high-confidence wrong output (e.g., `"ecture"` at conf=1.0). No structural heuristic catches this. Gate relies on symbol/mixed-digit signals catching formula-heavy slides.
 - **Dark-themed slides**: OCR performs reasonably well (high confidence), so detection quality isn't degraded — but dark backgrounds can change character detection patterns.
 
-### Rule 8.2b — Trust layer (Layer 3: Verify Before Studying)
-- `StudyNotes.verify_before_studying: list[str]` holds every equation/symbol Gemini could not read with high confidence, with the ambiguity stated (e.g. `τ = Iα may have been misread as 't = Iα'`).
-- Prompt mandates: NEVER silently guess an unreadable symbol; record the best guess AND list it in `verify_before_studying`.
+### Rule 8.2b — Learning-first output + Trust layer (Layer 3: Verify Before Studying)
+- **Product philosophy**: The output answers "what should the student learn?" NOT "what did the AI see?" The 5-credit Diagram result is a complete learning product — no separate revision upsell.
+- **Diagram mode StudyNotes order**: `topic` (title; `is_probable` → "Topic inferred from screenshot") → `what_you_should_remember` → `key_formulas` (each with `confidence`: clear | context_needed | possible_extraction_issue) → `understand_it` → `common_mistakes` → `thirty_second_revision` (3-5 bullets) → `visual_context` (1-2 sentences max, no object/axis inventory) → `verify_before_studying` → `uncertainties` → `analogy`.
+- **Grounding rule**: NEVER invent missing derivations/equations/definitions. Distinguish visible evidence / safe inference / missing context. If a derivation is cut off, say so — never complete it as the professor's work.
+- **Common Mistakes**: never fabricated. Only when supported by visible material or framed as "a general thing to watch for with this type of problem."
+- **Proportional uncertainty**: no scary warnings for every formula. Confidence states: clear (no warning) / context_needed (subtle note) / possible_extraction_issue (listed in verify_before_studying).
+- `StudyNotes.verify_before_studying: list[str]` holds equations/symbols Gemini could not read with high confidence (confidence = possible_extraction_issue), e.g. `τ = Iα may have been misread as 't = Iα'`.
 - Common confusion pairs the prompt watches: τ/t, ω/w, θ/0, μ/u, α/a, v/r.
-- Rendered as a prominent red `⚠️ Verify Before Studying` card (frontend + markdown) right after the Formula Box.
+- Rendered as a red `🛡️ Verify Before Studying` card (frontend + markdown) after Visual Context.
 - Trust ordering for QA: formula accuracy > topic accuracy > explanation quality.
+- **Text mode** stays the cheap funnel: structured OCR (formulas/labels/text) at 1 credit; `✨ Make This Revision-Ready` (+1) is a separate Gemini call producing the same learning sheet. Revision button is TEXT-ONLY; diagram mode never shows it.
+- `RevisionResponse` returns the same `StudyNotes` shape (field `study_notes`) — the revision layer is the funnel on-ramp, not the diagram's upsell.
 
 ### Rule 8.3 — Pricing model
 - `/extract/text`: 1 credit if OCR succeeds standalone; **5 credits if escalation to Gemini fires** (credit check before Gemini call, line 55-57 of extract.py)
@@ -230,4 +236,4 @@ The gate checks in order:
 8. Chemistry equilibrium formulas → escalate (untuned, passed cold)
 9. Dark-theme CS BST slide (Unacademy style) → escalate (untuned, passed cold)
 
-*Last updated: July 2026*
+*Last updated: August 2026*

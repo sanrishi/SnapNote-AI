@@ -14,35 +14,29 @@ class TopicInfo(BaseModel):
     is_probable: bool = False
 
 
-class VisibleContent(BaseModel):
-    headings: list[str] = []
-    equations: list[str] = []
-    labels: list[str] = []
-    statements: list[str] = []
-
-
 class FormulaEntry(BaseModel):
     formula: str = ""
     explanation: str = ""
     uncertain_symbols: list[str] = []
+    confidence: str = "clear"  # "clear" | "context_needed" | "possible_extraction_issue"
 
 
-class DiagramInterpretation(BaseModel):
+class VisualContext(BaseModel):
     present: bool = False
-    visible_elements: list[str] = []
-    likely_interpretation: list[str] = []
+    summary: str = ""
 
 
 class StudyNotes(BaseModel):
     topic: TopicInfo = TopicInfo()
-    visible_content: VisibleContent = VisibleContent()
-    study_notes: list[str] = []
-    simple_explanation: str = ""
-    formula_box: list[FormulaEntry] = []
-    diagram_interpretation: DiagramInterpretation = DiagramInterpretation()
-    uncertainties: list[str] = []
+    what_you_should_remember: str = ""
+    key_formulas: list[FormulaEntry] = []
+    understand_it: list[str] = []
+    common_mistakes: list[str] = []
+    thirty_second_revision: list[str] = []
+    visual_context: VisualContext = VisualContext()
     verify_before_studying: list[str] = []
-    key_takeaway: str = ""
+    uncertainties: list[str] = []
+    analogy: str = ""
 
 
 class ExtractionResponse(BaseModel):
@@ -89,16 +83,8 @@ class DeviceAuthResponse(BaseModel):
     plan: str = "free"
 
 
-class RevisionGuide(BaseModel):
-    why_it_matters: str = ""
-    intuition: str = ""
-    common_mistakes: list[str] = []
-    thirty_second_revision: str = ""
-    analogy: str = ""
-
-
 class RevisionResponse(BaseModel):
-    revision_guide: RevisionGuide
+    study_notes: StudyNotes
     creditsUsed: int
 
 

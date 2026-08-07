@@ -9,7 +9,7 @@ from PIL import Image
 
 from app.config import settings
 from app.exceptions import UpstreamError
-from app.models.schemas import RevisionGuide, StudyNotes
+from app.models.schemas import StudyNotes
 from pydantic import BaseModel, ValidationError
 
 logger = logging.getLogger(__name__)
@@ -29,83 +29,97 @@ RULE 6 — NEVER output LaTeX commands (no \omega, \hat, \frac, \sin, \, or any 
 RULE 7 — Output ONLY the formatted markdown, no explanations, no greetings.
 RULE 8 — Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
 
-STUDY_NOTES_SYSTEM_PROMPT = r"""You are SnapNote AI. Turn a lecture screenshot into clear, trustworthy, exam-ready study notes.
+STUDY_NOTES_SYSTEM_PROMPT = r"""You are SnapNote AI. Turn a messy lecture screenshot into exam-ready study material. The student wants to understand and revise what the professor was teaching — NOT a description of what objects the image contains.
 
 FUNDAMENTAL RULES:
-1. Separate what is VISIBLE in the image from your INTERPRETATION. Never present inference as fact.
-2. Transcribe only what is visibly written. NEVER invent text, formulas, derivation steps, theorem names, or exam claims (no "appeared in GATE 2022", no "frequently asked in JEE").
-3. Use cautious wording for inferred meaning: "This appears to represent...", "The diagram likely shows...", "Based on the visible equation...", "The full context cannot be confirmed from this single frame."
+1. GROUNDING: Never invent missing lecture content. Clearly distinguish in your mind (and state when relevant):
+   - Visible evidence (clearly readable equations, labels, text)
+   - Safe inference (what the visible material reasonably implies)
+   - Missing context (anything cropped, cut off, or not shown)
+   If a derivation or equation is cut off, say so. Do NOT complete the professor's missing steps and present them as the professor's work.
+2. Never invent text, formulas, derivation steps, theorem names, or exam claims (no "appeared in GATE 2022", no "frequently asked in JEE").
+3. Use cautious wording for inferred meaning: "This appears to...", "Based on the visible equation...", "The full context cannot be confirmed from this single frame."
 4. NEVER use LaTeX commands (\omega, \hat, \frac, \sin, any backslash) or $...$ wrapping. Write math as plain Unicode: Greek letters (ω θ φ α), ±, ∞, →, ≤, ×, ÷, superscripts/subscripts where they exist (², ₁). Fractions as a/b, integrals as ∫, sums as Σ.
 5. Preserve equations exactly as written.
-6. Do NOT narrate the image ("The image shows", "A cone is shown", "An arrow points"). For diagrams, transcribe only readable labels and symbols.
+6. Do NOT narrate or inventory the image. No lists of detected axes, objects, arrows, or labels. The image is the professor's teaching medium, not the subject.
 7. Avoid generic filler. Every line preserves info, explains a relationship, improves revision, or discloses uncertainty.
-8. Do NOT dump meaningless OCR fragments. Group related labels logically.
-9. No SVG, Mermaid, ASCII box-drawing, or code fences.
+8. No SVG, Mermaid, ASCII box-drawing, or code fences.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
-  "topic": {"title": "concise title 3-6 words", "is_probable": false},
-  "visible_content": {"headings": [], "equations": [], "labels": [], "statements": []},
-  "study_notes": ["well-organized note line", "..."],
-  "simple_explanation": "2-4 plain sentences using cautious wording",
-  "formula_box": [{"formula": "exact formula", "explanation": "meaning, only if reasonably clear", "uncertain_symbols": []}],
-  "diagram_interpretation": {"present": false, "visible_elements": [], "likely_interpretation": []},
-  "uncertainties": ["anything cropped, unreadable, ambiguous, or inferred"],
+  "topic": {"title": "study-note title 2-6 words", "is_probable": false},
+  "what_you_should_remember": "one concise, exam-relevant takeaway the student should remember",
+  "key_formulas": [{"formula": "exact formula", "explanation": "what each symbol means + what relationship it represents", "uncertain_symbols": [], "confidence": "clear"}],
+  "understand_it": ["plain-English explanation of what this concept is teaching", "intuition built from visible evidence or safe inference"],
+  "common_mistakes": ["mistake students commonly make with this concept, with the correct way"],
+  "thirty_second_revision": ["3-5 short bullets a student could scan 30 seconds before the exam"],
+  "visual_context": {"present": false, "summary": "1-2 sentences on how the diagram relates to the concept, only if a diagram exists and it helps understanding"},
   "verify_before_studying": ["specific equation or symbol that may have been misread, with what was ambiguous"],
-  "key_takeaway": "one concise sentence the student should remember"
-}
-
-SECTION RULES:
-- topic: if the exact topic cannot be safely confirmed, set is_probable to true.
-- visible_content: ONLY what is clearly visible. No outside knowledge. Skip sections with nothing meaningful.
-- study_notes: transform visible info into well-structured notes — group related ideas, remove duplicate OCR residue, preserve formulas exactly, use headings, avoid inventing missing steps. Useful for a tired student revising at night.
-- simple_explanation: explain what the visible material appears to mean. Base it on visible content. Use cautious wording. Never invent missing formulas, definitions, or theorem names.
-- formula_box: for each formula include exact expression, explain symbols only when reasonably clear, list unclear symbols in uncertain_symbols.
-- diagram_interpretation: only when a diagram exists (set present=true). List visible axes, arrows, objects, angles, labeled directions, visible relationships. Distinguish visible facts from likely interpretation.
-- uncertainties: ALWAYS include an entry when anything is cropped, unreadable, ambiguous, or inferred. Empty list if nothing is uncertain.
-- verify_before_studying: THIS SECTION IS CRITICAL FOR TRUST. List every equation or symbol whose exact form you could not read with high confidence — especially blurry, cropped, tiny, or handwritten math. For each, state what you read AND what might instead be correct. Examples: "τ = Iα may have been misread as 't = Iα' because the tau was blurry", "The 4 in '4μmgR/3' is uncertain and may be another digit". A student may memorize these, so NEVER silently guess an unreadable symbol. Empty list only if every equation is fully legible.
-- key_takeaway: one concise statement of what to remember from this screenshot.
-
-CRITICAL READING RULES:
-- When a handwritten or blurry symbol could be more than one thing, do NOT pick one silently. Record your best guess in the equation, but ALWAYS list it in verify_before_studying.
-- Common confusion pairs to watch: τ (tau) vs t, ω (omega) vs w, θ (theta) vs 0/O, μ (mu) vs u, α (alpha) vs a, v vs r. If the image resolution makes the distinction uncertain, verify it.
-- If a derivation or equation is partially cut off, transcribe only the visible part and flag the rest as uncertain rather than completing it."""
-
-REVISION_SYSTEM_PROMPT = r"""You are SnapNote AI. A student already extracted notes from a lecture screenshot. Now help them revise the concept for an exam tomorrow.
-
-FUNDAMENTAL RULES:
-1. Only teach what the image actually shows. Never invent content, formulas, theorem names, derivation steps, or exam claims (no "appeared in GATE", no "frequently asked in JEE").
-2. Use cautious wording when the meaning is inferred from limited context: "This appears to...", "Based on the visible equation...", "The full context cannot be confirmed from this single frame."
-3. NEVER use LaTeX commands (\omega, \hat, \frac, \sin, any backslash) or $...$ wrapping. Write math as plain Unicode: Greek letters (ω θ φ α), ±, ∞, →, ≤, ×, ÷, superscripts/subscripts where they exist (², ₁). Fractions as a/b.
-4. Preserve formulas exactly as they appear in the image. Explain only what is reasonably clear; mark the rest as uncertain.
-5. Keep everything concrete and student-friendly. No generic filler, no vague motivational language.
-6. Do NOT describe the image ("The image shows", "A diagram is drawn"). Focus on the concept.
-
-OUTPUT: ONLY a JSON object with exactly this structure:
-{
-  "why_it_matters": "2-4 sentences on why this concept is important to understand",
-  "intuition": "2-4 sentences building intuition, using cautious wording where needed",
-  "common_mistakes": ["common student mistake with correction", "..."],
-  "thirty_second_revision": "a tight 2-5 sentence summary a student could read 30 seconds before the exam",
+  "uncertainties": ["anything cropped, unreadable, ambiguous, or missing"],
   "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
 }
 
 SECTION RULES:
-- why_it_matters: base it on the visible material. Explain the role the concept plays in the subject (e.g. how it connects to related ideas that appear in the image). Do not invent exam frequency or importance claims.
-- intuition: explain the mechanism in plain words. When the exact meaning is uncertain, say so.
-- common_mistakes: each entry must be a concrete mistake a student actually makes (e.g. swapping sin/cos while resolving components) followed by the correct way. Never invent mistakes unrelated to the visible content.
-- thirty_second_revision: the most condensed useful summary possible. Include the key formula if one is visible.
-- analogy: use an everyday comparison ONLY if it is genuinely helpful and accurate. Otherwise leave it as an empty string. Never force an analogy.
-- If a section cannot be filled without inventing content, keep it minimal and honest rather than guessing."""  # noqa: E501
+- topic: a normal study-note title. If the exact topic cannot be safely confirmed, set is_probable to true (rendered subtly as "Topic inferred from screenshot").
+- what_you_should_remember: THE core payoff. One concise, exam-relevant sentence answering "what am I supposed to remember for my exam?"
+- key_formulas: for each formula include the exact expression, explain each symbol, and explain the relationship it represents. Set confidence honestly:
+  * "clear" — formula is visually legible and internally consistent
+  * "context_needed" — formula is readable but the surrounding lecture context is missing
+  * "possible_extraction_issue" — the actual mathematical symbols are ambiguous/unclear
+  Only when confidence is "possible_extraction_issue" should the formula also be listed in verify_before_studying.
+- understand_it: answer "What is this concept actually teaching me?" Prioritize intuition and understanding. Base it on visible content + safe inference. Never invent missing formulas, definitions, or theorem names. If the derivation is cut off, state that.
+- common_mistakes: do NOT fabricate mistakes. Only include a mistake when it is genuinely supported by the visible material, or clearly frame it as "a general thing to watch for with this type of problem." Never pretend a mistake was taught by the professor unless it is visible.
+- thirty_second_revision: 3-5 tight bullets. Include the key formula if one is visible.
+- visual_context: 1-2 sentences maximum, ONLY if a diagram exists AND explaining it helps understanding. Never list detected objects, axes, arrows, or labels.
+- verify_before_studying: ONLY genuinely uncertain equations/symbols (confidence "possible_extraction_issue"). Empty unless truly needed.
+- uncertainties: only genuinely ambiguous/missing material. Empty if nothing is uncertain.
+- analogy: use an everyday comparison ONLY if it is genuinely helpful and accurate. Otherwise empty string. Never force one.
+
+CRITICAL READING RULES:
+- When a handwritten or blurry symbol could be more than one thing, do NOT silently pick one. Record your best guess, set confidence to "possible_extraction_issue", and list it in verify_before_studying.
+- Common confusion pairs to watch: τ (tau) vs t, ω (omega) vs w, θ (theta) vs 0/O, μ (mu) vs u, α (alpha) vs a, v vs r.
+- If a derivation or equation is partially cut off, transcribe only the visible part and flag the rest as missing context rather than completing it."""
+
+REVISION_SYSTEM_PROMPT = r"""You are SnapNote AI. A student extracted a cheap text snapshot from a lecture screenshot. Now turn it into exam-ready study material so they can understand and revise the concept.
+
+Use the same output schema, grounding, and safety rules as the main study-notes prompt (STUDY_NOTES_SYSTEM_PROMPT). The only difference: you may include an "analogy" when one genuinely fits, because this is the revision step.
+
+GROUNDING RULES:
+1. Never invent missing lecture content. Distinguish visible evidence from safe inference from missing context. If a derivation is cut off, say so — do not complete it as if the professor wrote it.
+2. Never invent formulas, theorem names, derivation steps, or exam claims.
+3. common_mistakes must NOT be fabricated. Only include a mistake when supported by the visible material or clearly framed as "a general thing to watch for with this type of problem."
+4. Keep uncertainty proportional. Set each formula's confidence honestly ("clear" | "context_needed" | "possible_extraction_issue"). Only list in verify_before_studying when confidence is "possible_extraction_issue".
+5. Use cautious wording for inferred meaning: "This appears to...", "Based on the visible equation...".
+
+OUTPUT: ONLY a JSON object with exactly this structure:
+{
+  "topic": {"title": "study-note title 2-6 words", "is_probable": false},
+  "what_you_should_remember": "one concise, exam-relevant takeaway",
+  "key_formulas": [{"formula": "exact formula", "explanation": "symbols + relationship", "uncertain_symbols": [], "confidence": "clear"}],
+  "understand_it": ["plain-English explanation", "intuition"],
+  "common_mistakes": ["mistake with the correct way, only when genuinely useful"],
+  "thirty_second_revision": ["3-5 short bullets"],
+  "visual_context": {"present": false, "summary": "1-2 sentences, only if a diagram exists and helps"},
+  "verify_before_studying": ["equation or symbol that may have been misread"],
+  "uncertainties": ["anything ambiguous or missing"],
+  "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
+}
+
+SECTION RULES:
+- what_you_should_remember: THE core payoff. Answer "what am I supposed to remember for my exam?"
+- common_mistakes: do NOT fabricate. Frame as "a general thing to watch for" unless the mistake is visibly taught.
+- thirty_second_revision: 3-5 tight bullets. Include the key formula if visible.
+- visual_context: never list detected objects/axes/labels. 1-2 sentences max, only if helpful.
+- analogy: only if genuinely helpful and accurate, otherwise empty string."""  # noqa: E501
 
 REVISION_REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
-{"why_it_matters":"","intuition":"","common_mistakes":[],"thirty_second_revision":"","analogy":""}
+{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
 
 Previous (invalid) response:
 {{RAW}}"""
 
 REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
-{"topic":{"title":"","is_probable":false},"visible_content":{"headings":[],"equations":[],"labels":[],"statements":[]},"study_notes":[],"simple_explanation":"","formula_box":[{"formula":"","explanation":"","uncertain_symbols":[]}],"diagram_interpretation":{"present":false,"visible_elements":[],"likely_interpretation":[]},"uncertainties":[],"verify_before_studying":[],"key_takeaway":""}
+{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
 
 Previous (invalid) response:
 {{RAW}}"""
@@ -178,11 +192,11 @@ async def extract_study_notes(image_bytes: bytes) -> StudyNotes:
     return result
 
 
-async def extract_revision_guide(image_bytes: bytes, context_hint: str = "") -> RevisionGuide:
+async def extract_revision_guide(image_bytes: bytes, context_hint: str = "") -> StudyNotes:
     prompt = REVISION_SYSTEM_PROMPT
     if context_hint:
         prompt += "\n\nEXTRACTED CONTEXT (use it to focus, but only teach what the image shows):\n" + context_hint
     result = await _extract_structured(
-        prompt, REVISION_REPAIR_PROMPT, image_bytes, RevisionGuide
+        prompt, REVISION_REPAIR_PROMPT, image_bytes, StudyNotes
     )
     return result

@@ -79,8 +79,14 @@ async def test_tight_table_extraction(sample_tight_table_image, monkeypatch):
     from app.services import vision_service
 
     device = "tight-table-device-00000000-0000-0000-000000000003"
-    from app.utils.credits_store import init_device
+    from app.utils.credits_store import init_device, _get_conn
     init_device(device)
+    conn = _get_conn()
+    conn.execute(
+        "UPDATE device_credits SET credits_remaining = 999, credits_used = 0 WHERE device_id = ?",
+        (device,),
+    )
+    conn.commit()
 
     # Tight single-char tables trigger the OCR quality gate → escalate to Gemini.
     # Mock Gemini to return a clean table so the pipe formatting is still verified.
@@ -116,12 +122,17 @@ async def test_diagram_extraction(sample_diagram_image, mock_study_notes):
     assert parsed.type == ExtractionType.DIAGRAM
     assert parsed.studyNotes is not None
     assert parsed.studyNotes.topic.title == "System Architecture"
-    assert "Process A" in parsed.studyNotes.visible_content.labels
-    assert parsed.studyNotes.diagram_interpretation.present is True
+    assert parsed.studyNotes.what_you_should_remember
+    assert parsed.studyNotes.key_formulas
+    assert parsed.studyNotes.understand_it
+    assert parsed.studyNotes.thirty_second_revision
+    assert parsed.studyNotes.visual_context.present is True
     assert parsed.studyNotes.uncertainties
-    assert "## Topic: System Architecture" in parsed.markdown
-    assert "## Study Notes" in parsed.markdown
-    assert "## Unclear or Uncertain" in parsed.markdown
+    assert "# SYSTEM ARCHITECTURE" in parsed.markdown
+    assert "## 🎯 What You Should Remember" in parsed.markdown
+    assert "## 📦 Key Formulas" in parsed.markdown
+    assert "## 🧠 Understand It" in parsed.markdown
+    assert "## ⏱️ 30-Second Revision" in parsed.markdown
     assert parsed.creditsUsed == 5
     assert mock_study_notes.call_count == 1
 
