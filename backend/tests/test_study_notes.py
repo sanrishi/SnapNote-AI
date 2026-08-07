@@ -21,8 +21,13 @@ def _valid_png() -> bytes:
 
 @pytest.fixture(autouse=True)
 def seed_credits():
-    from app.utils.credits_store import init_device
-    init_device(TEST_DEVICE_ID)
+    from app.utils.credits_store import _get_conn
+    conn = _get_conn()
+    conn.execute(
+        "INSERT OR REPLACE INTO device_credits (device_id, credits_remaining, credits_used) VALUES (?, 999, 0)",
+        (TEST_DEVICE_ID,),
+    )
+    conn.commit()
 
 
 # ── Unit: JSON extraction helper ──
@@ -52,6 +57,7 @@ async def test_extract_study_notes_valid(monkeypatch):
         "formula_box": [{"formula": "ω = v/r", "explanation": "angular velocity equals linear velocity over radius", "uncertain_symbols": []}],
         "diagram_interpretation": {"present": False, "visible_elements": [], "likely_interpretation": []},
         "uncertainties": [],
+        "verify_before_studying": ["ω = v/r may have been misread because the omega was blurry."],
         "key_takeaway": "ω = v/r",
     }
     mock_model = AsyncMock()
@@ -61,6 +67,7 @@ async def test_extract_study_notes_valid(monkeypatch):
     notes = await extract_study_notes(_valid_png())
     assert notes.topic.title == "Rotational Motion"
     assert notes.formula_box[0].formula == "ω = v/r"
+    assert notes.verify_before_studying
     assert mock_model.generate_content_async.call_count == 1  # no repair retry
 
 
@@ -76,6 +83,7 @@ async def test_extract_study_notes_repair(monkeypatch):
         "formula_box": [],
         "diagram_interpretation": {"present": False, "visible_elements": [], "likely_interpretation": []},
         "uncertainties": [],
+        "verify_before_studying": [],
         "key_takeaway": "",
     }
     bad_response = type("o", (), {"text": "this is not json"})()
@@ -119,6 +127,7 @@ async def test_diagram_route_structured(sample_diagram_image):
         "formula_box": [],
         "diagram_interpretation": {"present": True, "visible_elements": ["Process A"], "likely_interpretation": []},
         "uncertainties": ["One arrow's meaning is unclear."],
+        "verify_before_studying": ["The label near the top may have been misread."],
         "key_takeaway": "Remember the link between components.",
     }
     mock_model = AsyncMock()
@@ -136,6 +145,8 @@ async def test_diagram_route_structured(sample_diagram_image):
     assert body["studyNotes"]["topic"]["title"] == "Architecture"
     assert body["studyNotes"]["diagram_interpretation"]["present"] is True
     assert body["studyNotes"]["uncertainties"] == ["One arrow's meaning is unclear."]
+    assert body["studyNotes"]["verify_before_studying"]
+    assert "Verify Before Studying" in body["markdown"]
     assert "## Key Takeaway" in body["markdown"] or "Key takeaway" in body["markdown"]
 
 

@@ -114,6 +114,7 @@ def mock_study_notes(monkeypatch):
         "formula_box": [],
         "diagram_interpretation": {"present": True, "visible_elements": ["Process A", "Component B", "connecting line"], "likely_interpretation": ["The line likely shows a data flow from Process A to Component B."]},
         "uncertainties": ["The exact meaning of the connecting line cannot be confirmed from this frame."],
+        "verify_before_studying": [],
         "key_takeaway": "A system with two linked components.",
     })
     mock_response = type("obj", (), {"text": payload})()

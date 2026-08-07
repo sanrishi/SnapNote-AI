@@ -204,6 +204,13 @@ The gate checks in order:
 - **Fluent-looking wrong text**: OCR can produce high-confidence wrong output (e.g., `"ecture"` at conf=1.0). No structural heuristic catches this. Gate relies on symbol/mixed-digit signals catching formula-heavy slides.
 - **Dark-themed slides**: OCR performs reasonably well (high confidence), so detection quality isn't degraded — but dark backgrounds can change character detection patterns.
 
+### Rule 8.2b — Trust layer (Layer 3: Verify Before Studying)
+- `StudyNotes.verify_before_studying: list[str]` holds every equation/symbol Gemini could not read with high confidence, with the ambiguity stated (e.g. `τ = Iα may have been misread as 't = Iα'`).
+- Prompt mandates: NEVER silently guess an unreadable symbol; record the best guess AND list it in `verify_before_studying`.
+- Common confusion pairs the prompt watches: τ/t, ω/w, θ/0, μ/u, α/a, v/r.
+- Rendered as a prominent red `⚠️ Verify Before Studying` card (frontend + markdown) right after the Formula Box.
+- Trust ordering for QA: formula accuracy > topic accuracy > explanation quality.
+
 ### Rule 8.3 — Pricing model
 - `/extract/text`: 1 credit if OCR succeeds standalone; **5 credits if escalation to Gemini fires** (credit check before Gemini call, line 55-57 of extract.py)
 - `/extract/revision`: 1 credit (separate Gemini call for the learning layer)

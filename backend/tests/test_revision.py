@@ -148,6 +148,32 @@ def test_uncertainty_sentence_deterministic():
     assert s == uncertainty_sentence("θ")  # deterministic
 
 
+# ── Unit: render includes Verify Before Studying section ──
+
+def test_render_verify_before_studying():
+    from app.models.schemas import StudyNotes
+    from app.utils.render_notes import render_study_notes
+
+    notes = StudyNotes(
+        topic={"title": "Rotational Motion", "is_probable": True},
+        formula_box=[{"formula": "t = Iα", "explanation": "", "uncertain_symbols": []}],
+        verify_before_studying=["τ = Iα may have been misread as 't = Iα' because the tau was blurry."],
+    )
+    md = render_study_notes(notes)
+    assert "⚠️ Verify Before Studying" in md
+    assert "τ = Iα may have been misread" in md
+    assert "Verify these against the original lecture" in md
+
+
+def test_render_verify_empty_omitted():
+    from app.models.schemas import StudyNotes
+    from app.utils.render_notes import render_study_notes
+
+    notes = StudyNotes(topic={"title": "T", "is_probable": False})
+    md = render_study_notes(notes)
+    assert "Verify Before Studying" not in md
+
+
 # ── Unit: structured text formatting groups content ──
 
 def test_format_structured_text_groups():

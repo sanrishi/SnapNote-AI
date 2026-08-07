@@ -51,6 +51,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "formula_box": [{"formula": "exact formula", "explanation": "meaning, only if reasonably clear", "uncertain_symbols": []}],
   "diagram_interpretation": {"present": false, "visible_elements": [], "likely_interpretation": []},
   "uncertainties": ["anything cropped, unreadable, ambiguous, or inferred"],
+  "verify_before_studying": ["specific equation or symbol that may have been misread, with what was ambiguous"],
   "key_takeaway": "one concise sentence the student should remember"
 }
 
@@ -62,7 +63,13 @@ SECTION RULES:
 - formula_box: for each formula include exact expression, explain symbols only when reasonably clear, list unclear symbols in uncertain_symbols.
 - diagram_interpretation: only when a diagram exists (set present=true). List visible axes, arrows, objects, angles, labeled directions, visible relationships. Distinguish visible facts from likely interpretation.
 - uncertainties: ALWAYS include an entry when anything is cropped, unreadable, ambiguous, or inferred. Empty list if nothing is uncertain.
-- key_takeaway: one concise statement of what to remember from this screenshot."""
+- verify_before_studying: THIS SECTION IS CRITICAL FOR TRUST. List every equation or symbol whose exact form you could not read with high confidence — especially blurry, cropped, tiny, or handwritten math. For each, state what you read AND what might instead be correct. Examples: "τ = Iα may have been misread as 't = Iα' because the tau was blurry", "The 4 in '4μmgR/3' is uncertain and may be another digit". A student may memorize these, so NEVER silently guess an unreadable symbol. Empty list only if every equation is fully legible.
+- key_takeaway: one concise statement of what to remember from this screenshot.
+
+CRITICAL READING RULES:
+- When a handwritten or blurry symbol could be more than one thing, do NOT pick one silently. Record your best guess in the equation, but ALWAYS list it in verify_before_studying.
+- Common confusion pairs to watch: τ (tau) vs t, ω (omega) vs w, θ (theta) vs 0/O, μ (mu) vs u, α (alpha) vs a, v vs r. If the image resolution makes the distinction uncertain, verify it.
+- If a derivation or equation is partially cut off, transcribe only the visible part and flag the rest as uncertain rather than completing it."""
 
 REVISION_SYSTEM_PROMPT = r"""You are SnapNote AI. A student already extracted notes from a lecture screenshot. Now help them revise the concept for an exam tomorrow.
 
@@ -98,7 +105,7 @@ Previous (invalid) response:
 {{RAW}}"""
 
 REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
-{"topic":{"title":"","is_probable":false},"visible_content":{"headings":[],"equations":[],"labels":[],"statements":[]},"study_notes":[],"simple_explanation":"","formula_box":[{"formula":"","explanation":"","uncertain_symbols":[]}],"diagram_interpretation":{"present":false,"visible_elements":[],"likely_interpretation":[]},"uncertainties":[],"key_takeaway":""}
+{"topic":{"title":"","is_probable":false},"visible_content":{"headings":[],"equations":[],"labels":[],"statements":[]},"study_notes":[],"simple_explanation":"","formula_box":[{"formula":"","explanation":"","uncertain_symbols":[]}],"diagram_interpretation":{"present":false,"visible_elements":[],"likely_interpretation":[]},"uncertainties":[],"verify_before_studying":[],"key_takeaway":""}
 
 Previous (invalid) response:
 {{RAW}}"""

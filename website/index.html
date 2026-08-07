@@ -124,6 +124,9 @@
     .note-card .uncertain-symbols { color: var(--amber); font-size: 12px; margin-top: 4px; }
     .note-card.uncertain-card { border-color: rgba(245,158,11,.5); background: rgba(245,158,11,.06); }
     .note-card.uncertain-card h3 { color: var(--amber); }
+    .note-card.verify-card { border-color: rgba(239,68,68,.5); background: rgba(239,68,68,.06); }
+    .note-card.verify-card h3 { color: var(--danger); }
+    .note-card.verify-card p { color: var(--muted); font-size: 13px; margin-bottom: 4px; }
     .note-card.takeaway-card { border-color: rgba(34,197,94,.4); background: rgba(34,197,94,.05); }
     .note-card.takeaway-card h3 { color: var(--green); }
     .note-card.diagram-card img {
@@ -730,6 +733,10 @@
           return html + `</div>`;
         }).join("");
         cards.push(`<div class="note-card"><h3>📦 Formula Box</h3>${formulas}</div>`);
+      }
+
+      if (notes.verify_before_studying && notes.verify_before_studying.length) {
+        cards.push(`<div class="note-card verify-card"><h3>⚠️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
       }
 
       if (notes.study_notes && notes.study_notes.length) {

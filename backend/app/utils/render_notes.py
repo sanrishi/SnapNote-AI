@@ -28,6 +28,16 @@ def render_study_notes(notes: StudyNotes) -> str:
                 )
             lines.append(line)
 
+    if notes.verify_before_studying:
+        lines.append("\n## ⚠️ Verify Before Studying")
+        lines.append(
+            "Some symbols or equations may be ambiguous because the handwriting or image is unclear. "
+            "Verify these against the original lecture before memorizing them:"
+        )
+        for item in notes.verify_before_studying:
+            if item.strip():
+                lines.append(f"- {item.strip()}")
+
     if notes.study_notes:
         lines.append("\n## Study Notes")
         for note in notes.study_notes:

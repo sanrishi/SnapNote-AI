@@ -41,6 +41,7 @@ class StudyNotes(BaseModel):
     formula_box: list[FormulaEntry] = []
     diagram_interpretation: DiagramInterpretation = DiagramInterpretation()
     uncertainties: list[str] = []
+    verify_before_studying: list[str] = []
     key_takeaway: str = ""
 
 
