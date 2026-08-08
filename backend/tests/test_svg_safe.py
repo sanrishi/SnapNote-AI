@@ -1,5 +1,3 @@
-import pytest
-
 from app.utils.svg_safe import sanitize_svg, svg_data_uri
 
 
@@ -34,6 +32,16 @@ def test_sanitize_rejects_non_svg():
 
 def test_sanitize_rejects_malformed():
     assert sanitize_svg("<svg><unclosed>") == ""
+
+
+def test_sanitize_strips_style_block():
+    svg = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">'
+           "<style>.box { fill: #fff; }</style>"
+           '<rect class="box" x="1" y="1" width="20" height="20"/></svg>')
+    out = sanitize_svg(svg)
+    assert "<style" not in out
+    assert "<rect" in out
+    assert out.startswith("<svg")
 
 
 def test_sanitize_empty():
