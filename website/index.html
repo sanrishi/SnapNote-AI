@@ -323,6 +323,12 @@
     .note-card.takeaway-card { border-color: rgba(52,211,153,.4); background: linear-gradient(180deg, rgba(52,211,153,.07), var(--surface)); }
     .note-card.takeaway-card h3 { color: var(--green); }
     .note-card.diagram-card img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border); margin-top: 8px; }
+    .note-card.diagram-card .diagram-wrap {
+      margin: 8px 0; padding: 14px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 12px; overflow-x: auto;
+    }
+    .note-card.diagram-card .diagram-wrap svg { display: block; max-width: 100%; height: auto; }
+    .note-card.diagram-card .diagram-wrap svg text { font-family: 'Space Grotesk', sans-serif; }
     .note-card .muted { color: var(--muted); font-size: 13px; }
 
     #revise-btn {
@@ -1308,6 +1314,10 @@
 
       if (notes.visual_context && notes.visual_context.present && notes.visual_context.summary) {
         cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="bar"></span>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
+      }
+
+      if (notes.diagram && notes.diagram.present && notes.diagram.svg) {
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p></div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {

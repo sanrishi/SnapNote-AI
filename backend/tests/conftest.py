@@ -114,6 +114,7 @@ def mock_study_notes(monkeypatch):
         "common_mistakes": ["General thing to watch for: assuming the link implies a power connection rather than a data flow."],
         "thirty_second_revision": ["Two components, one link.", "Data flows between them."],
         "visual_context": {"present": True, "summary": "The connecting line represents a data flow, not power: one component passes information to the other, which is what links them into a single system."},
+        "diagram": {"present": True, "svg": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><rect x="10" y="30" width="60" height="40" fill="#a78bfa"/><text x="25" y="55" font-size="14">A</text><rect x="130" y="30" width="60" height="40" fill="#6ee7b7"/><text x="145" y="55" font-size="14">B</text><line x1="70" y1="50" x2="130" y2="50" stroke="#fff" stroke-width="2"/></svg>'},
         "verify_before_studying": [],
         "uncertainties": ["The exact meaning of the connecting line cannot be confirmed from this frame."],
         "analogy": "",

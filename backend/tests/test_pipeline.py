@@ -134,6 +134,10 @@ async def test_diagram_extraction(sample_diagram_image, mock_study_notes):
     assert "## 🧠 Understand It" in parsed.markdown
     assert "## ⏱️ 30-Second Revision" in parsed.markdown
     assert "![Diagram](" not in parsed.markdown
+    assert "![Clean diagram](" in parsed.markdown
+    assert parsed.studyNotes.diagram.present is True
+    assert parsed.studyNotes.diagram.svg
+    assert "<rect" in parsed.studyNotes.diagram.svg
     assert parsed.creditsUsed == 5
     assert mock_study_notes.call_count == 1
 

@@ -1,4 +1,5 @@
 from app.models.schemas import StudyNotes
+from app.utils.svg_safe import sanitize_svg, svg_data_uri
 
 
 def uncertainty_sentence(symbol: str) -> str:
@@ -61,6 +62,13 @@ def render_study_notes(notes: StudyNotes) -> str:
     if notes.visual_context.present and notes.visual_context.summary:
         lines.append("\n## 🔎 Visual Context")
         lines.append(notes.visual_context.summary)
+
+    if notes.diagram.present and notes.diagram.svg:
+        svg = sanitize_svg(notes.diagram.svg)
+        if svg:
+            lines.append("\n## 📐 Diagram")
+            lines.append(f"![Clean diagram]({svg_data_uri(svg)})")
+            lines.append("*Rebuilt from your screenshot as a clean diagram.*")
 
     if notes.verify_before_studying:
         lines.append("\n## 🛡️ Verify Before Studying")

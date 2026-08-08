@@ -11,6 +11,7 @@ from app.config import settings
 from app.exceptions import UpstreamError
 from app.models.schemas import StudyNotes
 from app.utils.latex_clean import latex_to_unicode
+from app.utils.svg_safe import sanitize_svg
 from pydantic import BaseModel, ValidationError
 
 logger = logging.getLogger(__name__)
@@ -44,7 +45,6 @@ FUNDAMENTAL RULES:
 5. Preserve equations exactly as written.
 6. Do NOT narrate or inventory the image. No lists of detected axes, objects, arrows, or labels. The image is the professor's teaching medium, not the subject.
 7. Avoid generic filler. Every line preserves info, explains a relationship, improves revision, or discloses uncertainty.
-8. No SVG, Mermaid, ASCII box-drawing, or code fences.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
@@ -55,6 +55,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "common_mistakes": ["mistake students commonly make with this concept, with the correct way"],
   "thirty_second_revision": ["3-5 short bullets a student could scan 30 seconds before the exam"],
   "visual_context": {"present": false, "summary": "1-2 sentences teaching what the diagram MEANS conceptually for the concept, only if a diagram exists and it helps understanding"},
+  "diagram": {"present": false, "svg": ""},
   "verify_before_studying": ["specific equation or symbol that may have been misread, with what was ambiguous"],
   "uncertainties": ["anything cropped, unreadable, ambiguous, or missing"],
   "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
@@ -72,6 +73,13 @@ SECTION RULES:
 - common_mistakes: do NOT fabricate mistakes. Only include a mistake when it is genuinely supported by the visible material, or clearly frame it as "a general thing to watch for with this type of problem." Never pretend a mistake was taught by the professor unless it is visible.
 - thirty_second_revision: 3-5 tight bullets. Include the key formula if one is visible.
 - visual_context: 1-2 sentences maximum, ONLY if a diagram exists AND explaining it helps understanding. Explain what the diagram MEANS conceptually and why it matters for the concept — never list what objects, axes, arrows, or labels are visible. It must teach the relationship, not describe the picture. Example (GOOD): "The diagram represents a closed-loop control system: the reference input is compared with feedback to form an error signal, which the controller uses to drive the plant toward the desired output." Example (BAD): "Block diagrams illustrate closed-loop control systems with reference inputs, summing junctions, controllers, processes."
+- diagram: REBUILD the visible diagram as a CLEAN vector SVG (present=true + svg) whenever the screenshot contains a meaningful diagram, flowchart, block diagram, graph, geometric figure, or schematic. This gives the student a readable, non-messy version of what was on the board. Rules:
+  * Ground the SVG strictly in what is visible. Recreate the same boxes, arrows, shapes, connections, and labels — do not add, remove, or "improve" the structure, and never invent content that is not in the image.
+  * Readable and clean: straight lines, generous spacing, labels as <text> elements, distinct fill colors for different parts, no hand-drawn wobble, no background photo, no watermark.
+  * Keep it simple and flat — rectangles, circles, lines, arrows (markers), text. A student must be able to read it at a glance.
+  * Escape text properly (&lt; &gt; &amp;). Use viewBox with a sane aspect ratio and width 100%.
+  * Only include <svg>…</svg>. No markdown fences, no comments.
+  * If the screenshot is pure prose/equations with no real diagram (no shapes/connections/structure), set present=false and svg="".
 - verify_before_studying: ONLY genuinely uncertain equations/symbols (confidence "possible_extraction_issue"). Empty unless truly needed.
 - uncertainties: only genuinely ambiguous/missing material. Empty if nothing is uncertain.
 - analogy: use an everyday comparison ONLY if it is genuinely helpful and accurate. Otherwise empty string. Never force one.
@@ -101,6 +109,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "common_mistakes": ["mistake with the correct way, only when genuinely useful"],
   "thirty_second_revision": ["3-5 short bullets"],
   "visual_context": {"present": false, "summary": "1-2 sentences teaching what the diagram MEANS conceptually, only if a diagram exists and helps"},
+  "diagram": {"present": false, "svg": ""},
   "verify_before_studying": ["equation or symbol that may have been misread"],
   "uncertainties": ["anything ambiguous or missing"],
   "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
@@ -111,16 +120,17 @@ SECTION RULES:
 - common_mistakes: do NOT fabricate. Frame as "a general thing to watch for" unless the mistake is visibly taught.
 - thirty_second_revision: 3-5 tight bullets. Include the key formula if visible.
 - visual_context: 1-2 sentences max, only if a diagram exists and helps. Explain what the diagram MEANS conceptually (teach the relationship), never list what objects/axes/labels are visible.
+- diagram: same rules as the main prompt — rebuild the visible diagram as a clean, readable vector SVG (present=true + svg) when the material contains one; else present=false, svg="".
 - analogy: only if genuinely helpful and accurate, otherwise empty string."""  # noqa: E501
 
 REVISION_REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
-{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
+{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"diagram":{"present":false,"svg":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
 
 Previous (invalid) response:
 {{RAW}}"""
 
 REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
-{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
+{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"diagram":{"present":false,"svg":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
 
 Previous (invalid) response:
 {{RAW}}"""
@@ -173,12 +183,23 @@ def _clean_latex_in_dict(value: object) -> object:
     return value
 
 
+def _sanitize_svg_in_dict(value: object) -> object:
+    if isinstance(value, dict):
+        if value.get("svg"):
+            value["svg"] = sanitize_svg(value["svg"])
+        return {key: _sanitize_svg_in_dict(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_sanitize_svg_in_dict(item) for item in value]
+    return value
+
+
 async def _extract_structured(
     primary_prompt: str, repair_prompt: str, image_bytes: bytes, model_cls: type
 ) -> BaseModel:
     raw = await _call_gemini(primary_prompt, image_bytes, json_mode=True)
     try:
         data = _clean_latex_in_dict(_extract_json(raw))
+        data = _sanitize_svg_in_dict(data)
         return model_cls(**data)
     except (json.JSONDecodeError, ValidationError) as first_err:
         logger.warning("%s JSON parse failed (attempt 1): %s", model_cls.__name__, first_err)
@@ -187,6 +208,7 @@ async def _extract_structured(
                 repair_prompt.replace("{{RAW}}", raw), image_bytes, json_mode=True
             )
             data = _clean_latex_in_dict(_extract_json(repaired))
+            data = _sanitize_svg_in_dict(data)
             return model_cls(**data)
         except (json.JSONDecodeError, ValidationError, UpstreamError) as repair_err:
             logger.error("%s repair failed: %s", model_cls.__name__, repair_err)

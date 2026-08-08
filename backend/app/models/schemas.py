@@ -26,6 +26,11 @@ class VisualContext(BaseModel):
     summary: str = ""
 
 
+class DiagramRep(BaseModel):
+    present: bool = False
+    svg: str = ""
+
+
 class StudyNotes(BaseModel):
     topic: TopicInfo = TopicInfo()
     what_you_should_remember: str = ""
@@ -34,6 +39,7 @@ class StudyNotes(BaseModel):
     common_mistakes: list[str] = []
     thirty_second_revision: list[str] = []
     visual_context: VisualContext = VisualContext()
+    diagram: DiagramRep = DiagramRep()
     verify_before_studying: list[str] = []
     uncertainties: list[str] = []
     analogy: str = ""
