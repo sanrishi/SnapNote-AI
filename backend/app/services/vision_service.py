@@ -144,28 +144,39 @@ def _extract_json(text: str) -> dict:
     return json.loads(text)
 
 
-async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 3, json_mode: bool = False) -> str:
+async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 1, json_mode: bool = False) -> str:
+    """Call Gemini with a bounded per-call timeout and at most one controlled retry.
+
+    The SDK default timeout for generate_content is 600s and it internally retries
+    on 503 — together with any outer retry loop that stacks unboundedly. We pin a
+    sane per-call timeout and retry only on 429/RESOURCE_EXHAUSTED (where a short
+    wait genuinely helps). Everything else fails fast.
+    """
     img = Image.open(io.BytesIO(image_bytes))
     last_error = None
-    for attempt in range(max_retries):
+    for attempt in range(max_retries + 1):
         try:
             config = {"response_mime_type": "application/json"} if json_mode else None
             response = await model.generate_content_async(
                 [prompt, img],
                 generation_config=config,
+                request_options={
+                    "timeout": settings.GEMINI_CALL_TIMEOUT_SECONDS,
+                    "retry": None,
+                },
             )
             return response.text.strip()
         except Exception as e:
             last_error = e
             err_str = str(e)
-            if "RESOURCE_EXHAUSTED" in err_str or "429" in err_str:
-                delay = min(2 ** attempt * 2, 30)
-                logger.warning("Gemini rate limited (attempt %d/%d). Retrying in %ds...", attempt + 1, max_retries, delay)
+            if attempt < max_retries and ("RESOURCE_EXHAUSTED" in err_str or "429" in err_str):
+                delay = 2 * (attempt + 1)
+                logger.warning("Gemini rate limited (attempt %d/%d). Retrying in %ds...", attempt + 1, max_retries + 1, delay)
                 await asyncio.sleep(delay)
             else:
                 logger.error("Gemini call failed: %s", str(e))
                 raise UpstreamError(service="Gemini Vision", detail=str(e))
-    logger.error("Gemini call failed after %d retries: %s", max_retries, last_error)
+    logger.error("Gemini call failed after %d retries: %s", max_retries + 1, last_error)
     raise UpstreamError(service="Gemini Vision", detail=str(last_error))
 
 

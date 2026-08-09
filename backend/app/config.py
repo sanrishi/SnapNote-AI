@@ -28,6 +28,11 @@ class Settings(BaseSettings):
     MAX_IMAGE_SIZE_MB: int = 10
     CREDITS_DB_PATH: str = "credits.db"
 
+    MAX_VISION_LONG_EDGE: int = 1600
+    VISION_JPEG_QUALITY: int = 85
+    GEMINI_CALL_TIMEOUT_SECONDS: float = 60.0
+    DIAGRAM_TIMEOUT_SECONDS: float = 75.0
+
     RAZORPAY_KEY_ID: str = ""
     RAZORPAY_KEY_SECRET: str = ""
 

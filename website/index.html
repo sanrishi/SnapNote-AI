@@ -1008,11 +1008,14 @@
 
       const endpoint = isDiagram ? `${BASE}/api/extract/diagram` : `${BASE}/api/extract/text`;
       const maxRetries = 3;
+      const REQUEST_TIMEOUT_MS = 95000;
 
       let lastError = null;
       for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
         try {
-          const resp = await fetch(endpoint, { method: "POST", body: formData });
+          const resp = await fetch(endpoint, { method: "POST", body: formData, signal: controller.signal });
 
           if (resp.status === 429) {
             throw new Error("429");
@@ -1057,12 +1060,16 @@
           } else {
             break;
           }
+        } finally {
+          clearTimeout(timer);
         }
       }
 
       if (lastError) {
         hideProcessing();
-        showError(lastError);
+        showError(lastError === "This operation was aborted"
+          ? "The AI took too long this time. No credits were charged — please try again."
+          : lastError);
       }
       submitBtn.disabled = false;
       submitBtn.innerHTML = "Extract Notes →";

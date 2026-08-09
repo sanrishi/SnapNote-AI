@@ -62,7 +62,8 @@ async def extract_text_route(
         if remaining < extra_cost:
             raise CreditLimitError()
         try:
-            result = await extract_text_with_llm(image_bytes)
+            enhanced = await asyncio.to_thread(enhance_for_vision, image_bytes)
+            result = await extract_text_with_llm(enhanced)
             markdown = result
             final_cost = settings.DIAGRAM_CREDIT_COST
         except Exception as e:
@@ -111,16 +112,28 @@ async def extract_diagram_route(
     except ValueError as e:
         raise InvalidInputError(message=str(e))
 
+    upload_task = asyncio.create_task(asyncio.to_thread(upload_image, enhanced))
     try:
-        study_notes = await extract_study_notes(enhanced)
+        study_notes = await asyncio.wait_for(
+            extract_study_notes(enhanced),
+            timeout=settings.DIAGRAM_TIMEOUT_SECONDS,
+        )
+    except asyncio.TimeoutError:
+        logger.error("Diagram extraction timed out after %ss (device=%s)", settings.DIAGRAM_TIMEOUT_SECONDS, deviceId[:8])
+        upload_task.cancel()
+        raise UpstreamError(
+            service="SnapNote AI",
+            detail="AI extraction is taking longer than usual right now. Please try again in a few minutes.",
+        )
     except Exception as e:
+        upload_task.cancel()
         err_str = str(e)
         logger.error("Gemini study notes failed: type=%s msg=%s", type(e).__name__, err_str)
         if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
             logger.warning("Gemini rate-limited on diagram (device=%s).", deviceId[:8])
             raise UpstreamError(service="SnapNote AI", detail="AI extraction is at high demand right now. Try again in a few minutes.")
         raise
-    uploaded_url = await asyncio.to_thread(upload_image, enhanced)
+    uploaded_url = await upload_task
     ctx = parse_context(context)
     tags = generate_tags(ctx)
 
@@ -151,7 +164,21 @@ async def extract_revision_route(
     context_hint = context.strip()[:2000] if context.strip() not in ("", "{}", "null") else ""
 
     try:
-        study_notes = await extract_revision_guide(image_bytes, context_hint)
+        enhanced = await asyncio.to_thread(enhance_for_vision, image_bytes)
+    except ValueError as e:
+        raise InvalidInputError(message=str(e))
+
+    try:
+        study_notes = await asyncio.wait_for(
+            extract_revision_guide(enhanced, context_hint),
+            timeout=settings.DIAGRAM_TIMEOUT_SECONDS,
+        )
+    except asyncio.TimeoutError:
+        logger.error("Revision guide timed out after %ss (device=%s)", settings.DIAGRAM_TIMEOUT_SECONDS, deviceId[:8])
+        raise UpstreamError(
+            service="SnapNote AI",
+            detail="AI enhancement is taking longer than usual right now. Please try again in a few minutes.",
+        )
     except Exception as e:
         err_str = str(e)
         logger.error("Revision guide failed: type=%s msg=%s", type(e).__name__, err_str)

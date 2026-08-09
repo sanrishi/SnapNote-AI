@@ -25,7 +25,7 @@ def _upload_to_imgbb(image_bytes: bytes, context: dict | None) -> str:
         raise ValueError("IMGBB_API_KEY not configured")
 
     title = _slugify(context.get("title", "diagram")) if context else "diagram"
-    data = {"key": api_key, "name": f"{title}.png"}
+    data = {"key": api_key, "name": f"{title}.jpg"}
     files = {"image": image_bytes}
 
     resp = httpx.post(
