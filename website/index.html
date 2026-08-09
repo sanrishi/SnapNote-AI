@@ -373,6 +373,17 @@
     }
     #result-panel .view-orig-btn:hover { border-color: var(--accent); color: var(--text); }
 
+    .regen-btn {
+      display: block; width: 100%; margin-top: 14px; padding: 12px 16px;
+      background: linear-gradient(135deg, rgba(251,191,36,.18), rgba(249,115,22,.14));
+      border: 1px dashed var(--amber); border-radius: 12px; color: var(--text);
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; font-family: inherit;
+    }
+    .regen-btn em { display: block; font-style: normal; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 3px; }
+    .regen-btn:hover { border-style: solid; box-shadow: 0 8px 24px -10px rgba(251,191,36,.5); }
+    .regen-btn:disabled { opacity: .55; cursor: not-allowed; }
+    .regen-btn .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: var(--amber); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 6px; vertical-align: -2px; }
+
     .orig-modal { max-width: 720px; }
     .orig-modal img { display: block; width: 100%; border-radius: 10px; margin-top: 10px; }
 
@@ -1175,6 +1186,77 @@
       revisionCards.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
+    async function handleRegenerate() {
+      if (!currentBlob) return;
+      const deviceId = getDeviceId();
+      if (!deviceId) { showError("Device not initialized. Refresh the page."); return; }
+
+      const regenBtn = document.getElementById("regen-btn");
+      if (regenBtn) { regenBtn.disabled = true; regenBtn.innerHTML = '<span class="spinner"></span> Regenerating...'; }
+      errorMsg.style.display = "none";
+
+      showProcessing(
+        ["Rereading your screenshot", "Rebuilding the diagram"],
+        "Regenerating diagram…",
+        "This is a separate AI pass — a few more seconds."
+      );
+
+      const formData = new FormData();
+      formData.append("image", currentBlob, "capture.png");
+      formData.append("context", JSON.stringify({
+        title: document.title,
+        url: location.href,
+        week: "",
+      }));
+      formData.append("deviceId", deviceId);
+      formData.append("regenerate", "true");
+
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 95000);
+      try {
+        const resp = await fetch(`${BASE}/api/extract/diagram`, { method: "POST", body: formData, signal: controller.signal });
+        if (resp.status === 429) {
+          const err = await resp.json().catch(() => ({}));
+          hideProcessing();
+          showError(err.error || "High demand — try again in a few minutes.");
+          return;
+        }
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          throw new Error(err.error || `Server error (${resp.status})`);
+        }
+        const result = await resp.json();
+        hideProcessing();
+
+        resultType.textContent = result.type.charAt(0).toUpperCase() + result.type.slice(1);
+        resultType.className = `type-badge ${result.type === "diagram" ? "diagram" : "text"}`;
+        resultCredits.textContent = `${result.creditsUsed} credits used`;
+        tagsContainer.innerHTML = result.tags.map((t) => `<span>${t}</span>`).join("");
+        renderResult(result);
+        resultPanel.classList.add("show");
+
+        const topic = (result.studyNotes && result.studyNotes.topic && result.studyNotes.topic.title) || "Study sheet";
+        saveHistory({
+          type: result.type,
+          topic,
+          creditsUsed: result.creditsUsed,
+          studyNotes: result.studyNotes || null,
+          markdown: result.markdown || "",
+          imageUrl: result.imageUrl || null,
+          at: Date.now(),
+        });
+        resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        await initDevice();
+      } catch (err) {
+        hideProcessing();
+        showError((err.name === "AbortError" || err.message === "This operation was aborted")
+          ? "The AI took too long this time. No credits were charged — please try again."
+          : (err.message || "Regeneration failed. Try again."));
+      } finally {
+        clearTimeout(timer);
+      }
+    }
+
     // ── Render result ──
     let currentMarkdown = "";
     let currentImageUrl = null;
@@ -1271,6 +1353,7 @@
       });
 
       const notes = result.studyNotes;
+      const canRegenerate = (result.type === "diagram") && !!currentBlob && !fromHistory;
       notesCards.innerHTML = "";
       if (!notes) {
         const card = document.createElement("div");
@@ -1324,9 +1407,9 @@
       }
 
       if (notes.diagram && notes.diagram.present && notes.diagram.svg) {
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p></div>`);
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p>${canRegenerate ? '<button class="regen-btn" id="regen-btn"><span>↻ Regenerate diagram</span><em>Ask the AI to redraw this diagram (+1 credit)</em></button>' : ''}</div>`);
       } else if (result.type === "diagram") {
-        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><p>No distinct diagram could be reconstructed from this image. Your study notes below still cover the content.</p></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><p>No distinct diagram could be reconstructed from this image. Your study notes below still cover the content.</p>${canRegenerate ? '<button class="regen-btn" id="regen-btn"><span>↻ Regenerate diagram</span><em>Ask the AI to try drawing it again (+1 credit)</em></button>' : ''}</div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
@@ -1342,6 +1425,9 @@
       }
 
       notesCards.innerHTML = cards.join("");
+
+      const regenBtn = document.getElementById("regen-btn");
+      if (regenBtn) regenBtn.addEventListener("click", handleRegenerate);
     }
 
     rawToggleBtn.addEventListener("click", () => {

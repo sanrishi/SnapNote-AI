@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     TEXT_CREDIT_COST: int = 1
     REVISION_CREDIT_COST: int = 1
     DIAGRAM_CREDIT_COST: int = 5
+    REGENERATE_CREDIT_COST: int = 1
+    REGENERATE_WINDOW_SECONDS: int = 1800
 
     DAILY_REQ_LIMIT: int = 50
     RATE_LIMIT_PER_MIN: int = 10

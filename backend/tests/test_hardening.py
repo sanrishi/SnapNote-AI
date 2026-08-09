@@ -37,7 +37,7 @@ def _reset_credits(device_id: str, amount: int = 50) -> None:
     init_device(device_id)
     conn = _get_conn()
     conn.execute(
-        "UPDATE device_credits SET credits_remaining = ?, credits_used = 0 WHERE device_id = ?",
+        "UPDATE device_credits SET credits_remaining = ?, credits_used = 0, last_diagram_paid_at = 0 WHERE device_id = ?",
         (amount, device_id),
     )
     conn.commit()
@@ -412,6 +412,9 @@ def test_retry_path_does_not_double_charge(sample_diagram_image, monkeypatch):
 def test_diagram_mode_never_calls_ocr(sample_diagram_image, monkeypatch):
     from app.services import ocr_service
 
+    device = "no-ocr-device-00000000-0000-0000-000000000004"
+    _reset_credits(device)
+
     payload = {
         "topic": {"title": "Rotation", "is_probable": False},
         "what_you_should_remember": "Takeaway.",
@@ -442,7 +445,7 @@ def test_diagram_mode_never_calls_ocr(sample_diagram_image, monkeypatch):
             return await client.post(
                 "/api/extract/diagram",
                 files={"image": ("d.png", sample_diagram_image, "image/png")},
-                data={"context": json.dumps({}), "deviceId": "no-ocr-device-00000000-0000-0000-000000000004"},
+                data={"context": json.dumps({}), "deviceId": device},
             )
 
     resp = asyncio.run(run())
@@ -490,6 +493,125 @@ def test_frontend_has_95s_timeout_and_no_infinite_spinner():
     assert "AbortController" in html
     assert "No credits were charged" in html
     assert "controller.abort()" in html
+
+
+# ── Diagram regenerate (1-credit retry, no 5-credit bypass) ──
+
+
+def _diagram_payload() -> dict:
+    return {
+        "topic": {"title": "Rotation", "is_probable": False},
+        "what_you_should_remember": "Takeaway.",
+        "key_formulas": [],
+        "understand_it": [],
+        "common_mistakes": [],
+        "thirty_second_revision": [],
+        "visual_context": {"present": False, "summary": ""},
+        "verify_before_studying": [],
+        "uncertainties": [],
+        "analogy": "",
+    }
+
+
+def _post_diagram(client, device: str, image: bytes, regenerate: bool = False):
+    data = {"context": json.dumps({}), "deviceId": device}
+    if regenerate:
+        data["regenerate"] = "true"
+    return client.post(
+        "/api/extract/diagram",
+        files={"image": ("d.png", image, "image/png")},
+        data=data,
+    )
+
+
+def test_regenerate_without_prior_diagram_charges_full_5(sample_diagram_image, monkeypatch):
+    """Calling /diagram with regenerate=true on a cold device must NOT be a
+    1-credit backdoor to the 5-credit product."""
+    from app.utils.credits_store import get_credits
+
+    device = "regen-cold-device-00000000-0000-0000-000000000010"
+    _reset_credits(device)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_diagram_payload())})())
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image, regenerate=True)
+
+    resp = asyncio.run(run())
+    assert resp.status_code == 200
+    assert resp.json()["creditsUsed"] == 5
+    remaining, _ = get_credits(device)
+    assert remaining == 45
+
+
+def test_regenerate_after_paid_diagram_charges_1(sample_diagram_image, monkeypatch):
+    """A real regeneration — the device paid 5 for a diagram within the window —
+    is a 1-credit retry."""
+    from app.utils.credits_store import get_credits, mark_diagram_paid
+
+    device = "regen-warm-device-00000000-0000-0000-000000000011"
+    _reset_credits(device)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_diagram_payload())})())
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    mark_diagram_paid(device)
+
+    async def run():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image, regenerate=True)
+
+    resp = asyncio.run(run())
+    assert resp.status_code == 200
+    assert resp.json()["creditsUsed"] == 1
+    remaining, _ = get_credits(device)
+    assert remaining == 49
+
+
+def test_regenerate_window_expired_charges_full_5(sample_diagram_image, monkeypatch):
+    """Regenerating long after the last paid diagram falls back to full price."""
+    from app.utils.credits_store import get_credits, _get_conn, init_device
+
+    device = "regen-expired-device-00000000-0000-0000-000000000012"
+    _reset_credits(device)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_diagram_payload())})())
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    # Pretend the last paid diagram was hours ago — outside the 1800s window.
+    init_device(device)
+    conn = _get_conn()
+    conn.execute(
+        "UPDATE device_credits SET last_diagram_paid_at = ? WHERE device_id = ?",
+        (settings.REGENERATE_WINDOW_SECONDS + 1, device),
+    )
+    conn.commit()
+
+    async def run():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image, regenerate=True)
+
+    resp = asyncio.run(run())
+    assert resp.status_code == 200
+    assert resp.json()["creditsUsed"] == 5
+    remaining, _ = get_credits(device)
+    assert remaining == 45
+
+
+def test_frontend_has_regenerate_button():
+    html_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "website", "index.html"))
+    with open(html_path, "r", encoding="utf-8") as fh:
+        html = fh.read()
+    assert "↻ Regenerate diagram" in html
+    assert "handleRegenerate" in html
+    assert 'formData.append("regenerate", "true")' in html
+    assert "No credits were charged" in html
+
 
 
 

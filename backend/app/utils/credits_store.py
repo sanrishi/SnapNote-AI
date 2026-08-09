@@ -2,6 +2,7 @@ import logging
 import os
 import sqlite3
 import threading
+import time
 
 from app.config import settings
 
@@ -19,9 +20,16 @@ def _get_conn() -> sqlite3.Connection:
             "CREATE TABLE IF NOT EXISTS device_credits ("
             "  device_id TEXT PRIMARY KEY,"
             "  credits_remaining INTEGER NOT NULL DEFAULT 50,"
-            "  credits_used INTEGER NOT NULL DEFAULT 0"
+            "  credits_used INTEGER NOT NULL DEFAULT 0,"
+            "  last_diagram_paid_at INTEGER NOT NULL DEFAULT 0"
             ")"
         )
+        try:
+            _local.conn.execute(
+                "ALTER TABLE device_credits ADD COLUMN last_diagram_paid_at INTEGER NOT NULL DEFAULT 0"
+            )
+        except sqlite3.OperationalError:
+            pass
         _local.conn.commit()
     return _local.conn
 
@@ -79,3 +87,24 @@ def use_credits(device_id: str, amount: int) -> int:
     new_remaining, _ = get_credits(device_id)
     logger.info("Used %d credits for %s (now %d)", amount, device_id[:8], new_remaining)
     return new_remaining
+
+
+def mark_diagram_paid(device_id: str) -> None:
+    conn = _get_conn()
+    init_device(device_id)
+    conn.execute(
+        "UPDATE device_credits SET last_diagram_paid_at = ? WHERE device_id = ?",
+        (int(time.time()), device_id),
+    )
+    conn.commit()
+
+
+def diagram_paid_recently(device_id: str) -> bool:
+    conn = _get_conn()
+    row = conn.execute(
+        "SELECT last_diagram_paid_at FROM device_credits WHERE device_id = ?",
+        (device_id,),
+    ).fetchone()
+    if row is None or row["last_diagram_paid_at"] == 0:
+        return False
+    return (int(time.time()) - row["last_diagram_paid_at"]) <= settings.REGENERATE_WINDOW_SECONDS

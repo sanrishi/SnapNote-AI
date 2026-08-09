@@ -224,8 +224,10 @@ The gate checks in order:
 - `/extract/text`: 1 credit if OCR succeeds standalone; **5 credits if escalation to Gemini fires** (credit check before Gemini call, line 55-57 of extract.py)
 - `/extract/revision`: 1 credit (separate Gemini call for the learning layer)
 - `/extract/diagram`: 5 credits always
+- `/extract/diagram` with `regenerate=true`: **1 credit**, but ONLY if the device paid for a full diagram within `REGENERATE_WINDOW_SECONDS` (30 min). Otherwise it's treated as a fresh 5-credit diagram — this blocks using regenerate as a cheap backdoor to the 5-credit product. `last_diagram_paid_at` is recorded via `mark_diagram_paid()` in `credits_store.py`.
 - 50 free credits/month = **50 OCR-only requests**, **50 revision enhancements**, or **10 Gemini-escalated requests**
 - When Gemini returns 429 (rate limit), text endpoint falls back to OCR + a note, charged 1 credit. Diagram endpoint returns a clean "high demand" message.
+- Regenerate is a temporary safety valve for a bad/empty render — NOT the product direction. Same input must produce a reliable conceptual reconstruction on the first pass; the button is the escape hatch, not the fix.
 
 ### Rule 8.4 — Test fixtures
 9 fixtures in `stress_test_fixtures/`:

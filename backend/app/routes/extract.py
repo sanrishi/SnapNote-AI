@@ -23,7 +23,12 @@ from app.utils.render_notes import render_study_notes
 from app.utils.tags import parse_context, generate_tags
 from app.utils.validation import validate_image_size
 from app.exceptions import InvalidInputError, CreditLimitError, UpstreamError
-from app.utils.credits_store import get_credits, use_credits
+from app.utils.credits_store import (
+    get_credits,
+    use_credits,
+    mark_diagram_paid,
+    diagram_paid_recently,
+)
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -102,8 +107,14 @@ async def extract_diagram_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
     deviceId: str = Form(...),
+    regenerate: bool = Form(False),
 ) -> ExtractionResponse:
-    _check_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
+    if regenerate and diagram_paid_recently(deviceId):
+        cost = settings.REGENERATE_CREDIT_COST
+        logger.info("Diagram regeneration (device=%s) charged %d credit", deviceId[:8], cost)
+    else:
+        cost = settings.DIAGRAM_CREDIT_COST
+    _check_credits(deviceId, cost)
     image_bytes = await image.read()
     validate_image_size(image_bytes)
 
@@ -139,14 +150,15 @@ async def extract_diagram_route(
 
     markdown = render_study_notes(study_notes)
 
-    use_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
+    use_credits(deviceId, cost)
+    mark_diagram_paid(deviceId)
 
     return ExtractionResponse(
         type=ExtractionType.DIAGRAM,
         markdown=markdown,
         imageUrl=uploaded_url,
         tags=tags,
-        creditsUsed=settings.DIAGRAM_CREDIT_COST,
+        creditsUsed=cost,
         studyNotes=study_notes,
     )
 
