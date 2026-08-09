@@ -1325,6 +1325,8 @@
 
       if (notes.diagram && notes.diagram.present && notes.diagram.svg) {
         cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p></div>`);
+      } else if (result.type === "diagram") {
+        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><p>No distinct diagram could be reconstructed from this image. Your study notes below still cover the content.</p></div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
