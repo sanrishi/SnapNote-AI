@@ -450,6 +450,35 @@ def test_diagram_mode_never_calls_ocr(sample_diagram_image, monkeypatch):
     assert called["n"] == 0  # no OCR triggered in diagram mode
 
 
+# ── Diagram SVG generation reliability rules ──
+
+
+def test_study_notes_prompt_enforces_svg_fill_safety():
+    """The exact failure caught on camera — solid-filled circles blotting out
+    content — must stay forbidden by the prompt."""
+    prompt = vision_service.STUDY_NOTES_SYSTEM_PROMPT
+    assert "FILL SAFETY" in prompt
+    assert 'fill="none"' in prompt
+    assert "NEVER fill a whole circle or outline shape solid" in prompt
+    assert "opacity=\"0.15\"–\"0.35\"" in prompt
+    assert "labels as <text> elements" in prompt
+
+
+def test_study_notes_prompt_enforces_diagram_completeness():
+    """The second caught failure — dropping one of two visible diagrams — must
+    stay forbidden by the prompt."""
+    prompt = vision_service.STUDY_NOTES_SYSTEM_PROMPT
+    assert "COMPLETENESS" in prompt
+    assert "include ALL of them" in prompt
+    assert "never simplify down to a single figure" in prompt
+
+
+def test_revision_prompt_reuses_diagram_rules():
+    """Revision tier inherits the same diagram rules — no parallel drift."""
+    prompt = vision_service.REVISION_SYSTEM_PROMPT
+    assert "diagram: same rules as the main prompt" in prompt
+
+
 # ── Frontend 95s timeout + no infinite spinner ──
 
 
