@@ -1,5 +1,5 @@
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 
@@ -29,6 +29,36 @@ class VisualContext(BaseModel):
 class DiagramRep(BaseModel):
     present: bool = False
     svg: str = ""
+    best_effort: bool = False  # True only for legacy-fallback SVG; presented as unverified, not "clean"
+
+
+class DiagramType(str, Enum):
+    POLAR_REGION = "polar_region"
+
+
+class PolarBounds(BaseModel):
+    inner: str = ""
+    outer: str = ""
+    theta_min: str = ""
+    theta_max: str = ""
+
+
+class DiagramSpec(BaseModel):
+    """Semantic description of a diagram, produced by Gemini. Never pixel/SVG geometry.
+
+    Only polar_region is rendered today; the renderer is deterministic, so the
+    same validated spec always produces the same SVG. This is an internal
+    intermediate — it never appears on the wire (StudyNotes excludes it).
+    """
+
+    present: bool = False
+    diagram_type: str = ""
+    bounds: PolarBounds = PolarBounds()
+    show_axes: bool = True
+    labels: list[str] = []
+    shade_region: bool = True
+    instruction_text: list[str] = []
+    uncertain: list[str] = []
 
 
 class StudyNotes(BaseModel):
@@ -40,6 +70,7 @@ class StudyNotes(BaseModel):
     thirty_second_revision: list[str] = []
     visual_context: VisualContext = VisualContext()
     diagram: DiagramRep = DiagramRep()
+    diagram_spec: Optional[DiagramSpec] = Field(default=None, exclude=True)
     verify_before_studying: list[str] = []
     uncertainties: list[str] = []
     analogy: str = ""
