@@ -9,7 +9,9 @@ from PIL import Image
 
 from app.config import settings
 from app.exceptions import UpstreamError
-from app.models.schemas import StudyNotes
+from app.models.schemas import DiagramRep, DiagramSpec, StudyNotes
+from app.utils.diagram_validation import SUPPORTED_DIAGRAM_TYPES, validate_diagram_spec
+from app.utils.diagram_renderer import render_polar_region
 from app.utils.latex_clean import latex_to_unicode
 from app.utils.svg_safe import sanitize_svg
 from pydantic import BaseModel, ValidationError
@@ -91,6 +93,48 @@ CRITICAL READING RULES:
 - Common confusion pairs to watch: τ (tau) vs t, ω (omega) vs w, θ (theta) vs 0/O, μ (mu) vs u, α (alpha) vs a, v vs r.
 - If a derivation or equation is partially cut off, transcribe only the visible part and flag the rest as missing context rather than completing it."""
 
+SEMANTIC_DIAGRAM_RULE = """- diagram_spec: REBUILD the visible diagram as a STRUCTURED SEMANTIC SPEC, NOT as SVG. The student needs the region's exact boundaries so our renderer can draw a clean diagram. You output MATH (radii and angles), never pixels. Never output SVG geometry — no <circle>, no cx/cy, no pixel coordinates.
+  * Set diagram_spec.present=true ONLY when the screenshot contains a real polar-coordinate integration region: two concentric circular boundaries, the area between them shaded, radial labels and/or a theta arc. Otherwise present=false and leave bounds empty.
+  * diagram_spec.diagram_type: "polar_region" when the figure is a polar-coordinate region. If the visible diagram is a different kind of figure, still return the spec with present=true but set diagram_type to that figure's honest type name (only "polar_region" is rendered today; anything else is reported as unsupported rather than guessed).
+  * bounds.inner / bounds.outer: the two RADII exactly as written, as plain math strings — e.g. "1", "sqrt(5)", "3". NEVER pixel values. Use "" if a radius is not clearly readable. Never invent radii that are not visible.
+  * bounds.theta_min / bounds.theta_max: the angular sweep as plain math strings — "0", "pi", "2*pi", "pi/2". If the shaded region is a COMPLETE ring (the shading goes all the way around with no gap) use theta_min="0" and theta_max="2*pi" — a closed ring is visible evidence of a full revolution. Leave a field empty only if the region is cut off or the sweep is genuinely ambiguous.
+  * labels: only text visibly written in the figure (e.g. "r = 1", "r = sqrt(5)", "θ"). Empty if none is readable.
+  * show_axes: true unless the figure clearly has no axes.
+  * shade_region: true when the area between the two boundaries is shaded.
+  * instruction_text: 1 short phrase teaching what region is being integrated, grounded in what is visible (e.g. "region between r = 1 and r = sqrt(5)"). Empty if unclear.
+  * uncertain: list anything you could not read with high confidence (e.g. "outer radius could be sqrt(5) or sqrt(3)"). Empty if confident.
+  * If a boundary is cut off, leave its field empty and note the missing part in uncertain — never complete it.
+  * Leave the top-level diagram field (present + svg) as present=false, svg="" — our renderer draws the SVG from diagram_spec."""
+
+_SEMANTIC_OUTPUT_LINE = '  "diagram": {"present": false, "svg": ""},'
+_SEMANTIC_REPLACEMENT = (
+    '  "diagram": {"present": false, "svg": ""},\n'
+    '  "diagram_spec": {"present": false, "diagram_type": "polar_region", '
+    '"bounds": {"inner": "", "outer": "", "theta_min": "", "theta_max": ""}, '
+    '"show_axes": true, "labels": [], "shade_region": true, "instruction_text": [], "uncertain": []},'
+)
+_LEGACY_DIAGRAM_BULLET = "- diagram: REBUILD the visible diagram as a CLEAN vector SVG"
+_VERIFY_ANCHOR = "\n- verify_before_studying:"
+
+
+def _build_semantic_prompt() -> str:
+    """Derive the semantic-mode prompt from the base prompt (fail fast if anchors drift)."""
+    base = STUDY_NOTES_SYSTEM_PROMPT
+    if (
+        _SEMANTIC_OUTPUT_LINE not in base
+        or _LEGACY_DIAGRAM_BULLET not in base
+        or _VERIFY_ANCHOR not in base
+    ):
+        raise RuntimeError("STUDY_NOTES_SYSTEM_PROMPT anchors changed; update _build_semantic_prompt")
+    head, tail = base.split(_VERIFY_ANCHOR, 1)
+    head, _legacy = head.split(_LEGACY_DIAGRAM_BULLET, 1)
+    base = head.rstrip() + f"\n{SEMANTIC_DIAGRAM_RULE}" + _VERIFY_ANCHOR + tail
+    base = base.replace(_SEMANTIC_OUTPUT_LINE, _SEMANTIC_REPLACEMENT, 1)
+    return base
+
+
+STUDY_NOTES_SEMANTIC_PROMPT = _build_semantic_prompt()
+
 REVISION_SYSTEM_PROMPT = r"""You are SnapNote AI. A student extracted a cheap text snapshot from a lecture screenshot. Now turn it into exam-ready study material so they can understand and revise the concept.
 
 Use the same output schema, grounding, and safety rules as the main study-notes prompt (STUDY_NOTES_SYSTEM_PROMPT). The only difference: you may include an "analogy" when one genuinely fits, because this is the revision step.
@@ -137,6 +181,63 @@ REPAIR_PROMPT = r"""The previous response was not valid JSON matching the requir
 Previous (invalid) response:
 {{RAW}}"""
 
+_REPAIR_ANCHOR = '{"present":false,"svg":""},"verify_before_studying"'
+_REPAIR_SEMANTIC = (
+    '{"present":false,"svg":""},'
+    '"diagram_spec":{"present":false,"diagram_type":"polar_region",'
+    '"bounds":{"inner":"","outer":"","theta_min":"","theta_max":""},'
+    '"show_axes":true,"labels":[],"shade_region":true,"instruction_text":[],"uncertain":[]},'
+    '"verify_before_studying"'
+)
+
+REPAIR_PROMPT_SEMANTIC = REPAIR_PROMPT.replace(_REPAIR_ANCHOR, _REPAIR_SEMANTIC, 1)
+
+LEGACY_DIAGRAM_ONLY_PROMPT = r"""You are SnapNote AI. A student uploaded a lecture screenshot. Our deterministic renderer does not support this diagram type yet, so draw the visible diagram as a best-effort vector SVG — the student still deserves a readable version of what was on the board.
+
+Output ONLY a JSON object with exactly this structure:
+{"present": false, "svg": ""}
+
+RULES:
+- COMPLETENESS: If the source contains MULTIPLE distinct diagram sketches, include ALL of them — never drop a visible figure.
+- Ground strictly in what is visible. Recreate the same boxes, arrows, shapes, connections, and labels — do not add, remove, or "improve" structure, and never invent content not in the image.
+- FILL SAFETY: Open shapes (circles, ellipses, rectangles, polygons that are outlines/regions) MUST use fill="none" with a visible stroke. NEVER fill a whole outline shape solid. Only use fill when shading a genuinely meaningful area, at low opacity (0.15–0.35) so text beneath stays readable. Labels must be <text> elements with readable contrast.
+- Readable and clean: straight lines, generous spacing, labels as <text>, no hand-drawn wobble, no photo, no watermark.
+- Keep it simple and flat — rectangles, circles, lines, arrows, text. A student must read it at a glance.
+- Escape text (&lt; &gt; &amp;). Use viewBox with a sane aspect ratio and width 100%.
+- Only include <svg>…</svg>. No markdown fences, no comments.
+- If there is no real diagram (pure prose/equations, no shapes/connections/structure), set present=false and svg="".
+- This is a BEST-EFFORT output: if the image is ambiguous, prefer a simpler faithful sketch over a confident wrong one."""
+
+# Hard budget for the unsupported-diagram fallback call. The diagram route allows
+# 75s total and the primary call may take up to 60s, so the fallback is capped at
+# 25s to stay inside the window; on any failure we degrade to explanation-only.
+LEGACY_FALLBACK_TIMEOUT_SECONDS = 25.0
+_FALLBACK_NOTE = (
+    "This diagram is a best-effort reconstruction. This diagram type isn't fully "
+    "supported by the deterministic renderer yet, so it was redrawn as-is from the "
+    "screenshot and may not be perfectly accurate — verify it against the original image."
+)
+
+
+async def _legacy_diagram_fallback(image_bytes: bytes) -> DiagramRep:
+    """Best-effort legacy SVG for an unsupported diagram type, or an empty state on failure."""
+    try:
+        raw = await _call_gemini(
+            LEGACY_DIAGRAM_ONLY_PROMPT,
+            image_bytes,
+            json_mode=True,
+            timeout_seconds=LEGACY_FALLBACK_TIMEOUT_SECONDS,
+        )
+        data = _clean_latex_in_dict(_extract_json(raw))
+        data = _sanitize_svg_in_dict(data)
+        present = bool(data.get("present"))
+        svg = str(data.get("svg") or "")
+        if present and svg:
+            return DiagramRep(present=True, svg=sanitize_svg(svg), best_effort=True)
+    except Exception as e:
+        logger.warning("Legacy diagram fallback failed (will degrade to explanation-only): %s", e)
+    return DiagramRep(present=False, svg="")
+
 
 def _extract_json(text: str) -> dict:
     text = text.strip()
@@ -146,15 +247,25 @@ def _extract_json(text: str) -> dict:
     return json.loads(text)
 
 
-async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 1, json_mode: bool = False) -> str:
+async def _call_gemini(
+    prompt: str,
+    image_bytes: bytes,
+    max_retries: int = 1,
+    json_mode: bool = False,
+    timeout_seconds: float | None = None,
+) -> str:
     """Call Gemini with a bounded per-call timeout and at most one controlled retry.
 
     The SDK default timeout for generate_content is 600s and it internally retries
     on 503 — together with any outer retry loop that stacks unboundedly. We pin a
     sane per-call timeout and retry only on 429/RESOURCE_EXHAUSTED (where a short
     wait genuinely helps). Everything else fails fast.
+
+    `timeout_seconds` overrides the configured default so a secondary fallback call
+    can be hard-budgeted (keeps the total under the diagram route timeout).
     """
     img = Image.open(io.BytesIO(image_bytes))
+    call_timeout = timeout_seconds if timeout_seconds is not None else settings.GEMINI_CALL_TIMEOUT_SECONDS
     last_error = None
     for attempt in range(max_retries + 1):
         try:
@@ -163,7 +274,7 @@ async def _call_gemini(prompt: str, image_bytes: bytes, max_retries: int = 1, js
                 [prompt, img],
                 generation_config=config,
                 request_options={
-                    "timeout": settings.GEMINI_CALL_TIMEOUT_SECONDS,
+                    "timeout": call_timeout,
                     "retry": None,
                 },
             )
@@ -232,10 +343,56 @@ async def _extract_structured(
 
 
 async def extract_study_notes(image_bytes: bytes) -> StudyNotes:
-    result = await _extract_structured(
-        STUDY_NOTES_SYSTEM_PROMPT, REPAIR_PROMPT, image_bytes, StudyNotes
-    )
+    semantic = settings.DIAGRAM_RENDERER_MODE == "semantic"
+    primary = STUDY_NOTES_SEMANTIC_PROMPT if semantic else STUDY_NOTES_SYSTEM_PROMPT
+    repair = REPAIR_PROMPT_SEMANTIC if semantic else REPAIR_PROMPT
+    result = await _extract_structured(primary, repair, image_bytes, StudyNotes)
+
+    if semantic and result.diagram_spec is not None:
+        await _apply_diagram_spec(result, image_bytes)
     return result
+
+
+async def _apply_diagram_spec(notes: StudyNotes, image_bytes: bytes) -> None:
+    """Route the semantic spec: deterministic render, or safe per-image fallback.
+
+    Supported type -> deterministic renderer (never touches Gemini again).
+    Unsupported type -> bounded legacy best-effort SVG, marked best_effort.
+    Anything else (missing/contradictory geometry, no diagram) -> explanation-only.
+    A fallback failure never fabricates a diagram — it degrades to explanation-only.
+    """
+    spec = notes.diagram_spec
+    if spec is None:
+        return
+
+    for item in spec.uncertain:
+        if item.strip() and item.strip() not in notes.verify_before_studying:
+            notes.verify_before_studying.append(item.strip())
+
+    if spec.diagram_type not in SUPPORTED_DIAGRAM_TYPES:
+        fallback = await _legacy_diagram_fallback(image_bytes)
+        notes.diagram = fallback
+        if fallback.present and fallback.svg:
+            if _FALLBACK_NOTE not in notes.uncertainties:
+                notes.uncertainties.append(_FALLBACK_NOTE)
+        else:
+            what = spec.diagram_type or "an unknown"
+            reason = f"This diagram type ({what}) is not supported yet, so it could not be reconstructed cleanly."
+            if reason not in notes.uncertainties:
+                notes.uncertainties.append(reason)
+        notes.diagram_spec = None
+        return
+
+    validation = validate_diagram_spec(spec)
+    if validation.valid and validation.canonical is not None:
+        notes.diagram = DiagramRep(present=True, svg=render_polar_region(validation.canonical))
+    else:
+        notes.diagram = DiagramRep(present=False, svg="")
+        for reason in validation.reasons:
+            if reason.strip() and reason.strip() not in notes.uncertainties:
+                notes.uncertainties.append(reason.strip())
+
+    notes.diagram_spec = None
 
 
 async def extract_revision_guide(image_bytes: bytes, context_hint: str = "") -> StudyNotes:

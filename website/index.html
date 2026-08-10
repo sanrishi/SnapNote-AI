@@ -1407,7 +1407,10 @@
       }
 
       if (notes.diagram && notes.diagram.present && notes.diagram.svg) {
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p>${canRegenerate ? '<button class="regen-btn" id="regen-btn"><span>↻ Regenerate diagram</span><em>Ask the AI to redraw this diagram (+1 credit)</em></button>' : ''}</div>`);
+        const diagramCap = notes.diagram.best_effort
+          ? 'Best-effort reconstruction — this diagram type isn\'t fully supported yet; verify it against the original screenshot.'
+          : 'Rebuilt from your screenshot as a clean diagram.';
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">${esc(diagramCap)}</p>${canRegenerate ? '<button class="regen-btn" id="regen-btn"><span>↻ Regenerate diagram</span><em>Ask the AI to redraw this diagram (+1 credit)</em></button>' : ''}</div>`);
       } else if (result.type === "diagram") {
         cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><p>No distinct diagram could be reconstructed from this image. Your study notes below still cover the content.</p>${canRegenerate ? '<button class="regen-btn" id="regen-btn"><span>↻ Regenerate diagram</span><em>Ask the AI to try drawing it again (+1 credit)</em></button>' : ''}</div>`);
       }

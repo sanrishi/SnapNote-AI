@@ -3,7 +3,10 @@ services:
     name: snapnote-api
     env: docker
     repo: https://github.com/sanrishi/SnapNote-AI
-    branch: master
+    # No branch pin: service PR previews build the PR's branch, not master.
+    # Production deploys from the repo default branch (master) — unchanged.
+    previews:
+      generation: automatic
     dockerfilePath: ./Dockerfile
     healthCheckPath: /health
     disk:

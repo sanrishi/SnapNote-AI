@@ -68,7 +68,10 @@ def render_study_notes(notes: StudyNotes) -> str:
         if svg:
             lines.append("\n## 📐 Diagram")
             lines.append(f"![Clean diagram]({svg_data_uri(svg)})")
-            lines.append("*Rebuilt from your screenshot as a clean diagram.*")
+            if notes.diagram.best_effort:
+                lines.append("*Best-effort reconstruction — this diagram type isn't fully supported yet; verify it against the original screenshot.*")
+            else:
+                lines.append("*Rebuilt from your screenshot as a clean diagram.*")
 
     if notes.verify_before_studying:
         lines.append("\n## 🛡️ Verify Before Studying")

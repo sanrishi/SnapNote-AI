@@ -35,6 +35,10 @@ class Settings(BaseSettings):
     GEMINI_CALL_TIMEOUT_SECONDS: float = 60.0
     DIAGRAM_TIMEOUT_SECONDS: float = 75.0
 
+    # "semantic" = Gemini outputs a structured DiagramSpec, Python renders it
+    # deterministically. "legacy" = Gemini writes the SVG directly (old path).
+    DIAGRAM_RENDERER_MODE: str = "semantic"
+
     RAZORPAY_KEY_ID: str = ""
     RAZORPAY_KEY_SECRET: str = ""
 
