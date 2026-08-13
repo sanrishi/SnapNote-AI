@@ -224,10 +224,16 @@ The gate checks in order:
 - `/extract/text`: 1 credit if OCR succeeds standalone; **5 credits if escalation to Gemini fires** (credit check before Gemini call, line 55-57 of extract.py)
 - `/extract/revision`: 1 credit (separate Gemini call for the learning layer)
 - `/extract/diagram`: 5 credits always
-- `/extract/diagram` with `regenerate=true`: **1 credit**, but ONLY if the device paid for a full diagram within `REGENERATE_WINDOW_SECONDS` (30 min). Otherwise it's treated as a fresh 5-credit diagram — this blocks using regenerate as a cheap backdoor to the 5-credit product. `last_diagram_paid_at` is recorded via `mark_diagram_paid()` in `credits_store.py`.
+- **Explain Visually** (`POST /api/extract/visual`): **0 additional student credits** — a bundled benefit of the 5-credit Diagram product, NOT a separate charge.
+- **Entitlement is tied to a specific completed Diagram result**: a successful 5-credit Diagram extraction records one Explain Visually grant (via `record_diagram_grant()` in `credits_store.py`, storing `diagram_id` + `study_notes_json` in the `visual_explanations` table). The grant is created AFTER the diagram succeeds, never at request start, and is scoped to that device + `diagram_id`.
+- **Lazy, on-click, generated exactly once**: Explain Visually is never generated automatically at extraction time — the student clicks the button. One successful visual generation per granted `diagram_id`; `visual_url` is immutable once set (`set_visual_url()`). A second click on the same result returns the existing image with `status: "already_generated"` — no second image-model call, no regeneration button, no re-generation endpoint.
+- **Two-stage pipeline**: Stage 1 = Gemini (`build_visual_spec()` in `vision_service.py`) reads the screenshot + study notes and emits a structured VisualSpec (concept / visual_form / key_elements / key_relationships / must_show / avoid). Stage 2 = Pollinations (`generate_visual()` in `visual_service.py`) renders the raster image from that spec. Gemini is the semantic/understanding layer only; it never renders images.
+- **Quality gate + one hidden retry**: `_quality_pass()` rejects low-light, dark-heavy, or undersized renders; on failure the pipeline retries ONCE with an emphatic white-background hint, then returns an honest "Visual explanation unavailable for this material." — never a fake success state.
+- **Trust labeling**: the generated visual is always labeled "AI-generated visual explanation" (frontend + product copy) and must NOT be presented as a verified reconstruction. Deterministic SVG reconstruction (`StudyNotes.diagram`) remains the accuracy/trust path where supported; unsupported reconstruction types are marked `best_effort` and never presented as verified.
+- **Storage**: generated visuals are uploaded to ImgBB for the MVP (not R2).
 - 50 free credits/month = **50 OCR-only requests**, **50 revision enhancements**, or **10 Gemini-escalated requests**
 - When Gemini returns 429 (rate limit), text endpoint falls back to OCR + a note, charged 1 credit. Diagram endpoint returns a clean "high demand" message.
-- Regenerate is a temporary safety valve for a bad/empty render — NOT the product direction. Same input must produce a reliable conceptual reconstruction on the first pass; the button is the escape hatch, not the fix.
+- **Provider status**: Pollinations is the current MVP image-generation provider (config: `POLLINATIONS_API_KEY` optional for the registered free tier, else anonymous; `POLLINATIONS_MODEL=sana`). Gemini image generation (`gemini-*-flash-image`) is NOT used — free-tier accounts return 429 for every image model.
 
 ### Rule 8.4 — Test fixtures
 9 fixtures in `stress_test_fixtures/`:
@@ -241,4 +247,4 @@ The gate checks in order:
 8. Chemistry equilibrium formulas → escalate (untuned, passed cold)
 9. Dark-theme CS BST slide (Unacademy style) → escalate (untuned, passed cold)
 
-*Last updated: August 2026*
+*Last updated: August 2026 (Explain Visually replaces diagram regeneration)

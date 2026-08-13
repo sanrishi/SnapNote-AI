@@ -83,6 +83,7 @@ class ExtractionResponse(BaseModel):
     tags: list[str] = []
     creditsUsed: int
     studyNotes: Optional[StudyNotes] = None
+    diagramId: Optional[str] = None
 
 
 class ExtractionContext(BaseModel):
@@ -127,3 +128,24 @@ class RevisionResponse(BaseModel):
 
 class DiagramResult(BaseModel):
     markdown: str
+
+
+class VisualSpec(BaseModel):
+    """Structured, grounded description of the educational visual to generate.
+
+    Gemini produces this from the screenshot + StudyNotes. It is a semantic
+    spec (concept, form, elements, relationships) — never pixel geometry.
+    """
+
+    concept: str = ""
+    visual_form: str = ""
+    key_elements: list[str] = []
+    key_relationships: list[str] = []
+    must_show: list[str] = []
+    avoid: list[str] = []
+
+
+class VisualExplanationResponse(BaseModel):
+    diagramId: str
+    imageUrl: Optional[str] = None
+    status: str = "generated"  # "generated" | "already_generated"

@@ -373,16 +373,20 @@
     }
     #result-panel .view-orig-btn:hover { border-color: var(--accent); color: var(--text); }
 
-    .regen-btn {
-      display: block; width: 100%; margin-top: 14px; padding: 12px 16px;
-      background: linear-gradient(135deg, rgba(251,191,36,.18), rgba(249,115,22,.14));
+    .explain-btn {
+      display: block; width: 100%; margin-top: 14px; padding: 13px 16px;
+      background: linear-gradient(135deg, rgba(251,191,36,.2), rgba(249,115,22,.16));
       border: 1px dashed var(--amber); border-radius: 12px; color: var(--text);
       font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; font-family: inherit;
     }
-    .regen-btn em { display: block; font-style: normal; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 3px; }
-    .regen-btn:hover { border-style: solid; box-shadow: 0 8px 24px -10px rgba(251,191,36,.5); }
-    .regen-btn:disabled { opacity: .55; cursor: not-allowed; }
-    .regen-btn .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: var(--amber); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 6px; vertical-align: -2px; }
+    .explain-btn em { display: block; font-style: normal; font-size: 12px; font-weight: 500; color: var(--muted); margin-top: 3px; }
+    .explain-btn:hover { border-style: solid; box-shadow: 0 8px 24px -10px rgba(251,191,36,.5); }
+    .explain-btn:disabled { opacity: .55; cursor: not-allowed; }
+    .explain-btn .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: var(--amber); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 6px; vertical-align: -2px; }
+
+    .visual-wrap { margin-top: 12px; }
+    .visual-wrap img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+    .visual-trust { font-size: 11.5px; color: var(--muted); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
 
     .orig-modal { max-width: 720px; }
     .orig-modal img { display: block; width: 100%; border-radius: 10px; margin-top: 10px; }
@@ -911,7 +915,7 @@
       rawMarkdown.textContent = currentMarkdown;
       rawMarkdown.classList.remove("show");
       rawToggleBtn.textContent = "View extracted text";
-      renderResult({ type: h.type, creditsUsed: h.creditsUsed, studyNotes: h.studyNotes, markdown: h.markdown, imageUrl: h.imageUrl }, true);
+      renderResult({ type: h.type, creditsUsed: h.creditsUsed, studyNotes: h.studyNotes, markdown: h.markdown, imageUrl: h.imageUrl, diagramId: h.diagramId || null, visualUrl: h.visualUrl || null }, true);
       resultPanel.classList.add("show");
       resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -1054,6 +1058,8 @@
             studyNotes: result.studyNotes || null,
             markdown: result.markdown || "",
             imageUrl: result.imageUrl || null,
+            diagramId: result.diagramId || null,
+            visualUrl: null,
             at: Date.now(),
           });
 
@@ -1186,39 +1192,35 @@
       revisionCards.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
-    async function handleRegenerate() {
-      if (!currentBlob) return;
+    async function handleExplainVisual() {
+      if (!currentBlob || !currentDiagramId) return;
       const deviceId = getDeviceId();
       if (!deviceId) { showError("Device not initialized. Refresh the page."); return; }
 
-      const regenBtn = document.getElementById("regen-btn");
-      if (regenBtn) { regenBtn.disabled = true; regenBtn.innerHTML = '<span class="spinner"></span> Regenerating...'; }
+      const btn = document.getElementById("explain-btn");
+      if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Creating your visual…'; }
       errorMsg.style.display = "none";
 
       showProcessing(
-        ["Rereading your screenshot", "Rebuilding the diagram"],
-        "Regenerating diagram…",
-        "This is a separate AI pass — a few more seconds."
+        ["Reading your notes", "Deciding how to explain this visually", "Drawing the visual"],
+        "Explaining visually…",
+        "Free — bundled with your diagram. A few more seconds."
       );
 
       const formData = new FormData();
       formData.append("image", currentBlob, "capture.png");
-      formData.append("context", JSON.stringify({
-        title: document.title,
-        url: location.href,
-        week: "",
-      }));
       formData.append("deviceId", deviceId);
-      formData.append("regenerate", "true");
+      formData.append("diagramId", currentDiagramId);
 
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 95000);
       try {
-        const resp = await fetch(`${BASE}/api/extract/diagram`, { method: "POST", body: formData, signal: controller.signal });
-        if (resp.status === 429) {
+        const resp = await fetch(`${BASE}/api/extract/visual`, { method: "POST", body: formData, signal: controller.signal });
+        if (resp.status === 502) {
           const err = await resp.json().catch(() => ({}));
           hideProcessing();
-          showError(err.error || "High demand — try again in a few minutes.");
+          showError(err.error || "Visual explanation unavailable for this material. Your study notes above still cover it.");
+          if (btn) { btn.disabled = false; btn.innerHTML = '<span>✨ Explain Visually</span><em>Free — bundled with your diagram</em>'; }
           return;
         }
         if (!resp.ok) {
@@ -1227,31 +1229,22 @@
         }
         const result = await resp.json();
         hideProcessing();
-
-        resultType.textContent = result.type.charAt(0).toUpperCase() + result.type.slice(1);
-        resultType.className = `type-badge ${result.type === "diagram" ? "diagram" : "text"}`;
-        resultCredits.textContent = `${result.creditsUsed} credits used`;
-        tagsContainer.innerHTML = result.tags.map((t) => `<span>${t}</span>`).join("");
-        renderResult(result);
-        resultPanel.classList.add("show");
-
-        const topic = (result.studyNotes && result.studyNotes.topic && result.studyNotes.topic.title) || "Study sheet";
-        saveHistory({
-          type: result.type,
-          topic,
-          creditsUsed: result.creditsUsed,
-          studyNotes: result.studyNotes || null,
-          markdown: result.markdown || "",
-          imageUrl: result.imageUrl || null,
-          at: Date.now(),
-        });
-        resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
-        await initDevice();
+        currentVisualUrl = result.imageUrl || null;
+        if (currentVisualUrl && currentDiagramId) {
+          const hist = getHistory();
+          for (const entry of hist) {
+            if (entry.diagramId === currentDiagramId) entry.visualUrl = currentVisualUrl;
+          }
+          localStorage.setItem(HISTORY_KEY, JSON.stringify(hist));
+        }
+        renderResult({ ...lastResult, visualUrl: currentVisualUrl });
+        resultPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
       } catch (err) {
         hideProcessing();
         showError((err.name === "AbortError" || err.message === "This operation was aborted")
-          ? "The AI took too long this time. No credits were charged — please try again."
-          : (err.message || "Regeneration failed. Try again."));
+          ? "The visual took too long this time. Try again in a minute."
+          : (err.message || "Could not create the visual. Try again."));
+        if (btn) btn.innerHTML = '<span>✨ Explain Visually</span><em>Free — bundled with your diagram</em>';
       } finally {
         clearTimeout(timer);
       }
@@ -1260,6 +1253,10 @@
     // ── Render result ──
     let currentMarkdown = "";
     let currentImageUrl = null;
+    let lastResult = null;
+    let currentDiagramId = null;
+    let currentVisualUrl = null;
+    let canExplain = false;
 
     function esc(s) {
       const div = document.createElement("div");
@@ -1333,8 +1330,11 @@
     switchDemo("physics");
 
     function renderResult(result, fromHistory) {
+      lastResult = result;
       currentMarkdown = result.markdown || "";
       currentImageUrl = result.imageUrl || null;
+      currentDiagramId = result.diagramId || null;
+      currentVisualUrl = result.visualUrl || null;
       viewOrigBtn.style.display = currentImageUrl ? "block" : "none";
       rawMarkdown.textContent = currentMarkdown;
       rawMarkdown.classList.remove("show");
@@ -1353,7 +1353,7 @@
       });
 
       const notes = result.studyNotes;
-      const canRegenerate = (result.type === "diagram") && !!currentBlob && !fromHistory;
+      canExplain = (result.type === "diagram") && !!currentDiagramId && !!currentBlob && !fromHistory;
       notesCards.innerHTML = "";
       if (!notes) {
         const card = document.createElement("div");
@@ -1410,9 +1410,9 @@
         const diagramCap = notes.diagram.best_effort
           ? 'Best-effort reconstruction — this diagram type isn\'t fully supported yet; verify it against the original screenshot.'
           : 'Rebuilt from your screenshot as a clean diagram.';
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">${esc(diagramCap)}</p>${canRegenerate ? '<button class="regen-btn" id="regen-btn"><span>↻ Regenerate diagram</span><em>Ask the AI to redraw this diagram (+1 credit)</em></button>' : ''}</div>`);
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">${esc(diagramCap)}</p>${explainSectionHtml()}</div>`);
       } else if (result.type === "diagram") {
-        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><p>No distinct diagram could be reconstructed from this image. Your study notes below still cover the content.</p>${canRegenerate ? '<button class="regen-btn" id="regen-btn"><span>↻ Regenerate diagram</span><em>Ask the AI to try drawing it again (+1 credit)</em></button>' : ''}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><p>No distinct diagram could be reconstructed from this image. Your study notes below still cover the content.</p>${explainSectionHtml()}</div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
@@ -1429,8 +1429,18 @@
 
       notesCards.innerHTML = cards.join("");
 
-      const regenBtn = document.getElementById("regen-btn");
-      if (regenBtn) regenBtn.addEventListener("click", handleRegenerate);
+      const explainBtn = document.getElementById("explain-btn");
+      if (explainBtn) explainBtn.addEventListener("click", handleExplainVisual);
+    }
+
+    function explainSectionHtml() {
+      if (currentVisualUrl) {
+        return `<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /><p class="visual-trust"><span>✨</span> AI-generated visual explanation — verify details against your notes.</p></div>`;
+      }
+      if (canExplain) {
+        return `<button class="explain-btn" id="explain-btn"><span>✨ Explain Visually</span><em>Free — bundled with your diagram</em></button>`;
+      }
+      return "";
     }
 
     rawToggleBtn.addEventListener("click", () => {

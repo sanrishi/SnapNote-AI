@@ -37,7 +37,7 @@ def _reset_credits(device_id: str, amount: int = 50) -> None:
     init_device(device_id)
     conn = _get_conn()
     conn.execute(
-        "UPDATE device_credits SET credits_remaining = ?, credits_used = 0, last_diagram_paid_at = 0 WHERE device_id = ?",
+        "UPDATE device_credits SET credits_remaining = ?, credits_used = 0 WHERE device_id = ?",
         (amount, device_id),
     )
     conn.commit()
@@ -495,7 +495,7 @@ def test_frontend_has_95s_timeout_and_no_infinite_spinner():
     assert "controller.abort()" in html
 
 
-# ── Diagram regenerate (1-credit retry, no 5-credit bypass) ──
+# ── Explain Visually (free, bundled with 5-credit diagram) ──
 
 
 def _diagram_payload() -> dict:
@@ -513,23 +513,51 @@ def _diagram_payload() -> dict:
     }
 
 
-def _post_diagram(client, device: str, image: bytes, regenerate: bool = False):
-    data = {"context": json.dumps({}), "deviceId": device}
-    if regenerate:
-        data["regenerate"] = "true"
+def _post_diagram(client, device: str, image: bytes):
     return client.post(
         "/api/extract/diagram",
         files={"image": ("d.png", image, "image/png")},
-        data=data,
+        data={"context": json.dumps({}), "deviceId": device},
     )
 
 
-def test_regenerate_without_prior_diagram_charges_full_5(sample_diagram_image, monkeypatch):
-    """Calling /diagram with regenerate=true on a cold device must NOT be a
-    1-credit backdoor to the 5-credit product."""
-    from app.utils.credits_store import get_credits
+def _visual_png() -> bytes:
+    buf = io.BytesIO()
+    Image.new("RGB", (768, 768), "white").save(buf, format="PNG")
+    return buf.getvalue()
 
-    device = "regen-cold-device-00000000-0000-0000-000000000010"
+
+def _mock_visual_pipeline(monkeypatch, png: bytes | None = None):
+    """Mock the /visual route: Gemini VisualSpec + Pollinations + ImgBB."""
+    spec_response = type(
+        "o",
+        (),
+        {
+            "text": json.dumps(
+                {
+                    "concept": "Rotation",
+                    "visual_form": "labeled diagram",
+                    "key_elements": ["torque arrow", "radius"],
+                    "key_relationships": ["tau = r x F"],
+                    "must_show": ["direction of torque"],
+                    "avoid": ["unrelated details"],
+                }
+            )
+        },
+    )()
+    model_mock = AsyncMock()
+    model_mock.generate_content_async = AsyncMock(return_value=spec_response)
+    monkeypatch.setattr("app.services.vision_service.model", model_mock)
+
+    monkeypatch.setattr("app.services.visual_service._render_once", AsyncMock(return_value=png))
+    monkeypatch.setattr("app.services.visual_service._quality_pass", lambda p: True)
+    monkeypatch.setattr("app.routes.extract.upload_image", lambda b, context=None: "https://imgbb.test/visual.png")
+
+
+def test_diagram_returns_diagram_id_and_grants_entitlement(sample_diagram_image, monkeypatch):
+    from app.utils.credits_store import get_credits, get_visual_entitlement
+
+    device = "visual-grant-device-00000000-0000-0000-000000000020"
     _reset_credits(device)
 
     mock_model = AsyncMock()
@@ -538,79 +566,141 @@ def test_regenerate_without_prior_diagram_charges_full_5(sample_diagram_image, m
 
     async def run():
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            return await _post_diagram(client, device, sample_diagram_image, regenerate=True)
+            return await _post_diagram(client, device, sample_diagram_image)
 
     resp = asyncio.run(run())
     assert resp.status_code == 200
-    assert resp.json()["creditsUsed"] == 5
+    body = resp.json()
+    assert body["diagramId"]
+    assert body["creditsUsed"] == 5
+    assert get_visual_entitlement(body["diagramId"]) is not None
     remaining, _ = get_credits(device)
     assert remaining == 45
 
 
-def test_regenerate_after_paid_diagram_charges_1(sample_diagram_image, monkeypatch):
-    """A real regeneration — the device paid 5 for a diagram within the window —
-    is a 1-credit retry."""
-    from app.utils.credits_store import get_credits, mark_diagram_paid
+def test_visual_route_generates_once_then_reuses(sample_diagram_image, monkeypatch):
+    from app.utils.credits_store import get_visual_entitlement
 
-    device = "regen-warm-device-00000000-0000-0000-000000000011"
+    device = "visual-once-device-00000000-0000-0000-000000000021"
+    _reset_credits(device)
+
+    # First: pay for the diagram -> gets diagramId + entitlement
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_diagram_payload())})())
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    resp = asyncio.run(run_diagram())
+    diagram_id = resp.json()["diagramId"]
+
+    # Second: generate the visual (free)
+    _mock_visual_pipeline(monkeypatch, png=_visual_png())
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp1 = asyncio.run(run_visual())
+    assert resp1.status_code == 200
+    body1 = resp1.json()
+    assert body1["status"] == "generated"
+    assert body1["imageUrl"] == "https://imgbb.test/visual.png"
+    assert get_visual_entitlement(diagram_id)[1] == "https://imgbb.test/visual.png"
+
+    # Third: same diagram -> must reuse, never re-generate (immutable entitlement).
+    # A counting model proves Gemini is not called again.
+    calls = {"n": 0}
+
+    def counting_model(*a, **k):
+        calls["n"] += 1
+        return type("o", (), {"text": json.dumps(_diagram_payload())})()
+
+    from app.services import vision_service
+    model_mock = AsyncMock()
+    model_mock.generate_content_async = AsyncMock(side_effect=counting_model)
+    monkeypatch.setattr("app.services.vision_service.model", model_mock)
+
+    async def run_visual_again():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp2 = asyncio.run(run_visual_again())
+    assert resp2.status_code == 200
+    body2 = resp2.json()
+    assert body2["status"] == "already_generated"
+    assert body2["imageUrl"] == "https://imgbb.test/visual.png"
+    assert calls["n"] == 0
+
+
+def test_visual_route_rejects_unowned_or_unknown_diagram(sample_diagram_image, monkeypatch):
+    device = "visual-unauth-device-00000000-0000-0000-000000000022"
     _reset_credits(device)
 
     mock_model = AsyncMock()
     mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_diagram_payload())})())
     monkeypatch.setattr("app.services.vision_service.model", mock_model)
 
-    mark_diagram_paid(device)
-
-    async def run():
+    async def run_unknown():
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            return await _post_diagram(client, device, sample_diagram_image, regenerate=True)
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": "no-such-diagram"},
+            )
 
-    resp = asyncio.run(run())
-    assert resp.status_code == 200
-    assert resp.json()["creditsUsed"] == 1
-    remaining, _ = get_credits(device)
-    assert remaining == 49
+    resp = asyncio.run(run_unknown())
+    assert resp.status_code == 422
 
 
-def test_regenerate_window_expired_charges_full_5(sample_diagram_image, monkeypatch):
-    """Regenerating long after the last paid diagram falls back to full price."""
-    from app.utils.credits_store import get_credits, _get_conn, init_device
-
-    device = "regen-expired-device-00000000-0000-0000-000000000012"
+def test_visual_route_honest_unavailable_on_quality_failure(sample_diagram_image, monkeypatch):
+    device = "visual-fail-device-00000000-0000-0000-000000000023"
     _reset_credits(device)
 
     mock_model = AsyncMock()
     mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_diagram_payload())})())
     monkeypatch.setattr("app.services.vision_service.model", mock_model)
 
-    # Pretend the last paid diagram was hours ago — outside the 1800s window.
-    init_device(device)
-    conn = _get_conn()
-    conn.execute(
-        "UPDATE device_credits SET last_diagram_paid_at = ? WHERE device_id = ?",
-        (settings.REGENERATE_WINDOW_SECONDS + 1, device),
-    )
-    conn.commit()
-
-    async def run():
+    async def run_diagram():
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            return await _post_diagram(client, device, sample_diagram_image, regenerate=True)
+            return await _post_diagram(client, device, sample_diagram_image)
 
-    resp = asyncio.run(run())
-    assert resp.status_code == 200
-    assert resp.json()["creditsUsed"] == 5
-    remaining, _ = get_credits(device)
-    assert remaining == 45
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    _mock_visual_pipeline(monkeypatch, png=None)  # both attempts return None
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"].lower()
 
 
-def test_frontend_has_regenerate_button():
+def test_frontend_explain_visually_button():
     html_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "website", "index.html"))
     with open(html_path, "r", encoding="utf-8") as fh:
         html = fh.read()
-    assert "↻ Regenerate diagram" in html
-    assert "handleRegenerate" in html
-    assert 'formData.append("regenerate", "true")' in html
-    assert "No credits were charged" in html
+    assert "✨ Explain Visually" in html
+    assert "handleExplainVisual" in html
+    assert "diagramId" in html
+    assert "↻ Regenerate diagram" not in html
+    assert 'formData.append("regenerate", "true")' not in html
 
 
 

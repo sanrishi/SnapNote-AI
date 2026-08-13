@@ -9,7 +9,7 @@ from PIL import Image
 
 from app.config import settings
 from app.exceptions import UpstreamError
-from app.models.schemas import DiagramRep, DiagramSpec, StudyNotes
+from app.models.schemas import DiagramRep, DiagramSpec, StudyNotes, VisualSpec
 from app.utils.diagram_validation import SUPPORTED_DIAGRAM_TYPES, validate_diagram_spec
 from app.utils.diagram_renderer import render_polar_region
 from app.utils.latex_clean import latex_to_unicode
@@ -403,3 +403,50 @@ async def extract_revision_guide(image_bytes: bytes, context_hint: str = "") -> 
         prompt, REVISION_REPAIR_PROMPT, image_bytes, StudyNotes
     )
     return result
+
+
+VISUAL_SPEC_PROMPT = r"""You are SnapNote AI. A student uploaded a messy lecture screenshot, and we already extracted study notes from it. We will now ask an image-generation model to draw ONE clean, educational visual that helps the student understand this concept. Your job: decide WHAT that visual should be, and describe it as a STRUCTURED SPEC — not as pixels, not as an SVG, not as a vague prompt.
+
+GROUNDING RULES:
+1. The screenshot is the source of truth. The study notes below are helpful context, but never invent content that conflicts with what the image actually shows.
+2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
+3. Choose the SINGLE most useful visual form for this concept: an annotated diagram, a labeled graph, a flowchart, a concept map, a comparison table, a step-by-step process, a timeline, etc. Pick the form that genuinely helps a student understand THIS concept.
+4. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
+5. Write labels as short, plain, readable text.
+
+OUTPUT: ONLY a JSON object with exactly this structure:
+{
+  "concept": "one phrase naming the concept the visual explains",
+  "visual_form": "the chosen visual form, e.g. 'labeled block diagram' or 'step-by-step flowchart'",
+  "key_elements": ["every box/axis/label/marker the visual must contain, verbatim text in quotes"],
+  "key_relationships": ["each relationship the visual must show, e.g. 'error = reference - feedback'"],
+  "must_show": ["the essential things that must be visually present so the student understands"],
+  "avoid": ["anything to leave out: unsupported quantities, decorative objects, unrelated details"]
+}
+
+Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support."""
+
+
+async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:
+    """Produce the structured VisualSpec that drives the Explain Visually image.
+
+    Stage 1 of the pipeline: Gemini reads the screenshot (ground truth) plus the
+    already-extracted study notes (context) and decides what educational visual
+    to draw — as a semantic spec, never as pixels. This keeps the image
+    generation grounded even though the raster provider (Pollinations) is
+    text-to-image only.
+    """
+    prompt = VISUAL_SPEC_PROMPT
+    if study_notes is not None:
+        notes_json = study_notes.model_dump_json(exclude={"diagram_spec", "diagram"})
+        prompt += "\n\nSTUDY NOTES (context — do not contradict the screenshot):\n" + notes_json
+    raw = await _call_gemini(prompt, image_bytes, json_mode=True)
+    try:
+        data = _clean_latex_in_dict(_extract_json(raw))
+        return VisualSpec(**data)
+    except (json.JSONDecodeError, ValidationError) as e:
+        logger.warning("VisualSpec parse failed: %s", e)
+        raise UpstreamError(
+            service="SnapNote AI",
+            detail="Could not plan an educational visual for this material.",
+        )
