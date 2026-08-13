@@ -405,18 +405,32 @@ async def extract_revision_guide(image_bytes: bytes, context_hint: str = "") -> 
     return result
 
 
-VISUAL_SPEC_PROMPT = r"""You are SnapNote AI. A student uploaded a messy lecture screenshot, and we already extracted study notes from it. We will now ask an image-generation model to draw ONE clean, educational visual that helps the student understand this concept. Your job: decide WHAT that visual should be, and describe it as a STRUCTURED SPEC — not as pixels, not as an SVG, not as a vague prompt.
+VISUAL_SPEC_PROMPT = r"""You are SnapNote AI. A student uploaded a messy lecture screenshot, and we already extracted study notes from it. We will now build ONE clean, educational visual that helps the student understand this concept. Your job: decide WHAT that visual should be and HOW it must be rendered, and describe it as a STRUCTURED SPEC — not as pixels, not as an SVG, not as a vague prompt.
+
+THE RENDERING RULE (the most important decision you make):
+Choose "render_mode": "deterministic" or "generative" based on INFORMATION PRECISION, not the subject name:
+  - "deterministic" — when correctness of text, symbols, equations, relationships, or exact structure is CENTRAL to understanding. Our deterministic renderer then draws a clean SVG with your exact equations and steps. Use this for: formulas, derivations, definitions, labeled flows, diagrams where labels matter, physics/math/engineering content, chemistry mechanisms, anything where garbled text would be harmful.
+  - "generative" — ONLY when the value is a rich conceptual illustration where exact text is NOT the main payload: conceptual scenes, biology/cell processes, analogy-like images, mechanisms you can convey with pictures. Never use generative mode for content whose understanding depends on reading exact symbols or labels.
+
+If in doubt, choose "deterministic". A physics topic like "what is angular momentum?" may still benefit from a generative conceptual illustration — decide by precision, not by topic.
 
 GROUNDING RULES:
 1. The screenshot is the source of truth. The study notes below are helpful context, but never invent content that conflicts with what the image actually shows.
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
-3. Choose the SINGLE most useful visual form for this concept: an annotated diagram, a labeled graph, a flowchart, a concept map, a comparison table, a step-by-step process, a timeline, etc. Pick the form that genuinely helps a student understand THIS concept.
-4. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
-5. Write labels as short, plain, readable text.
+3. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
+4. Write labels as short, plain, readable text.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
   "concept": "one phrase naming the concept the visual explains",
+  "render_mode": "deterministic | generative",
+  "text_required": true,
+  "deterministic": {
+    "title": "short title (2-6 words)",
+    "equations": [{"expression": "exact formula in Unicode, no LaTeX, no backslash", "meaning": "one line: what each symbol means and what the relationship represents"}],
+    "steps": ["ordered steps, each a short phrase"],
+    "points": ["key points, each a short phrase"]
+  },
   "visual_form": "the chosen visual form, e.g. 'labeled block diagram' or 'step-by-step flowchart'",
   "key_elements": ["every box/axis/label/marker the visual must contain, verbatim text in quotes"],
   "key_relationships": ["each relationship the visual must show, e.g. 'error = reference - feedback'"],
@@ -424,7 +438,10 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "avoid": ["anything to leave out: unsupported quantities, decorative objects, unrelated details"]
 }
 
-Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support."""
+FIELD RULES:
+- "text_required": true when readable text/symbols are essential to the visual (always true in deterministic mode). false only for a purely conceptual illustration that conveys meaning through pictures alone.
+- "deterministic": ALWAYS populate it. In deterministic mode it is the payload — fill equations/steps/points with the EXACT content (equations as Unicode: τ, ω, θ, ∫, Δ, ×, superscripts ²; NEVER LaTeX commands or backslash). In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
+- Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support."""
 
 
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:

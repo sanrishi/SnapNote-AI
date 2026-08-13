@@ -386,6 +386,7 @@
 
     .visual-wrap { margin-top: 12px; }
     .visual-wrap img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+    .visual-wrap svg { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--border); background: #fff; }
     .visual-trust { font-size: 11.5px; color: var(--muted); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
 
     .orig-modal { max-width: 720px; }
@@ -915,7 +916,7 @@
       rawMarkdown.textContent = currentMarkdown;
       rawMarkdown.classList.remove("show");
       rawToggleBtn.textContent = "View extracted text";
-      renderResult({ type: h.type, creditsUsed: h.creditsUsed, studyNotes: h.studyNotes, markdown: h.markdown, imageUrl: h.imageUrl, diagramId: h.diagramId || null, visualUrl: h.visualUrl || null }, true);
+      renderResult({ type: h.type, creditsUsed: h.creditsUsed, studyNotes: h.studyNotes, markdown: h.markdown, imageUrl: h.imageUrl, diagramId: h.diagramId || null, visualUrl: h.visualUrl || null, visualSvg: h.visualSvg || null, renderMode: h.renderMode || null }, true);
       resultPanel.classList.add("show");
       resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     }
@@ -1060,6 +1061,8 @@
             imageUrl: result.imageUrl || null,
             diagramId: result.diagramId || null,
             visualUrl: null,
+            visualSvg: null,
+            renderMode: null,
             at: Date.now(),
           });
 
@@ -1230,14 +1233,19 @@
         const result = await resp.json();
         hideProcessing();
         currentVisualUrl = result.imageUrl || null;
-        if (currentVisualUrl && currentDiagramId) {
+        currentVisualSvg = result.imageSvg || null;
+        if ((currentVisualUrl || currentVisualSvg) && currentDiagramId) {
           const hist = getHistory();
           for (const entry of hist) {
-            if (entry.diagramId === currentDiagramId) entry.visualUrl = currentVisualUrl;
+            if (entry.diagramId === currentDiagramId) {
+              entry.visualUrl = currentVisualUrl;
+              entry.visualSvg = currentVisualSvg;
+              entry.renderMode = result.renderMode || null;
+            }
           }
           localStorage.setItem(HISTORY_KEY, JSON.stringify(hist));
         }
-        renderResult({ ...lastResult, visualUrl: currentVisualUrl });
+        renderResult({ ...lastResult, visualUrl: currentVisualUrl, visualSvg: currentVisualSvg, renderMode: result.renderMode });
         resultPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
       } catch (err) {
         hideProcessing();
@@ -1256,6 +1264,7 @@
     let lastResult = null;
     let currentDiagramId = null;
     let currentVisualUrl = null;
+    let currentVisualSvg = null;
     let canExplain = false;
 
     function esc(s) {
@@ -1335,6 +1344,7 @@
       currentImageUrl = result.imageUrl || null;
       currentDiagramId = result.diagramId || null;
       currentVisualUrl = result.visualUrl || null;
+      currentVisualSvg = result.visualSvg || null;
       viewOrigBtn.style.display = currentImageUrl ? "block" : "none";
       rawMarkdown.textContent = currentMarkdown;
       rawMarkdown.classList.remove("show");
@@ -1434,6 +1444,9 @@
     }
 
     function explainSectionHtml() {
+      if (currentVisualSvg) {
+        return `<div class="visual-wrap">${currentVisualSvg}<p class="visual-trust"><span>✨</span> AI-generated visual explanation — verify details against your notes.</p></div>`;
+      }
       if (currentVisualUrl) {
         return `<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /><p class="visual-trust"><span>✨</span> AI-generated visual explanation — verify details against your notes.</p></div>`;
       }

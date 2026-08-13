@@ -6,7 +6,9 @@ import httpx
 from PIL import Image
 
 from app.config import settings
-from app.models.schemas import VisualSpec
+from app.models.schemas import VisualRenderMode, VisualSpec
+from app.services import ocr_service
+from app.utils.visual_renderer import render_deterministic_visual
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +19,10 @@ _STRONG_WHITE_HINT = (
     "Only the diagram's lines, boxes, arrows and text may be dark. "
     "No shadows, no gradients, no colored background, no watermark."
 )
+
+# OCR legibility gate thresholds (generative mode only, when text_required).
+_MIN_READABLE_TOKENS = 2
+_MIN_TOKEN_CONFIDENCE = 0.35
 
 
 def _build_render_prompt(spec: VisualSpec, retry: bool) -> str:
@@ -48,6 +54,8 @@ def _quality_pass(png: bytes) -> bool:
     Checks: valid decodable image, sane size, background sufficiently light,
     content not mostly dark/empty. Colored arrows and shading are preserved;
     we only reject renders that would look broken or unreadable to a student.
+    This is the FIRST gate; generative text-bearing renders are additionally
+    checked by the OCR legibility gate (see _legibility_pass).
     """
     if not png or len(png) < 500:
         return False
@@ -69,6 +77,43 @@ def _quality_pass(png: bytes) -> bool:
     dark = sum(1 for r, g, b in pixels if max(r, g, b) < 60) / n
     ok = light >= 0.20 and dark <= 0.80
     logger.info("Quality gate: light=%.2f dark=%.2f -> %s", light, dark, "pass" if ok else "fail")
+    return ok
+
+
+def _legibility_pass(png: bytes) -> bool:
+    """OCR legibility gate — only used in generative mode when text_required.
+
+    Never run blindly: the VisualSpec itself declares whether readable text is
+    essential. When it is, we reject a render with essentially no readable
+    tokens (the exact failure mode observed with Pollinations: clean-looking
+    diagrams with garbled labels). When OCR is unavailable we cannot verify, so
+    we accept rather than break the feature — the gate is a safety net, not a
+    hard dependency.
+    """
+    try:
+        import numpy as np
+    except Exception as e:  # pragma: no cover - defensive
+        logger.warning("OCR legibility gate unavailable (%s); accepting render", e)
+        return True
+    if not ocr_service.ocr_available():
+        logger.warning("OCR reader not available; skipping legibility gate")
+        return True
+    try:
+        arr = np.asarray(Image.open(io.BytesIO(png)).convert("RGB"))
+    except Exception as e:
+        logger.warning("Legibility gate: image decode failed: %s", e)
+        return False
+    try:
+        tokens = [(text.strip(), conf) for _, text, conf in ocr_service.read_raw(arr) if text.strip()]
+    except Exception as e:
+        logger.warning("Legibility gate: OCR failed: %s", e)
+        return True
+    if len(tokens) < _MIN_READABLE_TOKENS:
+        logger.info("Legibility gate: only %d readable token(s) -> fail", len(tokens))
+        return False
+    avg_conf = sum(conf for _, conf in tokens) / len(tokens)
+    ok = avg_conf >= _MIN_TOKEN_CONFIDENCE
+    logger.info("Legibility gate: %d tokens avg_conf=%.2f -> %s", len(tokens), avg_conf, "pass" if ok else "fail")
     return ok
 
 
@@ -100,13 +145,14 @@ async def _render_once(prompt: str) -> bytes | None:
         return None
 
 
-async def generate_visual(spec: VisualSpec) -> bytes | None:
-    """Stage 2: render the visual, then one hidden quality-gated retry.
+async def _render_generative(spec: VisualSpec) -> bytes | None:
+    """Generative branch: Pollinations render, quality gate, then a conditional
+    OCR legibility gate (only when spec.text_required), then one hidden retry.
 
-    First attempt uses the spec as-is. If the quality gate rejects it, one
-    internal retry re-renders with an emphatic pure-white instruction. If that
-    also fails, return None so the route reports an honest unavailable state.
-    Never exposed as a student-facing regenerate control.
+    First attempt uses the spec as-is. If a gate rejects it, one internal retry
+    re-renders with an emphatic pure-white instruction. If that also fails,
+    return None so the route reports an honest unavailable state. Never exposed
+    as a student-facing regenerate control.
     """
     attempts = [
         _build_render_prompt(spec, retry=False),
@@ -115,10 +161,40 @@ async def generate_visual(spec: VisualSpec) -> bytes | None:
     for attempt, prompt in enumerate(attempts, start=1):
         png = await _render_once(prompt)
         if png is not None and _quality_pass(png):
-            logger.info("Visual generated on attempt %d", attempt)
-            return png
+            if spec.text_required and not await asyncio.to_thread(_legibility_pass, png):
+                logger.info("Visual rejected by OCR legibility gate on attempt %d; one hidden retry", attempt)
+                png = None
+            else:
+                logger.info("Visual generated on attempt %d", attempt)
+                return png
         if attempt == 1:
             logger.info("Visual failed quality gate on attempt 1; one hidden retry")
             await asyncio.sleep(2.0)
     logger.warning("Visual generation failed after 2 attempts")
     return None
+
+
+async def generate_visual(spec: VisualSpec) -> tuple[str, str | bytes] | None:
+    """Hybrid dispatcher: render the educational visual for a VisualSpec.
+
+    - deterministic: exact text/symbols are the payload -> code renders a clean
+      sanitized SVG (visual_renderer). Returns ("svg", svg_string).
+    - generative: exact typography is NOT the payload -> Pollinations draws a
+      conceptual illustration, gated by brightness + conditional OCR legibility.
+      Returns ("png", image_bytes).
+
+    Returns None when the chosen branch produced nothing usable, so the route
+    reports an honest unavailable state. The same spec always renders the same
+    deterministic SVG (no randomness).
+    """
+    if spec.render_mode == VisualRenderMode.DETERMINISTIC:
+        svg = await asyncio.to_thread(render_deterministic_visual, spec.deterministic)
+        if not svg:
+            logger.warning("Deterministic visual: empty SVG (nothing meaningful to draw)")
+            return None
+        return ("svg", svg)
+
+    png = await _render_generative(spec)
+    if png is None:
+        return None
+    return ("png", png)

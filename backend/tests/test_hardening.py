@@ -527,8 +527,38 @@ def _visual_png() -> bytes:
     return buf.getvalue()
 
 
-def _mock_visual_pipeline(monkeypatch, png: bytes | None = None):
-    """Mock the /visual route: Gemini VisualSpec + Pollinations + ImgBB."""
+def _mock_visual_pipeline(monkeypatch, png: bytes | None = None, render_mode: str = "deterministic"):
+    """Mock the /visual route: Gemini VisualSpec (+ Pollinations + ImgBB when generative).
+
+    render_mode="deterministic" -> route renders SVG, no external calls.
+    render_mode="generative" -> _render_once/_quality_pass/upload_image are mocked.
+    """
+    if render_mode == "deterministic":
+        spec_json = {
+            "concept": "Rotation",
+            "render_mode": "deterministic",
+            "text_required": True,
+            "deterministic": {
+                "title": "Rotational Dynamics",
+                "equations": [
+                    {"expression": "τ = r × F", "meaning": "torque equals force times lever arm"},
+                    {"expression": "L = Iω", "meaning": "angular momentum equals moment of inertia times angular velocity"},
+                ],
+                "steps": ["Identify the axis of rotation", "Compute torque applied", "Relate to angular momentum"],
+                "points": ["Torque is the rotational analogue of force", "Angular momentum is conserved without net torque"],
+            },
+            "visual_form": "labeled block diagram",
+            "key_elements": [],
+            "key_relationships": [],
+            "must_show": [],
+            "avoid": [],
+        }
+        spec_response = type("o", (), {"text": json.dumps(spec_json)})()
+        model_mock = AsyncMock()
+        model_mock.generate_content_async = AsyncMock(return_value=spec_response)
+        monkeypatch.setattr("app.services.vision_service.model", model_mock)
+        return
+
     spec_response = type(
         "o",
         (),
@@ -536,6 +566,8 @@ def _mock_visual_pipeline(monkeypatch, png: bytes | None = None):
             "text": json.dumps(
                 {
                     "concept": "Rotation",
+                    "render_mode": "generative",
+                    "text_required": False,
                     "visual_form": "labeled diagram",
                     "key_elements": ["torque arrow", "radius"],
                     "key_relationships": ["tau = r x F"],
@@ -596,8 +628,8 @@ def test_visual_route_generates_once_then_reuses(sample_diagram_image, monkeypat
     resp = asyncio.run(run_diagram())
     diagram_id = resp.json()["diagramId"]
 
-    # Second: generate the visual (free)
-    _mock_visual_pipeline(monkeypatch, png=_visual_png())
+    # Second: generate the visual (free) — generative mode (raster URL path)
+    _mock_visual_pipeline(monkeypatch, png=_visual_png(), render_mode="generative")
 
     async def run_visual():
         async with AsyncClient(transport=transport, base_url="http://test") as client:
@@ -643,6 +675,75 @@ def test_visual_route_generates_once_then_reuses(sample_diagram_image, monkeypat
     assert calls["n"] == 0
 
 
+def test_visual_route_deterministic_returns_svg_and_reuses(sample_diagram_image, monkeypatch):
+    from app.utils.credits_store import get_visual_entitlement
+
+    device = "visual-det-device-00000000-0000-0000-000000000024"
+    _reset_credits(device)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(return_value=type("o", (), {"text": json.dumps(_diagram_payload())})())
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    _mock_visual_pipeline(monkeypatch, render_mode="deterministic")
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp1 = asyncio.run(run_visual())
+    assert resp1.status_code == 200
+    body1 = resp1.json()
+    assert body1["status"] == "generated"
+    assert body1["renderMode"] == "deterministic"
+    assert body1["imageUrl"] is None
+    assert body1["imageSvg"]
+    assert "τ = r × F" in body1["imageSvg"]
+    assert "Rotational Dynamics" in body1["imageSvg"]
+    stored = get_visual_entitlement(diagram_id)
+    assert stored is not None
+    assert stored[2] == "deterministic"  # render_mode
+    assert stored[3] == body1["imageSvg"]  # visual_svg persisted
+
+    # Reuse must return the SAME persisted SVG without re-calling the pipeline.
+    calls = {"n": 0}
+
+    def counting_model(*a, **k):
+        calls["n"] += 1
+        return type("o", (), {"text": json.dumps(_diagram_payload())})()
+
+    from app.services import vision_service
+    model_mock = AsyncMock()
+    model_mock.generate_content_async = AsyncMock(side_effect=counting_model)
+    monkeypatch.setattr("app.services.vision_service.model", model_mock)
+
+    async def run_visual_again():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp2 = asyncio.run(run_visual_again())
+    assert resp2.status_code == 200
+    body2 = resp2.json()
+    assert body2["status"] == "already_generated"
+    assert body2["renderMode"] == "deterministic"
+    assert body2["imageSvg"] == body1["imageSvg"]
+    assert calls["n"] == 0
+
+
 def test_visual_route_rejects_unowned_or_unknown_diagram(sample_diagram_image, monkeypatch):
     device = "visual-unauth-device-00000000-0000-0000-000000000022"
     _reset_credits(device)
@@ -677,7 +778,7 @@ def test_visual_route_honest_unavailable_on_quality_failure(sample_diagram_image
 
     diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
 
-    _mock_visual_pipeline(monkeypatch, png=None)  # both attempts return None
+    _mock_visual_pipeline(monkeypatch, png=None, render_mode="generative")  # both attempts return None
 
     async def run_visual():
         async with AsyncClient(transport=transport, base_url="http://test") as client:

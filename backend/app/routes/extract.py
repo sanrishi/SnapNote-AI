@@ -37,7 +37,7 @@ from app.utils.credits_store import (
     use_credits,
     get_visual_entitlement,
     record_diagram_grant,
-    set_visual_url,
+    set_visual_result,
 )
 
 logger = logging.getLogger(__name__)
@@ -224,20 +224,29 @@ async def extract_visual_route(
     The entitlement is tied to a specific completed diagram result (diagramId),
     never a time window. If a visual already exists for this diagram it is
     returned as-is (immutable — the image model is never called again). The
-    generation pipeline is: Gemini reads the screenshot + extracted study notes
-    -> VisualSpec -> Pollinations render -> quality gate -> one hidden retry ->
-    ImgBB. No credits are charged.
+    generation pipeline is hybrid: Gemini reads the screenshot + extracted study
+    notes -> VisualSpec -> render_mode dispatch:
+      - deterministic -> code renders a clean sanitized SVG (exact text/symbols)
+      - generative -> Pollinations render -> brightness gate -> conditional OCR
+        legibility gate (only when text_required) -> one hidden retry -> ImgBB.
+    No credits are charged.
     """
     entitlement = get_visual_entitlement(diagramId)
     if entitlement is None:
         raise InvalidInputError(message="No purchased diagram result found for this device.")
-    owner_device, visual_url, study_notes_json = entitlement
+    owner_device, visual_url, render_mode, visual_svg, study_notes_json = entitlement
     if owner_device != deviceId:
         raise InvalidInputError(message="No purchased diagram result found for this device.")
 
-    if visual_url:
+    if visual_url or visual_svg:
         logger.info("Visual already generated for diagram %s (device=%s)", diagramId[:8], deviceId[:8])
-        return VisualExplanationResponse(diagramId=diagramId, imageUrl=visual_url, status="already_generated")
+        return VisualExplanationResponse(
+            diagramId=diagramId,
+            renderMode=render_mode or "deterministic",
+            imageUrl=visual_url or None,
+            imageSvg=visual_svg or None,
+            status="already_generated",
+        )
 
     image_bytes = await image.read()
     validate_image_size(image_bytes)
@@ -255,21 +264,41 @@ async def extract_visual_route(
             logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
     spec = await build_visual_spec(enhanced, study_notes)
 
-    png_bytes = await generate_visual(spec)
-    if png_bytes is None:
+    result = await generate_visual(spec)
+    if result is None:
         raise UpstreamError(
             service="SnapNote AI",
             detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
         )
 
-    visual_url = await asyncio.to_thread(upload_image, png_bytes, {"title": "explain-visually"})
+    mode, payload = result
+    if mode == "svg":
+        visual_svg = payload
+        if not set_visual_result(diagramId, deviceId, "deterministic", visual_svg=visual_svg):
+            logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
+            existing = get_visual_entitlement(diagramId)
+            if existing is not None:
+                _, visual_url, render_mode, visual_svg, _ = existing
+        return VisualExplanationResponse(
+            diagramId=diagramId,
+            renderMode="deterministic",
+            imageSvg=visual_svg,
+            status="generated",
+        )
+
+    visual_url = await asyncio.to_thread(upload_image, payload, {"title": "explain-visually"})
     if not visual_url:
         raise UpstreamError(service="SnapNote AI", detail="Could not store the generated visual. Please try again.")
 
-    if not set_visual_url(diagramId, deviceId, visual_url):
-        logger.warning("Visual URL already set for diagram %s; returning existing", diagramId[:8])
+    if not set_visual_result(diagramId, deviceId, "generative", visual_url=visual_url):
+        logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
         existing = get_visual_entitlement(diagramId)
         if existing is not None:
-            visual_url = existing[1]
+            _, visual_url, render_mode, visual_svg, _ = existing
 
-    return VisualExplanationResponse(diagramId=diagramId, imageUrl=visual_url, status="generated")
+    return VisualExplanationResponse(
+        diagramId=diagramId,
+        renderMode="generative",
+        imageUrl=visual_url,
+        status="generated",
+    )

@@ -130,14 +130,48 @@ class DiagramResult(BaseModel):
     markdown: str
 
 
+class VisualRenderMode(str, Enum):
+    DETERMINISTIC = "deterministic"
+    GENERATIVE = "generative"
+
+
+class VisualEquation(BaseModel):
+    expression: str = ""
+    meaning: str = ""
+
+
+class DeterministicVisual(BaseModel):
+    """Exact, bounded content payload for the deterministic renderer.
+
+    Carries the information that MUST be rendered exactly — equations, their
+    meanings, ordered steps, and key points. Code owns all layout/geometry;
+    Gemini only supplies content. Never pixel coordinates.
+    """
+
+    title: str = ""
+    equations: list[VisualEquation] = []
+    steps: list[str] = []
+    points: list[str] = []
+
+
 class VisualSpec(BaseModel):
     """Structured, grounded description of the educational visual to generate.
 
     Gemini produces this from the screenshot + StudyNotes. It is a semantic
     spec (concept, form, elements, relationships) — never pixel geometry.
+
+    render_mode picks the rendering path:
+      - "deterministic": exact text/symbols matter, so code renders a clean
+        SVG (visual_renderer) — no generative model involved.
+      - "generative": exact typography is NOT the payload, so Pollinations may
+        draw a conceptual illustration, gated by an OCR legibility check when
+        text_required is true.
     """
 
     concept: str = ""
+    render_mode: VisualRenderMode = VisualRenderMode.DETERMINISTIC
+    text_required: bool = True
+    deterministic: DeterministicVisual = DeterministicVisual()
     visual_form: str = ""
     key_elements: list[str] = []
     key_relationships: list[str] = []
@@ -147,5 +181,7 @@ class VisualSpec(BaseModel):
 
 class VisualExplanationResponse(BaseModel):
     diagramId: str
+    renderMode: str = "deterministic"  # "deterministic" | "generative"
     imageUrl: Optional[str] = None
+    imageSvg: Optional[str] = None
     status: str = "generated"  # "generated" | "already_generated"

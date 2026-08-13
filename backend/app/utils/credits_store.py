@@ -29,12 +29,26 @@ def _get_conn() -> sqlite3.Connection:
             "  device_id TEXT NOT NULL,"
             "  study_notes_json TEXT NOT NULL DEFAULT '',"
             "  visual_url TEXT NOT NULL DEFAULT '',"
+            "  render_mode TEXT NOT NULL DEFAULT '',"
+            "  visual_svg TEXT NOT NULL DEFAULT '',"
             "  generated_at INTEGER NOT NULL DEFAULT 0"
             ")"
         )
         try:
             _local.conn.execute(
                 "ALTER TABLE visual_explanations ADD COLUMN study_notes_json TEXT NOT NULL DEFAULT ''"
+            )
+        except sqlite3.OperationalError:
+            pass
+        try:
+            _local.conn.execute(
+                "ALTER TABLE visual_explanations ADD COLUMN render_mode TEXT NOT NULL DEFAULT ''"
+            )
+        except sqlite3.OperationalError:
+            pass
+        try:
+            _local.conn.execute(
+                "ALTER TABLE visual_explanations ADD COLUMN visual_svg TEXT NOT NULL DEFAULT ''"
             )
         except sqlite3.OperationalError:
             pass
@@ -115,28 +129,43 @@ def record_diagram_grant(device_id: str, diagram_id: str, study_notes_json: str)
     conn.commit()
 
 
-def get_visual_entitlement(diagram_id: str) -> tuple[str, str, str] | None:
-    """Return (device_id, visual_url, study_notes_json) for a diagram_id, or None.
+def get_visual_entitlement(diagram_id: str) -> tuple[str, str, str, str, str] | None:
+    """Return (device_id, visual_url, render_mode, visual_svg, study_notes_json).
 
-    visual_url == "" means entitled but not yet generated (lazy on click).
-    A non-empty visual_url is immutable — reuse it, never re-generate.
+    visual_url == "" and visual_svg == "" means entitled but not yet generated
+    (lazy on click). A non-empty visual_url/visual_svg is immutable — reuse it,
+    never re-generate. render_mode is "deterministic" | "generative" | "".
     """
     conn = _get_conn()
     row = conn.execute(
-        "SELECT device_id, visual_url, study_notes_json FROM visual_explanations WHERE diagram_id = ?",
+        "SELECT device_id, visual_url, render_mode, visual_svg, study_notes_json "
+        "FROM visual_explanations WHERE diagram_id = ?",
         (diagram_id,),
     ).fetchone()
     if row is None:
         return None
-    return row["device_id"], row["visual_url"], row["study_notes_json"]
+    return (
+        row["device_id"],
+        row["visual_url"],
+        row["render_mode"],
+        row["visual_svg"],
+        row["study_notes_json"],
+    )
 
 
-def set_visual_url(diagram_id: str, device_id: str, visual_url: str) -> bool:
-    """Persist the generated visual URL. Refuses to overwrite an existing URL."""
+def set_visual_result(
+    diagram_id: str,
+    device_id: str,
+    render_mode: str,
+    visual_url: str = "",
+    visual_svg: str = "",
+) -> bool:
+    """Persist the generated visual result. Refuses to overwrite an existing result."""
     conn = _get_conn()
     cur = conn.execute(
-        "UPDATE visual_explanations SET visual_url = ? WHERE diagram_id = ? AND device_id = ? AND visual_url = ''",
-        (visual_url, diagram_id, device_id),
+        "UPDATE visual_explanations SET visual_url = ?, render_mode = ?, visual_svg = ? "
+        "WHERE diagram_id = ? AND device_id = ? AND visual_url = '' AND visual_svg = ''",
+        (visual_url, render_mode, visual_svg, diagram_id, device_id),
     )
     conn.commit()
     return cur.rowcount > 0
