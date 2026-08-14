@@ -1,8 +1,10 @@
 """Unit tests for the hybrid Explain Visually renderer and dispatcher.
 
 Deterministic SVG renderer: exact text/symbols rendered by code, sanitized,
-byte-deterministic. Hybrid dispatcher: render_mode routes to SVG (deterministic)
-or Pollinations (generative) with a conditional OCR legibility gate.
+byte-deterministic. Universal scene primitives (objects/vectors/angles/arcs/
+relations/process boxes/connectors) render as real diagrams. Hybrid dispatcher:
+render_mode routes to SVG (deterministic) or Pollinations (generative) with a
+conditional OCR legibility gate.
 """
 
 import asyncio
@@ -10,7 +12,22 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from app.models.schemas import DeterministicVisual, VisualEquation, VisualRenderMode, VisualSpec
+from app.models.schemas import (
+    DeterministicVisual,
+    FlowConnector,
+    FlowNode,
+    ForceDiagram,
+    ProcessFlow,
+    VisualAngle,
+    VisualArc,
+    VisualEquation,
+    VisualObject,
+    VisualRelation,
+    VisualRenderMode,
+    VisualScene,
+    VisualSpec,
+    VisualVector,
+)
 from app.utils.visual_renderer import render_deterministic_visual
 
 
@@ -61,6 +78,117 @@ def test_renderer_escapes_html_in_text():
     assert "&lt;" in svg
     assert "&amp;" in svg
     assert "<script" not in svg.lower()
+
+
+# ── Scene engine (universal educational primitives) ──
+
+
+def _torque_scene() -> DeterministicVisual:
+    return DeterministicVisual(
+        title="Torque",
+        scene=VisualScene(
+            scene_kind="force_diagram",
+            caption="Torque magnitude depends on the lever arm r and the angle θ between r and F.",
+            force=ForceDiagram(
+                object=VisualObject(kind="pivot", label="O"),
+                vectors=[
+                    VisualVector(label="r", angle_deg=55, length=1.1, color="accent"),
+                    VisualVector(label="F", angle_deg=90, length=0.8, color="red", tail="r"),
+                ],
+                angles=[VisualAngle(label="θ", between=["r", "F"])],
+                arcs=[VisualArc(label="τ", around="O", direction="ccw")],
+                relation=VisualRelation(expression="τ = r × F", caption="torque depends on lever arm and angle"),
+            ),
+        ),
+        points=["Torque drives changes in angular momentum"],
+    )
+
+
+def test_scene_force_diagram_draws_real_diagram():
+    svg = render_deterministic_visual(_torque_scene())
+    # Every primitive must be present: pivot, both vectors, angle arc, rotation arc,
+    # the relation equation, the caption header, and the key point.
+    for token in ["Torque", "O", "r", "F", "θ", "τ", "τ = r × F", "WHAT THE VISUAL SHOWS", "KEY POINTS"]:
+        assert token in svg, f"missing {token!r}"
+    # Real geometry, not just text: lines + arrowhead polygons + arc polylines.
+    assert "<line" in svg
+    assert "<polygon" in svg  # arrowheads
+    assert "<polyline" in svg  # angle arc + rotation arc
+    assert "<rect" in svg  # stage + equation card
+    assert "angle-arc" not in svg  # no leftover placeholder concepts
+
+
+def test_scene_is_byte_deterministic_and_sanitized():
+    a = render_deterministic_visual(_torque_scene())
+    b = render_deterministic_visual(_torque_scene())
+    assert a == b
+    assert "<script" not in a.lower()
+    assert "javascript:" not in a.lower()
+
+
+def test_scene_relation_card_included():
+    svg = render_deterministic_visual(_torque_scene())
+    assert "τ = r × F" in svg
+    assert "torque depends on lever arm and angle" in svg
+
+
+def test_scene_flow_renders_boxes_and_connectors():
+    spec = DeterministicVisual(
+        title="PID Control",
+        scene=VisualScene(
+            scene_kind="process_flow",
+            caption="The controller compares the reference with feedback and drives the plant.",
+            flow=ProcessFlow(
+                nodes=[
+                    FlowNode(label="Reference"),
+                    FlowNode(label="Controller"),
+                    FlowNode(label="Plant"),
+                ],
+                connectors=[
+                    FlowConnector(source=0, target=1, label="e(t)"),
+                    FlowConnector(source=1, target=2, label="u(t)"),
+                    FlowConnector(source=2, target=0, label="y(t)", feedback=True),
+                ],
+                relation=VisualRelation(expression="u(t) = Kp · e(t)", caption="proportional control"),
+            ),
+        ),
+    )
+    svg = render_deterministic_visual(spec)
+    for token in ["PID Control", "Reference", "Controller", "Plant", "e(t)", "u(t)", "y(t)", "WHAT THE VISUAL SHOWS"]:
+        assert token in svg, f"missing {token!r}"
+    # Feedback loop must draw as a dashed return path.
+    assert "stroke-dasharray" in svg
+    assert "<polyline" in svg
+
+
+def test_scene_fallback_to_card_when_scene_empty():
+    # A scene with no vectors/nodes must not crash and renders the card instead.
+    spec = DeterministicVisual(
+        title="Fallback",
+        scene=VisualScene(scene_kind="force_diagram", force=None),
+        equations=[VisualEquation(expression="a = b", meaning="identity")],
+    )
+    svg = render_deterministic_visual(spec)
+    assert svg.startswith("<svg")
+    assert "a = b" in svg
+    assert "KEY EQUATIONS" in svg
+
+
+def test_scene_escapes_user_text():
+    spec = DeterministicVisual(
+        title="<unsafe>",
+        scene=VisualScene(
+            scene_kind="force_diagram",
+            caption="r & F <i>",
+            force=ForceDiagram(
+                object=VisualObject(kind="pivot", label="O"),
+                vectors=[VisualVector(label="<F>", angle_deg=90)],
+            ),
+        ),
+    )
+    svg = render_deterministic_visual(spec)
+    assert "<script" not in svg.lower()
+    assert "&lt;" in svg
 
 
 # ── Hybrid dispatcher ──

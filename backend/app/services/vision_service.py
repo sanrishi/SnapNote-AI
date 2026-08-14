@@ -414,11 +414,30 @@ Choose "render_mode": "deterministic" or "generative" based on INFORMATION PRECI
 
 If in doubt, choose "deterministic". A physics topic like "what is angular momentum?" may still benefit from a generative conceptual illustration — decide by precision, not by topic.
 
+THE SCENE PRIMITIVES (deterministic mode):
+Inside "deterministic.scene" you describe WHAT must be shown using universal educational primitives. Python decides HOW to draw everything — you NEVER give coordinates, pixel positions, or SVG. You decide only the SEMANTICS: which objects, which vectors, their directions in degrees, and which relationships to draw.
+  - "scene_kind": "force_diagram" (vectors/forces/angles around a pivot: torque, lever arms, projectile launch, inclined planes, forces on a body) OR "process_flow" (labeled boxes with arrows between them: control loops, PID, workflows, algorithms, reaction chains).
+  - "force_diagram" fields:
+      "object": {"kind": "pivot"|"disk"|"point"|"block", "label": "O" (a short name), "caption": "what it is"}
+      "vectors": [{"label": "r", "angle_deg": 55, "length": 1.0, "tail": "r" (label of the vector this one starts from; omit/empty to start at the object), "color": ""|"accent"|"red"|"green", "caption": "what this vector represents"}]
+        - "angle_deg": direction in degrees, 0 = pointing right, 90 = straight up, 180 = left, 270 = down. Use the direction that matches the real diagram.
+        - "length": relative length (0.4 to 1.6). 1.0 is the default.
+      "angles": [{"label": "θ", "between": ["r", "F"] (labels of exactly two vectors), "caption": "what the angle is"}]
+      "arcs": [{"label": "τ", "around": "O" (object label), "direction": "ccw"|"cw", "caption": "e.g. rotation direction"}]
+      "relation": {"expression": "τ = r × F" (exact Unicode equation, NO LaTeX, NO backslash), "caption": "one line meaning"}
+  - "process_flow" fields:
+      "nodes": [{"label": "Controller"}, {"label": "Plant"}, ...] (2-6 nodes)
+      "connectors": [{"source": 0, "target": 1, "label": "u(t)" (optional), "feedback": false}]
+        - "feedback": true on the connector that loops the output back to the input (drawn as a curved dashed return arrow).
+      "relation": {"expression": "...", "caption": "..."} (optional)
+  - "caption": ONE sentence under "WHAT THE VISUAL SHOWS" teaching what the diagram means conceptually (never an inventory of parts). Example: "Torque magnitude depends on the lever arm r and the angle θ between r and F."
+
 GROUNDING RULES:
 1. The screenshot is the source of truth. The study notes below are helpful context, but never invent content that conflicts with what the image actually shows.
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
 3. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
 4. Write labels as short, plain, readable text.
+5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. If the concept does not fit either scene kind well, omit "scene" entirely and use the card fields (equations/steps/points) instead.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
@@ -427,20 +446,26 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "text_required": true,
   "deterministic": {
     "title": "short title (2-6 words)",
+    "scene": {
+      "scene_kind": "force_diagram | process_flow",
+      "caption": "one teaching sentence about what the diagram means",
+      "force": { "object": {...}, "vectors": [...], "angles": [...], "arcs": [...], "relation": {...} },
+      "flow": { "nodes": [...], "connectors": [...], "relation": {...} }
+    },
     "equations": [{"expression": "exact formula in Unicode, no LaTeX, no backslash", "meaning": "one line: what each symbol means and what the relationship represents"}],
     "steps": ["ordered steps, each a short phrase"],
     "points": ["key points, each a short phrase"]
   },
-  "visual_form": "the chosen visual form, e.g. 'labeled block diagram' or 'step-by-step flowchart'",
+  "visual_form": "the chosen visual form, e.g. 'force vector diagram' or 'labeled block diagram' or 'step-by-step flowchart'",
   "key_elements": ["every box/axis/label/marker the visual must contain, verbatim text in quotes"],
-  "key_relationships": ["each relationship the visual must show, e.g. 'error = reference - feedback'"],
+  "key_relationships": ["each relationship the visual must show, e.g. 'torque = cross product of r and F'"],
   "must_show": ["the essential things that must be visually present so the student understands"],
   "avoid": ["anything to leave out: unsupported quantities, decorative objects, unrelated details"]
 }
 
 FIELD RULES:
 - "text_required": true when readable text/symbols are essential to the visual (always true in deterministic mode). false only for a purely conceptual illustration that conveys meaning through pictures alone.
-- "deterministic": ALWAYS populate it. In deterministic mode it is the payload — fill equations/steps/points with the EXACT content (equations as Unicode: τ, ω, θ, ∫, Δ, ×, superscripts ²; NEVER LaTeX commands or backslash). In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
+- "deterministic": ALWAYS populate it. Prefer providing a "scene" (a real diagram) when the concept maps to force_diagram or process_flow; the renderer draws it. Also fill equations/steps/points with the EXACT content (equations as Unicode: τ, ω, θ, ∫, Δ, ×, superscripts ²; NEVER LaTeX commands or backslash) — they appear as supplementary cards under the scene. In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
 - Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support."""
 
 

@@ -1,6 +1,7 @@
 from enum import Enum
+from typing import Literal, Optional
+
 from pydantic import BaseModel, Field
-from typing import Optional
 
 
 class ExtractionType(str, Enum):
@@ -140,15 +141,88 @@ class VisualEquation(BaseModel):
     meaning: str = ""
 
 
+class VisualObject(BaseModel):
+    kind: Literal["pivot", "disk", "point", "block"] = "pivot"
+    label: str = ""
+    caption: str = ""
+
+
+class VisualVector(BaseModel):
+    label: str = ""
+    angle_deg: int = 0
+    length: float = 1.0
+    tail: str = ""
+    color: str = ""
+    caption: str = ""
+
+
+class VisualAngle(BaseModel):
+    label: str = "θ"
+    between: list[str] = []
+    caption: str = ""
+
+
+class VisualArc(BaseModel):
+    label: str = ""
+    around: str = ""
+    direction: Literal["ccw", "cw"] = "ccw"
+    caption: str = ""
+
+
+class VisualRelation(BaseModel):
+    expression: str = ""
+    caption: str = ""
+
+
+class ForceDiagram(BaseModel):
+    object: VisualObject = VisualObject()
+    vectors: list[VisualVector] = []
+    angles: list[VisualAngle] = []
+    arcs: list[VisualArc] = []
+    relation: VisualRelation | None = None
+
+
+class FlowNode(BaseModel):
+    label: str = ""
+
+
+class FlowConnector(BaseModel):
+    source: int = 0
+    target: int = 1
+    label: str = ""
+    feedback: bool = False
+
+
+class ProcessFlow(BaseModel):
+    nodes: list[FlowNode] = []
+    connectors: list[FlowConnector] = []
+    relation: VisualRelation | None = None
+
+
+class VisualScene(BaseModel):
+    scene_kind: Literal["force_diagram", "process_flow"] = "force_diagram"
+    title: str = ""
+    caption: str = ""
+    force: ForceDiagram | None = None
+    flow: ProcessFlow | None = None
+
+
 class DeterministicVisual(BaseModel):
     """Exact, bounded content payload for the deterministic renderer.
 
-    Carries the information that MUST be rendered exactly — equations, their
-    meanings, ordered steps, and key points. Code owns all layout/geometry;
-    Gemini only supplies content. Never pixel coordinates.
+    Carries the information that MUST be rendered exactly. Two supported
+    presentations:
+      - a `scene` (universal educational primitives: objects, vectors, angles,
+        arcs, relations, process boxes, connectors) rendered as a real diagram,
+      - or the classic study card (equations + meanings, ordered steps, points).
+
+    Code owns ALL layout/geometry; Gemini only supplies semantics (labels,
+    angles in degrees, relative lengths, relationships). Never pixel
+    coordinates.
     """
 
     title: str = ""
+    scene: VisualScene | None = None
     equations: list[VisualEquation] = []
     steps: list[str] = []
     points: list[str] = []
