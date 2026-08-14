@@ -8,6 +8,7 @@ conditional OCR legibility gate.
 """
 
 import asyncio
+import re
 from unittest.mock import AsyncMock
 
 import pytest
@@ -95,8 +96,8 @@ def _torque_scene() -> DeterministicVisual:
                     VisualVector(label="r", angle_deg=55, length=1.1, color="accent"),
                     VisualVector(label="F", angle_deg=90, length=0.8, color="red", tail="r"),
                 ],
-                angles=[VisualAngle(label="θ", between=["r", "F"])],
-                arcs=[VisualArc(label="τ", around="O", direction="ccw")],
+                angles=[VisualAngle(label="θ", between=["r", "F"], caption="angle between the position vector and the force vector")],
+                arcs=[VisualArc(label="τ", around="O", direction="ccw", caption="rotation direction")],
                 relation=VisualRelation(expression="τ = r × F", caption="torque depends on lever arm and angle"),
             ),
         ),
@@ -130,6 +131,39 @@ def test_scene_relation_card_included():
     svg = render_deterministic_visual(_torque_scene())
     assert "τ = r × F" in svg
     assert "torque depends on lever arm and angle" in svg
+
+
+def test_scene_captions_render_below_stage_as_legend():
+    """Regression: long angle/arc captions must NOT be dropped inline over the
+    vector geometry (they overlapped the F vector line in the torque visual).
+    They must appear as muted legend lines under a 'WHAT EACH SYMBOL MEANS'
+    header that sits BELOW the stage rect."""
+    svg = render_deterministic_visual(_torque_scene())
+    assert "WHAT EACH SYMBOL MEANS" in svg
+    # Captions came from the angle + arc in the fixture.
+    assert "WHAT EACH SYMBOL MEANS" in svg
+    # The legend text must not live inside the stage band (y < STAGE_Y+STAGE_H).
+    stage_bottom = 110 + 470
+    for m in re.finditer(r'<text[^>]*y="([\d.]+)"[^>]*>(.*?)</text>', svg):
+        content = m.group(2)
+        if "WHAT EACH SYMBOL MEANS" in content or "—" in content:
+            assert float(m.group(1)) > stage_bottom, (
+                f"caption {content!r} inside stage at y={m.group(1)}"
+            )
+
+
+def test_scene_svg_height_is_dynamic():
+    """The SVG viewBox height must grow to fit scene + legend + equations, so
+    taller content is never clipped by the old fixed 900px viewBox."""
+    svg = render_deterministic_visual(_torque_scene())
+    m = re.search(r'viewBox="0 0 (\d+) (\d+)"', svg)
+    assert m, "viewBox missing"
+    w, h = int(m.group(1)), int(m.group(2))
+    assert w == 800
+    assert h >= 900
+    # Content must fit: the last text element must be inside the viewBox.
+    ys = [float(y) for y in re.findall(r'<text[^>]*y="([\d.]+)"', svg)]
+    assert max(ys) <= h, f"content y={max(ys)} exceeds viewBox height {h}"
 
 
 def test_scene_flow_renders_boxes_and_connectors():

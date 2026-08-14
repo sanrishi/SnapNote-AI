@@ -269,7 +269,13 @@ def _angle_arc(
     vertex: tuple[float, float],
     dirs: list[float],
 ) -> str:
-    """Arc between two ray directions at `vertex`, labeled, with arrowhead."""
+    """Arc between two ray directions at `vertex`, labeled, with arrowhead.
+
+    Only the small label sits near the arc. Long captions must NOT be dropped
+    inline (a wide text block placed at the shared vertex reliably overlaps the
+    vector geometry); they are collected by the caller into the legend block
+    below the stage instead.
+    """
     if len(dirs) < 2:
         return ""
     a, b = dirs[0], dirs[1]
@@ -279,7 +285,7 @@ def _angle_arc(
     r_arc = 34.0
     pts = _arc_points(vertex[0], vertex[1], r_arc, a, b)
     mid_deg = a + diff * 0.5
-    label_pos = _polar(vertex[0], vertex[1], r_arc + 16, mid_deg)
+    label_pos = _polar(vertex[0], vertex[1], r_arc + 18, mid_deg)
     tip = pts[-1]
     tip_deg = a + diff
     parts = [
@@ -291,14 +297,6 @@ def _angle_arc(
             f'<text x="{_f(label_pos[0])}" y="{_f(label_pos[1])}" font-family="{_FONT}" '
             f'font-size="17" font-weight="700" fill="{ACCENT}" text-anchor="middle">{_esc(angle.label)}</text>'
         )
-    if angle.caption:
-        cpts = _wrap(angle.caption, 52)
-        cy = label_pos[1] + 34
-        for i, cl in enumerate(cpts):
-            parts.append(
-                f'<text x="{_f(label_pos[0])}" y="{_f(cy + i * 16)}" font-family="{_FONT}" '
-                f'font-size="12" fill="{MUTED}" text-anchor="middle">{_esc(cl)}</text>'
-            )
     return "".join(parts)
 
 
@@ -310,31 +308,53 @@ def _rotation_arc(arc: VisualArc, around: tuple[float, float]) -> str:
     pts = _arc_points(around[0], around[1], r, start, start + sweep, steps=28)
     tip = pts[-1]
     tip_deg = start + sweep
-    mid = pts[len(pts) // 2]
+    mid_deg = start + sweep * 0.5
     parts = [
         _polyline(pts, GREEN, width=2.6),
         _arrowhead(tip[0], tip[1], tip_deg, 11),
     ]
     if arc.label:
-        lpos = (mid[0] + 16, mid[1] - 18)
+        # Label sits OUTSIDE the arc ring (radius r+24 along the arc midpoint),
+        # never on top of the arc line itself.
+        lpos = _polar(around[0], around[1], r + 24, mid_deg)
         parts.append(
             f'<text x="{_f(lpos[0])}" y="{_f(lpos[1])}" font-family="{_FONT}" font-size="16" '
             f'font-weight="700" fill="{GREEN}" text-anchor="middle">{_esc(arc.label)}</text>'
         )
-    if arc.caption:
-        parts.append(
-            f'<text x="{_f(mid[0] + 16)}" y="{_f(mid[1])}" font-family="{_FONT}" font-size="11.5" '
-            f'fill="{MUTED}" text-anchor="middle">{_esc(arc.caption)}</text>'
-        )
     return "".join(parts)
 
 
-def _render_force_diagram(scene: VisualScene) -> tuple[str, int]:
-    """Render the force/vector diagram inside the stage. Returns (svg, next_y)."""
+def _legend_line(y: int, label: str, text: str) -> str:
+    """One muted legend line (label chip + explanation) below the stage."""
+    parts = []
+    if label:
+        parts.append(
+            f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="12.5" font-weight="700" '
+            f'fill="{ACCENT}" text-anchor="start">{_esc(label)}</text>'
+        )
+        tx = MARGIN + 30
+    else:
+        tx = MARGIN
+    parts.append(
+        f'<text x="{tx}" y="{y}" font-family="{_FONT}" font-size="12.5" fill="{MUTED}" '
+        f'text-anchor="start">{_esc(text)}</text>'
+    )
+    return "".join(parts)
+
+
+def _render_force_diagram(scene: VisualScene) -> tuple[str, int, list[str], VisualRelation | None]:
+    """Render the force/vector diagram inside the stage.
+
+    Returns (svg, next_y, legend_lines, relation). Long angle/arc captions are
+    NOT drawn inline (they would overlap the vector geometry); they are
+    returned as legend lines the caller renders below the stage. The relation
+    card is returned separately so the caller can place it after the legend.
+    """
     force: ForceDiagram | None = scene.force
     parts: list[str] = []
+    legend: list[str] = []
     if force is None:
-        return "", STAGE_Y + STAGE_H + 24
+        return "", STAGE_Y + STAGE_H + 24, legend, None
 
     pivot = (PIVOT_X, PIVOT_Y)
 
@@ -369,34 +389,27 @@ def _render_force_diagram(scene: VisualScene) -> tuple[str, int]:
                     dirs.append(_vector_deg(v))
                     break
         parts.append(_angle_arc(angle, vertex, dirs))
+        if angle.caption.strip():
+            legend.append(f"{angle.label.strip()} — {angle.caption.strip()}")
 
     # Rotation arcs around the pivot.
     for arc in force.arcs:
         parts.append(_rotation_arc(arc, pivot))
+        if arc.caption.strip():
+            legend.append(f"{arc.label.strip()} — {arc.caption.strip()}")
 
-    # Relation equation card below the stage.
-    relation_html = ""
-    y_after = STAGE_Y + STAGE_H + 18
-    if force.relation and force.relation.expression.strip():
-        relation_html, y_after = _equation_card(
-            y_after,
-            force.relation.expression.strip(),
-            force.relation.caption.strip(),
-        )
-        parts.append(relation_html)
-
-    return "".join(parts), y_after
+    return "".join(parts), STAGE_Y + STAGE_H + 18, legend, force.relation
 
 
-def _render_flow(scene: VisualScene) -> tuple[str, int]:
+def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelation | None]:
     """Render a process-flow scene: labeled boxes + arrows (+ optional feedback loop)."""
     flow = scene.flow
     parts: list[str] = []
     if flow is None:
-        return "", STAGE_Y + STAGE_H + 24
+        return "", STAGE_Y + STAGE_H + 24, [], None
     nodes: list[FlowNode] = [n for n in flow.nodes if n.label.strip()]
     if not nodes:
-        return "", STAGE_Y + STAGE_H + 24
+        return "", STAGE_Y + STAGE_H + 24, [], None
 
     n = len(nodes)
     box_w = min(150, int((CONTENT_W - 40 - (n - 1) * 30) / n))
@@ -461,27 +474,21 @@ def _render_flow(scene: VisualScene) -> tuple[str, int]:
                     f'fill="{MUTED}" text-anchor="middle">{_esc(conn.label)}</text>'
                 )
 
-    # Relation card below.
-    relation_html = ""
-    y_after = y_center + box_h / 2 + 74
-    if flow.relation and flow.relation.expression.strip():
-        relation_html, y_after = _equation_card(
-            y_after,
-            flow.relation.expression.strip(),
-            flow.relation.caption.strip(),
-        )
-    return "".join(parts), y_after
+    # Relation card below (returned for the caller to place after the legend).
+    return "".join(parts), y_center + box_h / 2 + 74, [], flow.relation
 
 
 def _render_scene(scene: VisualScene) -> tuple[str, int]:
     """Dispatch a VisualScene to its layout. Returns (svg_html, next_y)."""
     parts: list[str] = []
+    legend: list[str] = []
+    relation = None
     if scene.scene_kind == "force_diagram":
-        diagram, y_after = _render_force_diagram(scene)
+        diagram, y_after, legend, relation = _render_force_diagram(scene)
     elif scene.scene_kind == "process_flow":
-        diagram, y_after = _render_flow(scene)
+        diagram, y_after, legend, relation = _render_flow(scene)
     else:
-        diagram, y_after = "", STAGE_Y + STAGE_H + 24
+        diagram, y_after, legend, relation = "", STAGE_Y + STAGE_H + 24, [], None
     if not diagram.strip():
         return "", y_after
 
@@ -490,6 +497,26 @@ def _render_scene(scene: VisualScene) -> tuple[str, int]:
         f'fill="{BG_STAGE}" stroke="{STAGE_STROKE}" stroke-width="1.5"/>'
     )
     parts.append(diagram)
+
+    # Long angle/arc captions live BELOW the stage (never inline over geometry).
+    if legend:
+        legend_hdr, y_after = _section_header(y_after, "WHAT EACH SYMBOL MEANS")
+        parts.append(legend_hdr)
+        for line in legend:
+            parts.append(
+                f'<text x="{MARGIN + 4}" y="{y_after}" font-family="{_FONT}" font-size="12.5" '
+                f'fill="{MUTED}" text-anchor="start">{_esc(line)}</text>'
+            )
+            y_after += 19
+        y_after += 6
+
+    if relation is not None and relation.expression.strip():
+        rel_html, y_after = _equation_card(
+            y_after,
+            relation.expression.strip(),
+            relation.caption.strip(),
+        )
+        parts.append(rel_html)
 
     if scene.caption.strip():
         cap_html, y_after = _section_header(y_after, "WHAT THE VISUAL SHOWS")
@@ -516,8 +543,7 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
     universal primitives). Otherwise the classic study card (equations +
     steps + points) is rendered. Returns "" if there is nothing meaningful.
     """
-    parts: list[str] = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {VIEW_W} 900" width="100%">']
-    parts.append("<title>Educational visual</title>")
+    parts: list[str] = ["<title>Educational visual</title>"]
 
     meaningful = any(eq.expression.strip() for eq in spec.equations) or any(
         s.strip() for s in spec.steps
@@ -589,8 +615,11 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
                 html, y = _point_line(y, point.strip())
                 parts.append(html)
 
-    parts.append("</svg>")
-    svg = sanitize_svg("".join(parts))
+    height = max(900, y + 60)
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {VIEW_W} {height}" width="100%">'
+    svg += "".join(parts)
+    svg += "</svg>"
+    svg = sanitize_svg(svg)
     if not svg:
         return ""
     return svg
