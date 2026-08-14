@@ -388,6 +388,8 @@
     .visual-wrap img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--border); }
     .visual-wrap svg { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--border); background: #fff; }
     .visual-trust { font-size: 11.5px; color: var(--muted); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+    .explain-card { border: 1px solid rgba(251,191,36,.35); background: linear-gradient(180deg, rgba(251,191,36,.05), rgba(255,255,255,0) 60%); }
+    .explain-card h3 .bar { background: var(--amber); }
 
     .orig-modal { max-width: 720px; }
     .orig-modal img { display: block; width: 100%; border-radius: 10px; margin-top: 10px; }
@@ -1420,9 +1422,13 @@
         const diagramCap = notes.diagram.best_effort
           ? 'Best-effort reconstruction — this diagram type isn\'t fully supported yet; verify it against the original screenshot.'
           : 'Rebuilt from your screenshot as a clean diagram.';
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">${esc(diagramCap)}</p>${explainSectionHtml()}</div>`);
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">${esc(diagramCap)}</p></div>`);
       } else if (result.type === "diagram") {
-        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram</h3><p>No distinct diagram could be reconstructed from this image. Your study notes below still cover the content.</p>${explainSectionHtml()}</div>`);
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><p>No confident reconstruction available from this image. Your study notes below still cover the content.</p></div>`);
+      }
+
+      if (result.type === "diagram") {
+        cards.push(`<div class="note-card explain-card" style="animation-delay:280ms">${explainSectionHtml()}</div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
@@ -1444,14 +1450,15 @@
     }
 
     function explainSectionHtml() {
+      const head = `<h3><span class="bar"></span>✨ Explain Visually</h3><p class="muted visual-trust">AI-generated visual explanation — verify details against your notes.</p>`;
       if (currentVisualSvg) {
-        return `<div class="visual-wrap">${currentVisualSvg}<p class="visual-trust"><span>✨</span> AI-generated visual explanation — verify details against your notes.</p></div>`;
+        return `${head}<div class="visual-wrap">${currentVisualSvg}</div>`;
       }
       if (currentVisualUrl) {
-        return `<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /><p class="visual-trust"><span>✨</span> AI-generated visual explanation — verify details against your notes.</p></div>`;
+        return `${head}<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /></div>`;
       }
       if (canExplain) {
-        return `<button class="explain-btn" id="explain-btn"><span>✨ Explain Visually</span><em>Free — bundled with your diagram</em></button>`;
+        return `${head}<button class="explain-btn" id="explain-btn"><span>✨ Explain Visually</span><em>Free — bundled with your diagram</em></button>`;
       }
       return "";
     }
