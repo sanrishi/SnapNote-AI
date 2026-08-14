@@ -1,9 +1,16 @@
 import asyncio
 import logging
+import uuid
 from fastapi import APIRouter, Form, UploadFile, File
 
 from app.config import settings
-from app.models.schemas import ExtractionResponse, ExtractionType, RevisionResponse
+from app.models.schemas import (
+    ExtractionResponse,
+    ExtractionType,
+    RevisionResponse,
+    StudyNotes,
+    VisualExplanationResponse,
+)
 from app.services.preprocessor import preprocess, enhance_for_vision
 from app.services.ocr_service import (
     read_raw,
@@ -14,10 +21,12 @@ from app.services.ocr_service import (
     low_quality_result,
 )
 from app.services.vision_service import (
+    build_visual_spec,
     extract_revision_guide,
     extract_study_notes,
     extract_text_with_llm,
 )
+from app.services.visual_service import generate_visual
 from app.services.storage_service import upload_image
 from app.utils.render_notes import render_study_notes
 from app.utils.tags import parse_context, generate_tags
@@ -26,8 +35,9 @@ from app.exceptions import InvalidInputError, CreditLimitError, UpstreamError
 from app.utils.credits_store import (
     get_credits,
     use_credits,
-    mark_diagram_paid,
-    diagram_paid_recently,
+    get_visual_entitlement,
+    record_diagram_grant,
+    set_visual_result,
 )
 
 logger = logging.getLogger(__name__)
@@ -107,14 +117,8 @@ async def extract_diagram_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
     deviceId: str = Form(...),
-    regenerate: bool = Form(False),
 ) -> ExtractionResponse:
-    if regenerate and diagram_paid_recently(deviceId):
-        cost = settings.REGENERATE_CREDIT_COST
-        logger.info("Diagram regeneration (device=%s) charged %d credit", deviceId[:8], cost)
-    else:
-        cost = settings.DIAGRAM_CREDIT_COST
-    _check_credits(deviceId, cost)
+    _check_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
     image_bytes = await image.read()
     validate_image_size(image_bytes)
 
@@ -150,16 +154,18 @@ async def extract_diagram_route(
 
     markdown = render_study_notes(study_notes)
 
-    use_credits(deviceId, cost)
-    mark_diagram_paid(deviceId)
+    use_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
+    diagram_id = uuid.uuid4().hex
+    record_diagram_grant(deviceId, diagram_id, study_notes.model_dump_json(exclude={"diagram_spec", "diagram"}))
 
     return ExtractionResponse(
         type=ExtractionType.DIAGRAM,
         markdown=markdown,
         imageUrl=uploaded_url,
         tags=tags,
-        creditsUsed=cost,
+        creditsUsed=settings.DIAGRAM_CREDIT_COST,
         studyNotes=study_notes,
+        diagramId=diagram_id,
     )
 
 
@@ -204,4 +210,95 @@ async def extract_revision_route(
     return RevisionResponse(
         study_notes=study_notes,
         creditsUsed=settings.REVISION_CREDIT_COST,
+    )
+
+
+@router.post("/visual", response_model=VisualExplanationResponse)
+async def extract_visual_route(
+    image: UploadFile = File(...),
+    deviceId: str = Form(...),
+    diagramId: str = Form(...),
+) -> VisualExplanationResponse:
+    """Explain Visually — free, bundled with the 5-credit diagram result.
+
+    The entitlement is tied to a specific completed diagram result (diagramId),
+    never a time window. If a visual already exists for this diagram it is
+    returned as-is (immutable — the image model is never called again). The
+    generation pipeline is hybrid: Gemini reads the screenshot + extracted study
+    notes -> VisualSpec -> render_mode dispatch:
+      - deterministic -> code renders a clean sanitized SVG (exact text/symbols)
+      - generative -> Pollinations render -> brightness gate -> conditional OCR
+        legibility gate (only when text_required) -> one hidden retry -> ImgBB.
+    No credits are charged.
+    """
+    entitlement = get_visual_entitlement(diagramId)
+    if entitlement is None:
+        raise InvalidInputError(message="No purchased diagram result found for this device.")
+    owner_device, visual_url, render_mode, visual_svg, study_notes_json = entitlement
+    if owner_device != deviceId:
+        raise InvalidInputError(message="No purchased diagram result found for this device.")
+
+    if visual_url or visual_svg:
+        logger.info("Visual already generated for diagram %s (device=%s)", diagramId[:8], deviceId[:8])
+        return VisualExplanationResponse(
+            diagramId=diagramId,
+            renderMode=render_mode or "deterministic",
+            imageUrl=visual_url or None,
+            imageSvg=visual_svg or None,
+            status="already_generated",
+        )
+
+    image_bytes = await image.read()
+    validate_image_size(image_bytes)
+
+    try:
+        enhanced = await asyncio.to_thread(enhance_for_vision, image_bytes)
+    except ValueError as e:
+        raise InvalidInputError(message=str(e))
+
+    study_notes: StudyNotes | None = None
+    if study_notes_json:
+        try:
+            study_notes = StudyNotes.model_validate_json(study_notes_json)
+        except Exception as e:
+            logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
+    spec = await build_visual_spec(enhanced, study_notes)
+
+    result = await generate_visual(spec)
+    if result is None:
+        raise UpstreamError(
+            service="SnapNote AI",
+            detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
+        )
+
+    mode, payload = result
+    if mode == "svg":
+        visual_svg = payload
+        if not set_visual_result(diagramId, deviceId, "deterministic", visual_svg=visual_svg):
+            logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
+            existing = get_visual_entitlement(diagramId)
+            if existing is not None:
+                _, visual_url, render_mode, visual_svg, _ = existing
+        return VisualExplanationResponse(
+            diagramId=diagramId,
+            renderMode="deterministic",
+            imageSvg=visual_svg,
+            status="generated",
+        )
+
+    visual_url = await asyncio.to_thread(upload_image, payload, {"title": "explain-visually"})
+    if not visual_url:
+        raise UpstreamError(service="SnapNote AI", detail="Could not store the generated visual. Please try again.")
+
+    if not set_visual_result(diagramId, deviceId, "generative", visual_url=visual_url):
+        logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
+        existing = get_visual_entitlement(diagramId)
+        if existing is not None:
+            _, visual_url, render_mode, visual_svg, _ = existing
+
+    return VisualExplanationResponse(
+        diagramId=diagramId,
+        renderMode="generative",
+        imageUrl=visual_url,
+        status="generated",
     )

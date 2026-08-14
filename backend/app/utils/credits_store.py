@@ -20,13 +20,35 @@ def _get_conn() -> sqlite3.Connection:
             "CREATE TABLE IF NOT EXISTS device_credits ("
             "  device_id TEXT PRIMARY KEY,"
             "  credits_remaining INTEGER NOT NULL DEFAULT 50,"
-            "  credits_used INTEGER NOT NULL DEFAULT 0,"
-            "  last_diagram_paid_at INTEGER NOT NULL DEFAULT 0"
+            "  credits_used INTEGER NOT NULL DEFAULT 0"
+            ")"
+        )
+        _local.conn.execute(
+            "CREATE TABLE IF NOT EXISTS visual_explanations ("
+            "  diagram_id TEXT PRIMARY KEY,"
+            "  device_id TEXT NOT NULL,"
+            "  study_notes_json TEXT NOT NULL DEFAULT '',"
+            "  visual_url TEXT NOT NULL DEFAULT '',"
+            "  render_mode TEXT NOT NULL DEFAULT '',"
+            "  visual_svg TEXT NOT NULL DEFAULT '',"
+            "  generated_at INTEGER NOT NULL DEFAULT 0"
             ")"
         )
         try:
             _local.conn.execute(
-                "ALTER TABLE device_credits ADD COLUMN last_diagram_paid_at INTEGER NOT NULL DEFAULT 0"
+                "ALTER TABLE visual_explanations ADD COLUMN study_notes_json TEXT NOT NULL DEFAULT ''"
+            )
+        except sqlite3.OperationalError:
+            pass
+        try:
+            _local.conn.execute(
+                "ALTER TABLE visual_explanations ADD COLUMN render_mode TEXT NOT NULL DEFAULT ''"
+            )
+        except sqlite3.OperationalError:
+            pass
+        try:
+            _local.conn.execute(
+                "ALTER TABLE visual_explanations ADD COLUMN visual_svg TEXT NOT NULL DEFAULT ''"
             )
         except sqlite3.OperationalError:
             pass
@@ -89,22 +111,61 @@ def use_credits(device_id: str, amount: int) -> int:
     return new_remaining
 
 
-def mark_diagram_paid(device_id: str) -> None:
+def record_diagram_grant(device_id: str, diagram_id: str, study_notes_json: str) -> None:
+    """Record a freshly completed 5-credit diagram result.
+
+    This is the ONLY way a device earns an Explain Visually entitlement. It is
+    called after a successful 5-credit diagram extraction, never at request
+    start. One generation per purchased result: once visual_url is set it stays
+    immutable and the image model is never called again for that diagram_id.
+    The study notes are stored server-side so the visual route can reuse them
+    without trusting client input.
+    """
     conn = _get_conn()
-    init_device(device_id)
     conn.execute(
-        "UPDATE device_credits SET last_diagram_paid_at = ? WHERE device_id = ?",
-        (int(time.time()), device_id),
+        "INSERT OR IGNORE INTO visual_explanations (diagram_id, device_id, study_notes_json, generated_at) VALUES (?, ?, ?, ?)",
+        (diagram_id, device_id, study_notes_json, int(time.time())),
     )
     conn.commit()
 
 
-def diagram_paid_recently(device_id: str) -> bool:
+def get_visual_entitlement(diagram_id: str) -> tuple[str, str, str, str, str] | None:
+    """Return (device_id, visual_url, render_mode, visual_svg, study_notes_json).
+
+    visual_url == "" and visual_svg == "" means entitled but not yet generated
+    (lazy on click). A non-empty visual_url/visual_svg is immutable — reuse it,
+    never re-generate. render_mode is "deterministic" | "generative" | "".
+    """
     conn = _get_conn()
     row = conn.execute(
-        "SELECT last_diagram_paid_at FROM device_credits WHERE device_id = ?",
-        (device_id,),
+        "SELECT device_id, visual_url, render_mode, visual_svg, study_notes_json "
+        "FROM visual_explanations WHERE diagram_id = ?",
+        (diagram_id,),
     ).fetchone()
-    if row is None or row["last_diagram_paid_at"] == 0:
-        return False
-    return (int(time.time()) - row["last_diagram_paid_at"]) <= settings.REGENERATE_WINDOW_SECONDS
+    if row is None:
+        return None
+    return (
+        row["device_id"],
+        row["visual_url"],
+        row["render_mode"],
+        row["visual_svg"],
+        row["study_notes_json"],
+    )
+
+
+def set_visual_result(
+    diagram_id: str,
+    device_id: str,
+    render_mode: str,
+    visual_url: str = "",
+    visual_svg: str = "",
+) -> bool:
+    """Persist the generated visual result. Refuses to overwrite an existing result."""
+    conn = _get_conn()
+    cur = conn.execute(
+        "UPDATE visual_explanations SET visual_url = ?, render_mode = ?, visual_svg = ? "
+        "WHERE diagram_id = ? AND device_id = ? AND visual_url = '' AND visual_svg = ''",
+        (visual_url, render_mode, visual_svg, diagram_id, device_id),
+    )
+    conn.commit()
+    return cur.rowcount > 0

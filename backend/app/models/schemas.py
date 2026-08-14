@@ -1,6 +1,7 @@
 from enum import Enum
+from typing import Literal, Optional
+
 from pydantic import BaseModel, Field
-from typing import Optional
 
 
 class ExtractionType(str, Enum):
@@ -83,6 +84,7 @@ class ExtractionResponse(BaseModel):
     tags: list[str] = []
     creditsUsed: int
     studyNotes: Optional[StudyNotes] = None
+    diagramId: Optional[str] = None
 
 
 class ExtractionContext(BaseModel):
@@ -127,3 +129,133 @@ class RevisionResponse(BaseModel):
 
 class DiagramResult(BaseModel):
     markdown: str
+
+
+class VisualRenderMode(str, Enum):
+    DETERMINISTIC = "deterministic"
+    GENERATIVE = "generative"
+
+
+class VisualEquation(BaseModel):
+    expression: str = ""
+    meaning: str = ""
+
+
+class VisualObject(BaseModel):
+    kind: Literal["pivot", "disk", "point", "block"] = "pivot"
+    label: str = ""
+    caption: str = ""
+
+
+class VisualVector(BaseModel):
+    label: str = ""
+    angle_deg: int = 0
+    length: float = 1.0
+    tail: str = ""
+    color: str = ""
+    caption: str = ""
+
+
+class VisualAngle(BaseModel):
+    label: str = "θ"
+    between: list[str] = []
+    caption: str = ""
+
+
+class VisualArc(BaseModel):
+    label: str = ""
+    around: str = ""
+    direction: Literal["ccw", "cw"] = "ccw"
+    caption: str = ""
+
+
+class VisualRelation(BaseModel):
+    expression: str = ""
+    caption: str = ""
+
+
+class ForceDiagram(BaseModel):
+    object: VisualObject = VisualObject()
+    vectors: list[VisualVector] = []
+    angles: list[VisualAngle] = []
+    arcs: list[VisualArc] = []
+    relation: VisualRelation | None = None
+
+
+class FlowNode(BaseModel):
+    label: str = ""
+
+
+class FlowConnector(BaseModel):
+    source: int = 0
+    target: int = 1
+    label: str = ""
+    feedback: bool = False
+
+
+class ProcessFlow(BaseModel):
+    nodes: list[FlowNode] = []
+    connectors: list[FlowConnector] = []
+    relation: VisualRelation | None = None
+
+
+class VisualScene(BaseModel):
+    scene_kind: Literal["force_diagram", "process_flow"] = "force_diagram"
+    title: str = ""
+    caption: str = ""
+    force: ForceDiagram | None = None
+    flow: ProcessFlow | None = None
+
+
+class DeterministicVisual(BaseModel):
+    """Exact, bounded content payload for the deterministic renderer.
+
+    Carries the information that MUST be rendered exactly. Two supported
+    presentations:
+      - a `scene` (universal educational primitives: objects, vectors, angles,
+        arcs, relations, process boxes, connectors) rendered as a real diagram,
+      - or the classic study card (equations + meanings, ordered steps, points).
+
+    Code owns ALL layout/geometry; Gemini only supplies semantics (labels,
+    angles in degrees, relative lengths, relationships). Never pixel
+    coordinates.
+    """
+
+    title: str = ""
+    scene: VisualScene | None = None
+    equations: list[VisualEquation] = []
+    steps: list[str] = []
+    points: list[str] = []
+
+
+class VisualSpec(BaseModel):
+    """Structured, grounded description of the educational visual to generate.
+
+    Gemini produces this from the screenshot + StudyNotes. It is a semantic
+    spec (concept, form, elements, relationships) — never pixel geometry.
+
+    render_mode picks the rendering path:
+      - "deterministic": exact text/symbols matter, so code renders a clean
+        SVG (visual_renderer) — no generative model involved.
+      - "generative": exact typography is NOT the payload, so Pollinations may
+        draw a conceptual illustration, gated by an OCR legibility check when
+        text_required is true.
+    """
+
+    concept: str = ""
+    render_mode: VisualRenderMode = VisualRenderMode.DETERMINISTIC
+    text_required: bool = True
+    deterministic: DeterministicVisual = DeterministicVisual()
+    visual_form: str = ""
+    key_elements: list[str] = []
+    key_relationships: list[str] = []
+    must_show: list[str] = []
+    avoid: list[str] = []
+
+
+class VisualExplanationResponse(BaseModel):
+    diagramId: str
+    renderMode: str = "deterministic"  # "deterministic" | "generative"
+    imageUrl: Optional[str] = None
+    imageSvg: Optional[str] = None
+    status: str = "generated"  # "generated" | "already_generated"

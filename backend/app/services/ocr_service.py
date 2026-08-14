@@ -34,6 +34,11 @@ def read_raw(image_np: Any) -> OCRResult:
         return reader.readtext(image_np)
 
 
+def ocr_available() -> bool:
+    """True when the EasyOCR reader is importable (may lazily initialize)."""
+    return _get_reader() is not None
+
+
 def _is_english_like(word: str) -> bool:
     vowels = set("aeiou")
     chars = word.lower()
