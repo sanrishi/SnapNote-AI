@@ -313,7 +313,7 @@ def _rotation_arc(arc: VisualArc, around: tuple[float, float]) -> str:
     mid = pts[len(pts) // 2]
     parts = [
         _polyline(pts, GREEN, width=2.6),
-        f'<polygon points="{_arrowhead(tip[0], tip[1], tip_deg, 11)}"/>',
+        _arrowhead(tip[0], tip[1], tip_deg, 11),
     ]
     if arc.label:
         lpos = (mid[0] + 16, mid[1] - 18)

@@ -191,6 +191,33 @@ def test_scene_escapes_user_text():
     assert "&lt;" in svg
 
 
+def test_scene_arrowheads_never_nested():
+    """Regression: arrowheads must be standalone <polygon> elements, never
+    embedded inside another element's attribute (double-wrap bug produced a
+    malformed points value that Chrome rejected with a console error)."""
+    import re
+
+    svg = render_deterministic_visual(_torque_scene())
+    for m in re.finditer(r'points="([^"]*)"', svg):
+        assert "<polygon" not in m.group(1), f"nested polygon in points: {m.group(1)[:80]}"
+    # Every polygon must parse as numbers.
+    for m in re.finditer(r'<polygon points="([^"]+)"', svg):
+        vals = m.group(1).split()
+        assert len(vals) % 2 == 0
+        for v in vals:
+            float(v)
+
+
+def test_scene_rotation_arc_arrowhead_present():
+    """The torque rotation arc must carry a standalone arrowhead polygon."""
+    import re
+
+    svg = render_deterministic_visual(_torque_scene())
+    polys = re.findall(r'<polygon[^>]*>', svg)
+    # pivot arrowheads (2 vectors) + angle arc + rotation arc = at least 4
+    assert len(polys) >= 4, f"only {len(polys)} polygons"
+
+
 # ── Hybrid dispatcher ──
 
 
