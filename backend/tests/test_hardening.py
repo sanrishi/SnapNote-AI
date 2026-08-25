@@ -106,8 +106,9 @@ def test_compression_preserves_dimensions_under_limit(name):
 def test_compression_large_png_downscales(large_phone_png):
     out = enhance_for_vision(large_phone_png)
     img_out = Image.open(io.BytesIO(out))
-    assert img_out.size == (1600, 738)
     assert max(img_out.size) == settings.MAX_VISION_LONG_EDGE
+    # aspect preserved: 2340x1080 -> scaled to MAX x 590
+    assert abs((img_out.size[0] / img_out.size[1]) - (2340 / 1080)) < 0.01
     assert len(out) < len(large_phone_png)
 
 
@@ -482,14 +483,15 @@ def test_revision_prompt_reuses_diagram_rules():
     assert "diagram: same rules as the main prompt" in prompt
 
 
-# ── Frontend 95s timeout + no infinite spinner ──
+# ── Frontend 32s timeout + no infinite spinner (perf: 15-20s SLA) ──
 
 
 def test_frontend_has_95s_timeout_and_no_infinite_spinner():
     html_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "website", "index.html"))
     with open(html_path, "r", encoding="utf-8") as fh:
         html = fh.read()
-    assert "REQUEST_TIMEOUT_MS = 95000" in html
+    assert "REQUEST_TIMEOUT_MS = 32000" in html
+    assert "setTimeout(() => controller.abort(), 32000)" in html
     assert "AbortController" in html
     assert "No credits were charged" in html
     assert "controller.abort()" in html
