@@ -14,15 +14,32 @@ _local = threading.local()
 
 def _get_conn() -> sqlite3.Connection:
     if not hasattr(_local, "conn") or _local.conn is None:
-        _local.conn = sqlite3.connect(str(_db_path))
+        _local.conn = sqlite3.connect(str(_db_path), timeout=30.0, check_same_thread=False, isolation_level=None)
         _local.conn.row_factory = sqlite3.Row
+        # WAL for concurrent readers/writers on the single Render disk.
+        try:
+            _local.conn.execute("PRAGMA journal_mode=WAL;")
+            _local.conn.execute("PRAGMA synchronous=NORMAL;")
+            _local.conn.execute("PRAGMA foreign_keys=ON;")
+        except sqlite3.Error:
+            pass
         _local.conn.execute(
             "CREATE TABLE IF NOT EXISTS device_credits ("
             "  device_id TEXT PRIMARY KEY,"
-            "  credits_remaining INTEGER NOT NULL DEFAULT 50,"
-            "  credits_used INTEGER NOT NULL DEFAULT 0"
+            "  credits_remaining INTEGER NOT NULL DEFAULT 50 CHECK(credits_remaining >= 0),"
+            "  credits_used INTEGER NOT NULL DEFAULT 0 CHECK(credits_used >= 0)"
             ")"
         )
+        # Enforce non-negative balance on existing DBs (ALTER cannot add CHECK).
+        try:
+            _local.conn.execute(
+                "CREATE TRIGGER IF NOT EXISTS trg_device_credits_no_negative "
+                "BEFORE UPDATE ON device_credits FOR EACH ROW "
+                "WHEN NEW.credits_remaining < 0 BEGIN "
+                "SELECT RAISE(ABORT, 'credits_remaining cannot be negative'); END;"
+            )
+        except sqlite3.Error:
+            pass
         _local.conn.execute(
             "CREATE TABLE IF NOT EXISTS visual_explanations ("
             "  diagram_id TEXT PRIMARY KEY,"
@@ -34,6 +51,27 @@ def _get_conn() -> sqlite3.Connection:
             "  generated_at INTEGER NOT NULL DEFAULT 0"
             ")"
         )
+        _local.conn.execute(
+            "CREATE TABLE IF NOT EXISTS razorpay_orders ("
+            "  order_id TEXT PRIMARY KEY,"
+            "  device_id TEXT NOT NULL,"
+            "  plan TEXT NOT NULL,"
+            "  credits INTEGER NOT NULL,"
+            "  amount INTEGER NOT NULL,"
+            "  status TEXT NOT NULL DEFAULT 'created',"
+            "  razorpay_payment_id TEXT,"
+            "  created_at INTEGER NOT NULL"
+            ")"
+        )
+        _local.conn.execute(
+            "CREATE TABLE IF NOT EXISTS request_log ("
+            "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            "  device_id TEXT NOT NULL,"
+            "  ts INTEGER NOT NULL"
+            ")"
+        )
+        _local.conn.execute("CREATE INDEX IF NOT EXISTS idx_request_log_device_ts ON request_log(device_id, ts);")
+        _local.conn.execute("CREATE INDEX IF NOT EXISTS idx_visual_device ON visual_explanations(device_id);")
         try:
             _local.conn.execute(
                 "ALTER TABLE visual_explanations ADD COLUMN study_notes_json TEXT NOT NULL DEFAULT ''"
@@ -97,18 +135,59 @@ def add_credits(device_id: str, amount: int) -> int:
 
 
 def use_credits(device_id: str, amount: int) -> int:
+    """Atomically deduct credits. Raises CreditLimitError if insufficient.
+
+    Uses BEGIN IMMEDIATE so concurrent requests serialize; the DB CHECK +
+    trigger prevents a negative balance even under race.
+    """
+    from app.exceptions import CreditLimitError
+
     conn = _get_conn()
-    remaining, used = get_credits(device_id)
-    if remaining < amount:
-        return remaining
-    conn.execute(
-        "UPDATE device_credits SET credits_remaining = credits_remaining - ?, credits_used = credits_used + ? WHERE device_id = ?",
-        (amount, amount, device_id),
-    )
-    conn.commit()
+    # Ensure row exists before the atomic block (INSERT OR IGNORE is idempotent).
+    init_device(device_id)
+    try:
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute(
+            "SELECT credits_remaining, credits_used FROM device_credits WHERE device_id = ?",
+            (device_id,),
+        ).fetchone()
+        if row is None:
+            conn.execute("ROLLBACK")
+            raise CreditLimitError()
+        remaining = row["credits_remaining"]
+        if remaining < amount:
+            conn.execute("ROLLBACK")
+            raise CreditLimitError()
+        conn.execute(
+            "UPDATE device_credits SET credits_remaining = credits_remaining - ?, credits_used = credits_used + ? WHERE device_id = ?",
+            (amount, amount, device_id),
+        )
+        conn.execute("COMMIT")
+    except CreditLimitError:
+        raise
+    except sqlite3.Error as e:
+        try:
+            conn.execute("ROLLBACK")
+        except sqlite3.Error:
+            pass
+        # CHECK / trigger abort surfaces as OperationalError — map to 429.
+        if "negative" in str(e).lower() or "CHECK" in str(e):
+            raise CreditLimitError() from e
+        raise
     new_remaining, _ = get_credits(device_id)
     logger.info("Used %d credits for %s (now %d)", amount, device_id[:8], new_remaining)
     return new_remaining
+
+
+def try_use_credits(device_id: str, amount: int) -> bool:
+    """Non-raising variant — returns False if insufficient."""
+    from app.exceptions import CreditLimitError
+
+    try:
+        use_credits(device_id, amount)
+        return True
+    except CreditLimitError:
+        return False
 
 
 def record_diagram_grant(device_id: str, diagram_id: str, study_notes_json: str) -> None:
