@@ -1441,6 +1441,12 @@
 
       const explainBtn = document.getElementById("explain-btn");
       if (explainBtn) explainBtn.addEventListener("click", handleExplainVisual);
+
+      // Guaranteed explanatory image: auto-generate on every diagram upload so
+      // the student always gets a labeled visual, not a silent empty state.
+      if (canExplain && !currentVisualSvg && !currentVisualUrl && !fromHistory) {
+        setTimeout(() => handleExplainVisual(), 400);
+      }
     }
 
     function explainSectionHtml() {
