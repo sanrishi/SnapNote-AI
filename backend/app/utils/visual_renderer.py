@@ -617,6 +617,7 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
 
     height = max(900, y + 60)
     svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {VIEW_W} {height}" width="100%">'
+    svg += f'<rect x="0" y="0" width="{VIEW_W}" height="{height}" rx="16" fill="white"/>'
     svg += "".join(parts)
     svg += "</svg>"
     svg = sanitize_svg(svg)

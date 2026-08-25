@@ -90,6 +90,7 @@ def render_polar_region(spec: CanonicalPolarRegion) -> str:
 
     parts: list[str] = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {VIEW_W} {VIEW_H}" width="100%">']
     parts.append("<title>Polar integration region</title>")
+    parts.append(f'<rect x="0" y="0" width="{VIEW_W}" height="{VIEW_H}" rx="12" fill="white"/>')
 
     outer_ring = _ring_path(outer_r, t0, t1)
     inner_ring = _ring_path(inner_r, t0, t1, reverse=True)
