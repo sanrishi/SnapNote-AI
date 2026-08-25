@@ -1423,8 +1423,6 @@
           ? 'Best-effort reconstruction — this diagram type isn\'t fully supported yet; verify it against the original screenshot.'
           : 'Rebuilt from your screenshot as a clean diagram.';
         cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">${esc(diagramCap)}</p></div>`);
-      } else if (result.type === "diagram") {
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><p>No confident reconstruction available from this image. Your study notes below still cover the content.</p></div>`);
       }
 
       if (result.type === "diagram") {
@@ -1433,10 +1431,6 @@
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
         cards.push(`<div class="note-card verify-card" style="animation-delay:280ms"><h3><span class="bar"></span>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
-      }
-
-      if (notes.uncertainties && notes.uncertainties.length) {
-        cards.push(`<div class="note-card uncertain-card" style="animation-delay:320ms"><h3><span class="bar"></span>⚠️ Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
       }
 
       if (notes.analogy) {

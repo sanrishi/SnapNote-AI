@@ -83,12 +83,6 @@ def render_study_notes(notes: StudyNotes) -> str:
             if item.strip():
                 lines.append(f"- {item.strip()}")
 
-    if notes.uncertainties:
-        lines.append("\n## ⚠️ Unclear")
-        for u in notes.uncertainties:
-            if u.strip():
-                lines.append(f"- {u.strip()}")
-
     if notes.analogy:
         lines.append("\n## 💡 Easy Analogy")
         lines.append(notes.analogy)
