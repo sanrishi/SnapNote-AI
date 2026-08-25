@@ -199,12 +199,34 @@ class ProcessFlow(BaseModel):
     relation: VisualRelation | None = None
 
 
+class VisualCurve(BaseModel):
+    label: str = ""
+    expr: str = ""  # safe math in x, e.g. "x**2", "sin(x)", "sqrt(x)"
+    points: list[list[float]] = Field(default_factory=list)  # explicit [[x,y],...] alternative to expr
+    style: Literal["solid", "dashed"] = "solid"
+    color: str = ""  # ""|accent|red|green
+    x_min: float = 0.0
+    x_max: float = 5.0
+
+
+class VisualPlot(BaseModel):
+    x_label: str = "x"
+    y_label: str = "y"
+    x_min: float = 0.0
+    x_max: float = 5.0
+    y_min: float = 0.0
+    y_max: float = 5.0
+    show_grid: bool = True
+    curves: list[VisualCurve] = Field(default_factory=list)
+
+
 class VisualScene(BaseModel):
-    scene_kind: Literal["force_diagram", "process_flow"] = "force_diagram"
+    scene_kind: Literal["force_diagram", "process_flow", "plot"] = "force_diagram"
     title: str = ""
     caption: str = ""
     force: ForceDiagram | None = None
     flow: ProcessFlow | None = None
+    plot: VisualPlot | None = None
 
 
 class DeterministicVisual(BaseModel):

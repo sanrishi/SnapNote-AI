@@ -28,7 +28,9 @@ from app.models.schemas import (
     FlowNode,
     ForceDiagram,
     VisualAngle,
+    VisualCurve,
     VisualObject,
+    VisualPlot,
     VisualScene,
     VisualVector,
 )
@@ -478,6 +480,198 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
     return "".join(parts), y_center + box_h / 2 + 74, [], flow.relation
 
 
+# ── Plot renderer: pure-SVG axes + grid + curves (no matplotlib, stays deterministic) ──
+
+_ALLOWED_FUNCS = {"sqrt": math.sqrt, "sin": math.sin, "cos": math.cos, "tan": math.tan,
+                  "asin": math.asin, "acos": math.acos, "atan": math.atan,
+                  "exp": math.exp, "log": math.log, "log10": math.log10, "fabs": math.fabs, "abs": abs}
+
+
+def _safe_eval(expr: str, x_val: float) -> float | None:
+    """Safe eval of a math expr in x (no exec). Returns None on error or non-finite."""
+    import ast as _ast
+    if not expr or not expr.strip():
+        return None
+    py = expr.strip().replace("^", "**").replace("**", "**")
+    # normalize unicode
+    py = py.replace("×", "*").replace("·", "*").replace("−", "-")
+    py = py.replace("π", "pi")
+    try:
+        tree = _ast.parse(py, mode="eval")
+    except SyntaxError:
+        return None
+
+    def _ev(node) -> float | None:
+        if isinstance(node, _ast.Expression):
+            return _ev(node.body)
+        if isinstance(node, _ast.Constant) and isinstance(node.value, (int, float)):
+            return float(node.value)
+        if isinstance(node, _ast.Name):
+            if node.id == "x":
+                return float(x_val)
+            if node.id == "pi":
+                return math.pi
+            if node.id == "e":
+                return math.e
+            return None
+        if isinstance(node, _ast.UnaryOp) and isinstance(node.op, (_ast.UAdd, _ast.USub)):
+            v = _ev(node.operand)
+            if v is None:
+                return None
+            return v if isinstance(node.op, _ast.UAdd) else -v
+        if isinstance(node, _ast.BinOp):
+            l, r = _ev(node.left), _ev(node.right)
+            if l is None or r is None:
+                return None
+            if isinstance(node.op, _ast.Add):
+                return l + r
+            if isinstance(node.op, _ast.Sub):
+                return l - r
+            if isinstance(node.op, _ast.Mult):
+                return l * r
+            if isinstance(node.op, _ast.Div):
+                return None if abs(r) < 1e-12 else l / r
+            if isinstance(node.op, _ast.Pow):
+                try:
+                    return float(l ** r)
+                except Exception:
+                    return None
+            return None
+        if isinstance(node, _ast.Call) and isinstance(node.func, _ast.Name):
+            if node.func.id not in _ALLOWED_FUNCS or len(node.args) != 1 or node.keywords:
+                return None
+            v = _ev(node.args[0])
+            if v is None:
+                return None
+            try:
+                return float(_ALLOWED_FUNCS[node.func.id](v))
+            except Exception:
+                return None
+        return None
+    try:
+        v = _ev(tree)
+        if v is None or not math.isfinite(v):
+            return None
+        return float(v)
+    except Exception:
+        return None
+
+
+def _curve_points(curve: VisualCurve, x_min: float, x_max: float) -> list[tuple[float, float]]:
+    # explicit points take precedence (already in data coords)
+    if curve.points:
+        pts: list[tuple[float, float]] = []
+        for p in curve.points:
+            if isinstance(p, (list, tuple)) and len(p) == 2:
+                try:
+                    pts.append((float(p[0]), float(p[1])))
+                except Exception:
+                    continue
+        if pts:
+            return pts
+    # expr path: sample 80 points across its own x_min/x_max (falls back to plot range)
+    expr = (curve.expr or "").strip()
+    if not expr:
+        return []
+    lo = float(curve.x_min) if curve.x_min != 0 or curve.x_max != 0 else x_min
+    hi = float(curve.x_max) if curve.x_max != 0 or curve.x_min != 0 else x_max
+    # if curve has its own range, use it; otherwise use plot range
+    if curve.x_min == 0 and curve.x_max == 5.0 and (x_min != 0 or x_max != 5.0):
+        lo, hi = x_min, x_max
+    elif curve.x_min == 0 and curve.x_max == 0:
+        lo, hi = x_min, x_max
+    if hi <= lo:
+        return []
+    n = 80
+    pts = []
+    for i in range(n):
+        xv = lo + (hi - lo) * i / (n - 1)
+        yv = _safe_eval(expr, xv)
+        if yv is not None and math.isfinite(yv):
+            pts.append((xv, yv))
+    return pts
+
+
+def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
+    plot = scene.plot
+    if plot is None or not plot.curves:
+        return "", STAGE_Y + STAGE_H + 24, [], None
+    # sanitize ranges
+    x_min, x_max = float(plot.x_min), float(plot.x_max)
+    y_min, y_max = float(plot.y_min), float(plot.y_max)
+    if x_max <= x_min:
+        x_min, x_max = 0.0, 5.0
+    if y_max <= y_min:
+        y_min, y_max = 0.0, 5.0
+    # stage geometry
+    x0, y0, w, h = STAGE_X, STAGE_Y, STAGE_W, STAGE_H
+    pad_l, pad_b = 36, 26
+    plot_x0, plot_y0, plot_w, plot_h = x0 + pad_l, y0 + 14, w - pad_l - 14, h - 14 - pad_b
+
+    def map_x(xv: float) -> float:
+        return plot_x0 + (xv - x_min) / (x_max - x_min) * plot_w if x_max != x_min else plot_x0
+
+    def map_y(yv: float) -> float:
+        return plot_y0 + plot_h - (yv - y_min) / (y_max - y_min) * plot_h if y_max != y_min else plot_y0
+
+    parts: list[str] = []
+    # grid
+    if plot.show_grid:
+        for i in range(1, 4):
+            gx = plot_x0 + plot_w * i / 4
+            gy = plot_y0 + plot_h * i / 4
+            parts.append(f'<line x1="{_f(gx)}" y1="{_f(plot_y0)}" x2="{_f(gx)}" y2="{_f(plot_y0+plot_h)}" stroke="{STAGE_STROKE}" stroke-width="1" stroke-dasharray="3 3"/>')
+            parts.append(f'<line x1="{_f(plot_x0)}" y1="{_f(gy)}" x2="{_f(plot_x0+plot_w)}" y2="{_f(gy)}" stroke="{STAGE_STROKE}" stroke-width="1" stroke-dasharray="3 3"/>')
+    # axes (draw at 0 if inside range, else at border)
+    x_axis_y = map_y(0) if y_min <= 0 <= y_max else (plot_y0 + plot_h if y_min >= 0 else plot_y0)
+    y_axis_x = map_x(0) if x_min <= 0 <= x_max else plot_x0
+    # clamp axes inside plot
+    x_axis_y = max(plot_y0, min(plot_y0 + plot_h, x_axis_y))
+    y_axis_x = max(plot_x0, min(plot_x0 + plot_w, y_axis_x))
+    parts.append(f'<line x1="{_f(plot_x0)}" y1="{_f(x_axis_y)}" x2="{_f(plot_x0+plot_w)}" y2="{_f(x_axis_y)}" stroke="{INK}" stroke-width="1.5"/>')
+    parts.append(f'<line x1="{_f(y_axis_x)}" y1="{_f(plot_y0)}" x2="{_f(y_axis_x)}" y2="{_f(plot_y0+plot_h)}" stroke="{INK}" stroke-width="1.5"/>')
+    parts.append(f'<polygon points="{_arrowhead(plot_x0+plot_w, x_axis_y, 0)}" fill="{INK}"/>')
+    parts.append(f'<polygon points="{_arrowhead(y_axis_x, plot_y0, 90)}" fill="{INK}"/>')
+    # axis labels + ticks
+    parts.append(f'<text x="{_f(plot_x0+plot_w+8)}" y="{_f(x_axis_y+4)}" font-family="{_FONT}" font-size="12" fill="{MUTED}" text-anchor="start">{_esc(plot.x_label or "x")}</text>')
+    parts.append(f'<text x="{_f(y_axis_x+6)}" y="{_f(plot_y0-6)}" font-family="{_FONT}" font-size="12" fill="{MUTED}" text-anchor="start">{_esc(plot.y_label or "y")}</text>')
+    for xv in [x_min, (x_min + x_max) / 2, x_max]:
+        parts.append(f'<text x="{_f(map_x(xv))}" y="{_f(x_axis_y+14)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="middle">{_f(xv)}</text>')
+    for yv in [y_min, (y_min + y_max) / 2, y_max]:
+        parts.append(f'<text x="{_f(y_axis_x-8)}" y="{_f(map_y(yv)+3)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="end">{_f(yv)}</text>')
+
+    # curves
+    for curve in plot.curves:
+        pts = _curve_points(curve, x_min, x_max)
+        if not pts:
+            continue
+        color = _VECTOR_COLORS.get(curve.color, ACCENT if curve.color == "" else INK)
+        # clip to y range for clean visual (keep slightly outside then clip)
+        segs: list[list[tuple[float, float]]] = []
+        cur: list[tuple[float, float]] = []
+        for xv, yv in pts:
+            if yv < y_min - (y_max - y_min) * 0.1 or yv > y_max + (y_max - y_min) * 0.1:
+                if cur:
+                    segs.append(cur)
+                    cur = []
+                continue
+            cur.append((map_x(xv), map_y(yv)))
+        if cur:
+            segs.append(cur)
+        dash = ' stroke-dasharray="6 4"' if curve.style == "dashed" else ""
+        for seg in segs:
+            if len(seg) < 2:
+                continue
+            points = " ".join(f"{_f(x)},{_f(y)}" for x, y in seg)
+            parts.append(f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="2.2"{dash}/>')
+        if curve.label:
+            # label near the end of last segment
+            if segs and segs[-1]:
+                lx, ly = segs[-1][-1]
+                parts.append(f'<text x="{_f(lx+6)}" y="{_f(ly-6)}" font-family="{_FONT}" font-size="11" font-weight="600" fill="{color}" text-anchor="start">{_esc(curve.label)}</text>')
+    return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
+
+
 def _render_scene(scene: VisualScene) -> tuple[str, int]:
     """Dispatch a VisualScene to its layout. Returns (svg_html, next_y)."""
     parts: list[str] = []
@@ -487,6 +681,8 @@ def _render_scene(scene: VisualScene) -> tuple[str, int]:
         diagram, y_after, legend, relation = _render_force_diagram(scene)
     elif scene.scene_kind == "process_flow":
         diagram, y_after, legend, relation = _render_flow(scene)
+    elif scene.scene_kind == "plot":
+        diagram, y_after, legend, relation = _render_plot(scene)
     else:
         diagram, y_after, legend, relation = "", STAGE_Y + STAGE_H + 24, [], None
     if not diagram.strip():

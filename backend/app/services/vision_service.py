@@ -416,7 +416,7 @@ If in doubt, choose "deterministic". A physics topic like "what is angular momen
 
 THE SCENE PRIMITIVES (deterministic mode):
 Inside "deterministic.scene" you describe WHAT must be shown using universal educational primitives. Python decides HOW to draw everything — you NEVER give coordinates, pixel positions, or SVG. You decide only the SEMANTICS: which objects, which vectors, their directions in degrees, and which relationships to draw.
-  - "scene_kind": "force_diagram" (vectors/forces/angles around a pivot: torque, lever arms, projectile launch, inclined planes, forces on a body) OR "process_flow" (labeled boxes with arrows between them: control loops, PID, workflows, algorithms, reaction chains).
+  - "scene_kind": "force_diagram" (vectors/forces/angles around a pivot: torque, lever arms, inclined planes, forces on a body) OR "process_flow" (labeled boxes with arrows: control loops, PID, workflows) OR "plot" (2D graphs: functions y=f(x), projectile trajectories, polar curves — rendered as clean axes + curves).
   - "force_diagram" fields:
       "object": {"kind": "pivot"|"disk"|"point"|"block", "label": "O" (a short name), "caption": "what it is"}
       "vectors": [{"label": "r", "angle_deg": 55, "length": 1.0, "tail": "r" (label of the vector this one starts from; omit/empty to start at the object), "color": ""|"accent"|"red"|"green", "caption": "what this vector represents"}]
@@ -430,7 +430,14 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
       "connectors": [{"source": 0, "target": 1, "label": "u(t)" (optional), "feedback": false}]
         - "feedback": true on the connector that loops the output back to the input (drawn as a curved dashed return arrow).
       "relation": {"expression": "...", "caption": "..."} (optional)
+  - "plot" fields:
+      "plot": {"x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true,
+               "curves": [{"label": "y = x²", "expr": "x**2", "x_min": 0, "x_max": 2, "style": "solid", "color": "accent"},
+                          {"label": "trajectory", "points": [[0,0],[1,1.2],[2,1.8]], "style": "solid", "color": ""}]}
+        - each curve: EITHER "expr" (safe math in x: x, sin(x), cos(x), sqrt(x), exp(x), log(x), pi) with its own x_min/x_max, OR explicit "points" [[x,y],...]. Prefer expr for accuracy. Colors ""|accent|red|green.
   - "caption": ONE sentence under "WHAT THE VISUAL SHOWS" teaching what the diagram means conceptually (never an inventory of parts). Example: "Torque magnitude depends on the lever arm r and the angle θ between r and F."
+
+  When the screenshot shows a graph/plot/trajectory (parabola, sine wave, polar curve, projectile), prefer "plot" with a safe expr. When it shows vectors/forces, prefer "force_diagram". When it shows boxes/arrows, prefer "process_flow".
 
 GROUNDING RULES:
 1. The screenshot is the source of truth. The study notes below are helpful context, but never invent content that conflicts with what the image actually shows.
@@ -447,10 +454,11 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "deterministic": {
     "title": "short title (2-6 words)",
     "scene": {
-      "scene_kind": "force_diagram | process_flow",
+      "scene_kind": "force_diagram | process_flow | plot",
       "caption": "one teaching sentence about what the diagram means",
       "force": { "object": {...}, "vectors": [...], "angles": [...], "arcs": [...], "relation": {...} },
-      "flow": { "nodes": [...], "connectors": [...], "relation": {...} }
+      "flow": { "nodes": [...], "connectors": [...], "relation": {...} },
+      "plot": { "x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true, "curves": [{"label": "y=x²", "expr": "x**2", "x_min": 0, "x_max": 2}] }
     },
     "equations": [{"expression": "exact formula in Unicode, no LaTeX, no backslash", "meaning": "one line: what each symbol means and what the relationship represents"}],
     "steps": ["ordered steps, each a short phrase"],
