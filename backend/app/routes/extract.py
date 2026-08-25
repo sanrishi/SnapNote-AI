@@ -39,6 +39,7 @@ from app.utils.credits_store import (
     record_diagram_grant,
     set_visual_result,
 )
+from app.utils.rate_limiter import check_rate_limits
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -56,6 +57,7 @@ async def extract_text_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
 ) -> ExtractionResponse:
+    check_rate_limits(deviceId)
     _check_credits(deviceId, settings.TEXT_CREDIT_COST)
     image_bytes = await image.read()
     validate_image_size(image_bytes)
@@ -118,6 +120,7 @@ async def extract_diagram_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
 ) -> ExtractionResponse:
+    check_rate_limits(deviceId)
     _check_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
     image_bytes = await image.read()
     validate_image_size(image_bytes)
@@ -175,6 +178,7 @@ async def extract_revision_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
 ) -> RevisionResponse:
+    check_rate_limits(deviceId)
     _check_credits(deviceId, settings.REVISION_CREDIT_COST)
     image_bytes = await image.read()
     validate_image_size(image_bytes)
@@ -231,6 +235,7 @@ async def extract_visual_route(
         legibility gate (only when text_required) -> one hidden retry -> ImgBB.
     No credits are charged.
     """
+    check_rate_limits(deviceId)
     entitlement = get_visual_entitlement(diagramId)
     if entitlement is None:
         raise InvalidInputError(message="No purchased diagram result found for this device.")
