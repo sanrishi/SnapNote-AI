@@ -791,12 +791,22 @@
           authError.style.display = "none";
           try {
             const idToken = response.credential;
+            // Decode the Google JWT payload to grab the profile picture.
+            let pic = "";
+            let gName = "";
+            try {
+              const parts = idToken.split(".");
+              const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+              pic = payload.picture || "";
+              gName = payload.name || "";
+            } catch {}
             const resp = await fetch(`${BASE}/api/auth/google`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken }) });
             const data = await resp.json().catch(() => ({}));
             if (!resp.ok) throw new Error(data.error || "Google sign-in failed");
             setAuthToken(data.accessToken);
             localStorage.setItem("snapnote_user_email", data.email || "");
-            localStorage.setItem("snapnote_user_name", data.name || "");
+            localStorage.setItem("snapnote_user_name", data.name || gName);
+            localStorage.setItem("snapnote_user_picture", pic);
             hideAuth();
             await refreshAuthUI();
           } catch (err) {
@@ -836,8 +846,34 @@
         const data = await resp.json();
         creditsBadge.textContent = `${data.creditsRemaining} credits`;
         const name = data.name || data.email || "";
-        authArea.innerHTML = `<span style="color:#94a3b8;font-size:13px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</span><button id="logout-btn" style="background:none;border:1px solid rgba(148,163,184,.2);color:#94a3b8;padding:6px 10px;border-radius:20px;font-size:12px;cursor:pointer">Log out</button>`;
-        document.getElementById("logout-btn").addEventListener("click", () => { setAuthToken(null); localStorage.removeItem("snapnote_user_email"); localStorage.removeItem("snapnote_user_name"); refreshAuthUI(); initDevice(); });
+        const pic = localStorage.getItem("snapnote_user_picture") || "";
+        const initial = (name || "U").charAt(0).toUpperCase();
+        const avatarHtml = pic
+          ? `<img src="${esc(pic)}" alt="" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(148,163,184,.3);object-fit:cover;cursor:pointer" id="avatar-img" />`
+          : `<div style="width:32px;height:32px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;cursor:pointer" id="avatar-img">${esc(initial)}</div>`;
+        authArea.innerHTML = `
+          <div style="position:relative;display:flex;align-items:center;margin-left:8px" id="avatar-wrap">
+            ${avatarHtml}
+            <div id="avatar-dropdown" style="display:none;position:absolute;top:40px;right:0;background:#151d31;border:1px solid rgba(148,163,184,.25);border-radius:12px;box-shadow:0 20px 60px -20px rgba(0,0,0,.6);min-width:180px;padding:10px;z-index:200">
+              <div style="padding:4px 8px;border-bottom:1px solid rgba(148,163,184,.15);margin-bottom:8px">
+                <div style="color:#eef2ff;font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</div>
+                <div style="color:#94a3b8;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(data.email || "")}</div>
+              </div>
+              <button id="logout-btn" style="width:100%;background:none;border:none;color:#f87171;text-align:left;padding:8px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Log out</button>
+            </div>
+          </div>`;
+        const avatarImg = document.getElementById("avatar-img");
+        const dd = document.getElementById("avatar-dropdown");
+        avatarImg.addEventListener("click", (e) => { e.stopPropagation(); dd.style.display = dd.style.display === "none" ? "block" : "none"; });
+        document.addEventListener("click", () => { if (dd) dd.style.display = "none"; });
+        document.getElementById("logout-btn").addEventListener("click", () => {
+          setAuthToken(null);
+          localStorage.removeItem("snapnote_user_email");
+          localStorage.removeItem("snapnote_user_name");
+          localStorage.removeItem("snapnote_user_picture");
+          refreshAuthUI();
+          initDevice();
+        });
       } catch {
         setAuthToken(null);
         authArea.innerHTML = `<button onclick="showAuth('login')" style="background:none;border:1px solid rgba(148,163,184,.2);color:#eef2ff;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer">Log in</button><button onclick="showAuth('signup')" style="background:var(--grad);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">Sign up</button>`;
