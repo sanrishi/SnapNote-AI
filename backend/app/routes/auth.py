@@ -27,9 +27,20 @@ def _get_firebase_app():
     if firebase_admin._apps:
         return firebase_admin.get_app()
     try:
-        return firebase_admin.initialize_app(
-            credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
-        )
+        cred_path = (settings.FIREBASE_CREDENTIALS_PATH or "").strip()
+        if not cred_path:
+            logger.warning("Firebase credentials not configured (FIREBASE_CREDENTIALS_PATH empty)")
+            return None
+        if cred_path.lstrip().startswith("{"):
+            # raw JSON blob pasted into the env var (Render friendly)
+            import json
+
+            cred_dict = json.loads(cred_path)
+            cred = credentials.Certificate(cred_dict)
+        else:
+            # file path on disk
+            cred = credentials.Certificate(cred_path)
+        return firebase_admin.initialize_app(cred)
     except Exception as e:
         logger.warning("Firebase not configured: %s", str(e))
         return None
