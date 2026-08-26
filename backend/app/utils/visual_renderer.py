@@ -29,6 +29,7 @@ from app.models.schemas import (
     ForceDiagram,
     VisualAngle,
     VisualCurve,
+    VisualGeneric,
     VisualObject,
     VisualPlot,
     VisualScene,
@@ -672,6 +673,51 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
 
 
+def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, int, list[str], object]:
+    generic = scene.generic
+    central = ""
+    callouts: list[str] = []
+    if generic is not None:
+        central = (generic.central_label or "").strip()
+        callouts = [c.strip() for c in (generic.callouts or []) if c.strip()][:4]
+    if not central:
+        central = (scene.title or fallback_title or "Key Concept").strip()
+    if not callouts:
+        # synthesize from caption if needed — still guarantees a visual
+        cap = (scene.caption or "").strip()
+        if cap:
+            callouts = _wrap(cap, 28)[:2]
+    if not central and not callouts:
+        return "", STAGE_Y + STAGE_H + 24, [], None
+    # layout: centre box + up to 4 satellites
+    cx, cy = 400.0, STAGE_Y + 230
+    cw, ch = 220, 64
+    parts: list[str] = []
+    # centre
+    parts.append(f'<rect x="{_f(cx-cw/2)}" y="{_f(cy-ch/2)}" width="{cw}" height="{ch}" rx="14" fill="#ede9fe" stroke="{ACCENT}" stroke-width="2"/>')
+    clines = _wrap(central, 20)
+    ty = cy - (len(clines) - 1) * 9
+    for line in clines:
+        parts.append(f'<text x="{_f(cx)}" y="{_f(ty)}" font-family="{_FONT}" font-size="14" font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>')
+        ty += 18
+    # satellites
+    positions = [(-150, -96), (150, -96), (-150, 96), (150, 96)]
+    bw, bh = 168, 46
+    for idx, txt in enumerate(callouts[:4]):
+        px, py = cx + positions[idx][0], cy + positions[idx][1]
+        # connector
+        sx = cx + (cw/2 + 8) * (1 if px > cx else -1) if abs(px - cx) > 80 else cx
+        sy = cy + (ch/2 + 6) * (1 if py > cy else -1) if abs(py - cy) > 40 else cy
+        parts.append(f'<line x1="{_f(sx)}" y1="{_f(sy)}" x2="{_f(px)}" y2="{_f(py)}" stroke="{ACCENT}" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.9"/>')
+        parts.append(f'<rect x="{_f(px-bw/2)}" y="{_f(py-bh/2)}" width="{bw}" height="{bh}" rx="10" fill="{CARD_FILL}" stroke="{CARD_STROKE}" stroke-width="1.5"/>')
+        tlines = _wrap(txt, 22)
+        ty2 = py - (len(tlines) - 1) * 7
+        for line in tlines:
+            parts.append(f'<text x="{_f(px)}" y="{_f(ty2)}" font-family="{_FONT}" font-size="11.5" fill="{INK}" text-anchor="middle">{_esc(line)}</text>')
+            ty2 += 14
+    return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
+
+
 def _render_scene(scene: VisualScene) -> tuple[str, int]:
     """Dispatch a VisualScene to its layout. Returns (svg_html, next_y)."""
     parts: list[str] = []
@@ -683,6 +729,8 @@ def _render_scene(scene: VisualScene) -> tuple[str, int]:
         diagram, y_after, legend, relation = _render_flow(scene)
     elif scene.scene_kind == "plot":
         diagram, y_after, legend, relation = _render_plot(scene)
+    elif scene.scene_kind == "generic":
+        diagram, y_after, legend, relation = _render_generic(scene, fallback_title="")
     else:
         diagram, y_after, legend, relation = "", STAGE_Y + STAGE_H + 24, [], None
     if not diagram.strip():
@@ -743,7 +791,7 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
 
     meaningful = any(eq.expression.strip() for eq in spec.equations) or any(
         s.strip() for s in spec.steps
-    ) or any(p.strip() for p in spec.points) or (spec.scene is not None)
+    ) or any(p.strip() for p in spec.points) or (spec.scene is not None) or bool((spec.title or "").strip())
     if not meaningful:
         return ""
 
@@ -755,6 +803,33 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
     scene_rendered = False
     if spec.scene is not None:
         scene_html, y_after = _render_scene(spec.scene)
+        if scene_html:
+            parts.append(scene_html)
+            y = y_after
+            scene_rendered = True
+    # Guaranteed visual: if no scene was rendered but we have title/points/equations,
+    # synthesize a generic explanatory diagram so every upload yields an image.
+    if not scene_rendered and (spec.title.strip() or spec.points or spec.equations or spec.steps):
+        callouts: list[str] = []
+        for p in spec.points[:4]:
+            if p.strip():
+                callouts.append(p.strip())
+        for eq in spec.equations[:2]:
+            if eq.expression.strip():
+                callouts.append(eq.expression.strip())
+        for s in spec.steps[:2]:
+            if s.strip():
+                callouts.append(s.strip())
+        callouts = callouts[:4]
+        if not callouts:
+            callouts = [(spec.title or "Key concept").strip()]
+        synth_scene = VisualScene(
+            scene_kind="generic",
+            title=title,
+            caption="",
+            generic=VisualGeneric(central_label=title, callouts=callouts),
+        )
+        scene_html, y_after = _render_scene(synth_scene)
         if scene_html:
             parts.append(scene_html)
             y = y_after
