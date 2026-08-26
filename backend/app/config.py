@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     TEXT_CREDIT_COST: int = 1
     REVISION_CREDIT_COST: int = 1
     DIAGRAM_CREDIT_COST: int = 5
+    ANONYMOUS_FREE_USES: int = 50  # overridden to 1 in production via render.yaml (prevents reload abuse)
 
     # Pollinations image generation (Explain Visually). Empty key = anonymous
     # tier (1 req / 15s, slower); a free registered key lifts it to 1 req / 5s.
@@ -48,6 +49,9 @@ class Settings(BaseSettings):
 
     RAZORPAY_KEY_ID: str = ""
     RAZORPAY_KEY_SECRET: str = ""
+
+    JWT_SECRET: str = "dev-secret-change-in-prod-please-set-JWT_SECRET-env"
+    JWT_EXPIRES_HOURS: int = 168
 
     CREDIT_PACKS: dict = {
         "starter": {"credits": 50, "price_paise": 4900},

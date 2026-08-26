@@ -7,3 +7,6 @@ pydantic
 pydantic-settings
 google-generativeai
 httpx
+pyjwt
+passlib[bcrypt]
+email-validator
