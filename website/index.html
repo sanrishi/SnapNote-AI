@@ -299,15 +299,29 @@
     #result-panel .tags span { background: var(--surface); padding: 4px 12px; border-radius: 20px; font-size: 12px; color: var(--muted); border: 1px solid var(--border); }
 
     .note-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
       padding: 18px 20px; margin-bottom: 12px;
       animation: rise .4s ease both;
     }
     @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .note-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 8px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .note-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--text); display: flex; align-items: center; gap: 8px; letter-spacing: .1px; }
     .note-card h3 .bar { width: 3px; height: 15px; border-radius: 2px; background: var(--grad); }
     .note-card p, .note-card li { font-size: 14px; line-height: 1.75; color: #cbd5e1; }
     .note-card ul { padding-left: 20px; }
+    /* Secondary sections: quieter, collapsible, not competing with the learning payload */
+    .note-card.secondary {
+      background: transparent; border: 1px solid var(--border); border-radius: 12px;
+      padding: 12px 16px; box-shadow: none;
+    }
+    .note-card.secondary summary {
+      list-style: none; cursor: pointer; font-size: 13px; font-weight: 600;
+      color: var(--muted); display: flex; align-items: center; gap: 8px; user-select: none;
+    }
+    .note-card.secondary summary::-webkit-details-marker { display: none; }
+    .note-card.secondary summary::after { content: "＋"; margin-left: auto; color: var(--muted-2); font-size: 13px; }
+    .note-card.secondary[open] summary::after { content: "−"; }
+    .note-card.secondary summary:hover { color: var(--text); }
+    .note-card.secondary .inner { padding-top: 10px; }
     .note-card .formula {
       font-family: 'Space Grotesk', ui-monospace, monospace;
       background: linear-gradient(135deg, rgba(99,102,241,.1), rgba(139,92,246,.05));
@@ -331,6 +345,9 @@
     .note-card.diagram-card .diagram-wrap svg { display: block; max-width: 100%; height: auto; background: #fff; border-radius: 10px; }
     .note-card.diagram-card .diagram-wrap svg text { font-family: 'Space Grotesk', sans-serif; }
     .note-card .muted { color: var(--muted); font-size: 13px; }
+    /* Visual context demoted to a subtle line under the explain visual */
+    .visual-context-line { font-size: 12px; color: var(--muted-2); margin-top: 8px; line-height: 1.6; }
+    .visual-context-line strong { color: var(--muted); font-weight: 600; }
 
     #revise-btn {
       display: none; width: 100%; margin: 6px 0 14px; padding: 14px 16px;
@@ -388,9 +405,14 @@
     .visual-wrap { margin-top: 12px; }
     .visual-wrap img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--border); }
     .visual-wrap svg { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--border); background: #fff; }
-    .visual-trust { font-size: 11.5px; color: var(--muted); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
-    .explain-card { border: 1px solid rgba(251,191,36,.35); background: linear-gradient(180deg, rgba(251,191,36,.05), rgba(255,255,255,0) 60%); }
+    .visual-trust { font-size: 11.5px; color: var(--muted-2); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+    .explain-card { border: 1px solid rgba(251,191,36,.4); background: linear-gradient(180deg, rgba(251,191,36,.06), rgba(255,255,255,0) 60%); }
     .explain-card h3 .bar { background: var(--amber); }
+    .explain-card .explain-tagline { font-size: 13px; color: var(--muted); margin: -2px 0 6px; font-style: italic; }
+    .explain-card .explain-btn {
+      background: linear-gradient(135deg, rgba(251,191,36,.22), rgba(249,115,22,.16));
+      border: 1px solid rgba(251,191,36,.45); border-radius: 12px;
+    }
 
     .orig-modal { max-width: 720px; }
     .orig-modal img { display: block; width: 100%; border-radius: 10px; margin-top: 10px; }
@@ -595,7 +617,7 @@
     <div id="result-panel">
       <div class="result-header">
         <span id="result-type" class="type-badge text">Text</span>
-        <span id="result-credits" style="font-size:13px;color:var(--muted);"></span>
+        <span id="result-credits" style="font-size:11.5px;color:var(--muted-2);opacity:.7;"></span>
       </div>
       <div id="tags-container" class="tags"></div>
       <button id="revise-btn" class="revise-btn">
@@ -1512,6 +1534,7 @@
     let currentVisualUrl = null;
     let currentVisualSvg = null;
     let canExplain = false;
+    let lastVisualContext = null;
 
     function esc(s) {
       const div = document.createElement("div");
@@ -1609,6 +1632,7 @@
       });
 
       const notes = result.studyNotes;
+      lastVisualContext = (notes && notes.visual_context) || null;
       canExplain = (result.type === "diagram") && !!currentDiagramId && !!currentBlob && !fromHistory;
       notesCards.innerHTML = "";
       if (!notes) {
@@ -1650,32 +1674,31 @@
         cards.push(`<div class="note-card" style="animation-delay:120ms"><h3><span class="bar"></span>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
       }
 
-      if (notes.common_mistakes && notes.common_mistakes.length) {
-        cards.push(`<div class="note-card" style="animation-delay:160ms"><h3><span class="bar"></span>⚠️ Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
-      }
-
-      if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
-        cards.push(`<div class="note-card takeaway-card" style="animation-delay:200ms"><h3><span class="bar"></span>⏱️ 30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
-      }
-
-      if (notes.visual_context && notes.visual_context.present && notes.visual_context.summary) {
-        cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="bar"></span>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
-      }
-
       if (notes.diagram && notes.diagram.present && notes.diagram.svg && !notes.diagram.best_effort) {
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p></div>`);
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:160ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p></div>`);
       }
 
       if (result.type === "diagram") {
-        cards.push(`<div class="note-card explain-card" style="animation-delay:280ms">${explainSectionHtml()}</div>`);
+        cards.push(`<div class="note-card explain-card" style="animation-delay:200ms">${explainSectionHtml()}</div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
-        cards.push(`<div class="note-card verify-card" style="animation-delay:280ms"><h3><span class="bar"></span>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card verify-card" style="animation-delay:240ms"><h3><span class="bar"></span>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
       }
 
+      // ── Secondary (quieter, collapsible) ──
+      let secondary = "";
+      if (notes.common_mistakes && notes.common_mistakes.length) {
+        secondary += `<details class="note-card secondary" style="animation-delay:300ms"><summary>⚠️ Common Mistakes</summary><div class="inner"><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div></details>`;
+      }
+      if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
+        secondary += `<details class="note-card secondary" style="animation-delay:320ms"><summary>⏱️ 30-Second Revision</summary><div class="inner"><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></details>`;
+      }
       if (notes.analogy) {
-        cards.push(`<div class="note-card" style="animation-delay:360ms"><h3><span class="bar"></span>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
+        secondary += `<details class="note-card secondary" style="animation-delay:340ms"><summary>💡 Easy Analogy</summary><div class="inner"><p>${esc(notes.analogy)}</p></div></details>`;
+      }
+      if (secondary) {
+        cards.push(secondary);
       }
 
       notesCards.innerHTML = cards.join("");
@@ -1764,13 +1787,17 @@
     }
 
     function explainSectionHtml() {
-      const head = `<h3><span class="bar"></span>✨ Explain Visually</h3><p class="muted visual-trust">AI-generated visual explanation — verify details against your notes.</p>`;
+      const vcLine = (lastVisualContext && lastVisualContext.present && lastVisualContext.summary)
+        ? `<div class="visual-context-line"><strong>Why this visual matters:</strong> ${esc(lastVisualContext.summary)}</div>`
+        : "";
+      const head = `<h3><span class="bar"></span>✨ Explain Visually</h3><p class="explain-tagline">See the idea, not just the formula.</p>`;
       const dlBtn = `<button id="visual-download-btn" style="margin-top:10px;background:none;border:1px solid rgba(148,163,184,.3);color:#94a3b8;padding:8px 14px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .2s ease">⬇️ Download image</button>`;
+      const trust = `<p class="muted visual-trust">✨ AI-generated visual explanation — verify details against your notes.</p>`;
       if (currentVisualSvg) {
-        return `${head}<div class="visual-wrap">${currentVisualSvg}</div>${dlBtn}`;
+        return `${head}<div class="visual-wrap">${currentVisualSvg}</div>${trust}${vcLine}${dlBtn}`;
       }
       if (currentVisualUrl) {
-        return `${head}<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /></div>${dlBtn}`;
+        return `${head}<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /></div>${trust}${vcLine}${dlBtn}`;
       }
       if (canExplain) {
         return `${head}<button class="explain-btn" id="explain-btn"><span>✨ Explain Visually</span><em>Free — bundled with your diagram</em></button>`;
