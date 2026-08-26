@@ -34,5 +34,7 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
+      - key: GOOGLE_CLIENT_ID
+        value: 112530923487-6kjt4rvk765lekhd55fpeeu5fg1dh49e.apps.googleusercontent.com
       - key: ANONYMOUS_FREE_USES
         value: 1

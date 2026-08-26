@@ -9,8 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://accounts.google.com/gsi/client"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -474,8 +473,8 @@
         <button id="auth-close" style="position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid #8b5cf6;color:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center;transition:all .2s ease">✕</button>
         <h3 id="auth-title" style="font-size:20px;font-weight:600;color:#fff;margin-bottom:8px">Log in or sign up</h3>
         <p style="color:#b0b0b0;font-size:13px;line-height:1.5;margin-bottom:20px" id="auth-sub">You'll get smarter responses and can upload files, images, and more.</p>
-        <button id="google-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px;transition:all .2s ease"> <span style="font-size:16px">G</span> Continue with Google</button>
-        <button id="apple-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px;transition:all .2s ease"> Continue with Apple</button>
+        <div id="google-btn" style="width:100%;margin-bottom:10px"></div>
+        <button id="apple-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px;transition:all .2s ease"> Apple</button>
         <button id="phone-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;font-size:14px;transition:all .2s ease">📞 Continue with phone</button>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1;height:1px;background:#4a4a4a"></div><span style="color:#8a8a8a;font-size:12px;letter-spacing:1px">OR</span><div style="flex:1;height:1px;background:#4a4a4a"></div></div>
         <input id="auth-name" placeholder="Name (for signup)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;display:none;font-size:14px;transition:border-color .2s ease" />
@@ -781,43 +780,42 @@
       }
     });
     const googleBtn = document.getElementById("google-btn");
-    const firebaseConfig = {
-      apiKey: "AIzaSyBO91PIHuMBaXnkHWW5Kft9-FrFHuAh4Pc",
-      authDomain: "snapnote-ai-3a503.firebaseapp.com",
-      projectId: "snapnote-ai-3a503",
-      storageBucket: "snapnote-ai-3a503.firebasestorage.app",
-      messagingSenderId: "112530923487",
-      appId: "1:112530923487:web:b9c367be2c144a89f1ae6a"
-    };
-    let firebaseApp = null;
-    try { if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY" && typeof firebase !== "undefined") firebaseApp = firebase.initializeApp(firebaseConfig); } catch {}
-    googleBtn.addEventListener("click", async () => {
-      authError.style.display = "none";
-      if (!firebaseApp || typeof firebase === "undefined" || !firebase.auth) {
-        authError.textContent = "Google sign-in not configured yet. Please use email signup for now — it takes 10 seconds.";
-        authError.style.display = "block";
-        return;
-      }
-      googleBtn.disabled = true; googleBtn.textContent = "Opening Google…";
-      try {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const result = await firebase.auth().signInWithPopup(provider);
-        const idToken = await result.user.getIdToken();
-        const resp = await fetch(`${BASE}/api/auth/google`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken }) });
-        const data = await resp.json().catch(() => ({}));
-        if (!resp.ok) throw new Error(data.error || "Google sign-in failed");
-        setAuthToken(data.accessToken);
-        localStorage.setItem("snapnote_user_email", data.email || "");
-        localStorage.setItem("snapnote_user_name", data.name || "");
-        hideAuth();
-        await refreshAuthUI();
-      } catch (err) {
-        authError.textContent = err.message || "Google sign-in failed";
-        authError.style.display = "block";
-      } finally {
-        googleBtn.disabled = false; googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="" /> Continue with Google';
-      }
-    });
+    const GOOGLE_CLIENT_ID = "112530923487-6kjt4rvk765lekhd55fpeeu5fg1dh49e.apps.googleusercontent.com";
+    let gsiInitialized = false;
+    function initGoogleButton() {
+      if (gsiInitialized || typeof google === "undefined" || !google.accounts) return;
+      gsiInitialized = true;
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: async (response) => {
+          authError.style.display = "none";
+          try {
+            const idToken = response.credential;
+            const resp = await fetch(`${BASE}/api/auth/google`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken }) });
+            const data = await resp.json().catch(() => ({}));
+            if (!resp.ok) throw new Error(data.error || "Google sign-in failed");
+            setAuthToken(data.accessToken);
+            localStorage.setItem("snapnote_user_email", data.email || "");
+            localStorage.setItem("snapnote_user_name", data.name || "");
+            hideAuth();
+            await refreshAuthUI();
+          } catch (err) {
+            authError.textContent = err.message || "Google sign-in failed";
+            authError.style.display = "block";
+          }
+        }
+      });
+      google.accounts.id.renderButton(document.getElementById("google-btn"), {
+        theme: "outline",
+        size: "large",
+        shape: "pill",
+        text: "continue_with",
+        width: 330
+      });
+    }
+    initGoogleButton();
+    // Re-init if the modal opens before the script finishes
+    setTimeout(initGoogleButton, 1500);
     document.getElementById("apple-btn").addEventListener("click", () => {
       authError.textContent = "Apple sign-in coming soon — please use Google or email for now.";
       authError.style.display = "block";
