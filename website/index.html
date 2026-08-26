@@ -781,7 +781,14 @@
       }
     });
     const googleBtn = document.getElementById("google-btn");
-    const firebaseConfig = { apiKey: "YOUR_API_KEY", authDomain: "YOUR_PROJECT.firebaseapp.com", projectId: "YOUR_PROJECT_ID" };
+    const firebaseConfig = {
+      apiKey: "AIzaSyBO91PIHuMBaXnkHWW5Kft9-FrFHuAh4Pc",
+      authDomain: "snapnote-ai-3a503.firebaseapp.com",
+      projectId: "snapnote-ai-3a503",
+      storageBucket: "snapnote-ai-3a503.firebasestorage.app",
+      messagingSenderId: "112530923487",
+      appId: "1:112530923487:web:b9c367be2c144a89f1ae6a"
+    };
     let firebaseApp = null;
     try { if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY" && typeof firebase !== "undefined") firebaseApp = firebase.initializeApp(firebaseConfig); } catch {}
     googleBtn.addEventListener("click", async () => {
