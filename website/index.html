@@ -1682,6 +1682,8 @@
 
       const explainBtn = document.getElementById("explain-btn");
       if (explainBtn) explainBtn.addEventListener("click", handleExplainVisual);
+      const visualDlBtn = document.getElementById("visual-download-btn");
+      if (visualDlBtn) visualDlBtn.addEventListener("click", downloadVisual);
 
       // Guaranteed explanatory image: auto-generate on every diagram upload so
       // the student always gets a labeled visual, not a silent empty state.
@@ -1690,13 +1692,47 @@
       }
     }
 
-    function explainSectionHtml() {
-      const head = `<h3><span class="bar"></span>✨ Explain Visually</h3><p class="muted visual-trust">AI-generated visual explanation — verify details against your notes.</p>`;
+    function downloadVisual() {
       if (currentVisualSvg) {
-        return `${head}<div class="visual-wrap">${currentVisualSvg}</div>`;
+        // Convert SVG to PNG via canvas so students get a real image file.
+        const svgMarkup = currentVisualSvg;
+        const blob = new Blob([svgMarkup], { type: "image/svg+xml;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.naturalWidth || 900;
+          canvas.height = img.naturalHeight || 1200;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          URL.revokeObjectURL(url);
+          const a = document.createElement("a");
+          a.download = "snapnote-visual.png";
+          a.href = canvas.toDataURL("image/png");
+          a.click();
+        };
+        img.src = url;
+        return;
       }
       if (currentVisualUrl) {
-        return `${head}<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /></div>`;
+        const a = document.createElement("a");
+        a.href = currentVisualUrl;
+        a.download = "snapnote-visual.png";
+        a.target = "_blank";
+        a.click();
+      }
+    }
+
+    function explainSectionHtml() {
+      const head = `<h3><span class="bar"></span>✨ Explain Visually</h3><p class="muted visual-trust">AI-generated visual explanation — verify details against your notes.</p>`;
+      const dlBtn = `<button id="visual-download-btn" style="margin-top:10px;background:none;border:1px solid rgba(148,163,184,.3);color:#94a3b8;padding:8px 14px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .2s ease">⬇️ Download image</button>`;
+      if (currentVisualSvg) {
+        return `${head}<div class="visual-wrap">${currentVisualSvg}</div>${dlBtn}`;
+      }
+      if (currentVisualUrl) {
+        return `${head}<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /></div>${dlBtn}`;
       }
       if (canExplain) {
         return `${head}<button class="explain-btn" id="explain-btn"><span>✨ Explain Visually</span><em>Free — bundled with your diagram</em></button>`;
