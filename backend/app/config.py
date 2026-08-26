@@ -53,6 +53,8 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "dev-secret-change-in-prod-please-set-JWT_SECRET-env"
     JWT_EXPIRES_HOURS: int = 168
 
+    GOOGLE_CLIENT_ID: str = ""  # for Google Identity Services ID-token verification
+
     CREDIT_PACKS: dict = {
         "starter": {"credits": 50, "price_paise": 4900},
         "popular": {"credits": 120, "price_paise": 9900},

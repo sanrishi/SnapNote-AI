@@ -46,19 +46,42 @@ def _get_firebase_app():
         return None
 
 
+def _verify_google_id_token(id_token: str) -> dict:
+    """Verify a Google ID token (Google Identity Services). No Firebase needed."""
+    client_id = (settings.GOOGLE_CLIENT_ID or "").strip()
+    if not client_id:
+        raise AuthError(message="Google sign-in not configured on server yet. Please use email.")
+    try:
+        from google.oauth2 import id_token as google_id_token
+        from google.auth.transport import requests as google_requests
+
+        req = google_requests.Request()
+        info = google_id_token.verify_oauth2_token(id_token, req, client_id)
+    except Exception as e:
+        logger.warning("Google ID token verify failed: %s", e)
+        raise AuthError(message="Could not verify Google sign-in. Please use email.")
+    if not info.get("email_verified", False):
+        raise AuthError(message="Google account email not verified.")
+    return info
+
+
 @router.post("/google", response_model=AuthResponse)
 async def google_auth(req: GoogleAuthRequest) -> AuthResponse:
-    app = _get_firebase_app()
-    if app is None:
-        raise AuthError(message="Firebase not configured on server")
-    try:
-        from firebase_admin import auth as firebase_auth
-        decoded = firebase_auth.verify_id_token(req.idToken)
-    except ValueError as e:
-        raise AuthError(message=f"Invalid token: {str(e)}")
-    except Exception as e:
-        logger.error("Firebase auth failed: %s", str(e))
-        raise AuthError()
+    # Prefer direct Google ID token verification (Google Identity Services).
+    if (settings.GOOGLE_CLIENT_ID or "").strip():
+        decoded = _verify_google_id_token(req.idToken)
+    else:
+        app = _get_firebase_app()
+        if app is None:
+            raise AuthError(message="Firebase not configured on server")
+        try:
+            from firebase_admin import auth as firebase_auth
+            decoded = firebase_auth.verify_id_token(req.idToken)
+        except ValueError as e:
+            raise AuthError(message=f"Invalid token: {str(e)}")
+        except Exception as e:
+            logger.error("Firebase auth failed: %s", str(e))
+            raise AuthError()
 
     email = (decoded.get("email") or "").lower().strip()
     name = decoded.get("name") or (email.split("@")[0] if email else "User")
