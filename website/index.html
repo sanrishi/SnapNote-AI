@@ -1694,24 +1694,62 @@
 
     function downloadVisual() {
       if (currentVisualSvg) {
-        // Convert SVG to PNG via canvas so students get a real image file.
-        const svgMarkup = currentVisualSvg;
+        // Convert the rendered SVG to PNG. The inline SVG uses width="100%",
+        // so we read its actual rendered box and stamp an explicit pixel
+        // width/height before rasterizing (otherwise naturalWidth is 0).
+        const svgEl = document.querySelector(".visual-wrap svg");
+        let w = 0, h = 0;
+        if (svgEl) {
+          const rect = svgEl.getBoundingClientRect();
+          w = Math.round(rect.width);
+          h = Math.round(rect.height);
+        }
+        if (!w || !h) {
+          const m = currentVisualSvg.match(/viewBox="[\d.]+ [\d.]+ ([\d.]+) ([\d.]+)"/);
+          w = m ? Math.round(parseFloat(m[1]) * 2) : 900;
+          h = m ? Math.round(parseFloat(m[2]) * 2) : 1200;
+        }
+        const clone = svgEl ? svgEl.cloneNode(true) : null;
+        let svgMarkup = currentVisualSvg;
+        if (clone) {
+          clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+          clone.setAttribute("width", w);
+          clone.setAttribute("height", h);
+          clone.removeAttribute("style");
+          svgMarkup = new XMLSerializer().serializeToString(clone);
+        }
         const blob = new Blob([svgMarkup], { type: "image/svg+xml;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const img = new Image();
         img.onload = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.naturalWidth || 900;
-          canvas.height = img.naturalHeight || 1200;
-          const ctx = canvas.getContext("2d");
-          ctx.fillStyle = "#ffffff";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          URL.revokeObjectURL(url);
+          try {
+            const canvas = document.createElement("canvas");
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext("2d");
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            const a = document.createElement("a");
+            a.download = "snapnote-visual.png";
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+          } catch (e) {
+            // fallback: download the raw SVG file
+            const a = document.createElement("a");
+            a.download = "snapnote-visual.svg";
+            a.href = url;
+            a.click();
+          } finally {
+            setTimeout(() => URL.revokeObjectURL(url), 3000);
+          }
+        };
+        img.onerror = () => {
           const a = document.createElement("a");
-          a.download = "snapnote-visual.png";
-          a.href = canvas.toDataURL("image/png");
+          a.download = "snapnote-visual.svg";
+          a.href = url;
           a.click();
+          setTimeout(() => URL.revokeObjectURL(url), 3000);
         };
         img.src = url;
         return;
