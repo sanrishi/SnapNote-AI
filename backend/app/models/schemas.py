@@ -108,6 +108,7 @@ class AuthResponse(BaseModel):
     uid: str
     email: str
     name: str
+    picture: str = ""
     creditsRemaining: int
 
 

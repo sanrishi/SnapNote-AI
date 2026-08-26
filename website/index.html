@@ -846,7 +846,8 @@
         const data = await resp.json();
         creditsBadge.textContent = `${data.creditsRemaining} credits`;
         const name = data.name || data.email || "";
-        const pic = localStorage.getItem("snapnote_user_picture") || "";
+        const pic = data.picture || localStorage.getItem("snapnote_user_picture") || "";
+        if (data.picture) localStorage.setItem("snapnote_user_picture", data.picture);
         const initial = (name || "U").charAt(0).toUpperCase();
         const avatarHtml = pic
           ? `<img src="${esc(pic)}" alt="" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(148,163,184,.3);object-fit:cover;cursor:pointer" id="avatar-img" />`
