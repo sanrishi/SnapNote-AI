@@ -49,13 +49,26 @@ async def google_auth(req: GoogleAuthRequest) -> AuthResponse:
         logger.error("Firebase auth failed: %s", str(e))
         raise AuthError()
 
-    return AuthResponse(
-        accessToken=req.idToken,
-        uid=decoded["uid"],
-        email=decoded.get("email", ""),
-        name=decoded.get("name", "User"),
-        creditsRemaining=settings.FREE_CREDITS_MONTHLY,
-    )
+    email = (decoded.get("email") or "").lower().strip()
+    name = decoded.get("name") or (email.split("@")[0] if email else "User")
+    if not email:
+        raise AuthError(message="Google account has no email")
+    row = get_user_by_email(email)
+    if row is None:
+        import secrets
+
+        placeholder_hash = hash_password(secrets.token_urlsafe(32))
+        try:
+            user_id = create_user(email, placeholder_hash, name)
+            row = get_user_by_id(user_id)
+        except Exception:
+            row = get_user_by_email(email)
+            if row is None:
+                raise
+    assert row is not None
+    token = create_access_token(row["id"], row["email"])
+    logger.info("Google auth: %s -> %s", email, row["id"][:8])
+    return AuthResponse(accessToken=token, uid=row["id"], email=row["email"], name=row["name"], creditsRemaining=row["credits_remaining"])
 
 
 class ChromeAuthRequest(BaseModel):
