@@ -471,21 +471,28 @@
 
     <div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center">
       <div style="position:relative;background:#2f2f2f;border:1px solid #4a4a4a;border-radius:12px;padding:28px 24px;max-width:380px;width:90%;box-shadow:0 20px 60px -20px rgba(0,0,0,.8);text-align:center">
-        <button id="auth-close" style="position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid #8b5cf6;color:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center">✕</button>
+        <button id="auth-close" style="position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid #8b5cf6;color:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center;transition:all .2s ease">✕</button>
         <h3 id="auth-title" style="font-size:20px;font-weight:600;color:#fff;margin-bottom:8px">Log in or sign up</h3>
         <p style="color:#b0b0b0;font-size:13px;line-height:1.5;margin-bottom:20px" id="auth-sub">You'll get smarter responses and can upload files, images, and more.</p>
-        <button id="google-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px"><span style="font-size:16px">G</span> Continue with Google</button>
-        <button id="apple-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px"> Continue with Apple</button>
-        <button id="phone-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;font-size:14px">📞 Continue with phone</button>
+        <button id="google-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px;transition:all .2s ease"> <span style="font-size:16px">G</span> Continue with Google</button>
+        <button id="apple-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px;transition:all .2s ease"> Continue with Apple</button>
+        <button id="phone-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;font-size:14px;transition:all .2s ease">📞 Continue with phone</button>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1;height:1px;background:#4a4a4a"></div><span style="color:#8a8a8a;font-size:12px;letter-spacing:1px">OR</span><div style="flex:1;height:1px;background:#4a4a4a"></div></div>
-        <input id="auth-name" placeholder="Name (for signup)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;display:none;font-size:14px" />
-        <input id="auth-email" type="email" placeholder="Email address" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;font-size:14px" />
-        <input id="auth-pass" type="password" placeholder="Password (min 6)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:14px;font-size:14px" />
+        <input id="auth-name" placeholder="Name (for signup)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;display:none;font-size:14px;transition:border-color .2s ease" />
+        <input id="auth-email" type="email" placeholder="Email address" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;font-size:14px;transition:border-color .2s ease" />
+        <input id="auth-pass" type="password" placeholder="Password (min 6)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:14px;font-size:14px;transition:border-color .2s ease" />
         <div id="auth-error" style="color:#f87171;font-size:12px;margin-bottom:10px;display:none;text-align:left"></div>
-        <button id="auth-submit" style="width:100%;background:#fff;color:#000;border:none;padding:12px;border-radius:24px;font-weight:600;cursor:pointer;font-size:14px">Continue</button>
-        <p style="text-align:center;margin-top:14px;font-size:12px;color:#8a8a8a"><span id="auth-switch-text">Already have an account?</span> <a href="#" id="auth-switch" style="color:#fff;font-weight:600;text-decoration:underline">Log in</a></p>
+        <button id="auth-submit" style="width:100%;background:#fff;color:#000;border:none;padding:12px;border-radius:24px;font-weight:600;cursor:pointer;font-size:14px;transition:all .2s ease">Continue</button>
+        <p style="text-align:center;margin-top:14px;font-size:12px;color:#8a8a8a"><span id="auth-switch-text">Already have an account?</span> <a href="#" id="auth-switch" style="color:#fff;font-weight:600;text-decoration:underline;transition:color .2s ease">Log in</a></p>
       </div>
     </div>
+    <style>
+      #google-btn:hover, #apple-btn:hover, #phone-btn:hover { background:#3a3a3a !important; border-color:#6b6b6b !important; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.3); }
+      #auth-submit:hover { background:#f0f0f0 !important; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.2); }
+      #auth-close:hover { background:#3a3a3a !important; border-color:#a78bfa !important; color:#a78bfa !important; transform:rotate(90deg); }
+      #auth-switch:hover { color:#a78bfa !important; }
+      #auth-name:focus, #auth-email:focus, #auth-pass:focus { border-color:#8b5cf6 !important; outline:none; box-shadow:0 0 0 2px rgba(139,92,246,.2); }
+    </style>
 
     <section class="hero">
       <span class="eyebrow"><span class="dot"></span> Stuck on a lecture slide? Just screenshot it.</span>
