@@ -463,8 +463,23 @@
       <div id="credits-area">
         <span id="credits-badge">--</span>
         <button id="buy-btn">+ Buy Credits</button>
+        <span id="auth-area" style="display:flex;gap:8px;align-items:center;margin-left:8px"></span>
       </div>
     </header>
+
+    <div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center">
+      <div style="position:relative;background:#151d31;border:1px solid rgba(148,163,184,.2);border-radius:16px;padding:24px;max-width:380px;width:90%;box-shadow:0 20px 60px -20px rgba(0,0,0,.6)">
+        <h3 id="auth-title" style="font-size:18px;font-weight:800;margin-bottom:4px">Sign up</h3>
+        <p style="color:#94a3b8;font-size:13px;margin-bottom:16px" id="auth-sub">Create an account — credits stay with you, not your browser.</p>
+        <input id="auth-name" placeholder="Name (for signup)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(148,163,184,.2);background:#0b1120;color:#eef2ff;margin-bottom:10px;display:none" />
+        <input id="auth-email" type="email" placeholder="Email" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(148,163,184,.2);background:#0b1120;color:#eef2ff;margin-bottom:10px" />
+        <input id="auth-pass" type="password" placeholder="Password (min 6)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(148,163,184,.2);background:#0b1120;color:#eef2ff;margin-bottom:14px" />
+        <div id="auth-error" style="color:#f87171;font-size:12px;margin-bottom:10px;display:none"></div>
+        <button id="auth-submit" style="width:100%;background:linear-gradient(135deg,#7c3aed,#8b5cf6 55%,#d946ef);color:#fff;border:none;padding:11px;border-radius:10px;font-weight:700;cursor:pointer">Continue</button>
+        <p style="text-align:center;margin-top:12px;font-size:13px;color:#94a3b8"><span id="auth-switch-text">Already have an account?</span> <a href="#" id="auth-switch" style="color:#8b5cf6;font-weight:600">Log in</a></p>
+        <button id="auth-close" style="position:absolute;top:12px;right:14px;background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer">✕</button>
+      </div>
+    </div>
 
     <section class="hero">
       <span class="eyebrow"><span class="dot"></span> Stuck on a lecture slide? Just screenshot it.</span>
@@ -476,7 +491,7 @@
       </div>
       <div class="trust">
         <span>⚡ 50 free credits</span>
-        <span>🔒 No signup</span>
+        <span>🔒 One free preview, then sign up</span>
         <span>🧠 Built for JEE &amp; engineering students</span>
       </div>
     </section>
@@ -657,6 +672,18 @@
 
     // ── Device Auth ──
     async function initDevice() {
+      // If logged in, show user credits instead of device credits
+      const token = getAuthToken();
+      if (token) {
+        try {
+          const resp = await fetch(`${BASE}/api/auth/me`, { headers: { "Authorization": `Bearer ${token}` } });
+          if (resp.ok) {
+            const data = await resp.json();
+            creditsBadge.textContent = `${data.creditsRemaining} credits`;
+            return;
+          }
+        } catch {}
+      }
       let deviceId = localStorage.getItem("snapnote_deviceId");
       if (!deviceId) {
         deviceId = crypto.randomUUID();
@@ -681,6 +708,83 @@
 
     function getDeviceId() {
       return localStorage.getItem("snapnote_deviceId");
+    }
+    function getAuthToken() { return localStorage.getItem("snapnote_token"); }
+    function setAuthToken(t) { if (t) localStorage.setItem("snapnote_token", t); else localStorage.removeItem("snapnote_token"); }
+    function authHeader() { const t = getAuthToken(); return t ? `Bearer ${t}` : ""; }
+
+    // ── Auth modal ──
+    let authMode = "signup";
+    const authModal = document.getElementById("auth-modal");
+    const authArea = document.getElementById("auth-area");
+    const authTitle = document.getElementById("auth-title");
+    const authSub = document.getElementById("auth-sub");
+    const authName = document.getElementById("auth-name");
+    const authEmail = document.getElementById("auth-email");
+    const authPass = document.getElementById("auth-pass");
+    const authError = document.getElementById("auth-error");
+    const authSubmit = document.getElementById("auth-submit");
+    const authSwitch = document.getElementById("auth-switch");
+    const authSwitchText = document.getElementById("auth-switch-text");
+    const authClose = document.getElementById("auth-close");
+    function showAuth(mode) {
+      authMode = mode || "signup";
+      authTitle.textContent = authMode === "signup" ? "Sign up" : "Log in";
+      authSub.textContent = authMode === "signup" ? "Create an account — credits stay with you, not your browser." : "Welcome back.";
+      authName.style.display = authMode === "signup" ? "block" : "none";
+      authSwitchText.textContent = authMode === "signup" ? "Already have an account?" : "Need an account?";
+      authSwitch.textContent = authMode === "signup" ? "Log in" : "Sign up";
+      authError.style.display = "none";
+      authModal.style.display = "flex";
+    }
+    function hideAuth() { authModal.style.display = "none"; }
+    authClose.addEventListener("click", hideAuth);
+    authModal.addEventListener("click", (e) => { if (e.target === authModal) hideAuth(); });
+    authSwitch.addEventListener("click", (e) => { e.preventDefault(); showAuth(authMode === "signup" ? "login" : "signup"); });
+    authSubmit.addEventListener("click", async () => {
+      const email = authEmail.value.trim();
+      const pass = authPass.value;
+      const name = authName.value.trim();
+      if (!email || !pass) { authError.textContent = "Email and password required."; authError.style.display = "block"; return; }
+      if (pass.length < 6) { authError.textContent = "Password must be at least 6 characters."; authError.style.display = "block"; return; }
+      authSubmit.disabled = true; authSubmit.textContent = "Please wait…"; authError.style.display = "none";
+      try {
+        const endpoint = authMode === "signup" ? `${BASE}/api/auth/signup` : `${BASE}/api/auth/login`;
+        const body = authMode === "signup" ? { email, password: pass, name } : { email, password: pass };
+        const resp = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        const data = await resp.json().catch(() => ({}));
+        if (!resp.ok) throw new Error(data.error || data.message || "Auth failed");
+        setAuthToken(data.accessToken);
+        localStorage.setItem("snapnote_user_email", data.email || email);
+        localStorage.setItem("snapnote_user_name", data.name || "");
+        hideAuth();
+        await refreshAuthUI();
+        showError(""); // clear
+      } catch (err) {
+        authError.textContent = err.message || "Auth failed";
+        authError.style.display = "block";
+      } finally {
+        authSubmit.disabled = false; authSubmit.textContent = "Continue";
+      }
+    });
+    async function refreshAuthUI() {
+      const token = getAuthToken();
+      if (!token) {
+        authArea.innerHTML = `<button onclick="showAuth('login')" style="background:none;border:1px solid rgba(148,163,184,.2);color:#eef2ff;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer">Log in</button><button onclick="showAuth('signup')" style="background:var(--grad);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">Sign up</button>`;
+        return;
+      }
+      try {
+        const resp = await fetch(`${BASE}/api/auth/me`, { headers: { "Authorization": `Bearer ${token}` } });
+        if (!resp.ok) throw new Error("invalid");
+        const data = await resp.json();
+        creditsBadge.textContent = `${data.creditsRemaining} credits`;
+        const name = data.name || data.email || "";
+        authArea.innerHTML = `<span style="color:#94a3b8;font-size:13px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</span><button id="logout-btn" style="background:none;border:1px solid rgba(148,163,184,.2);color:#94a3b8;padding:6px 10px;border-radius:20px;font-size:12px;cursor:pointer">Log out</button>`;
+        document.getElementById("logout-btn").addEventListener("click", () => { setAuthToken(null); localStorage.removeItem("snapnote_user_email"); localStorage.removeItem("snapnote_user_name"); refreshAuthUI(); initDevice(); });
+      } catch {
+        setAuthToken(null);
+        authArea.innerHTML = `<button onclick="showAuth('login')" style="background:none;border:1px solid rgba(148,163,184,.2);color:#eef2ff;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer">Log in</button><button onclick="showAuth('signup')" style="background:var(--grad);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">Sign up</button>`;
+      }
     }
 
     // ── Payments ──
@@ -1033,8 +1137,17 @@
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
         try {
-          const resp = await fetch(endpoint, { method: "POST", body: formData, signal: controller.signal });
+          const headers = {};
+          const _tok = getAuthToken();
+          if (_tok) headers["Authorization"] = `Bearer ${_tok}`;
+          const resp = await fetch(endpoint, { method: "POST", body: formData, headers, signal: controller.signal });
 
+          if (resp.status === 401) {
+            const err = await resp.json().catch(() => ({}));
+            hideProcessing();
+            showAuth("signup");
+            throw new Error(err.error || "Please sign up or log in to continue.");
+          }
           if (resp.status === 429) {
             throw new Error("429");
           }
@@ -1119,7 +1232,17 @@
       formData.append("deviceId", deviceId);
 
       try {
-        const resp = await fetch(`${BASE}/api/extract/revision`, { method: "POST", body: formData });
+        const headers = {};
+        const _tok2 = getAuthToken();
+        if (_tok2) headers["Authorization"] = `Bearer ${_tok2}`;
+        const resp = await fetch(`${BASE}/api/extract/revision`, { method: "POST", body: formData, headers });
+        if (resp.status === 401) {
+          const err = await resp.json().catch(() => ({}));
+          hideProcessing();
+          showAuth("signup");
+          showError(err.error || "Please sign up or log in to continue.");
+          return;
+        }
         if (resp.status === 429) {
           const err = await resp.json().catch(() => ({}));
           hideProcessing();
@@ -1220,7 +1343,18 @@
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 32000);
       try {
-        const resp = await fetch(`${BASE}/api/extract/visual`, { method: "POST", body: formData, signal: controller.signal });
+        const headers = {};
+        const _tok3 = getAuthToken();
+        if (_tok3) headers["Authorization"] = `Bearer ${_tok3}`;
+        const resp = await fetch(`${BASE}/api/extract/visual`, { method: "POST", body: formData, headers, signal: controller.signal });
+        if (resp.status === 401) {
+          const err = await resp.json().catch(() => ({}));
+          hideProcessing();
+          showAuth("signup");
+          showError(err.error || "Please sign up or log in to continue.");
+          if (btn) { btn.disabled = false; btn.innerHTML = '<span>✨ Explain Visually</span><em>Free — bundled with your diagram</em>'; }
+          return;
+        }
         if (resp.status === 502) {
           const err = await resp.json().catch(() => ({}));
           hideProcessing();
@@ -1512,6 +1646,7 @@
     }
 
     // ── Init ──
+    refreshAuthUI();
     initDevice();
     renderHistory();
   </script>

@@ -41,6 +41,27 @@ def _get_conn() -> sqlite3.Connection:
         except sqlite3.Error:
             pass
         _local.conn.execute(
+            "CREATE TABLE IF NOT EXISTS users ("
+            "  id TEXT PRIMARY KEY,"
+            "  email TEXT UNIQUE NOT NULL,"
+            "  password_hash TEXT NOT NULL,"
+            "  name TEXT NOT NULL DEFAULT '',"
+            "  credits_remaining INTEGER NOT NULL DEFAULT 50 CHECK(credits_remaining >= 0),"
+            "  credits_used INTEGER NOT NULL DEFAULT 0 CHECK(credits_used >= 0),"
+            "  created_at INTEGER NOT NULL"
+            ")"
+        )
+        try:
+            _local.conn.execute(
+                "CREATE TRIGGER IF NOT EXISTS trg_users_credits_no_negative "
+                "BEFORE UPDATE ON users FOR EACH ROW "
+                "WHEN NEW.credits_remaining < 0 BEGIN "
+                "SELECT RAISE(ABORT, 'credits_remaining cannot be negative'); END;"
+            )
+        except sqlite3.Error:
+            pass
+        _local.conn.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);")
+        _local.conn.execute(
             "CREATE TABLE IF NOT EXISTS visual_explanations ("
             "  diagram_id TEXT PRIMARY KEY,"
             "  device_id TEXT NOT NULL,"
@@ -248,3 +269,92 @@ def set_visual_result(
     )
     conn.commit()
     return cur.rowcount > 0
+
+
+# ── Users (for signup/login — credits stick to email, not clearable localStorage) ──
+
+def create_user(email: str, password_hash: str, name: str = "") -> str:
+    import uuid
+
+    user_id = uuid.uuid4().hex
+    conn = _get_conn()
+    try:
+        conn.execute(
+            "INSERT INTO users (id, email, password_hash, name, credits_remaining, credits_used, created_at) "
+            "VALUES (?, ?, ?, ?, ?, 0, ?)",
+            (user_id, email.lower().strip(), password_hash, name.strip(), settings.FREE_CREDITS_MONTHLY, int(time.time())),
+        )
+        conn.commit()
+        return user_id
+    except sqlite3.IntegrityError as e:
+        if "UNIQUE" in str(e) or "users.email" in str(e):
+            from app.exceptions import InvalidInputError
+
+            raise InvalidInputError(message="Email already registered. Please log in.")
+        raise
+
+
+def get_user_by_email(email: str) -> sqlite3.Row | None:
+    conn = _get_conn()
+    return conn.execute("SELECT * FROM users WHERE email = ?", (email.lower().strip(),)).fetchone()
+
+
+def get_user_by_id(user_id: str) -> sqlite3.Row | None:
+    conn = _get_conn()
+    return conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+
+
+def get_user_credits(user_id: str) -> tuple[int, int]:
+    row = get_user_by_id(user_id)
+    if row is None:
+        from app.exceptions import AuthError
+
+        raise AuthError(message="User not found")
+    return row["credits_remaining"], row["credits_used"]
+
+
+def use_user_credits(user_id: str, amount: int) -> int:
+    from app.exceptions import CreditLimitError
+
+    conn = _get_conn()
+    try:
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute("SELECT credits_remaining FROM users WHERE id = ?", (user_id,)).fetchone()
+        if row is None:
+            conn.execute("ROLLBACK")
+            from app.exceptions import AuthError
+
+            raise AuthError(message="User not found")
+        if row["credits_remaining"] < amount:
+            conn.execute("ROLLBACK")
+            raise CreditLimitError()
+        conn.execute(
+            "UPDATE users SET credits_remaining = credits_remaining - ?, credits_used = credits_used + ? WHERE id = ?",
+            (amount, amount, user_id),
+        )
+        conn.execute("COMMIT")
+    except CreditLimitError:
+        raise
+    except sqlite3.Error as e:
+        try:
+            conn.execute("ROLLBACK")
+        except sqlite3.Error:
+            pass
+        if "negative" in str(e).lower() or "CHECK" in str(e):
+            raise CreditLimitError() from e
+        raise
+    row = get_user_by_id(user_id)
+    assert row is not None
+    logger.info("Used %d credits for user %s (now %d)", amount, user_id[:8], row["credits_remaining"])
+    return row["credits_remaining"]
+
+
+def add_user_credits(user_id: str, amount: int) -> int:
+    conn = _get_conn()
+    conn.execute(
+        "UPDATE users SET credits_remaining = credits_remaining + ? WHERE id = ?", (amount, user_id)
+    )
+    conn.commit()
+    row = get_user_by_id(user_id)
+    assert row is not None
+    return row["credits_remaining"]

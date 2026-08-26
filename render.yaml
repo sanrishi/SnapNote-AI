@@ -32,3 +32,7 @@ services:
         sync: false
       - key: RAZORPAY_KEY_SECRET
         sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: ANONYMOUS_FREE_USES
+        value: 1

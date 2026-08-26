@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import uuid
-from fastapi import APIRouter, Form, UploadFile, File
+from fastapi import APIRouter, Form, Header, UploadFile, File, HTTPException
 
 from app.config import settings
 from app.models.schemas import (
@@ -31,18 +31,34 @@ from app.services.storage_service import upload_image
 from app.utils.render_notes import render_study_notes
 from app.utils.tags import parse_context, generate_tags
 from app.utils.validation import validate_image_size
-from app.exceptions import InvalidInputError, CreditLimitError, UpstreamError
+from app.exceptions import AuthError, InvalidInputError, CreditLimitError, UpstreamError
+from app.utils.auth import decode_token
 from app.utils.credits_store import (
     get_credits,
-    use_credits,
+    get_user_by_id,
+    get_user_credits,
     get_visual_entitlement,
     record_diagram_grant,
     set_visual_result,
+    use_credits,
+    use_user_credits,
 )
 from app.utils.rate_limiter import check_rate_limits
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
+
+
+def _resolve_identity(deviceId: str, authorization: str | None) -> tuple[str, bool]:
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            data = decode_token(authorization[7:])
+            uid = data.get("sub")
+            if uid and get_user_by_id(uid) is not None:
+                return uid, True
+        except Exception:
+            pass
+    return deviceId, False
 
 
 def _check_credits(device_id: str, cost: int) -> None:
@@ -51,14 +67,36 @@ def _check_credits(device_id: str, cost: int) -> None:
         raise CreditLimitError()
 
 
+def _check_credits_effective(effective_id: str, is_user: bool, cost: int) -> None:
+    if is_user:
+        remaining, _ = get_user_credits(effective_id)
+        if remaining < cost:
+            raise CreditLimitError()
+    else:
+        remaining, used = get_credits(effective_id)
+        # Anonymous gets ANONYMOUS_FREE_USES previews before signup is required (prevents reload abuse)
+        if used >= settings.ANONYMOUS_FREE_USES:
+            raise AuthError(message="Please sign up or log in to continue. Your free preview is used.")
+        if remaining < cost:
+            raise CreditLimitError()
+
+
+def _use_credits_effective(effective_id: str, is_user: bool, amount: int) -> int:
+    if is_user:
+        return use_user_credits(effective_id, amount)
+    return use_credits(effective_id, amount)
+
+
 @router.post("/text", response_model=ExtractionResponse)
 async def extract_text_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
     deviceId: str = Form(...),
+    authorization: str | None = Header(default=None),
 ) -> ExtractionResponse:
-    check_rate_limits(deviceId)
-    _check_credits(deviceId, settings.TEXT_CREDIT_COST)
+    effective_id, is_user = _resolve_identity(deviceId, authorization)
+    check_rate_limits(effective_id)
+    _check_credits_effective(effective_id, is_user, settings.TEXT_CREDIT_COST)
     image_bytes = await image.read()
     validate_image_size(image_bytes)
 
@@ -73,11 +111,17 @@ async def extract_text_route(
 
     raw_results = await asyncio.to_thread(read_raw, processed)
     if low_quality_result(raw_results):
-        logger.info("OCR quality low — escalating to Gemini (device=%s)", deviceId[:8])
+        logger.info("OCR quality low — escalating to Gemini (id=%s)", effective_id[:8])
         extra_cost = settings.DIAGRAM_CREDIT_COST - settings.TEXT_CREDIT_COST
-        remaining, _ = get_credits(deviceId)
-        if remaining < extra_cost:
-            raise CreditLimitError()
+        # check extra cost with effective identity
+        if is_user:
+            rem, _ = get_user_credits(effective_id)
+            if rem < extra_cost:
+                raise CreditLimitError()
+        else:
+            rem, _ = get_credits(effective_id)
+            if rem < extra_cost:
+                raise CreditLimitError()
         try:
             enhanced = await asyncio.to_thread(enhance_for_vision, image_bytes)
             result = await extract_text_with_llm(enhanced)
@@ -87,7 +131,7 @@ async def extract_text_route(
             logger.error("Gemini escalation failed: type=%s msg=%s", type(e).__name__, str(e))
             err_str = str(e)
             if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-                logger.warning("Gemini rate-limited (device=%s). Falling back to OCR.", deviceId[:8])
+                logger.warning("Gemini rate-limited (id=%s). Falling back to OCR.", effective_id[:8])
                 text_lines = raw_to_lines(raw_results)
                 ocr_text = format_structured_text(text_lines)
                 markdown = ocr_text + "\n\n---\n*Enhanced extraction unavailable right now (high demand). Showing OCR result.*"
@@ -104,7 +148,7 @@ async def extract_text_route(
         markdown = format_structured_text(text_lines)
         final_cost = settings.TEXT_CREDIT_COST
 
-    use_credits(deviceId, final_cost)
+    _use_credits_effective(effective_id, is_user, final_cost)
 
     return ExtractionResponse(
         type=extraction_type,
@@ -119,9 +163,11 @@ async def extract_diagram_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
     deviceId: str = Form(...),
+    authorization: str | None = Header(default=None),
 ) -> ExtractionResponse:
-    check_rate_limits(deviceId)
-    _check_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
+    effective_id, is_user = _resolve_identity(deviceId, authorization)
+    check_rate_limits(effective_id)
+    _check_credits_effective(effective_id, is_user, settings.DIAGRAM_CREDIT_COST)
     image_bytes = await image.read()
     validate_image_size(image_bytes)
 
@@ -137,7 +183,7 @@ async def extract_diagram_route(
             timeout=settings.DIAGRAM_TIMEOUT_SECONDS,
         )
     except asyncio.TimeoutError:
-        logger.error("Diagram extraction timed out after %ss (device=%s)", settings.DIAGRAM_TIMEOUT_SECONDS, deviceId[:8])
+        logger.error("Diagram extraction timed out after %ss (id=%s)", settings.DIAGRAM_TIMEOUT_SECONDS, effective_id[:8])
         upload_task.cancel()
         raise UpstreamError(
             service="SnapNote AI",
@@ -148,7 +194,7 @@ async def extract_diagram_route(
         err_str = str(e)
         logger.error("Gemini study notes failed: type=%s msg=%s", type(e).__name__, err_str)
         if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-            logger.warning("Gemini rate-limited on diagram (device=%s).", deviceId[:8])
+            logger.warning("Gemini rate-limited on diagram (id=%s).", effective_id[:8])
             raise UpstreamError(service="SnapNote AI", detail="AI extraction is at high demand right now. Try again in a few minutes.")
         raise
     uploaded_url = await upload_task
@@ -157,9 +203,9 @@ async def extract_diagram_route(
 
     markdown = render_study_notes(study_notes)
 
-    use_credits(deviceId, settings.DIAGRAM_CREDIT_COST)
+    _use_credits_effective(effective_id, is_user, settings.DIAGRAM_CREDIT_COST)
     diagram_id = uuid.uuid4().hex
-    record_diagram_grant(deviceId, diagram_id, study_notes.model_dump_json(exclude={"diagram_spec", "diagram"}))
+    record_diagram_grant(effective_id, diagram_id, study_notes.model_dump_json(exclude={"diagram_spec", "diagram"}))
 
     return ExtractionResponse(
         type=ExtractionType.DIAGRAM,
@@ -177,9 +223,11 @@ async def extract_revision_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
     deviceId: str = Form(...),
+    authorization: str | None = Header(default=None),
 ) -> RevisionResponse:
-    check_rate_limits(deviceId)
-    _check_credits(deviceId, settings.REVISION_CREDIT_COST)
+    effective_id, is_user = _resolve_identity(deviceId, authorization)
+    check_rate_limits(effective_id)
+    _check_credits_effective(effective_id, is_user, settings.REVISION_CREDIT_COST)
     image_bytes = await image.read()
     validate_image_size(image_bytes)
 
@@ -196,7 +244,7 @@ async def extract_revision_route(
             timeout=settings.DIAGRAM_TIMEOUT_SECONDS,
         )
     except asyncio.TimeoutError:
-        logger.error("Revision guide timed out after %ss (device=%s)", settings.DIAGRAM_TIMEOUT_SECONDS, deviceId[:8])
+        logger.error("Revision guide timed out after %ss (id=%s)", settings.DIAGRAM_TIMEOUT_SECONDS, effective_id[:8])
         raise UpstreamError(
             service="SnapNote AI",
             detail="AI enhancement is taking longer than usual right now. Please try again in a few minutes.",
@@ -205,11 +253,11 @@ async def extract_revision_route(
         err_str = str(e)
         logger.error("Revision guide failed: type=%s msg=%s", type(e).__name__, err_str)
         if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str:
-            logger.warning("Gemini rate-limited on revision (device=%s).", deviceId[:8])
+            logger.warning("Gemini rate-limited on revision (id=%s).", effective_id[:8])
             raise UpstreamError(service="SnapNote AI", detail="AI enhancement is at high demand right now. Try again in a few minutes.")
         raise
 
-    use_credits(deviceId, settings.REVISION_CREDIT_COST)
+    _use_credits_effective(effective_id, is_user, settings.REVISION_CREDIT_COST)
 
     return RevisionResponse(
         study_notes=study_notes,
@@ -222,6 +270,7 @@ async def extract_visual_route(
     image: UploadFile = File(...),
     deviceId: str = Form(...),
     diagramId: str = Form(...),
+    authorization: str | None = Header(default=None),
 ) -> VisualExplanationResponse:
     """Explain Visually — free, bundled with the 5-credit diagram result.
 
@@ -235,16 +284,17 @@ async def extract_visual_route(
         legibility gate (only when text_required) -> one hidden retry -> ImgBB.
     No credits are charged.
     """
-    check_rate_limits(deviceId)
+    effective_id, is_user = _resolve_identity(deviceId, authorization)
+    check_rate_limits(effective_id)
     entitlement = get_visual_entitlement(diagramId)
     if entitlement is None:
         raise InvalidInputError(message="No purchased diagram result found for this device.")
     owner_device, visual_url, render_mode, visual_svg, study_notes_json = entitlement
-    if owner_device != deviceId:
+    if owner_device != effective_id:
         raise InvalidInputError(message="No purchased diagram result found for this device.")
 
     if visual_url or visual_svg:
-        logger.info("Visual already generated for diagram %s (device=%s)", diagramId[:8], deviceId[:8])
+        logger.info("Visual already generated for diagram %s (id=%s)", diagramId[:8], effective_id[:8])
         return VisualExplanationResponse(
             diagramId=diagramId,
             renderMode=render_mode or "deterministic",
@@ -279,7 +329,7 @@ async def extract_visual_route(
     mode, payload = result
     if mode == "svg":
         visual_svg = payload
-        if not set_visual_result(diagramId, deviceId, "deterministic", visual_svg=visual_svg):
+        if not set_visual_result(diagramId, effective_id, "deterministic", visual_svg=visual_svg):
             logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
             existing = get_visual_entitlement(diagramId)
             if existing is not None:
@@ -295,7 +345,7 @@ async def extract_visual_route(
     if not visual_url:
         raise UpstreamError(service="SnapNote AI", detail="Could not store the generated visual. Please try again.")
 
-    if not set_visual_result(diagramId, deviceId, "generative", visual_url=visual_url):
+    if not set_visual_result(diagramId, effective_id, "generative", visual_url=visual_url):
         logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
         existing = get_visual_entitlement(diagramId)
         if existing is not None:
