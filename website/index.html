@@ -469,19 +469,21 @@
       </div>
     </header>
 
-    <div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center">
-      <div style="position:relative;background:#151d31;border:1px solid rgba(148,163,184,.2);border-radius:16px;padding:24px;max-width:380px;width:90%;box-shadow:0 20px 60px -20px rgba(0,0,0,.6)">
-        <h3 id="auth-title" style="font-size:18px;font-weight:800;margin-bottom:4px">Sign up</h3>
-        <p style="color:#94a3b8;font-size:13px;margin-bottom:16px" id="auth-sub">Create an account — credits stay with you, not your browser.</p>
-        <button id="google-btn" style="width:100%;background:#fff;color:#0b1120;border:1px solid #e2e8f0;padding:10px;border-radius:10px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="" /> Continue with Google</button>
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div style="flex:1;height:1px;background:rgba(148,163,184,.2)"></div><span style="color:#64748b;font-size:12px">or</span><div style="flex:1;height:1px;background:rgba(148,163,184,.2)"></div></div>
-        <input id="auth-name" placeholder="Name (for signup)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(148,163,184,.2);background:#0b1120;color:#eef2ff;margin-bottom:10px;display:none" />
-        <input id="auth-email" type="email" placeholder="Email" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(148,163,184,.2);background:#0b1120;color:#eef2ff;margin-bottom:10px" />
-        <input id="auth-pass" type="password" placeholder="Password (min 6)" style="width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(148,163,184,.2);background:#0b1120;color:#eef2ff;margin-bottom:14px" />
-        <div id="auth-error" style="color:#f87171;font-size:12px;margin-bottom:10px;display:none"></div>
-        <button id="auth-submit" style="width:100%;background:linear-gradient(135deg,#7c3aed,#8b5cf6 55%,#d946ef);color:#fff;border:none;padding:11px;border-radius:10px;font-weight:700;cursor:pointer">Continue with email</button>
-        <p style="text-align:center;margin-top:12px;font-size:13px;color:#94a3b8"><span id="auth-switch-text">Already have an account?</span> <a href="#" id="auth-switch" style="color:#8b5cf6;font-weight:600">Log in</a></p>
-        <button id="auth-close" style="position:absolute;top:12px;right:14px;background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer">✕</button>
+    <div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center">
+      <div style="position:relative;background:#2f2f2f;border:1px solid #4a4a4a;border-radius:12px;padding:28px 24px;max-width:380px;width:90%;box-shadow:0 20px 60px -20px rgba(0,0,0,.8);text-align:center">
+        <button id="auth-close" style="position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid #8b5cf6;color:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center">✕</button>
+        <h3 id="auth-title" style="font-size:20px;font-weight:600;color:#fff;margin-bottom:8px">Log in or sign up</h3>
+        <p style="color:#b0b0b0;font-size:13px;line-height:1.5;margin-bottom:20px" id="auth-sub">You'll get smarter responses and can upload files, images, and more.</p>
+        <button id="google-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px"><span style="font-size:16px">G</span> Continue with Google</button>
+        <button id="apple-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px"> Continue with Apple</button>
+        <button id="phone-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;font-size:14px">📞 Continue with phone</button>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1;height:1px;background:#4a4a4a"></div><span style="color:#8a8a8a;font-size:12px;letter-spacing:1px">OR</span><div style="flex:1;height:1px;background:#4a4a4a"></div></div>
+        <input id="auth-name" placeholder="Name (for signup)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;display:none;font-size:14px" />
+        <input id="auth-email" type="email" placeholder="Email address" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;font-size:14px" />
+        <input id="auth-pass" type="password" placeholder="Password (min 6)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:14px;font-size:14px" />
+        <div id="auth-error" style="color:#f87171;font-size:12px;margin-bottom:10px;display:none;text-align:left"></div>
+        <button id="auth-submit" style="width:100%;background:#fff;color:#000;border:none;padding:12px;border-radius:24px;font-weight:600;cursor:pointer;font-size:14px">Continue</button>
+        <p style="text-align:center;margin-top:14px;font-size:12px;color:#8a8a8a"><span id="auth-switch-text">Already have an account?</span> <a href="#" id="auth-switch" style="color:#fff;font-weight:600;text-decoration:underline">Log in</a></p>
       </div>
     </div>
 
@@ -802,6 +804,14 @@
         googleBtn.disabled = false; googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="" /> Continue with Google';
       }
     });
+    document.getElementById("apple-btn").addEventListener("click", () => {
+      authError.textContent = "Apple sign-in coming soon — please use Google or email for now.";
+      authError.style.display = "block";
+    });
+    document.getElementById("phone-btn").addEventListener("click", () => {
+      authError.textContent = "Phone sign-in coming soon — please use Google or email for now.";
+      authError.style.display = "block";
+    });
     async function refreshAuthUI() {
       const token = getAuthToken();
       if (!token) {
@@ -1062,6 +1072,11 @@
       resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
+    function shouldBlockAnonymousUpload() {
+      if (getAuthToken()) return false;
+      return localStorage.getItem("snapnote_has_used_free") === "1";
+    }
+
     // ── Image handlers ──
     function handleImage(blob) {
       if (blob.size > 10 * 1024 * 1024) {
@@ -1078,9 +1093,16 @@
       dropZone.scrollIntoView({ behavior: "smooth", block: "center" });
     }
 
-    heroUploadBtn.addEventListener("click", () => fileInput.click());
-    dropZone.addEventListener("click", () => fileInput.click());
+    heroUploadBtn.addEventListener("click", () => {
+      if (shouldBlockAnonymousUpload()) { showAuth("signup"); return; }
+      fileInput.click();
+    });
+    dropZone.addEventListener("click", () => {
+      if (shouldBlockAnonymousUpload()) { showAuth("signup"); return; }
+      fileInput.click();
+    });
     fileInput.addEventListener("change", () => {
+      if (shouldBlockAnonymousUpload()) { fileInput.value = ""; showAuth("signup"); return; }
       if (fileInput.files[0]) handleImage(fileInput.files[0]);
     });
 
@@ -1090,12 +1112,14 @@
     dropZone.addEventListener("drop", (e) => {
       e.preventDefault();
       dropZone.classList.remove("dragover");
+      if (shouldBlockAnonymousUpload()) { showAuth("signup"); return; }
       const file = e.dataTransfer.files[0];
       if (file && file.type.startsWith("image/")) handleImage(file);
     });
 
     // Clipboard paste
     document.addEventListener("paste", (e) => {
+      if (shouldBlockAnonymousUpload()) { showAuth("signup"); return; }
       const items = e.clipboardData.items;
       for (const item of items) {
         if (item.type.startsWith("image/")) {
@@ -1218,7 +1242,9 @@
 
           hideProcessing();
           resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (!getAuthToken()) localStorage.setItem("snapnote_has_used_free", "1");
           await initDevice();
+          await refreshAuthUI();
           lastError = null;
           break;
         } catch (err) {
