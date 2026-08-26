@@ -46,11 +46,17 @@ def _get_conn() -> sqlite3.Connection:
             "  email TEXT UNIQUE NOT NULL,"
             "  password_hash TEXT NOT NULL,"
             "  name TEXT NOT NULL DEFAULT '',"
+            "  picture TEXT NOT NULL DEFAULT '',"
             "  credits_remaining INTEGER NOT NULL DEFAULT 50 CHECK(credits_remaining >= 0),"
             "  credits_used INTEGER NOT NULL DEFAULT 0 CHECK(credits_used >= 0),"
             "  created_at INTEGER NOT NULL"
             ")"
         )
+        # Add picture column to existing DBs (idempotent migration).
+        try:
+            _local.conn.execute("ALTER TABLE users ADD COLUMN picture TEXT NOT NULL DEFAULT ''")
+        except sqlite3.OperationalError:
+            pass
         try:
             _local.conn.execute(
                 "CREATE TRIGGER IF NOT EXISTS trg_users_credits_no_negative "
@@ -273,16 +279,16 @@ def set_visual_result(
 
 # ── Users (for signup/login — credits stick to email, not clearable localStorage) ──
 
-def create_user(email: str, password_hash: str, name: str = "") -> str:
+def create_user(email: str, password_hash: str, name: str = "", picture: str = "") -> str:
     import uuid
 
     user_id = uuid.uuid4().hex
     conn = _get_conn()
     try:
         conn.execute(
-            "INSERT INTO users (id, email, password_hash, name, credits_remaining, credits_used, created_at) "
-            "VALUES (?, ?, ?, ?, ?, 0, ?)",
-            (user_id, email.lower().strip(), password_hash, name.strip(), settings.FREE_CREDITS_MONTHLY, int(time.time())),
+            "INSERT INTO users (id, email, password_hash, name, picture, credits_remaining, credits_used, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, 0, ?)",
+            (user_id, email.lower().strip(), password_hash, name.strip(), picture.strip(), settings.FREE_CREDITS_MONTHLY, int(time.time())),
         )
         conn.commit()
         return user_id
@@ -292,6 +298,12 @@ def create_user(email: str, password_hash: str, name: str = "") -> str:
 
             raise InvalidInputError(message="Email already registered. Please log in.")
         raise
+
+
+def set_user_picture(user_id: str, picture: str) -> None:
+    conn = _get_conn()
+    conn.execute("UPDATE users SET picture = ? WHERE id = ? AND picture = ''", (picture.strip(), user_id))
+    conn.commit()
 
 
 def get_user_by_email(email: str) -> sqlite3.Row | None:
