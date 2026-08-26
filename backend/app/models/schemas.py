@@ -220,13 +220,19 @@ class VisualPlot(BaseModel):
     curves: list[VisualCurve] = Field(default_factory=list)
 
 
+class VisualGeneric(BaseModel):
+    central_label: str = ""
+    callouts: list[str] = Field(default_factory=list)  # 2-5 short labels around centre
+
+
 class VisualScene(BaseModel):
-    scene_kind: Literal["force_diagram", "process_flow", "plot"] = "force_diagram"
+    scene_kind: Literal["force_diagram", "process_flow", "plot", "generic"] = "force_diagram"
     title: str = ""
     caption: str = ""
     force: ForceDiagram | None = None
     flow: ProcessFlow | None = None
     plot: VisualPlot | None = None
+    generic: VisualGeneric | None = None
 
 
 class DeterministicVisual(BaseModel):

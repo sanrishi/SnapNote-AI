@@ -435,7 +435,7 @@ GROUNDING RULES:
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
 3. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
 4. Write labels as short, plain, readable text.
-5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. If the concept does not fit either scene kind well, omit "scene" entirely and use the card fields (equations/steps/points) instead.
+5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. If none of those fit, use "generic" with central_label (2-4 words) and 2-4 callouts (each a short phrase) — this guarantees every concept gets a labeled diagram. Never leave scene empty if you can make a generic.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
@@ -445,11 +445,12 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "deterministic": {
     "title": "short title (2-6 words)",
     "scene": {
-      "scene_kind": "force_diagram | process_flow | plot",
+      "scene_kind": "force_diagram | process_flow | plot | generic",
       "caption": "one teaching sentence about what the diagram means",
       "force": { "object": {...}, "vectors": [...], "angles": [...], "arcs": [...], "relation": {...} },
       "flow": { "nodes": [...], "connectors": [...], "relation": {...} },
-      "plot": { "x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true, "curves": [{"label": "y=x²", "expr": "x**2", "x_min": 0, "x_max": 2}] }
+      "plot": { "x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true, "curves": [{"label": "y=x²", "expr": "x**2", "x_min": 0, "x_max": 2}] },
+      "generic": { "central_label": "Main idea", "callouts": ["callout 1", "callout 2"] }
     },
     "equations": [{"expression": "exact formula in Unicode, no LaTeX, no backslash", "meaning": "one line: what each symbol means and what the relationship represents"}],
     "steps": ["ordered steps, each a short phrase"],
