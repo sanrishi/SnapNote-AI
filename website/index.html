@@ -1418,11 +1418,8 @@
         cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="bar"></span>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
       }
 
-      if (notes.diagram && notes.diagram.present && notes.diagram.svg) {
-        const diagramCap = notes.diagram.best_effort
-          ? 'Best-effort reconstruction — this diagram type isn\'t fully supported yet; verify it against the original screenshot.'
-          : 'Rebuilt from your screenshot as a clean diagram.';
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">${esc(diagramCap)}</p></div>`);
+      if (notes.diagram && notes.diagram.present && notes.diagram.svg && !notes.diagram.best_effort) {
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:260ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p></div>`);
       }
 
       if (result.type === "diagram") {

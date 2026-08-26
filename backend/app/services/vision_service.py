@@ -370,16 +370,7 @@ async def _apply_diagram_spec(notes: StudyNotes, image_bytes: bytes) -> None:
             notes.verify_before_studying.append(item.strip())
 
     if spec.diagram_type not in SUPPORTED_DIAGRAM_TYPES:
-        fallback = await _legacy_diagram_fallback(image_bytes)
-        notes.diagram = fallback
-        if fallback.present and fallback.svg:
-            if _FALLBACK_NOTE not in notes.uncertainties:
-                notes.uncertainties.append(_FALLBACK_NOTE)
-        else:
-            what = spec.diagram_type or "an unknown"
-            reason = f"This diagram type ({what}) is not supported yet, so it could not be reconstructed cleanly."
-            if reason not in notes.uncertainties:
-                notes.uncertainties.append(reason)
+        notes.diagram = DiagramRep(present=False, svg="")
         notes.diagram_spec = None
         return
 

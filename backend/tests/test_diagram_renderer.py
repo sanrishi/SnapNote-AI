@@ -299,8 +299,8 @@ async def test_pipeline_spec_unsupported_type_empty_fallback_goes_explanation_on
     assert notes.diagram.present is False
     assert notes.diagram.svg == ""
     assert notes.diagram.best_effort is False
-    assert any("not supported" in u for u in notes.uncertainties)
-    assert mock_model.generate_content_async.await_count >= 2  # primary + legacy fallback
+    # Unsupported types now go explanation-only with no second Gemini call (no best-effort garble)
+    assert mock_model.generate_content_async.await_count == 1
 
 
 @pytest.mark.asyncio
@@ -329,15 +329,8 @@ async def test_pipeline_spec_unsupported_type_best_effort_fallback(sample_diagra
         "uncertainties": [],
         "analogy": "",
     }
-    fallback_svg = (
-        '<svg xmlns="http://www.w3.org/2000/svg"><rect x="5" y="5" width="40" height="25" '
-        'fill="none" stroke="#000"/><text x="8" y="14">Start</text></svg>'
-    )
 
     async def _fake_gemini(prompt, **kwargs):
-        prompt_text = prompt[0] if isinstance(prompt, list) else str(prompt)
-        if "best-effort vector SVG" in prompt_text:
-            return type("o", (), {"text": json.dumps({"present": True, "svg": fallback_svg})})()
         return type("o", (), {"text": json.dumps(primary_payload)})()
 
     mock_model = AsyncMock()
@@ -347,10 +340,11 @@ async def test_pipeline_spec_unsupported_type_best_effort_fallback(sample_diagra
     from app.services.vision_service import extract_study_notes
 
     notes = await extract_study_notes(sample_diagram_image)
-    assert notes.diagram.present is True
-    assert notes.diagram.best_effort is True
-    assert "<svg" in notes.diagram.svg
-    assert any("best-effort reconstruction" in u.lower() for u in notes.uncertainties)
+    # Unsupported types now go explanation-only with no best-effort garble (second Gemini call removed)
+    assert notes.diagram.present is False
+    assert notes.diagram.best_effort is False
+    assert notes.diagram.svg == ""
+    assert mock_model.generate_content_async.await_count == 1
 
 
 @pytest.mark.asyncio
