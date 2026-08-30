@@ -835,24 +835,14 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
             y = y_after
             scene_rendered = True
 
-    # When a scene is the centerpiece, the card sections become supplements.
+    # Explain Visually is a VISUAL ARTIFACT, not a second study sheet.
+    # When a scene is the centerpiece we render ONLY the scene geometry
+    # (+ its caption, symbol legend and relation equation, which are part of
+    # the scene itself). Detailed Key Formulas / Understand It / Key Points
+    # live in the normal study sections and must NOT be duplicated inside the
+    # white visual. The card layout is used only when no scene exists.
     if scene_rendered:
-        if spec.equations:
-            html, y = _section_header(y, "KEY EQUATIONS")
-            parts.append(html)
-            for eq in spec.equations:
-                if not eq.expression.strip():
-                    continue
-                html, y = _equation_card(y, eq.expression.strip(), eq.meaning.strip())
-                parts.append(html)
-        if spec.points:
-            html, y = _section_header(y, "KEY POINTS")
-            parts.append(html)
-            for point in spec.points:
-                if not point.strip():
-                    continue
-                html, y = _point_line(y, point.strip())
-                parts.append(html)
+        pass
     else:
         if spec.equations:
             html, y = _section_header(y, "KEY EQUATIONS")

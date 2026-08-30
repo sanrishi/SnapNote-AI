@@ -402,10 +402,12 @@
     .explain-btn:disabled { opacity: .55; cursor: not-allowed; }
     .explain-btn .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: var(--amber); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 6px; vertical-align: -2px; }
 
-    .visual-wrap { margin-top: 12px; }
+    .visual-wrap { margin-top: 12px; max-width: 720px; margin-left: auto; margin-right: auto; }
     .visual-wrap img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--border); }
     .visual-wrap svg { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--border); background: #fff; }
-    .visual-trust { font-size: 11.5px; color: var(--muted-2); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+    .visual-trust { font-size: 11.5px; color: var(--muted-2); margin-top: 8px; display: flex; align-items: center; gap: 6px; max-width: 720px; margin-left: auto; margin-right: auto; }
+    .visual-context-line { max-width: 720px; margin-left: auto; margin-right: auto; }
+    #visual-download-btn { display: block; margin: 10px auto 0; }
     .explain-card { border: 1px solid rgba(251,191,36,.4); background: linear-gradient(180deg, rgba(251,191,36,.06), rgba(255,255,255,0) 60%); }
     .explain-card h3 .bar { background: var(--amber); }
     .explain-card .explain-tagline { font-size: 13px; color: var(--muted); margin: -2px 0 6px; font-style: italic; }
@@ -1686,6 +1688,10 @@
         cards.push(`<div class="note-card verify-card" style="animation-delay:240ms"><h3><span class="bar"></span>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
       }
 
+      if (notes.analogy) {
+        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
+      }
+
       // ── Secondary (quieter, collapsible) ──
       let secondary = "";
       if (notes.common_mistakes && notes.common_mistakes.length) {
@@ -1693,9 +1699,6 @@
       }
       if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
         secondary += `<details class="note-card secondary" style="animation-delay:320ms"><summary>⏱️ 30-Second Revision</summary><div class="inner"><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></details>`;
-      }
-      if (notes.analogy) {
-        secondary += `<details class="note-card secondary" style="animation-delay:340ms"><summary>💡 Easy Analogy</summary><div class="inner"><p>${esc(notes.analogy)}</p></div></details>`;
       }
       if (secondary) {
         cards.push(secondary);

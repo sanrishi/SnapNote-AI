@@ -52,8 +52,15 @@ def test_renderer_produces_sanitized_svg_with_exact_content():
     svg = render_deterministic_visual(_sample_deterministic())
     assert svg.startswith("<svg")
     assert svg.strip().endswith("</svg>")
-    for token in ["Rotational Dynamics", "τ = r × F", "L = Iω", "ΔL = ∫ τ dt", "torque = force × lever arm"]:
-        assert token in svg
+    # No scene -> synthesizes a generic VISUAL ARTIFACT: central title + a few
+    # equation/point callouts. It must never render the full Key Formulas /
+    # How It Works / Key Points notes sections inside the visual.
+    assert "Rotational Dynamics" in svg
+    assert "τ = r × F" in svg
+    assert "L = Iω" in svg
+    assert "KEY EQUATIONS" not in svg
+    assert "HOW IT WORKS" not in svg
+    assert "KEY POINTS" not in svg
     # Sanitized: no scripts, no event handlers, no external refs
     assert "<script" not in svg.lower()
     assert "onerror" not in svg.lower()
@@ -108,9 +115,13 @@ def _torque_scene() -> DeterministicVisual:
 def test_scene_force_diagram_draws_real_diagram():
     svg = render_deterministic_visual(_torque_scene())
     # Every primitive must be present: pivot, both vectors, angle arc, rotation arc,
-    # the relation equation, the caption header, and the key point.
-    for token in ["Torque", "O", "r", "F", "θ", "τ", "τ = r × F", "WHAT THE VISUAL SHOWS", "KEY POINTS"]:
+    # the relation equation, and the caption header.
+    for token in ["Torque", "O", "r", "F", "θ", "τ", "τ = r × F", "WHAT THE VISUAL SHOWS"]:
         assert token in svg, f"missing {token!r}"
+    # Explain Visually is a VISUAL ARTIFACT, not a second study sheet: the scene
+    # must NOT duplicate Key Formulas / Key Points inside the white visual.
+    assert "KEY POINTS" not in svg
+    assert "KEY EQUATIONS" not in svg
     # Real geometry, not just text: lines + arrowhead polygons + arc polylines.
     assert "<line" in svg
     assert "<polygon" in svg  # arrowheads
@@ -196,7 +207,9 @@ def test_scene_flow_renders_boxes_and_connectors():
 
 
 def test_scene_fallback_to_card_when_scene_empty():
-    # A scene with no vectors/nodes must not crash and renders the card instead.
+    # A scene with no vectors/nodes must not crash. Explain Visually is a VISUAL
+    # ARTIFACT, so an empty scene synthesizes a generic diagram (central label +
+    # callouts) rather than falling back to a notes card with duplicate equations.
     spec = DeterministicVisual(
         title="Fallback",
         scene=VisualScene(scene_kind="force_diagram", force=None),
@@ -204,8 +217,10 @@ def test_scene_fallback_to_card_when_scene_empty():
     )
     svg = render_deterministic_visual(spec)
     assert svg.startswith("<svg")
-    assert "a = b" in svg
-    assert "KEY EQUATIONS" in svg
+    assert "Fallback" in svg  # generic central label
+    assert "a = b" in svg  # equation becomes a callout chip, not a KEY EQUATIONS card
+    assert "KEY EQUATIONS" not in svg
+    assert "KEY POINTS" not in svg
 
 
 def test_scene_escapes_user_text():
