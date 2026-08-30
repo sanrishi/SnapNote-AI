@@ -86,7 +86,7 @@ SECTION RULES:
   * If the screenshot is pure prose/equations with no real diagram (no shapes/connections/structure), set present=false and svg="".
 - verify_before_studying: ONLY genuinely uncertain equations/symbols (confidence "possible_extraction_issue"). Empty unless truly needed.
 - uncertainties: only genuinely ambiguous/missing material. Empty if nothing is uncertain.
-- analogy: use an everyday comparison ONLY if it is genuinely helpful and accurate. Otherwise empty string. Never force one.
+- analogy: ALWAYS provide a concise 2-4 sentence everyday analogy that builds intuition for the concept (e.g., for torque: opening a door far from the hinge; for integrals: accumulating area like filling a shape). Only leave empty if the content is purely definitional and no analogy would help. Never invent unsupported facts.
 
 CRITICAL READING RULES:
 - When a handwritten or blurry symbol could be more than one thing, do NOT silently pick one. Record your best guess, set confidence to "possible_extraction_issue", and list it in verify_before_studying.
@@ -137,7 +137,7 @@ STUDY_NOTES_SEMANTIC_PROMPT = _build_semantic_prompt()
 
 REVISION_SYSTEM_PROMPT = r"""You are SnapNote AI. A student extracted a cheap text snapshot from a lecture screenshot. Now turn it into exam-ready study material so they can understand and revise the concept.
 
-Use the same output schema, grounding, and safety rules as the main study-notes prompt (STUDY_NOTES_SYSTEM_PROMPT). The only difference: you may include an "analogy" when one genuinely fits, because this is the revision step.
+Use the same output schema, grounding, and safety rules as the main study-notes prompt (STUDY_NOTES_SYSTEM_PROMPT). Always include a concise analogy when it helps intuition (most physics/math concepts benefit).
 
 GROUNDING RULES:
 1. Never invent missing lecture content. Distinguish visible evidence from safe inference from missing context. If a derivation is cut off, say so — do not complete it as if the professor wrote it.
@@ -167,7 +167,7 @@ SECTION RULES:
 - thirty_second_revision: 3-5 tight bullets. Include the key formula if visible.
 - visual_context: 1-2 sentences max, only if a diagram exists and helps. Explain what the diagram MEANS conceptually (teach the relationship), never list what objects/axes/labels are visible.
 - diagram: same rules as the main prompt — rebuild the visible diagram as a clean, readable vector SVG (present=true + svg) when the material contains one; else present=false, svg="".
-- analogy: only if genuinely helpful and accurate, otherwise empty string."""  # noqa: E501
+- analogy: ALWAYS provide a concise 2-4 sentence analogy when it helps intuition (most concepts); only leave empty if no analogy would help."""  # noqa: E501
 
 REVISION_REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
 {"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"diagram":{"present":false,"svg":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
