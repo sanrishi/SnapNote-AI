@@ -52,14 +52,14 @@ RED = "#dc2626"
 BG_STAGE = "#f8fafc"
 STAGE_STROKE = "#e2e8f0"
 
-# Diagram stage geometry (force diagram).
-STAGE_X = 56
-STAGE_Y = 110
+# Diagram stage geometry (force diagram) — enlarged ~22% for composition (was 470).
+STAGE_X = 48
+STAGE_Y = 96
 STAGE_W = VIEW_W - 2 * STAGE_X
-STAGE_H = 470
+STAGE_H = 560
 PIVOT_X = 240
-PIVOT_Y = 470
-BASE_LEN = 190
+PIVOT_Y = 520
+BASE_LEN = 215
 MIN_R = 12
 
 _FONT = "sans-serif"
@@ -606,8 +606,8 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
         y_min, y_max = 0.0, 5.0
     # stage geometry
     x0, y0, w, h = STAGE_X, STAGE_Y, STAGE_W, STAGE_H
-    pad_l, pad_b = 36, 26
-    plot_x0, plot_y0, plot_w, plot_h = x0 + pad_l, y0 + 14, w - pad_l - 14, h - 14 - pad_b
+    pad_l, pad_b = 24, 16
+    plot_x0, plot_y0, plot_w, plot_h = x0 + pad_l, y0 + 8, w - pad_l - 10, h - 8 - pad_b
 
     def map_x(xv: float) -> float:
         return plot_x0 + (xv - x_min) / (x_max - x_min) * plot_w if x_max != x_min else plot_x0
@@ -876,7 +876,7 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
                 html, y = _point_line(y, point.strip())
                 parts.append(html)
 
-    height = max(900, y + 60)
+    height = max(860, y + 32)
     svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {VIEW_W} {height}" width="100%">'
     svg += f'<rect x="0" y="0" width="{VIEW_W}" height="{height}" rx="16" fill="white"/>'
     svg += "".join(parts)
