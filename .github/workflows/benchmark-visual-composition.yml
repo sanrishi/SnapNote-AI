@@ -1,0 +1,70 @@
+name: Benchmark Visual Composition (disposable)
+
+# Disposable research workflow — not part of production.
+# Runs ONLY on the prototype branch, Ubuntu, for the 4-way battle.
+on:
+  push:
+    branches: [feat/prototype-visual-composition]
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/prototype-visual-composition
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Set up Node 20 (for Satori)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install system deps (WeasyPrint + Typst deps)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcairo2 libpango-1.0-0 libpangoft2-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
+
+      - name: Install Typst CLI (official)
+        run: |
+          cargo --version || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && source $HOME/.cargo/env)
+          cargo install typst-cli --locked || echo "cargo install failed, trying binary download"
+          # fallback: download prebuilt binary if cargo not available
+          if ! command -v typst >/dev/null 2>&1; then
+            curl -L https://github.com/typst/typst/releases/download/v0.13.0/typst-x86_64-unknown-linux-musl.tar.xz | tar -xJ
+            sudo mv typst-x86_64-unknown-linux-musl/typst /usr/local/bin/typst
+          fi
+          typst --version
+          typst --help | head -n 20
+
+      - name: Install Python deps
+        run: |
+          pip install -r backend/requirements.txt
+          pip install weasyprint==69.0 typst==0.15.0
+          npm install satori@0.10.13 @resvg/resvg-js@2.6.2
+
+      - name: Run 4-way benchmark (same VisualSpec, Argand + Torque)
+        run: |
+          PYTHONPATH=backend python prototypes/visual_composition/bench.py | tee bench.log
+          # Also run a dedicated Satori bench if available
+          if [ -f prototypes/visual_composition/engine_d_satori.py ]; then
+            PYTHONPATH=backend node prototypes/visual_composition/engine_d_satori.js 2>&1 | tee -a bench.log || true
+          fi
+          ls -lh prototypes/visual_composition/outputs/ || true
+          cat bench.log
+
+      - name: Upload artifacts (8 visuals + log)
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-composition-benchmark
+          path: |
+            prototypes/visual_composition/outputs/
+            bench.log
+          if-no-files-found: warn
