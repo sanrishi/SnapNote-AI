@@ -23,10 +23,10 @@ from app.utils.math_normalize import display_math
 from app.utils.svg_safe import sanitize_svg
 
 VIEW_W = 520
-VIEW_H = 520
+VIEW_H = 500
 CX = 260.0
-CY = 260.0
-OUTER_MAX_PX = 200.0
+CY = 250.0
+OUTER_MAX_PX = 230.0
 
 FILL = "#a78bfa"
 STROKE = "#334155"

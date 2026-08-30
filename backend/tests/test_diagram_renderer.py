@@ -159,8 +159,8 @@ def test_render_is_sanitized_and_idempotent():
 def test_render_geometry():
     svg = render_polar_region(_canonical())
     assert svg.count("<circle") == 3  # origin dot + inner + outer boundary
-    assert 'r="200"' in svg  # outer = sqrt(5) scaled to OUTER_MAX_PX
-    assert 'r="89.44"' in svg  # inner = 1 * (200 / 2.236)
+    assert 'r="230"' in svg  # outer = sqrt(5) scaled to OUTER_MAX_PX (230)
+    assert 'r="102.86"' in svg  # inner = 1 * (230 / 2.236)
     assert "<polygon" in svg  # arrowheads
     assert "<line" in svg  # axes
     assert 'fill="#a78bfa"' in svg and 'opacity="0.2"' in svg  # shaded annulus
