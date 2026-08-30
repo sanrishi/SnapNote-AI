@@ -50,15 +50,18 @@ def render_typst_binding(typst_source: str) -> tuple[bytes | None, float, str]:
     if not ok:
         return None, 0, f"typst-py not available: {ver}"
     t0 = time.perf_counter()
-    try:
-        import typst
-        data = typst.compile(typst_source, format="svg")
-        dt = (time.perf_counter() - t0) * 1000
-        if isinstance(data, str):
-            data = data.encode("utf-8")
-        return data, dt, f"typst-py {ver} {dt:.1f}ms"
-    except Exception as e:
-        return None, (time.perf_counter() - t0) * 1000, f"typst-py failed: {e}"
+    with tempfile.TemporaryDirectory() as td:
+        try:
+            import typst
+            inp = os.path.join(td, "in.typ")
+            open(inp, "w", encoding="utf-8").write(typst_source)
+            data = typst.compile(inp, format="svg")
+            dt = (time.perf_counter() - t0) * 1000
+            if isinstance(data, str):
+                data = data.encode("utf-8")
+            return data, dt, f"typst-py {ver} {dt:.1f}ms"
+        except Exception as e:
+            return None, (time.perf_counter() - t0) * 1000, f"typst-py failed: {e}"
 
 # Minimal Typst templates for the two fixtures (deterministic, no LLM)
 TORQUE_TYPST = r'''

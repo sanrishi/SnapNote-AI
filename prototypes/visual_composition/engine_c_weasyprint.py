@@ -35,9 +35,16 @@ def render_weasyprint(title: str, hero_svg: str, callouts: list[str], result: st
         import weasyprint
         callouts_html = "".join(f'<div class="callout">{c}</div>' for c in callouts)
         html = HTML_TEMPLATE.format(title=title, hero=hero_svg, callouts=callouts_html, result=result)
-        pdf = weasyprint.HTML(string=html).write_png()
+        # WeasyPrint 69.0: HTML.render().write_png() is the correct API (write_png on HTML directly was removed)
+        doc = weasyprint.HTML(string=html).render()
+        # Write to PDF first (always available), then report PDF size. For PNG, use write_png if available.
+        if hasattr(doc, "write_png"):
+            png = doc.write_png()
+            dt = (time.perf_counter() - t0) * 1000
+            return png, dt, f"weasyprint {ver} PNG {dt:.1f}ms"
+        pdf = doc.write_pdf()
         dt = (time.perf_counter() - t0) * 1000
-        return pdf, dt, f"weasyprint {ver} {dt:.1f}ms"
+        return pdf, dt, f"weasyprint {ver} PDF {len(pdf)} bytes {dt:.1f}ms"
     except Exception as e:
         return None, (time.perf_counter() - t0) * 1000, f"weasyprint failed: {e}"
 
