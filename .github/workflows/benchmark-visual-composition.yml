@@ -60,6 +60,12 @@ jobs:
           ls -lh prototypes/visual_composition/outputs/ || true
           cat bench.log
 
+      - name: Run rich composition benchmark (one coherent infographic)
+        run: |
+          PYTHONPATH=backend python prototypes/visual_composition/rich_bench.py | tee -a bench.log
+          ls -lh prototypes/visual_composition/outputs/rich_* || true
+          cat bench.log
+
       - name: Upload artifacts (8 visuals + log)
         uses: actions/upload-artifact@v4
         with:
