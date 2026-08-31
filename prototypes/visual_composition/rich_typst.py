@@ -6,7 +6,7 @@ import os
 
 TEMPLATE_ARGAND = r'''
 #set page(width: 800pt, height: 1000pt, margin: 18pt)
-#set text(font: "Inter", size: 10pt)
+#set text(size: 10pt)
 
 #align(center)[#text(size: 18pt, weight: "bold")[Square on Argand Plane]]
 #v(6pt)
@@ -41,7 +41,7 @@ TEMPLATE_ARGAND = r'''
 
 TEMPLATE_TORQUE = r'''
 #set page(width: 800pt, height: 900pt, margin: 18pt)
-#set text(font: "Inter", size: 10pt)
+#set text(size: 10pt)
 
 #align(center)[#text(size: 18pt, weight: "bold")[Torque and Angular Momentum]]
 #v(6pt)
@@ -80,14 +80,12 @@ def _hero_svg_for_spec(spec) -> str:
     # For the prototype, we embed the whole visual as hero — the composition will add callouts around it.
     return svg
 
-def render_rich_typst(spec, template: str, name: str, out_fmt: str = "svg") -> tuple[bytes | None, float, str]:
+def render_rich_typst(spec, template: str, name: str, out_fmt: str = "pdf") -> tuple[bytes | None, float, str]:
     t0 = time.perf_counter()
     with tempfile.TemporaryDirectory() as td:
-        # Generate hero SVG and write it for Typst to embed (relative to in.typ)
         hero_svg = _hero_svg_for_spec(spec)
         hero_path = os.path.join(td, f"hero_{name}.svg")
         open(hero_path, "w", encoding="utf-8").write(hero_svg)
-        # Template already has image("hero_torque.svg") / image("hero_argand.svg") relative to in.typ
         src = template
         inp = os.path.join(td, "in.typ")
         out = os.path.join(td, f"out.{out_fmt}")
