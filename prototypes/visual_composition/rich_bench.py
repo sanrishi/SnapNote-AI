@@ -15,17 +15,11 @@ def bench():
         svg_a, ms_a = render_a(spec, name)
         open(os.path.join(OUT, f"rich_a_{name}.svg"), "w", encoding="utf-8").write(svg_a)
         print(f"A current SVG {name}: {len(svg_a)} chars, {ms_a:.1f}ms — has <svg { '<svg' in svg_a }")
-        # B: rich Typst (hero + callouts + derivation + result)
-        data, ms_b, log = render_rich_typst(spec, tmpl, name, "svg")
+        # B: rich Typst (hero + callouts + derivation + result) — use PDF for multi-page infographic
+        data, ms_b, log = render_rich_typst(spec, tmpl, name, "pdf")
         if data:
-            open(os.path.join(OUT, f"rich_b_typst_{name}.svg"), "wb").write(data)
+            open(os.path.join(OUT, f"rich_b_typst_{name}.pdf"), "wb").write(data)
             print(f"B rich Typst {name}: {len(data)} bytes, {ms_b:.1f}ms — {log[:80]}")
-            # also PNG
-            from rich_typst import render_rich_typst as rrt2
-            data_png, ms_p, log_p = rrt2(spec, tmpl, name, "png")
-            if data_png:
-                open(os.path.join(OUT, f"rich_b_typst_{name}.png"), "wb").write(data_png)
-                print(f"B rich Typst PNG {name}: {len(data_png)} bytes, {ms_p:.1f}ms")
         else:
             print(f"B rich Typst {name} FAILED: {log[:300]}")
 
