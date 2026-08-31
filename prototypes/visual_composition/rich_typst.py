@@ -87,8 +87,8 @@ def render_rich_typst(spec, template: str, name: str, out_fmt: str = "svg") -> t
         hero_svg = _hero_svg_for_spec(spec)
         hero_path = os.path.join(td, f"hero_{name}.svg")
         open(hero_path, "w", encoding="utf-8").write(hero_svg)
-        # Rewrite template to point to the hero file
-        src = template.replace(f"hero_{name}.svg", hero_path).replace("hero_argand.svg", hero_path).replace("hero_torque.svg", hero_path)
+        # Rewrite template to point to the hero file (single replace for this lesson)
+        src = template.replace(f"hero_{name}.svg", hero_path)
         inp = os.path.join(td, "in.typ")
         out = os.path.join(td, f"out.{out_fmt}")
         open(inp, "w", encoding="utf-8").write(src)
