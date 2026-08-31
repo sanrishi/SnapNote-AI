@@ -48,7 +48,7 @@ jobs:
         run: |
           pip install -r backend/requirements.txt
           pip install weasyprint==69.0 typst==0.15.0
-          npm install satori@0.10.13 @resvg/resvg-js@2.6.2
+          npm install satori@0.10.13 @resvg/resvg-js@2.6.2 @fontsource/inter
 
       - name: Run 4-way benchmark (same VisualSpec, Argand + Torque)
         run: |
