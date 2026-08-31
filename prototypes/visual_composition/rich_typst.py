@@ -83,12 +83,12 @@ def _hero_svg_for_spec(spec) -> str:
 def render_rich_typst(spec, template: str, name: str, out_fmt: str = "svg") -> tuple[bytes | None, float, str]:
     t0 = time.perf_counter()
     with tempfile.TemporaryDirectory() as td:
-        # Generate hero SVG and write it for Typst to embed
+        # Generate hero SVG and write it for Typst to embed (relative to in.typ)
         hero_svg = _hero_svg_for_spec(spec)
         hero_path = os.path.join(td, f"hero_{name}.svg")
         open(hero_path, "w", encoding="utf-8").write(hero_svg)
-        # Rewrite template to point to the hero file (single replace for this lesson)
-        src = template.replace(f"hero_{name}.svg", hero_path)
+        # Template already has image("hero_torque.svg") / image("hero_argand.svg") relative to in.typ
+        src = template
         inp = os.path.join(td, "in.typ")
         out = os.path.join(td, f"out.{out_fmt}")
         open(inp, "w", encoding="utf-8").write(src)
