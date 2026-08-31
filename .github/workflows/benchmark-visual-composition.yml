@@ -53,9 +53,9 @@ jobs:
       - name: Run 4-way benchmark (same VisualSpec, Argand + Torque)
         run: |
           PYTHONPATH=backend python prototypes/visual_composition/bench.py | tee bench.log
-          # Also run a dedicated Satori bench if available
-          if [ -f prototypes/visual_composition/engine_d_satori.py ]; then
-            PYTHONPATH=backend node prototypes/visual_composition/engine_d_satori.js 2>&1 | tee -a bench.log || true
+          # Also run a dedicated Satori bench if available (JS)
+          if [ -f prototypes/visual_composition/engine_d_satori.js ]; then
+            node prototypes/visual_composition/engine_d_satori.js 2>&1 | tee -a bench.log || true
           fi
           ls -lh prototypes/visual_composition/outputs/ || true
           cat bench.log
