@@ -21,8 +21,10 @@ from app.models.schemas import (
     ProcessFlow,
     VisualAngle,
     VisualArc,
+    VisualCurve,
     VisualEquation,
     VisualObject,
+    VisualPlot,
     VisualRelation,
     VisualRenderMode,
     VisualScene,
@@ -265,6 +267,66 @@ def test_scene_rotation_arc_arrowhead_present():
     polys = re.findall(r'<polygon[^>]*>', svg)
     # pivot arrowheads (2 vectors) + angle arc + rotation arc = at least 4
     assert len(polys) >= 4, f"only {len(polys)} polygons"
+
+
+def _argand_collision_scene() -> DeterministicVisual:
+    """Regression fixture: two plot curves ending at the same corner, like the
+    Argand square ("square ABCD") and its point marker ("A(1,1)")."""
+    return DeterministicVisual(
+        title="Square on Argand Plane",
+        scene=VisualScene(
+            scene_kind="plot",
+            plot=VisualPlot(
+                x_label="Re", y_label="Im",
+                x_min=-1, x_max=5, y_min=-1, y_max=5, show_grid=True,
+                curves=[
+                    VisualCurve(label="square ABCD", points=[[1, 1], [1, 3], [3, 3], [3, 1], [1, 1]]),
+                    VisualCurve(label="A(1,1)", points=[[1, 1], [1, 1]]),
+                ],
+            ),
+        ),
+    )
+
+
+def _curve_label_boxes(svg: str) -> list[tuple[float, float, float, float]]:
+    import re
+
+    boxes = []
+    for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="11"[^>]*>(.*?)</text>', svg):
+        x, y, text = float(m.group(1)), float(m.group(2)), m.group(3)
+        boxes.append((x, y - 11, len(text) * 6.6 + 8, 14))
+    return boxes
+
+
+def test_plot_curve_labels_never_overlap():
+    """Regression (Argand A(1,1)/ABCD collision): labels attached to the same
+    geometric point must be placed at deterministic non-overlapping offsets,
+    with exact coordinates and geometry untouched."""
+    svg = render_deterministic_visual(_argand_collision_scene())
+    assert "square ABCD" in svg
+    assert "A(1,1)" in svg
+    boxes = _curve_label_boxes(svg)
+    assert len(boxes) == 2, f"expected 2 curve labels, got {len(boxes)}"
+    (ax, ay, aw, ah), (bx, by, bw, bh) = boxes
+    overlaps = not (ax + aw <= bx or bx + bw <= ax or ay + ah <= by or by + bh <= ay)
+    assert not overlaps, f"curve labels overlap: {boxes}"
+
+
+def test_plot_single_label_keeps_legacy_placement():
+    """A lone curve label must render at the legacy (+6,-6) anchor offset."""
+    spec = DeterministicVisual(
+        title="Plot",
+        scene=VisualScene(
+            scene_kind="plot",
+            plot=VisualPlot(
+                x_min=0, x_max=4, y_min=0, y_max=4,
+                curves=[VisualCurve(label="y=x", points=[[0, 0], [4, 4]])],
+            ),
+        ),
+    )
+    svg = render_deterministic_visual(spec)
+    assert "y=x" in svg
+    assert len(_curve_label_boxes(svg)) == 1
 
 
 # ── Hybrid dispatcher ──

@@ -593,6 +593,13 @@ def _curve_points(curve: VisualCurve, x_min: float, x_max: float) -> list[tuple[
     return pts
 
 
+def _boxes_overlap(a: tuple[float, float, float, float], b: tuple[float, float, float, float], pad: float = 0.0) -> bool:
+    """Do two (x, y, w, h) boxes overlap (with optional padding)? Deterministic."""
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    return not (ax + aw + pad <= bx or bx + bw + pad <= ax or ay + ah + pad <= by or by + bh + pad <= ay)
+
+
 def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     plot = scene.plot
     if plot is None or not plot.curves:
@@ -641,7 +648,8 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     for yv in [y_min, (y_min + y_max) / 2, y_max]:
         parts.append(f'<text x="{_f(y_axis_x-8)}" y="{_f(map_y(yv)+3)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="end">{_f(yv)}</text>')
 
-    # curves
+    # curves (labels placed in a second pass with collision avoidance)
+    label_anchors: list[tuple[tuple[float, float], str, str]] = []
     for curve in plot.curves:
         pts = _curve_points(curve, x_min, x_max)
         if not pts:
@@ -665,11 +673,35 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
                 continue
             points = " ".join(f"{_f(x)},{_f(y)}" for x, y in seg)
             parts.append(f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="2.2"{dash}/>')
-        if curve.label:
-            # label near the end of last segment
-            if segs and segs[-1]:
-                lx, ly = segs[-1][-1]
-                parts.append(f'<text x="{_f(lx+6)}" y="{_f(ly-6)}" font-family="{_FONT}" font-size="11" font-weight="600" fill="{color}" text-anchor="start">{_esc(curve.label)}</text>')
+        if curve.label and segs and segs[-1]:
+            label_anchors.append((segs[-1][-1], curve.label, color))
+    # Generic collision-aware curve labels: labels sharing an anchor point
+    # (e.g. "square ABCD" and "A(1,1)" ending at the same corner) get
+    # deterministic fallback offsets so they never occupy the same box.
+    # First candidate == legacy (+6,-6) placement, so non-colliding labels
+    # render byte-identically to before.
+    placed_boxes: list[tuple[float, float, float, float]] = []
+    for (ax, ay), label, color in label_anchors:
+        est_w = len(label) * 6.6 + 8
+        est_h = 14.0
+        candidates = [
+            (ax + 6, ay - 6 - est_h / 2),
+            (ax + 6, ay - 24 - est_h / 2),
+            (ax + 6, ay + 14 - est_h / 2),
+            (ax - est_w - 6, ay - 6 - est_h / 2),
+            (ax - est_w - 6, ay - 24 - est_h / 2),
+            (ax + 6, ay + 32 - est_h / 2),
+        ]
+        chosen = candidates[0]
+        for cx, cy in candidates:
+            box = (cx, cy, est_w, est_h)
+            if not any(_boxes_overlap(box, other, pad=3.0) for other in placed_boxes):
+                chosen = (cx, cy)
+                break
+        placed_boxes.append((chosen[0], chosen[1], est_w, est_h))
+        # text-anchor=start at box left; baseline chosen so the legacy
+        # (+6,-6) candidate renders byte-identically to before.
+        parts.append(f'<text x="{_f(chosen[0])}" y="{_f(chosen[1] + est_h / 2)}" font-family="{_FONT}" font-size="11" font-weight="600" fill="{color}" text-anchor="start">{_esc(label)}</text>')
     return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
 
 
