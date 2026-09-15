@@ -5,38 +5,39 @@ import time
 import os
 
 TEMPLATE_ARGAND = r'''
-#set page(width: 800pt, height: 1000pt, margin: 18pt)
+#set page(width: 800pt, height: 1050pt, margin: 18pt)
 #set text(size: 10pt)
 
 #align(center)[#text(size: 18pt, weight: "bold")[Square on Argand Plane]]
-#v(6pt)
-#align(center)[#text(size: 10pt, fill: rgb("#64748b"))[JEE Complex Numbers — modulus, conjugate, area]]
-#v(12pt)
+#v(4pt)
+#align(center)[#text(size: 10pt, fill: rgb("#64748b"))[Each complex number is a point: $z = x + i y arrow.r (x, y)$]]
+#v(10pt)
 
 // Hero: Argand axes + square (embedded SVG from current renderer)
 #figure(
-  image("hero_argand.svg", width: 90%),
-  caption: [Argand plane: Re (x) horizontal, Im (y) vertical. Square ABCD with A(1,1), B(1,3), C(3,3), D(3,1).],
+  image("hero_argand.svg", width: 88%),
+  caption: [Square ABCD with A(1,1), B(1,3), C(3,3), D(3,1) on Re/Im axes.],
 ) <argand-hero>
 
-#grid(columns: (1fr, 1fr), gutter: 10pt,
-  rect(width: 100%, height: 60pt, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt)[
-    #text(weight: "bold")[A: z = 1 + i] \ (1, 1) \ conj(A) = 1 − i → (1, −1), mirror across Re
-  ],
-  rect(width: 100%, height: 60pt, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt)[
-    #text(weight: "bold")[B: z = 1 + 3i] \ (1, 3) \ C: 3 + 3i, D: 3 + i
-  ],
+#v(6pt)
+// Points strip: all four corners in ONE row, spatially ordered A→B→C→D
+#grid(columns: (1fr, 1fr, 1fr, 1fr), gutter: 8pt,
+  rect(width: 100%, fill: rgb("#ede9fe"), stroke: rgb("#6366f1"), radius: 6pt, inset: 6pt)[#align(center)[#text(weight: "bold")[A] \ $z=1+i$ \ (1,1)]],
+  rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 6pt)[#align(center)[#text(weight: "bold")[B] \ $z=1+3i$ \ (1,3)]],
+  rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 6pt)[#align(center)[#text(weight: "bold")[C] \ $z=3+3i$ \ (3,3)]],
+  rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 6pt)[#align(center)[#text(weight: "bold")[D] \ $z=3+i$ \ (3,1)]],
 )
 
 #v(8pt)
-#rect(width: 100%, fill: rgb("#fef9c3"), stroke: rgb("#facc15"), radius: 6pt, inset: 8pt)[
-  #text(weight: "bold")[Derivation:] Side $s = |B - A| = |2 i| = 2$; Modulus $|1+i| = sqrt(2)$; $s^2 = 4$.
+// Reasoning chain: conjugate → side → modulus → area, flowing with arrows
+#rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 8pt)[
+  #text(weight: "bold")[How it connects:] conj(A) $= 1-i$ mirrors across Re $arrow.r$ reflection; side $s = |B-A| = |2i| = 2$; modulus $|1+i| = sqrt(2)$; therefore $s^2 = 4$.
 ]
 
 #v(6pt)
 #align(center)[#rect(fill: rgb("#facc15"), stroke: none, radius: 6pt, inset: 8pt)[#text(weight: "bold", size: 13pt)[Area = 4]]]
 
-#align(left)[#text(size: 9pt, fill: rgb("#64748b"))[Why this matters: A square’s area is side² — here side s = |B − A| = 2, so Area = 4. Conjugate mirrors across Re.]]
+#align(left)[#text(size: 9pt, fill: rgb("#64748b"))[Takeaway: a square’s area is side² — here side s = |B − A| = 2, so Area = 4.]]
 '''
 
 TEMPLATE_TORQUE = r'''
@@ -54,19 +55,22 @@ TEMPLATE_TORQUE = r'''
   caption: [Pivot O, position vector r, force F, angle θ between them, torque τ out of page.],
 ) <torque-hero>
 
-#grid(columns: (1fr, 1fr), gutter: 10pt,
-  rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 8pt)[
-    #text(weight: "bold")[r] \ position vector \ from pivot to point of application
-  ],
-  rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 8pt)[
-    #text(weight: "bold")[τ = r × F] \ magnitude $r F sin(θ)$
-  ],
+#grid(columns: (1fr, 1fr, 1fr, 1fr), gutter: 8pt,
+  rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 6pt)[#align(center)[#text(weight: "bold")[O] \ pivot]],
+  rect(width: 100%, fill: rgb("#ede9fe"), stroke: rgb("#6366f1"), radius: 6pt, inset: 6pt)[#align(center)[#text(weight: "bold")[r] \ 55° lever]],
+  rect(width: 100%, fill: rgb("#fef2f2"), stroke: rgb("#dc2626"), radius: 6pt, inset: 6pt)[#align(center)[#text(weight: "bold")[F] \ 90° force]],
+  rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 6pt)[#align(center)[#text(weight: "bold")[θ = 35°] \ between r, F]],
 )
 
 #v(8pt)
 #rect(width: 100%, fill: rgb("#fef9c3"), stroke: rgb("#facc15"), radius: 6pt, inset: 8pt)[
-  #text(weight: "bold")[Takeaway:] A force far from the pivot (large r) with θ near 90° gives maximal torque — like pushing a door at the handle.
+  #text(weight: "bold")[Reasoning:] $theta = 90° - 55° = 35°$; torque $tau = r times F$, magnitude $r F sin(theta)$; direction by right-hand rule (out of page).
 ]
+
+#v(6pt)
+#align(center)[#rect(fill: rgb("#facc15"), stroke: none, radius: 6pt, inset: 8pt)[#text(weight: "bold", size: 13pt)[τ = r × F]]]
+
+#align(left)[#text(size: 9pt, fill: rgb("#64748b"))[Takeaway: a force far from the pivot (large r) with θ near 90° gives maximal torque — like pushing a door at the handle.]]
 
 #align(left)[#text(size: 9pt, fill: rgb("#64748b"))[Tip: If θ = 0° (push along r), sinθ = 0 → no turning.]]
 '''

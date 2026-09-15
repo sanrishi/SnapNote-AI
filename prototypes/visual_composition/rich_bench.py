@@ -77,6 +77,13 @@ def bench():
             print(f"B rich Typst {name}: {len(data)} bytes, {ms_b:.1f}ms — {log[:80]}")
         else:
             print(f"B rich Typst {name} FAILED: {log[:300]}")
+        # B PNG for direct viewing (Typst rasterizes the same composition)
+        png, ms_p, log_p = render_rich_typst(spec, tmpl, name, "png")
+        if png:
+            open(os.path.join(OUT, f"rich_b_typst_{name}.png"), "wb").write(png)
+            print(f"B rich Typst PNG {name}: {len(png)} bytes, {ms_p:.1f}ms")
+        else:
+            print(f"B rich Typst PNG {name} FAILED: {log_p[:200]}")
 
 
 if __name__ == "__main__":
