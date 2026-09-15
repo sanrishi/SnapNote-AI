@@ -40,8 +40,8 @@ ARGAND_SPEC = VisualSpec(
                 central_label="Square ABCD",
                 callouts=[
                     "A: z = 1 + i → (1,1)",
-                    "B: -1 + 3i → (-1,3) reflected",
-                    "Side s = √[(2)²] = 2",
+                    "B: 1 + 3i → (1,3)",
+                    "Side s = |B-A| = 2",
                     "Area = s² = 4"
                 ]
             )

@@ -21,22 +21,22 @@ TEMPLATE_ARGAND = r'''
 
 #grid(columns: (1fr, 1fr), gutter: 10pt,
   rect(width: 100%, height: 60pt, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt)[
-    #text(weight: "bold")[A: z = 1 + i] \ (1, 1) \ Conjugate → reflection across Re
+    #text(weight: "bold")[A: z = 1 + i] \ (1, 1) \ conj(A) = 1 − i → (1, −1), mirror across Re
   ],
   rect(width: 100%, height: 60pt, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt)[
-    #text(weight: "bold")[B: z = -1 + 3i] \ (-1, 3) \ Mirror of A
+    #text(weight: "bold")[B: z = 1 + 3i] \ (1, 3) \ C: 3 + 3i, D: 3 + i
   ],
 )
 
 #v(8pt)
 #rect(width: 100%, fill: rgb("#fef9c3"), stroke: rgb("#facc15"), radius: 6pt, inset: 8pt)[
-  #text(weight: "bold")[Derivation:] Side $s = sqrt((3-1)^2 + (1-1)^2) = 2$; Modulus $|z| = sqrt(x^2+y^2)$; $s^2 = 4$.
+  #text(weight: "bold")[Derivation:] Side $s = |B - A| = |2 i| = 2$; Modulus $|1+i| = sqrt(2)$; $s^2 = 4$.
 ]
 
 #v(6pt)
 #align(center)[#rect(fill: rgb("#facc15"), stroke: none, radius: 6pt, inset: 8pt)[#text(weight: "bold", size: 13pt)[Area = 4]]]
 
-#align(left)[#text(size: 9pt, fill: rgb("#64748b"))[Why this matters: A square’s area is side² — here the side comes from the distance between conjugate-related points.]]
+#align(left)[#text(size: 9pt, fill: rgb("#64748b"))[Why this matters: A square’s area is side² — here side s = |B − A| = 2, so Area = 4. Conjugate mirrors across Re.]]
 '''
 
 TEMPLATE_TORQUE = r'''

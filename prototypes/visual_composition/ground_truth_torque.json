@@ -1,0 +1,23 @@
+{
+  "concept": "Torque from position vector and force",
+  "source_note": "Ground truth for the torque lesson. Angles in degrees, 0=right, 90=up. Renderer must reproduce exactly.",
+  "pivot": { "label": "O", "kind": "pivot" },
+  "vectors": [
+    { "label": "r", "angle_deg": 55, "length": 1.1, "tail": "", "color": "accent", "meaning": "position vector from pivot to point of application" },
+    { "label": "F", "angle_deg": 90, "length": 0.8, "tail": "r", "color": "red", "meaning": "force applied at tip of r" }
+  ],
+  "angle": { "label": "θ", "between": ["r", "F"], "value_deg": 35, "meaning": "angle between r and F" },
+  "arc": { "label": "τ", "around": "O", "direction": "ccw", "meaning": "torque direction" },
+  "relationships": [
+    { "kind": "vector_equation", "expression": "τ = r × F", "meaning": "torque is the cross product" },
+    { "kind": "magnitude", "expression": "|τ| = r·F·sin(θ)", "meaning": "maximal at θ=90°" }
+  ],
+  "reasoning": [
+    { "step": 1, "eq": "r at 55°, F at 90° from tip of r", "why": "geometry of application", "consequence": "θ = 35°" },
+    { "step": 2, "eq": "τ = r × F", "why": "definition", "consequence": "direction by right-hand rule" }
+  ],
+  "takeaway": "A force far from the pivot with θ near 90° gives maximal torque — like pushing a door at the handle.",
+  "result": { "eq": "τ = r × F", "highlight": true },
+  "must_show": ["pivot O", "r", "F", "θ", "τ", "τ = r × F"],
+  "forbidden": ["L = Iω inside the visual", "ΔL = ∫τ dt inside the visual", "extra key-point bullets inside the visual"]
+}
