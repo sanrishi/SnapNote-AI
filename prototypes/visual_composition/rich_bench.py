@@ -31,7 +31,7 @@ REQUIRED_TOKENS_A = {
 # B-Typst composition must additionally carry the result + derivation (checked in template source).
 REQUIRED_TOKENS_B_TEMPLATE = {
     "torque": ["τ = r × F", "Takeaway"],
-    "argand": ["Area = 4", "Derivation"],
+    "argand": ["Area = 4", "How it connects"],
 }
 
 

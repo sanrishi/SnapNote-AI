@@ -45,13 +45,13 @@ TEMPLATE_TORQUE = r'''
 #set text(size: 10pt)
 
 #align(center)[#text(size: 18pt, weight: "bold")[Torque and Angular Momentum]]
-#v(6pt)
+#v(4pt)
 #align(center)[#text(size: 10pt, fill: rgb("#64748b"))[Pivot → r → F → θ → τ — the turning effect]]
-#v(12pt)
+#v(6pt)
 
-// Hero: force diagram (pivot O, r, F, θ, τ)
+// Hero: force diagram (pivot O, r, F, θ, τ) — keep to one page for PNG export
 #figure(
-  image("hero_torque.svg", width: 85%),
+  image("hero_torque.svg", width: 68%),
   caption: [Pivot O, position vector r, force F, angle θ between them, torque τ out of page.],
 ) <torque-hero>
 
