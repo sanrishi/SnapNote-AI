@@ -78,11 +78,9 @@ TEMPLATE_TORQUE = r'''
 def _hero_svg_for_spec(spec) -> str:
     import sys, os
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "backend")))
-    from app.utils.visual_renderer import render_deterministic_visual
-    svg = render_deterministic_visual(spec.deterministic)
-    # Extract just the hero stage SVG (the first <svg> is the whole visual; for hero we want the stage part
-    # For the prototype, we embed the whole visual as hero — the composition will add callouts around it.
-    return svg
+    from app.utils.visual_renderer import render_hero_geometry
+    # Bare geometry only (no title/caption/relation cards) — Typst owns ALL prose.
+    return render_hero_geometry(spec.deterministic)
 
 def render_rich_typst(spec, template: str, name: str, out_fmt: str = "pdf") -> tuple[bytes | None, float, str]:
     t0 = time.perf_counter()

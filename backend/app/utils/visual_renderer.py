@@ -887,6 +887,44 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
     return svg
 
 
+def render_hero_geometry(spec: DeterministicVisual) -> str:
+    """Geometry-only hero for composition engines (e.g. Typst).
+
+    Generic across scene kinds: keeps the stage rect + diagram geometry
+    (vectors, axes, curves, labels that belong to the geometry itself) and
+    drops ALL prose — no title, no legend, no relation/explanation cards, no
+    caption, no supplements. The composition layer (Typst) owns 100% of text.
+    Returns "" when there is no scene to draw.
+    """
+    if spec.scene is None:
+        return ""
+    scene = spec.scene
+    if scene.scene_kind == "force_diagram":
+        diagram, _, _, _ = _render_force_diagram(scene)
+    elif scene.scene_kind == "process_flow":
+        diagram, _, _, _ = _render_flow(scene)
+    elif scene.scene_kind == "plot":
+        diagram, _, _, _ = _render_plot(scene)
+    elif scene.scene_kind == "generic":
+        diagram, _, _, _ = _render_generic(scene, fallback_title="")
+    else:
+        return ""
+    if not diagram.strip():
+        return ""
+    pad = 16
+    vx, vy = STAGE_X - pad, STAGE_Y - pad
+    vw, vh = STAGE_W + 2 * pad, STAGE_H + 2 * pad
+    svg = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vx} {vy} {vw} {vh}" width="100%">'
+        f'<rect x="{vx}" y="{vy}" width="{vw}" height="{vh}" rx="14" fill="white"/>'
+        f'<rect x="{STAGE_X}" y="{STAGE_Y}" width="{STAGE_W}" height="{STAGE_H}" rx="14" '
+        f'fill="{BG_STAGE}" stroke="{STAGE_STROKE}" stroke-width="1.5"/>'
+        f"{diagram}</svg>"
+    )
+    svg = sanitize_svg(svg)
+    return svg or ""
+
+
 def _step_arrow(y_mid: int) -> str:
     """Downward arrow between two step boxes (polygon arrowhead)."""
     cx = VIEW_W / 2
