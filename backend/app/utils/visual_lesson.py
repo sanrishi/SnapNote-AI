@@ -311,9 +311,18 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
     )
 
 
-def compile_typst(source: str, out_format: str = "pdf", timeout: int = TYMST_TIMEOUT_SECONDS) -> bytes:
+def compile_typst(
+    source: str,
+    out_format: str = "pdf",
+    timeout: int = TYMST_TIMEOUT_SECONDS,
+    extra_files: dict[str, str] | None = None,
+) -> bytes:
     """Compile Typst source with the official CLI. Raises TypstUnavailable /
-    TypstCompileError — never returns a partial visual."""
+    TypstCompileError — never returns a partial visual.
+
+    `extra_files` maps filenames (e.g. ``{"hero.svg": "<svg/>"}``) to contents;
+    they are written next to ``in.typ`` so ``image("hero.svg")`` resolves.
+    """
     binary = shutil.which("typst")
     if binary is None:
         raise TypstUnavailable("typst CLI not found on PATH")
@@ -321,6 +330,11 @@ def compile_typst(source: str, out_format: str = "pdf", timeout: int = TYMST_TIM
         inp = str(Path(td) / "in.typ")
         out = str(Path(td) / f"out.{out_format}")
         Path(inp).write_text(source, encoding="utf-8")
+        for filename, contents in (extra_files or {}).items():
+            target = Path(td) / filename
+            if target.parent != Path(td):
+                raise TypstCompileError(f"refusing to write outside build dir: {filename!r}")
+            target.write_text(contents, encoding="utf-8")
         try:
             proc = subprocess.run(
                 [binary, "compile", inp, out, "--format", out_format],
@@ -358,7 +372,7 @@ def render_visual_lesson(spec: VisualSpec, out_format: str = "pdf") -> RenderedL
     source = build_lesson_typst(content)
     warnings: list[str] = []
     try:
-        data = compile_typst(source, out_format)
+        data = compile_typst(source, out_format, extra_files={"hero.svg": hero_svg})
         fallback = False
     except (TypstUnavailable, TypstCompileError) as e:
         warnings.append(str(e))
