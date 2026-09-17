@@ -138,8 +138,8 @@ def test_arrowheads_never_nested_any_family():
 
     from app.utils.visual_renderer import render_deterministic_visual, render_hero_geometry
 
-    specs = [_torque(), _argand(), _flow_spec(), _v3_torque(), _v3_argand()]
-    assert len(specs) == 5
+    specs = [_torque(), _argand(), _flow_spec(), _v3_torque(), _v3_argand(), _flow_v3_spec()]
+    assert len(specs) == 6
     for spec in specs:
         for svg in (render_deterministic_visual(spec.deterministic), render_hero_geometry(spec.deterministic)):
             assert "<polygon points=\"<polygon" not in svg
@@ -536,3 +536,127 @@ def test_fixture_suite_v3_torque_argand():
     # Exact content survives the boundary.
     content = extract_lesson_content(_v3_torque(), hero_svg="<svg/>")
     assert content.result_text == "τ = r × F"
+
+
+# ── req 10: engineering process_flow family with explicit v3 composition ──
+
+def _flow_v3_spec() -> VisualSpec:
+    """Engineering closed-loop control flow + explicit composition.
+
+    The composition result EQUALS the flow relation expression — the
+    contradiction gate (req 6) requires this whenever both are present.
+    All values are scene/node labels, not invented facts."""
+    from app.models.schemas import (
+        CompositionCallout,
+        CompositionReasoningStep,
+        CompositionResult,
+        FlowConnector,
+        FlowNode,
+        LessonComposition,
+        ProcessFlow,
+        VisualRelation,
+    )
+
+    spec = _torque()
+    assert spec.deterministic.scene is not None
+    spec.deterministic.scene.scene_kind = "process_flow"  # type: ignore[assignment]
+    spec.deterministic.scene.force = None
+    spec.deterministic.title = "Closed-Loop Control"
+    spec.deterministic.scene.caption = "A closed control loop: reference compared with feedback drives the plant."
+    spec.deterministic.scene.flow = ProcessFlow(
+        nodes=[
+            FlowNode(label="r"),
+            FlowNode(label="Controller"),
+            FlowNode(label="Plant"),
+            FlowNode(label="y"),
+        ],
+        connectors=[
+            FlowConnector(source=0, target=1, label="e"),
+            FlowConnector(source=1, target=2, label="u"),
+            FlowConnector(source=2, target=3, label=""),
+            FlowConnector(source=3, target=1, label="feedback", feedback=True),
+        ],
+        relation=VisualRelation(expression="e = r − y", caption="error = reference minus output"),
+    )
+    spec.deterministic.composition = LessonComposition(
+        title="Closed-Loop Control",
+        framing="Reference → error → control → plant → feedback",
+        callouts=[
+            CompositionCallout(id="node-r", label="r", value="reference input"),
+            CompositionCallout(id="node-e", label="e", value="error signal"),
+            CompositionCallout(id="node-u", label="u", value="control effort"),
+            CompositionCallout(id="node-y", label="y", value="measured output"),
+        ],
+        reasoning=[
+            CompositionReasoningStep(id="rs-err", expression="e = r − y", explanation="compare reference with feedback"),
+            CompositionReasoningStep(id="rs-act", expression="u drives plant", explanation="controller acts on the error"),
+        ],
+        result=CompositionResult(expression="e = r − y", emphasis=True),
+        takeaway="Feedback turns the error into the control signal that drives the plant toward the reference.",
+    )
+    return spec
+
+
+def test_v3_flow_validates_clean_and_extracts_exact():
+    spec = _flow_v3_spec()
+    assert validate_lesson_spec(spec) == []
+    content = extract_lesson_content(spec, hero_svg="<svg/>")
+    assert content.result_text == "e = r − y"
+    assert [c.heading for c in content.callouts] == ["r", "e", "u", "y"]
+    assert "compare reference with feedback" in content.reasoning
+    assert content.takeaway.startswith("Feedback turns the error")
+
+
+def test_v3_flow_renders_through_boundary():
+    spec = _flow_v3_spec()
+    mode, payload = _run(render_v3_visual(spec))
+    _assert_v3_shape(mode, payload)
+
+
+# ── req 6: contradiction gate (composition result vs scene relation) ──
+
+def test_v3_rejects_result_contradicting_scene_relation():
+    spec = _v3_torque()
+    assert spec.deterministic.scene is not None
+    assert spec.deterministic.scene.force is not None
+    assert spec.deterministic.scene.force.relation is not None
+    assert spec.deterministic.composition is not None
+    # Sanity: fixture agrees with its own scene relation.
+    assert spec.deterministic.scene.force.relation.expression == "τ = r × F"
+    # Contradict it: a different "answer" than the scene's own relation.
+    spec.deterministic.composition.result = CompositionResult(expression="τ = Iα", emphasis=True)
+    errors = validate_lesson_spec(spec)
+    assert any("contradicts scene relation" in e for e in errors)
+
+
+def test_v3_whitespace_only_difference_still_passes():
+    spec = _v3_torque()
+    assert spec.deterministic.composition is not None
+    assert spec.deterministic.composition.result is not None
+    spec.deterministic.composition.result.expression = "τ  =  r × F"
+    assert validate_lesson_spec(spec) == []
+
+
+def test_v3_plot_composition_without_scene_relation_passes():
+    # Argand has a composition result but the plot scene carries no relation:
+    # the gate only fires when BOTH are present, so this must stay valid.
+    assert validate_lesson_spec(_v3_argand()) == []
+
+
+# ── req 12 (part 1): no/unsafe composition → derived fallback, not failure ──
+
+def test_v3_absent_composition_uses_derived_fallback():
+    """A spec with NO composition must still render via the v2 derived path
+    (equations/steps/points) — never fail merely because composition is absent.
+    This is the fallback req 7/12 relies on when evidence is insufficient."""
+    spec = _flow_v3_spec()
+    spec.deterministic.composition = None
+    assert validate_lesson_spec(spec) == []
+    content = extract_lesson_content(spec, hero_svg="<svg/>")
+    # Derived path: explicit framing is gone, scene-derived content remains,
+    # and the visual still renders — absence of composition is never a failure.
+    assert "Reference → error" not in content.subtitle
+    assert "Feedback turns the error" not in content.takeaway
+    assert content.takeaway != ""
+    mode, payload = _run(render_v3_visual(spec))
+    _assert_v3_shape(mode, payload)

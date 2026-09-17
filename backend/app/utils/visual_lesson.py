@@ -176,7 +176,38 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
     comp = det.composition
     if comp is not None:
         errors.extend(_validate_composition(comp))
+        # Req 6 — contradiction gate: when the scene carries its own relation
+        # expression AND the composition highlights a result, both render as
+        # "the answer" and must agree (whitespace-insensitive; math is
+        # case-significant so no case folding). Deeper numeric cross-checking
+        # (e.g. requiring every number in reasoning to appear in scene labels)
+        # is deliberately NOT done: derived arithmetic such as θ = 90° − 55°
+        # legitimately combines emitted values, so such a check would reject
+        # honest reasoning. Anti-invention for callouts/reasoning is enforced
+        # at the prompt layer (composition grounding rules) instead.
+        relation_expr = _scene_relation_expression(scene)
+        result_expr = (comp.result.expression if comp.result is not None else "") or ""
+        if relation_expr.strip() and result_expr.strip():
+            if " ".join(relation_expr.split()) != " ".join(result_expr.split()):
+                errors.append(
+                    "composition result contradicts scene relation: "
+                    f"{result_expr!r} != {relation_expr!r}"
+                )
     return errors
+
+
+def _scene_relation_expression(scene) -> str:
+    """Extract the scene's own relation expression, if any (force/flow only)."""
+    try:
+        if scene.scene_kind == "force_diagram" and scene.force is not None:
+            rel = scene.force.relation
+        elif scene.scene_kind == "process_flow" and scene.flow is not None:
+            rel = scene.flow.relation
+        else:
+            return ""
+        return (rel.expression if rel is not None else "") or ""
+    except AttributeError:
+        return ""
 
 
 def _validate_composition(comp) -> list[str]:

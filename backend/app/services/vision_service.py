@@ -430,6 +430,20 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
 
   When the screenshot shows a graph/plot/trajectory (parabola, sine wave, polar curve, projectile), prefer "plot" with a safe expr. When it shows vectors/forces, prefer "force_diagram". When it shows boxes/arrows, prefer "process_flow".
 
+THE COMPOSITION BLOCK (explicit lesson content):
+Inside "deterministic.composition" you describe the LESSON the visual teaches — title, framing, callout chips, reasoning chain, highlighted result, takeaway. The renderer draws this block verbatim around the scene geometry, so every word must already be grounded.
+  - "title": short title, max 80 chars (usually repeats deterministic.title).
+  - "framing": one-line concept framing, max 200 chars.
+  - "callouts": 2-4 items, each {"id": "vec-r" (plain ASCII only: lowercase a-z, digits, _ and - only, max 32 chars, referencing what it describes — e.g. "vec-r", "node-err", NEVER Unicode subscripts like "node₀"), "label": "r" (max 24 chars), "value": "55° lever" (max 80 chars)}. Labels/values may use Unicode math (θ, τ, ×); ids MUST be plain ASCII.
+  - "reasoning": up to 4 steps, each {"id": "rs-theta" (same plain-ASCII id rule, e.g. "rs-1", "rs-tau"), "expression": "θ = 90° − 55° = 35°" (max 120 chars, exact Unicode math, NO LaTeX), "explanation": "angle between r and F" (max 200 chars)}.
+  - "result": {"expression": "τ = r × F" (max 120 chars), "emphasis": true}.
+  - "takeaway": one sentence, max 200 chars.
+  COMPOSITION GROUNDING (never invent to make the visual richer):
+  - Every callout label/value must come from a scene label you already emitted or verbatim text in the image/notes. Never invent new symbols, numbers, or names.
+  - Every reasoning expression must use ONLY equations/symbols visible in the image, the notes, or the scene you emitted. Arithmetic combining values you already emitted (e.g. θ = 90° − 55°) is allowed; new factual claims are forbidden.
+  - The result expression must EQUAL the scene's own relation expression when a relation exists; otherwise it must be an equation verbatim from the image/notes.
+  - If you cannot fill callouts/reasoning/result from visible evidence, OMIT the entire "composition" block. The renderer falls back to derived content automatically. Never hallucinate missing reasoning merely to fill the template.
+
 GROUNDING RULES:
 1. The screenshot is the source of truth. The study notes below are helpful context, but never invent content that conflicts with what the image actually shows.
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
@@ -454,7 +468,15 @@ OUTPUT: ONLY a JSON object with exactly this structure:
     },
     "equations": [{"expression": "exact formula in Unicode, no LaTeX, no backslash", "meaning": "one line: what each symbol means and what the relationship represents"}],
     "steps": ["ordered steps, each a short phrase"],
-    "points": ["key points, each a short phrase"]
+    "points": ["key points, each a short phrase"],
+    "composition": {
+      "title": "short title, max 80 chars",
+      "framing": "one-line concept framing, max 200 chars",
+      "callouts": [{"id": "vec-r", "label": "r", "value": "55° lever"}],
+      "reasoning": [{"id": "rs-theta", "expression": "θ = 90° − 55° = 35°", "explanation": "angle between r and F"}],
+      "result": {"expression": "τ = r × F", "emphasis": true},
+      "takeaway": "one sentence, max 200 chars"
+    }
   },
   "visual_form": "the chosen visual form, e.g. 'force vector diagram' or 'labeled block diagram' or 'step-by-step flowchart'",
   "key_elements": ["every box/axis/label/marker the visual must contain, verbatim text in quotes"],
@@ -466,7 +488,8 @@ OUTPUT: ONLY a JSON object with exactly this structure:
 FIELD RULES:
 - "text_required": true when readable text/symbols are essential to the visual (always true in deterministic mode). false only for a purely conceptual illustration that conveys meaning through pictures alone.
 - "deterministic": ALWAYS populate it. Prefer providing a "scene" (a real diagram) when the concept maps to force_diagram, process_flow or plot; the renderer draws it. IMPORTANT — Explain Visually is a VISUAL ARTIFACT, not a second study sheet: when you emit a scene, keep it geometry-first (objects, vectors, angles, arcs, relationships, labels) and do NOT fill equations/steps/points with the same material that already lives in the study notes. Leave equations/steps/points EMPTY when a scene is present; the only equation allowed inside the visual is the scene's own "relation" (e.g. "τ = r × F") plus the one-line caption. Fill equations/steps/points ONLY when there is no scene (the renderer then falls back to a card layout). In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
-- Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support."""
+- Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support.
+- "composition": emit it ONLY when you have enough structured evidence (scene labels + visible equations) to fill callouts/reasoning/result honestly. Omit the block entirely when evidence is thin — the renderer falls back gracefully. Never emit a composition whose values you invented."""
 
 
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:

@@ -23,6 +23,10 @@ IMAGES = [
     ("physics-torque-board", "../../website/samples/physics-demo.jpg"),
     ("math-complex-board", "../../website/samples/math-demo.jpg"),
     ("engineering-third", "../../website/samples/engineering-demo.jpg"),
+    # Req 12: messy prose input — explicit composition SHOULD be absent here
+    # (insufficient structured evidence); the run must prove derived fallback
+    # rather than invented content.
+    ("messy-prose-plain", "../../stress_test_fixtures/6_plain_prose.png"),
 ]
 
 OUT = os.path.join(os.path.dirname(__file__), "outputs")
@@ -51,6 +55,23 @@ async def one(name: str, path: str) -> dict:
         report["has_scene"] = det.scene is not None
         report["scene_kind"] = det.scene.scene_kind if det.scene else None
         report["has_composition"] = det.composition is not None
+        if det.composition is not None:
+            comp = det.composition
+            report["composition"] = {
+                "title": comp.title,
+                "framing": comp.framing,
+                "callouts": [{"id": c.id, "label": c.label, "value": c.value} for c in comp.callouts],
+                "reasoning": [
+                    {"id": s.id, "expression": s.expression, "explanation": s.explanation}
+                    for s in comp.reasoning
+                ],
+                "result": comp.result.expression if comp.result else None,
+                "takeaway": comp.takeaway,
+            }
+            report["composition_source"] = "explicit"
+        else:
+            report["composition_source"] = "derived-fallback"
+            report["fallback_reason"] = "Gemini omitted composition (insufficient structured evidence)"
         errors = validate_lesson_spec(spec)
         report["validation"] = errors or "clean"
         try:
@@ -85,7 +106,7 @@ async def main():
     for name, rel in IMAGES:
         print(f"--- {name} ---", flush=True)
         rep = await one(name, os.path.join(base, rel))
-        print(json.dumps(rep, indent=1, ensure_ascii=False)[:1500], flush=True)
+        print(json.dumps(rep, indent=1, ensure_ascii=True)[:1500], flush=True)
         results.append(rep)
     open(os.path.join(OUT, "real_input_report.json"), "w", encoding="utf-8").write(
         json.dumps(results, indent=1, ensure_ascii=False)
