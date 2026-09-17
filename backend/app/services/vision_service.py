@@ -508,10 +508,83 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
     raw = await _call_gemini(prompt, image_bytes, json_mode=True)
     try:
         data = _clean_latex_in_dict(_extract_json(raw))
-        return VisualSpec(**data)
+        spec = VisualSpec(**data)
     except (json.JSONDecodeError, ValidationError) as e:
         logger.warning("VisualSpec parse failed: %s", e)
         raise UpstreamError(
             service="SnapNote AI",
             detail="Could not plan an educational visual for this material.",
         )
+    # One-shot contradiction repair (v3 composition): the scene relation and
+    # the composition result both render as the visual's single highlighted
+    # answer, so a mismatch is refused downstream. Real boards can carry two
+    # grounded-but-complementary forms (e.g. "τ = r × F" and "|τ| = rF sin θ"),
+    # and Gemini non-deterministically picks different ones per slot — so give
+    # it exactly one bounded second chance to reconcile to a single grounded
+    # expression. Anything still mismatched (or any other failure) refuses
+    # honestly as before. At most one extra Gemini call, only on mismatch.
+    contradiction = _composition_contradiction(spec)
+    if contradiction is not None:
+        relation_expr, result_expr = contradiction
+        logger.warning(
+            "VisualSpec composition contradicts scene relation (%r != %r); attempting one repair",
+            result_expr,
+            relation_expr,
+        )
+        repair_prompt = (
+            COMPOSITION_RECONCILE_PROMPT.replace("{{RELATION}}", relation_expr)
+            .replace("{{RESULT}}", result_expr)
+            .replace("{{PREVIOUS_JSON}}", json.dumps(data, ensure_ascii=False))
+        )
+        if study_notes is not None:
+            notes_json = study_notes.model_dump_json(exclude={"diagram_spec", "diagram"})
+            repair_prompt += "\n\nSTUDY NOTES (context — do not contradict the screenshot):\n" + notes_json
+        try:
+            repair_raw = await _call_gemini(repair_prompt, image_bytes, json_mode=True)
+            repair_data = _clean_latex_in_dict(_extract_json(repair_raw))
+            repaired = VisualSpec(**repair_data)
+        except (json.JSONDecodeError, ValidationError, UpstreamError) as e:
+            logger.warning("VisualSpec contradiction repair failed: %s", e)
+            raise UpstreamError(
+                service="SnapNote AI",
+                detail="Could not plan an educational visual for this material.",
+            )
+        if _composition_contradiction(repaired) is not None:
+            logger.warning("VisualSpec contradiction persists after repair; refusing")
+            raise UpstreamError(
+                service="SnapNote AI",
+                detail="Could not plan an educational visual for this material.",
+            )
+        return repaired
+    return spec
+
+
+COMPOSITION_RECONCILE_PROMPT = r"""You previously emitted the visual spec below, but its scene relation and composition result disagree, so the visual would show two different highlighted answers.
+
+- Scene relation expression: "{{RELATION}}"
+- Composition result expression: "{{RESULT}}"
+
+YOUR PREVIOUS RESPONSE:
+{{PREVIOUS_JSON}}
+
+Re-emit the COMPLETE spec JSON with this fixed: choose the ONE expression that is actually grounded in the screenshot and study notes and put that identical expression in BOTH the scene relation and the composition result (whitespace differences are fine). If neither expression is truly grounded, omit the composition block entirely instead — never invent a third expression to paper over the disagreement. Keep every other field identical to your previous response above. Return ONLY the JSON object, no other text."""
+
+
+def _composition_contradiction(spec: VisualSpec) -> tuple[str, str] | None:
+    """Return (relation, result) when both are present but disagree (pure).
+
+    Whitespace-insensitive comparison; math is case-significant so no case
+    folding. None means no contradiction (either side absent, or agreement).
+    """
+    from app.utils.visual_lesson import _scene_relation_expression
+
+    det = spec.deterministic
+    comp = det.composition
+    if comp is None or det.scene is None:
+        return None
+    relation_expr = _scene_relation_expression(det.scene)
+    result_expr = (comp.result.expression if comp.result is not None else "") or ""
+    if relation_expr.strip() and result_expr.strip():
+        if " ".join(relation_expr.split()) != " ".join(result_expr.split()):
+            return relation_expr, result_expr
+    return None

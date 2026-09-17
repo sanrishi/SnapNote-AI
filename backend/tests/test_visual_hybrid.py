@@ -459,3 +459,95 @@ async def _run_generate(spec):
     from app.services.visual_service import generate_visual
 
     return await generate_visual(spec)
+
+
+# ── v3 contradiction repair (one bounded retry, then honest refusal) ──
+
+def _v3_torque_json(result_expr: str | None = None) -> str:
+    import json
+
+    from ground_truth_specs import torque_v3_spec_from_ground_truth
+
+    spec = torque_v3_spec_from_ground_truth()
+    if result_expr is not None:
+        assert spec.deterministic.composition is not None
+        assert spec.deterministic.composition.result is not None
+        spec.deterministic.composition.result.expression = result_expr
+    return spec.model_dump_json()
+
+
+def _run_build(coro):
+    return asyncio.run(coro)
+
+
+def test_composition_contradiction_helper_pure():
+    from ground_truth_specs import (
+        argand_v3_spec_from_ground_truth,
+        torque_v3_spec_from_ground_truth,
+    )
+    from app.services.vision_service import _composition_contradiction
+
+    assert _composition_contradiction(torque_v3_spec_from_ground_truth()) is None
+    # Plot scene carries no relation: result alone is never a contradiction.
+    assert _composition_contradiction(argand_v3_spec_from_ground_truth()) is None
+    clean = torque_v3_spec_from_ground_truth()
+    clean.deterministic.composition = None
+    assert _composition_contradiction(clean) is None
+    bad = torque_v3_spec_from_ground_truth()
+    assert bad.deterministic.composition is not None
+    assert bad.deterministic.composition.result is not None
+    bad.deterministic.composition.result.expression = "τ = Iα"
+    found = _composition_contradiction(bad)
+    assert found is not None and found[0] == "τ = r × F" and found[1] == "τ = Iα"
+
+
+def test_build_visual_spec_no_contradiction_single_call(monkeypatch):
+    from app.services import vision_service
+
+    calls: list[str] = []
+
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False) -> str:
+        calls.append(prompt)
+        return _v3_torque_json()
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    spec = _run_build(vision_service.build_visual_spec(b"fake", None))
+    assert spec.deterministic.title == "Torque and Angular Momentum"
+    assert len(calls) == 1
+
+
+def test_build_visual_spec_contradiction_repaired_once(monkeypatch):
+    from app.services import vision_service
+
+    responses = [_v3_torque_json("ΔL = ∫τ dt"), _v3_torque_json()]
+    calls: list[str] = []
+
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False) -> str:
+        calls.append(prompt)
+        return responses[min(len(calls) - 1, 1)]
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    spec = _run_build(vision_service.build_visual_spec(b"fake", None))
+    assert spec.deterministic.composition is not None
+    assert spec.deterministic.composition.result is not None
+    assert spec.deterministic.composition.result.expression == "τ = r × F"
+    assert len(calls) == 2
+    # Repair prompt quotes both disagreeing expressions for reconciliation.
+    assert "τ = r × F" in calls[1] and "ΔL = ∫τ dt" in calls[1]
+
+
+def test_build_visual_spec_contradiction_persists_refuses(monkeypatch):
+    from app.exceptions import UpstreamError
+    from app.services import vision_service
+
+    calls: list[str] = []
+
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False) -> str:
+        calls.append(prompt)
+        return _v3_torque_json("τ = Iα")
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    with pytest.raises(UpstreamError):
+        _run_build(vision_service.build_visual_spec(b"fake", None))
+    # Exactly one repair attempt — never an unbounded retry loop.
+    assert len(calls) == 2
