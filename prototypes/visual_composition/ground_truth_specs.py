@@ -12,10 +12,14 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "backend")))
 
 from app.models.schemas import (
+    CompositionCallout,
+    CompositionReasoningStep,
+    CompositionResult,
     DeterministicVisual,
     FlowConnector,
     FlowNode,
     ForceDiagram,
+    LessonComposition,
     ProcessFlow,
     VisualAngle,
     VisualArc,
@@ -126,3 +130,50 @@ def torque_spec_from_ground_truth() -> VisualSpec:
         must_show=["pivot", "r", "F", "θ", "τ"],
         avoid=["photo-realism"],
     )
+
+
+def torque_v3_spec_from_ground_truth() -> VisualSpec:
+    """v3: same geometry truth as v2 + explicit composition (no inference)."""
+    spec = torque_spec_from_ground_truth()
+    spec.deterministic.composition = LessonComposition(
+        title="Torque and Angular Momentum",
+        framing="Pivot → r → F → θ → τ — the turning effect",
+        callouts=[
+            CompositionCallout(id="obj-pivot", label="O", value="pivot"),
+            CompositionCallout(id="vec-r", label="r", value="55° lever"),
+            CompositionCallout(id="vec-f", label="F", value="90° force"),
+            CompositionCallout(id="ang-theta", label="θ = 35°", value="between r, F"),
+        ],
+        reasoning=[
+            CompositionReasoningStep(id="rs-theta", expression="θ = 90° − 55° = 35°", explanation="angle between r and F"),
+            CompositionReasoningStep(id="rs-tau", expression="τ = r × F", explanation="magnitude rF sin(θ)"),
+            CompositionReasoningStep(id="rs-dir", expression="right-hand rule", explanation="direction out of page"),
+        ],
+        result=CompositionResult(expression="τ = r × F", emphasis=True),
+        takeaway="A force far from the pivot (large r) with θ near 90° gives maximal torque — like pushing a door at the handle.",
+    )
+    return spec
+
+
+def argand_v3_spec_from_ground_truth() -> VisualSpec:
+    """v3: same geometry truth as v2 + explicit composition (no inference)."""
+    spec = argand_spec_from_ground_truth()
+    pts = load_ground_truth("argand")["points"]
+    spec.deterministic.composition = LessonComposition(
+        title="Square on Argand Plane",
+        framing="Each complex number is a point: z = x + iy → (x, y)",
+        callouts=[
+            CompositionCallout(id="pt-a", label="A", value=f"z = {pts['A']['z']} ({pts['A']['re']},{pts['A']['im']})"),
+            CompositionCallout(id="pt-b", label="B", value=f"z = {pts['B']['z']} ({pts['B']['re']},{pts['B']['im']})"),
+            CompositionCallout(id="pt-c", label="C", value=f"z = {pts['C']['z']} ({pts['C']['re']},{pts['C']['im']})"),
+            CompositionCallout(id="pt-d", label="D", value=f"z = {pts['D']['z']} ({pts['D']['re']},{pts['D']['im']})"),
+        ],
+        reasoning=[
+            CompositionReasoningStep(id="rs-conj", expression="conj(A) = 1 − i", explanation="mirrors across Re → reflection"),
+            CompositionReasoningStep(id="rs-side", expression="s = |B − A| = |2i| = 2", explanation="distance formula"),
+            CompositionReasoningStep(id="rs-mod", expression="|1 + i| = √2", explanation="modulus"),
+        ],
+        result=CompositionResult(expression="Area = 4", emphasis=True),
+        takeaway="A square's area is side² — here side s = |B − A| = 2, so Area = 4.",
+    )
+    return spec

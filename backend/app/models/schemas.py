@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ExtractionType(str, Enum):
@@ -236,6 +236,54 @@ class VisualScene(BaseModel):
     generic: VisualGeneric | None = None
 
 
+class CompositionCallout(BaseModel):
+    """One lesson chip: stable anchor id + short label + value. No pixels."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(default="", pattern=r"^[a-z0-9_-]{1,32}$")
+    label: str = Field(default="", max_length=24)
+    value: str = Field(default="", max_length=80)
+
+
+class CompositionReasoningStep(BaseModel):
+    """One reasoning row: exact expression + short explanation."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(default="", pattern=r"^[a-z0-9_-]{1,32}$")
+    expression: str = Field(default="", max_length=120)
+    explanation: str = Field(default="", max_length=200)
+
+
+class CompositionResult(BaseModel):
+    """Highlighted final result. Expression passes through byte-identical."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    expression: str = Field(default="", max_length=120)
+    emphasis: bool = True
+
+
+class LessonComposition(BaseModel):
+    """Explicit educational composition (VisualSpec v3).
+
+    Optional block: absent (None) = v2 derived behavior exactly. Present =
+    explicit lesson preferred over derivation. Values originate from validated
+    semantic data and pass through byte-identical; composition never invents
+    geometry or facts.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    title: str = Field(default="", max_length=80)
+    framing: str = Field(default="", max_length=200)
+    callouts: list[CompositionCallout] = Field(default_factory=list, max_length=6)
+    reasoning: list[CompositionReasoningStep] = Field(default_factory=list, max_length=4)
+    result: CompositionResult | None = None
+    takeaway: str = Field(default="", max_length=200)
+
+
 class DeterministicVisual(BaseModel):
     """Exact, bounded content payload for the deterministic renderer.
 
@@ -248,6 +296,9 @@ class DeterministicVisual(BaseModel):
     Code owns ALL layout/geometry; Gemini only supplies semantics (labels,
     angles in degrees, relative lengths, relationships). Never pixel
     coordinates.
+
+    v3: optional `composition` carries the explicit educational composition.
+    Absent = v2 derived behavior (unchanged).
     """
 
     title: str = ""
@@ -255,6 +306,7 @@ class DeterministicVisual(BaseModel):
     equations: list[VisualEquation] = []
     steps: list[str] = []
     points: list[str] = []
+    composition: LessonComposition | None = None
 
 
 class VisualSpec(BaseModel):

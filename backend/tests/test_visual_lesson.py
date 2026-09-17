@@ -12,7 +12,13 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
 
 import pytest
 
-from app.models.schemas import VisualSpec
+from app.models.schemas import (
+    CompositionCallout,
+    CompositionReasoningStep,
+    CompositionResult,
+    LessonComposition,
+    VisualSpec,
+)
 from app.utils import visual_lesson as vl
 from app.utils.visual_lesson import (
     LessonValidationError,
@@ -188,3 +194,97 @@ def test_full_render_when_available():
             src = build_lesson_typst(content)
             data = compile_typst(src, "pdf")
             assert data[:5] == b"%PDF-", "Typst must produce a real PDF"
+
+
+# ── v3 composition input ──
+
+def _v3_torque() -> VisualSpec:
+    from ground_truth_specs import torque_v3_spec_from_ground_truth
+
+    return torque_v3_spec_from_ground_truth()
+
+
+def _v3_argand() -> VisualSpec:
+    from ground_truth_specs import argand_v3_spec_from_ground_truth
+
+    return argand_v3_spec_from_ground_truth()
+
+
+def test_v3_validates_clean():
+    assert validate_lesson_spec(_v3_torque()) == []
+    assert validate_lesson_spec(_v3_argand()) == []
+
+
+def test_v3_extract_prefers_composition_exact():
+    content = extract_lesson_content(_v3_torque(), hero_svg="<svg/>")
+    assert content.title == "Torque and Angular Momentum"
+    assert content.subtitle == "Pivot → r → F → θ → τ — the turning effect"
+    assert [c.heading for c in content.callouts] == ["O", "r", "F", "θ = 35°"]
+    assert "θ = 90° − 55° = 35°" in content.reasoning
+    assert "τ = r × F" in content.reasoning
+    assert content.result_text == "τ = r × F"
+    assert content.takeaway.startswith("A force far from the pivot")
+
+    content_a = extract_lesson_content(_v3_argand(), hero_svg="<svg/>")
+    assert [c.heading for c in content_a.callouts] == ["A", "B", "C", "D"]
+    assert "z = 1+i" in content_a.callouts[0].body
+    assert "(1,1)" in content_a.callouts[0].body
+    assert "Area = 4" in content_a.result_text
+    assert "side s = |B − A| = 2" in content_a.takeaway
+
+
+def test_v3_rejects_duplicate_ids():
+    from pydantic import ValidationError
+
+    spec = _v3_torque()
+    assert spec.deterministic.composition is not None
+    spec.deterministic.composition.callouts[1].id = spec.deterministic.composition.callouts[0].id
+    errors = validate_lesson_spec(spec)
+    assert any("duplicated" in e for e in errors)
+
+
+def test_v3_rejects_empty_composition():
+    spec = _v3_torque()
+    spec.deterministic.composition = LessonComposition()
+    errors = validate_lesson_spec(spec)
+    assert any("empty" in e for e in errors)
+
+
+def test_v3_rejects_empty_callout_label_and_result():
+    spec = _v3_torque()
+    assert spec.deterministic.composition is not None
+    spec.deterministic.composition.callouts[0].label = "  "
+    spec.deterministic.composition.result = CompositionResult(expression="  ")
+    errors = validate_lesson_spec(spec)
+    assert any("empty label" in e for e in errors)
+    assert any("empty expression" in e for e in errors)
+
+
+def test_v3_rejects_unknown_fields():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        CompositionCallout(id="x", label="y", value="z", pixel_x=12)  # type: ignore[call-arg]
+    with pytest.raises(ValidationError):
+        LessonComposition(title="t", unknown_block="x")  # type: ignore[call-arg]
+
+
+def test_v3_rejects_too_many_callouts_and_long_label():
+    from pydantic import ValidationError
+
+    with pytest.raises(ValidationError):
+        LessonComposition(
+            callouts=[CompositionCallout(id=f"c{i}", label="l", value="v") for i in range(7)]
+        )
+    with pytest.raises(ValidationError):
+        CompositionCallout(id="c0", label="x" * 25, value="v")
+
+
+def test_v3_typst_source_carries_composition_once():
+    content = extract_lesson_content(_v3_argand(), hero_svg="<svg/>")
+    src = build_lesson_typst(content)
+    assert "Square on Argand Plane" in src
+    assert "Area = 4" in src
+    assert src.count("Square on Argand Plane") == 1
+    # composition body values pass through byte-identical
+    assert "z = 1+i" in src

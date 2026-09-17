@@ -171,6 +171,43 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
     elif kind == "generic":
         if scene.generic is None or not (scene.generic.central_label or "").strip():
             errors.append("generic scene needs a central_label")
+    comp = det.composition
+    if comp is not None:
+        errors.extend(_validate_composition(comp))
+    return errors
+
+
+def _validate_composition(comp) -> list[str]:
+    """Validate the explicit v3 composition block (shape already enforced by
+    pydantic: id pattern, lengths, counts, extra=forbid). Checks semantic
+    rules only; values pass through byte-identical."""
+    from app.models.schemas import LessonComposition
+
+    assert isinstance(comp, LessonComposition)
+    errors: list[str] = []
+    seen_callouts: set[str] = set()
+    for c in comp.callouts:
+        if c.id in seen_callouts:
+            errors.append(f"composition callout id duplicated: {c.id!r}")
+        seen_callouts.add(c.id)
+        if not c.label.strip():
+            errors.append(f"composition callout {c.id!r} has empty label")
+    seen_steps: set[str] = set()
+    for s in comp.reasoning:
+        if s.id in seen_steps:
+            errors.append(f"composition reasoning id duplicated: {s.id!r}")
+        seen_steps.add(s.id)
+        if not s.expression.strip():
+            errors.append(f"composition reasoning {s.id!r} has empty expression")
+    if comp.result is not None and not (comp.result.expression or "").strip():
+        errors.append("composition result has empty expression")
+    if (
+        not comp.callouts
+        and not comp.reasoning
+        and comp.result is None
+        and not (comp.takeaway or "").strip()
+    ):
+        errors.append("composition is empty: needs callouts, reasoning, result or takeaway")
     return errors
 
 
@@ -196,6 +233,28 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
     scene = det.scene
     assert scene is not None
     family = select_family(spec)
+    comp = det.composition
+    if comp is not None:
+        # v3 explicit composition: prefer it over derivation. Values pass
+        # through byte-identical; order kept; no markdown parsing, no LLM.
+        v3_callouts = [
+            LessonCallout(heading=c.label.strip(), body=_clean(c.value))
+            for c in comp.callouts
+        ]
+        v3_reasoning = "; ".join(
+            (f"{s.expression.strip()} — {_clean(s.explanation)}" if _clean(s.explanation) else s.expression.strip())
+            for s in comp.reasoning
+        )
+        return LessonContent(
+            title=_clean(comp.title) or _clean(det.title) or "Key concept",
+            subtitle=_clean(comp.framing) or _clean(spec.concept),
+            hero_svg=hero_svg,
+            hero_kind=family,
+            callouts=v3_callouts,
+            reasoning=v3_reasoning,
+            result_text=(comp.result.expression.strip() if comp.result is not None else ""),
+            takeaway=_clean(comp.takeaway) or _clean(scene.caption),
+        )
     callouts: list[LessonCallout] = []
     reasoning_bits: list[str] = []
     result_text = ""

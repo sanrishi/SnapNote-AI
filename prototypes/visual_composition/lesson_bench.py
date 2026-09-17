@@ -10,7 +10,12 @@ import time
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "backend")))
 
-from ground_truth_specs import argand_spec_from_ground_truth, torque_spec_from_ground_truth
+from ground_truth_specs import (
+    argand_spec_from_ground_truth,
+    argand_v3_spec_from_ground_truth,
+    torque_spec_from_ground_truth,
+    torque_v3_spec_from_ground_truth,
+)
 from app.utils.visual_renderer import render_deterministic_visual
 from app.utils.visual_lesson import LessonValidationError, render_visual_lesson, select_family, validate_lesson_spec
 
@@ -48,6 +53,30 @@ def bench():
             print(f"  AFTER PNG {name}: {len(lesson_png.data)} bytes, total={lesson_png.ms_total:.1f}ms")
         except LessonValidationError as e:
             print(f"  AFTER PNG {name} REFUSED: {e}")
+
+    print("=== Lesson Contract — V3 explicit composition (same ground truth) ===")
+    for name, builder in [("torque", torque_v3_spec_from_ground_truth), ("argand", argand_v3_spec_from_ground_truth)]:
+        spec = builder()
+        errors = validate_lesson_spec(spec)
+        assert spec.deterministic.composition is not None
+        print(f"V3 {name}: validation errors={errors or 'none'}, family={select_family(spec)}")
+        assert not errors, f"v3 {name} must validate clean"
+        try:
+            lesson = render_visual_lesson(spec, out_format="pdf")
+            open(os.path.join(OUT, f"lesson_v3_{name}.{lesson.out_format}"), "wb").write(lesson.data)
+            print(
+                f"  V3 {name}: {len(lesson.data)} bytes {lesson.out_format}, "
+                f"total={lesson.ms_total:.1f}ms (hero={lesson.ms_hero:.1f}, compose={lesson.ms_compose:.1f}), "
+                f"fallback={lesson.fallback_used}, warnings={lesson.warnings}"
+            )
+        except LessonValidationError as e:
+            print(f"  V3 {name} REFUSED: {e}")
+        try:
+            lesson_png = render_visual_lesson(spec, out_format="png")
+            open(os.path.join(OUT, f"lesson_v3_{name}.{lesson_png.out_format}"), "wb").write(lesson_png.data)
+            print(f"  V3 PNG {name}: {len(lesson_png.data)} bytes, total={lesson_png.ms_total:.1f}ms")
+        except LessonValidationError as e:
+            print(f"  V3 PNG {name} REFUSED: {e}")
 
 
 if __name__ == "__main__":
