@@ -27,6 +27,7 @@ from app.services.vision_service import (
     extract_text_with_llm,
 )
 from app.services.visual_service import generate_visual
+from app.utils.visual_lesson import render_v3_visual, should_use_v3
 from app.services.storage_service import upload_image
 from app.utils.render_notes import render_study_notes
 from app.utils.tags import parse_context, generate_tags
@@ -319,7 +320,19 @@ async def extract_visual_route(
             logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
     spec = await build_visual_spec(enhanced, study_notes)
 
-    result = await generate_visual(spec)
+    # v3 composition boundary (flag-gated). Same spec object — no second
+    # understanding pipeline. Generative specs always use the legacy path.
+    v3_composed = should_use_v3(spec)
+    if v3_composed:
+        logger.info("Explain Visually v3 composition path (diagram %s)", diagramId[:8])
+        result = await render_v3_visual(spec)
+    else:
+        if settings.EXPLAIN_VISUALLY_V3:
+            logger.info(
+                "Explain Visually v3 flag on but render_mode=%s; using legacy path (diagram %s)",
+                spec.render_mode, diagramId[:8],
+            )
+        result = await generate_visual(spec)
     if result is None:
         raise UpstreamError(
             service="SnapNote AI",
@@ -345,7 +358,10 @@ async def extract_visual_route(
     if not visual_url:
         raise UpstreamError(service="SnapNote AI", detail="Could not store the generated visual. Please try again.")
 
-    if not set_visual_result(diagramId, effective_id, "generative", visual_url=visual_url):
+    # A v3-composed PNG is deterministic content (Typst from a validated spec),
+    # not a generative illustration — label it honestly for observability.
+    store_mode = "deterministic" if (v3_composed and mode == "png") else "generative"
+    if not set_visual_result(diagramId, effective_id, store_mode, visual_url=visual_url):
         logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
         existing = get_visual_entitlement(diagramId)
         if existing is not None:
@@ -353,7 +369,7 @@ async def extract_visual_route(
 
     return VisualExplanationResponse(
         diagramId=diagramId,
-        renderMode="generative",
+        renderMode=store_mode if v3_composed else "generative",
         imageUrl=visual_url,
         status="generated",
     )

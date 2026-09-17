@@ -78,6 +78,27 @@ def bench():
         except LessonValidationError as e:
             print(f"  V3 PNG {name} REFUSED: {e}")
 
+    print("=== Route contract — render_v3_visual (exact function the route calls) ===")
+    import asyncio as _asyncio
+
+    from app.utils.visual_lesson import render_v3_visual, should_use_v3
+
+    for name, builder in [("torque", torque_v3_spec_from_ground_truth), ("argand", argand_v3_spec_from_ground_truth)]:
+        spec = builder()
+        print(f"ROUTE {name}: should_use_v3(flag off default)={should_use_v3(spec)}")
+        t0 = time.perf_counter()
+        result = _asyncio.run(render_v3_visual(spec))
+        ms = (time.perf_counter() - t0) * 1000
+        if result is None:
+            print(f"  ROUTE {name}: None (honest unavailable)")
+        else:
+            mode, payload = result
+            size = len(payload) if isinstance(payload, (bytes, bytearray)) else len(payload.encode("utf-8"))
+            open(os.path.join(OUT, f"lesson_route_{name}.{ 'svg' if mode == 'svg' else 'png' }"), "wb").write(
+                payload.encode("utf-8") if isinstance(payload, str) else payload
+            )
+            print(f"  ROUTE {name}: mode={mode}, {size} bytes, {ms:.1f}ms")
+
 
 if __name__ == "__main__":
     bench()

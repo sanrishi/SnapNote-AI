@@ -27,8 +27,10 @@ from app.utils.visual_lesson import (
     compile_typst,
     extract_lesson_content,
     render_hero_geometry,
+    render_v3_visual,
     render_visual_lesson,
     select_family,
+    should_use_v3,
     validate_lesson_spec,
 )
 from ground_truth_specs import argand_spec_from_ground_truth, torque_spec_from_ground_truth
@@ -288,3 +290,114 @@ def test_v3_typst_source_carries_composition_once():
     assert src.count("Square on Argand Plane") == 1
     # composition body values pass through byte-identical
     assert "z = 1+i" in src
+
+
+# ── v3 route wiring (flag + render_v3_visual contract) ──
+# These exercise the exact decision + render path the Explain Visually route
+# uses, without importing FastAPI modules (see module docstring rationale).
+
+def test_flag_defaults_off():
+    from app.config import Settings
+
+    assert Settings.model_fields["EXPLAIN_VISUALLY_V3"].default is False
+
+
+def test_should_use_v3_default_off():
+    # Flag off (default) -> legacy path even for deterministic specs.
+    assert should_use_v3(_torque()) is False
+    assert should_use_v3(_v3_torque()) is False
+
+
+def test_should_use_v3_flag_on_deterministic(monkeypatch):
+    from app.config import settings
+
+    monkeypatch.setattr(settings, "EXPLAIN_VISUALLY_V3", True)
+    assert should_use_v3(_torque()) is True
+    assert should_use_v3(_v3_torque()) is True
+    assert should_use_v3(_v3_argand()) is True
+
+
+def test_should_use_v3_flag_on_generative_stays_legacy(monkeypatch):
+    from app.config import settings
+    from app.models.schemas import VisualRenderMode
+
+    monkeypatch.setattr(settings, "EXPLAIN_VISUALLY_V3", True)
+    spec = _torque()
+    spec.render_mode = VisualRenderMode.GENERATIVE
+    assert should_use_v3(spec) is False
+
+
+def _run(coro):
+    import asyncio
+
+    return asyncio.run(coro)
+
+
+def test_v3_render_success_fallback_svg():
+    # No Typst CLI on Windows -> honest bare-hero SVG fallback, same shape as
+    # the legacy deterministic tuple ("svg", svg_string).
+    mode, payload = _run(render_v3_visual(_v3_torque()))
+    assert mode == "svg"
+    assert isinstance(payload, str) and payload.strip().startswith("<svg")
+    assert "WHAT THE" not in payload  # bare hero carries no prose
+
+
+def test_v3_render_validation_failure_returns_none():
+    spec = _v3_torque()
+    assert spec.deterministic.scene is not None
+    spec.deterministic.scene.force = None  # fails semantic validation
+    assert _run(render_v3_visual(spec)) is None
+
+
+def test_v3_render_no_double_execution(monkeypatch):
+    # The v3 path must never call the legacy deterministic renderer.
+    def _boom(*_a, **_k):
+        raise AssertionError("legacy generate path must not run under v3")
+
+    monkeypatch.setattr("app.utils.visual_renderer.render_deterministic_visual", _boom)
+    mode, payload = _run(render_v3_visual(_v3_argand()))
+    assert mode == "svg"
+    assert payload.strip().startswith("<svg")
+
+
+def test_v3_render_deterministic_result(monkeypatch):
+    # Force the fallback deterministically (independent of Typst presence):
+    # same spec twice -> byte-identical payload.
+    from app.utils import visual_lesson as mod
+
+    def _no_typst(*_a, **_k):
+        raise mod.TypstCompileError("forced for determinism check")
+
+    monkeypatch.setattr(mod, "compile_typst", _no_typst)
+    first = _run(render_v3_visual(_v3_torque()))
+    second = _run(render_v3_visual(_v3_torque()))
+    assert first == second
+
+
+def test_v3_render_touches_no_credits(monkeypatch):
+    import app.utils.credits_store as store
+
+    def _boom(*_a, **_k):
+        raise AssertionError("v3 render must not touch credits")
+
+    monkeypatch.setattr(store, "use_credits", _boom)
+    monkeypatch.setattr(store, "add_credits", _boom)
+    mode, _ = _run(render_v3_visual(_v3_argand()))
+    assert mode == "svg"
+
+
+# ── production fixture suite: Torque + Argand through the v3 boundary ──
+
+def test_fixture_suite_v3_torque_argand():
+    # Proves the route's v3 path actually invokes the composition boundary
+    # for both fixture families (vector + coordinate).
+    for spec in (_v3_torque(), _v3_argand()):
+        assert validate_lesson_spec(spec) == []
+        mode, payload = _run(render_v3_visual(spec))
+        assert mode == "svg"  # bare-hero fallback where Typst is absent
+        assert payload.strip().startswith("<svg")
+    # Exact content survives the boundary.
+    mode_t, _ = _run(render_v3_visual(_v3_torque()))
+    assert mode_t == "svg"
+    content = extract_lesson_content(_v3_torque(), hero_svg="<svg/>")
+    assert content.result_text == "τ = r × F"

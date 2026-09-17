@@ -22,6 +22,7 @@ Rules enforced here, not by convention:
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import math
 import shutil
@@ -31,7 +32,7 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from app.models.schemas import DeterministicVisual, VisualScene, VisualSpec
+from app.models.schemas import DeterministicVisual, VisualRenderMode, VisualScene, VisualSpec
 from app.utils.visual_renderer import render_hero_geometry
 
 logger = logging.getLogger(__name__)
@@ -218,6 +219,19 @@ def select_family(spec: VisualSpec) -> str:
         return SUPPORTED_FAMILIES[kind]
     except KeyError:
         raise LessonValidationError(f"unsupported scene_kind: {kind!r}") from None
+
+
+def should_use_v3(spec: VisualSpec) -> bool:
+    """Route decision for Explain Visually: v3 composition boundary or legacy.
+
+    True only when the flag is on AND the spec is deterministic. Generative
+    specs always use the legacy path (v3 composition is deterministic-only).
+    Pure function of (flag, spec) — no I/O, so the route stays thin and the
+    decision is unit-testable without FastAPI.
+    """
+    from app.config import settings
+
+    return bool(settings.EXPLAIN_VISUALLY_V3) and spec.render_mode == VisualRenderMode.DETERMINISTIC
 
 
 def _clean(text: str) -> str:
@@ -450,3 +464,34 @@ def render_visual_lesson(spec: VisualSpec, out_format: str = "pdf") -> RenderedL
         warnings=warnings,
         fallback_used=fallback,
     )
+
+
+async def render_v3_visual(spec: VisualSpec) -> tuple[str, str | bytes] | None:
+    """v3 composition path for the Explain Visually route.
+
+    Same return shape as the legacy ``generate_visual``: ``("svg", svg)`` for
+    the honest bare-hero fallback, ``("png", bytes)`` for a composed lesson.
+    Returns None (like the legacy dispatcher) when the spec fails semantic
+    validation or nothing usable was produced, so the caller reports the same
+    honest unavailable state. Logs the reason. Touches no credits.
+    """
+    errors = validate_lesson_spec(spec)
+    if errors:
+        logger.warning("v3 composition refused (semantic validation): %s", "; ".join(errors))
+        return None
+    try:
+        lesson = await asyncio.to_thread(render_visual_lesson, spec, "png")
+    except LessonValidationError as e:
+        logger.warning("v3 composition refused at render: %s", e)
+        return None
+    if lesson.fallback_used:
+        logger.info(
+            "v3 composition fell back to bare hero svg (family=%s, warnings=%s)",
+            lesson.hero_kind, lesson.warnings,
+        )
+        return ("svg", lesson.data.decode("utf-8"))
+    logger.info(
+        "v3 composition rendered (%s, %d bytes, total=%.1fms hero=%.1f compose=%.1f)",
+        lesson.out_format, len(lesson.data), lesson.ms_total, lesson.ms_hero, lesson.ms_compose,
+    )
+    return ("png", lesson.data)

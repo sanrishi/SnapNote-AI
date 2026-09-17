@@ -55,6 +55,11 @@ class Settings(BaseSettings):
 
     GOOGLE_CLIENT_ID: str = ""  # for Google Identity Services ID-token verification
 
+    # Explain Visually v3 composition boundary (visual_lesson.render_visual_lesson).
+    # false = legacy generate_visual path, byte-for-byte. true = v3 composition
+    # path for deterministic specs (generative specs always use legacy path).
+    EXPLAIN_VISUALLY_V3: bool = False
+
     CREDIT_PACKS: dict = {
         "starter": {"credits": 50, "price_paise": 4900},
         "popular": {"credits": 120, "price_paise": 9900},
