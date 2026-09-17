@@ -85,3 +85,79 @@ jobs:
             prototypes/visual_composition/outputs/
             bench.log
           if-no-files-found: warn
+
+  # Gate 2: prove the production Docker image actually runs v3.
+  # Clean Ubuntu runner, no secrets: build + Typst + /health + fixture render
+  # + ImgBB boundary (negative path only — live upload is a staging item).
+  docker-gate2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/prototype-visual-composition
+
+      - name: Build production image (Typst install fails loudly if broken)
+        run: docker build -t snapnote-api:gate2 -f Dockerfile .
+
+      - name: Pinned versions inside image
+        run: |
+          docker run --rm snapnote-api:gate2 pip show fastapi starlette | grep -E "Name|Version"
+          docker run --rm snapnote-api:gate2 python -c "import fastapi, starlette; assert fastapi.__version__ == '0.115.0', fastapi.__version__; assert starlette.__version__ == '0.37.2', starlette.__version__; print('pins OK')"
+
+      - name: Typst binary inside image
+        run: docker run --rm snapnote-api:gate2 typst --version
+
+      - name: Boot container and check /health
+        run: |
+          docker run -d --name gate2 -p 8000:8000 snapnote-api:gate2
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8000/health >/tmp/health.json 2>/dev/null; then break; fi
+            sleep 10
+          done
+          cat /tmp/health.json
+          python3 -c "
+          import json
+          h = json.load(open('/tmp/health.json'))
+          assert h['status'] == 'ok', h
+          assert h['typst_available'] is True, h
+          assert h['typst_version'], h
+          assert h['explain_visually_v3'] is False, h
+          print('health OK:', h)
+          "
+          docker logs gate2 | tail -n 20 || true
+
+      - name: Fixture v3 composed render inside container (Typst must be used)
+        run: |
+          docker run --rm -v $GITHUB_WORKSPACE/prototypes/visual_composition:/work \
+            snapnote-api:gate2 python -c "
+          import asyncio, sys
+          sys.path.insert(0, '/work')
+          from ground_truth_specs import torque_v3_spec_from_ground_truth, argand_v3_spec_from_ground_truth
+          from app.utils.visual_lesson import render_v3_visual, validate_lesson_spec, typst_status
+          print('typst:', typst_status())
+          assert typst_status()['available'] is True
+          async def main():
+              for name, spec in (('torque', torque_v3_spec_from_ground_truth()), ('argand', argand_v3_spec_from_ground_truth())):
+                  assert validate_lesson_spec(spec) == [], name
+                  out = await render_v3_visual(spec)
+                  assert out is not None, name
+                  mode, payload = out
+                  assert mode == 'png', (name, mode)
+                  assert payload[:8] == b'\x89PNG\r\n\x1a\n', name
+                  assert len(payload) > 2000, (name, len(payload))
+                  print(name, 'composed PNG bytes=', len(payload))
+          asyncio.run(main())
+          "
+
+      - name: ImgBB boundary without key returns None (no network)
+        run: |
+          docker run --rm snapnote-api:gate2 python -c "
+          from app.services.storage_service import upload_image
+          assert upload_image(b'not-an-image', {'title': 'gate2'}) is None
+          print('imgbb boundary OK (refuses without key, no crash)')
+          "
+
+      - name: Stop container
+        if: always()
+        run: docker rm -f gate2 || true
