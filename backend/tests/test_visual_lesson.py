@@ -221,19 +221,15 @@ def test_fallback_to_bare_hero_when_typst_missing(monkeypatch):
 def test_full_render_when_available():
     if not _typst_present():
         pytest.skip("typst CLI not on PATH (expected on Windows; runs on Ubuntu)")
-    import tempfile
 
     from app.utils.visual_renderer import render_hero_geometry as _hero
 
     for spec in (_torque(), _argand()):
         hero = _hero(spec.deterministic)
         content = extract_lesson_content(spec, hero_svg=hero)
-        with tempfile.TemporaryDirectory() as td:
-            hp = os.path.join(td, "hero.svg")
-            open(hp, "w", encoding="utf-8").write(hero)
-            src = build_lesson_typst(content)
-            data = compile_typst(src, "pdf")
-            assert data[:5] == b"%PDF-", "Typst must produce a real PDF"
+        src = build_lesson_typst(content)
+        data = compile_typst(src, "pdf", extra_files={"hero.svg": hero})
+        assert data[:5] == b"%PDF-", "Typst must produce a real PDF"
 
 
 # ── v3 composition input ──
@@ -371,13 +367,35 @@ def _run(coro):
     return asyncio.run(coro)
 
 
-def test_v3_render_success_fallback_svg():
-    # No Typst CLI on Windows -> honest bare-hero SVG fallback, same shape as
-    # the legacy deterministic tuple ("svg", svg_string).
+def _assert_v3_shape(mode: str, payload: object) -> None:
+    # Same tuple shape as the legacy dispatcher in both branches.
+    if mode == "svg":
+        assert isinstance(payload, str) and payload.strip().startswith("<svg")
+        assert "WHAT THE" not in payload  # bare hero carries no prose
+    else:
+        assert mode == "png"
+        assert isinstance(payload, (bytes, bytearray)) and bytes(payload)[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+def test_v3_render_success_shape():
+    # Typst absent -> ("svg", hero); Typst present -> ("png", bytes).
+    # Passes identically on Windows and Ubuntu.
+    mode, payload = _run(render_v3_visual(_v3_torque()))
+    _assert_v3_shape(mode, payload)
+
+
+def test_v3_render_fallback_svg_when_typst_fails(monkeypatch):
+    # Forced Typst failure -> honest bare-hero SVG fallback, everywhere.
+    from app.utils import visual_lesson as mod
+
+    def _no_typst(*_a, **_k):
+        raise mod.TypstCompileError("forced for fallback check")
+
+    monkeypatch.setattr(mod, "compile_typst", _no_typst)
     mode, payload = _run(render_v3_visual(_v3_torque()))
     assert mode == "svg"
     assert isinstance(payload, str) and payload.strip().startswith("<svg")
-    assert "WHAT THE" not in payload  # bare hero carries no prose
+    assert "WHAT THE" not in payload
 
 
 def test_v3_render_validation_failure_returns_none():
@@ -394,8 +412,7 @@ def test_v3_render_no_double_execution(monkeypatch):
 
     monkeypatch.setattr("app.utils.visual_renderer.render_deterministic_visual", _boom)
     mode, payload = _run(render_v3_visual(_v3_argand()))
-    assert mode == "svg"
-    assert payload.strip().startswith("<svg")
+    _assert_v3_shape(mode, payload)
 
 
 def test_v3_render_deterministic_result(monkeypatch):
@@ -420,8 +437,8 @@ def test_v3_render_touches_no_credits(monkeypatch):
 
     monkeypatch.setattr(store, "use_credits", _boom)
     monkeypatch.setattr(store, "add_credits", _boom)
-    mode, _ = _run(render_v3_visual(_v3_argand()))
-    assert mode == "svg"
+    mode, payload = _run(render_v3_visual(_v3_argand()))
+    _assert_v3_shape(mode, payload)
 
 
 def test_v3_store_mode_labels_composed_png_deterministic():
@@ -504,7 +521,7 @@ def test_v3_delivery_touches_no_credits(monkeypatch):
     monkeypatch.setattr(store, "use_credits", _boom)
     monkeypatch.setattr(store, "add_credits", _boom)
     mode, payload = _run(render_v3_visual(_v3_torque()))
-    assert mode in ("svg", "png")
+    _assert_v3_shape(mode, payload)
 
 
 # ── production fixture suite: Torque + Argand through the v3 boundary ──
@@ -515,10 +532,7 @@ def test_fixture_suite_v3_torque_argand():
     for spec in (_v3_torque(), _v3_argand()):
         assert validate_lesson_spec(spec) == []
         mode, payload = _run(render_v3_visual(spec))
-        assert mode == "svg"  # bare-hero fallback where Typst is absent
-        assert payload.strip().startswith("<svg")
+        _assert_v3_shape(mode, payload)
     # Exact content survives the boundary.
-    mode_t, _ = _run(render_v3_visual(_v3_torque()))
-    assert mode_t == "svg"
     content = extract_lesson_content(_v3_torque(), hero_svg="<svg/>")
     assert content.result_text == "τ = r × F"
