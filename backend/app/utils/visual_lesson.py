@@ -23,6 +23,7 @@ Rules enforced here, not by convention:
 from __future__ import annotations
 
 import asyncio
+import functools
 import logging
 import math
 import shutil
@@ -384,6 +385,26 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
     )
 
 
+@functools.lru_cache(maxsize=1)
+def typst_status() -> dict:
+    """Deployment check: official Typst CLI present, and which version.
+
+    Cached for the process lifetime (the binary cannot change at runtime).
+    Used by /health so a missing Typst is visible in deployment, never silent.
+    """
+    binary = shutil.which("typst")
+    if binary is None:
+        return {"available": False, "version": ""}
+    try:
+        proc = subprocess.run([binary, "--version"], capture_output=True, text=True, timeout=10)
+        if proc.returncode != 0:
+            return {"available": False, "version": ""}
+        version = (proc.stdout or proc.stderr or "").strip().splitlines()[0]
+        return {"available": bool(version), "version": version}
+    except Exception:
+        return {"available": False, "version": ""}
+
+
 def compile_typst(
     source: str,
     out_format: str = "pdf",
@@ -466,6 +487,18 @@ def render_visual_lesson(spec: VisualSpec, out_format: str = "pdf") -> RenderedL
     )
 
 
+def v3_store_mode(v3_used: bool, mode: str) -> str:
+    """Render-mode label for a stored visual.
+
+    A v3-composed PNG is deterministic content (Typst from a validated spec),
+    not a generative illustration — label it honestly. Everything else keeps
+    the legacy labels ("deterministic" for svg, "generative" for png).
+    """
+    if v3_used and mode == "png":
+        return "deterministic"
+    return "deterministic" if mode == "svg" else "generative"
+
+
 async def render_v3_visual(spec: VisualSpec) -> tuple[str, str | bytes] | None:
     """v3 composition path for the Explain Visually route.
 
@@ -480,18 +513,25 @@ async def render_v3_visual(spec: VisualSpec) -> tuple[str, str | bytes] | None:
         logger.warning("v3 composition refused (semantic validation): %s", "; ".join(errors))
         return None
     try:
+        family = select_family(spec)
+    except LessonValidationError as e:
+        logger.warning("v3 composition refused (family selection): %s", e)
+        return None
+    t_start = time.perf_counter()
+    try:
         lesson = await asyncio.to_thread(render_visual_lesson, spec, "png")
     except LessonValidationError as e:
         logger.warning("v3 composition refused at render: %s", e)
         return None
+    total_ms = (time.perf_counter() - t_start) * 1000
     if lesson.fallback_used:
         logger.info(
-            "v3 composition fell back to bare hero svg (family=%s, warnings=%s)",
-            lesson.hero_kind, lesson.warnings,
+            "v3 composition fallback: bare hero svg (family=%s, total=%.1fms hero=%.1f, warnings=%s)",
+            family, total_ms, lesson.ms_hero, lesson.warnings,
         )
         return ("svg", lesson.data.decode("utf-8"))
     logger.info(
-        "v3 composition rendered (%s, %d bytes, total=%.1fms hero=%.1f compose=%.1f)",
-        lesson.out_format, len(lesson.data), lesson.ms_total, lesson.ms_hero, lesson.ms_compose,
+        "v3 composition rendered (family=%s, %s, %d bytes, total=%.1fms hero=%.1f compose=%.1f)",
+        family, lesson.out_format, len(lesson.data), total_ms, lesson.ms_hero, lesson.ms_compose,
     )
     return ("png", lesson.data)

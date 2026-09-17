@@ -47,6 +47,7 @@ jobs:
       - name: Install Python deps
         run: |
           pip install -r backend/requirements.txt
+          pip install -r backend/requirements-test.txt
           pip install weasyprint==69.0 typst==0.15.0
           npm install satori@0.10.13 @resvg/resvg-js@2.6.2 @fontsource/inter
 

@@ -31,6 +31,7 @@ from app.utils.visual_lesson import (
     render_visual_lesson,
     select_family,
     should_use_v3,
+    v3_store_mode,
     validate_lesson_spec,
 )
 from ground_truth_specs import argand_spec_from_ground_truth, torque_spec_from_ground_truth
@@ -111,6 +112,43 @@ def test_content_preserves_exact_values():
     content_a = extract_lesson_content(_argand(), hero_svg="<svg/>")
     assert any("square ABCD" in c.heading for c in content_a.callouts)
     assert any("A(1,1)" in c.heading for c in content_a.callouts)
+
+
+# ── arrowhead nesting (all families, not just force) ──
+
+def _flow_spec():
+    from app.models.schemas import FlowConnector, FlowNode, ProcessFlow, VisualScene
+
+    spec = _torque()
+    assert spec.deterministic.scene is not None
+    spec.deterministic.scene.scene_kind = "process_flow"  # type: ignore[assignment]
+    spec.deterministic.scene.flow = ProcessFlow(
+        nodes=[FlowNode(label="A"), FlowNode(label="B")],
+        connectors=[FlowConnector(source=0, target=1, label="go")],
+    )
+    return spec
+
+
+def test_arrowheads_never_nested_any_family():
+    """Regression (real-input find): plot axis arrowheads were double-wrapped
+    as <polygon points="<polygon ...>"/> — valid XML after escaping, so the
+    sanitizer passed it and Chromium drew nothing. Every family must emit
+    standalone <polygon> elements with numeric points only."""
+    import re
+
+    from app.utils.visual_renderer import render_deterministic_visual, render_hero_geometry
+
+    specs = [_torque(), _argand(), _flow_spec(), _v3_torque(), _v3_argand()]
+    assert len(specs) == 5
+    for spec in specs:
+        for svg in (render_deterministic_visual(spec.deterministic), render_hero_geometry(spec.deterministic)):
+            assert "<polygon points=\"<polygon" not in svg
+            assert "&lt;polygon" not in svg
+            for m in re.finditer(r'<polygon points="([^"]+)"', svg):
+                vals = m.group(1).split()
+                assert len(vals) % 2 == 0
+                for v in vals:
+                    float(v)
 
 
 # ── collisions (generic mechanism, Argand regression) ──
@@ -384,6 +422,89 @@ def test_v3_render_touches_no_credits(monkeypatch):
     monkeypatch.setattr(store, "add_credits", _boom)
     mode, _ = _run(render_v3_visual(_v3_argand()))
     assert mode == "svg"
+
+
+def test_v3_store_mode_labels_composed_png_deterministic():
+    assert v3_store_mode(True, "png") == "deterministic"
+    assert v3_store_mode(True, "svg") == "deterministic"
+    assert v3_store_mode(False, "png") == "generative"
+    assert v3_store_mode(False, "svg") == "deterministic"
+
+
+# ── v3 delivery path: render -> exact bytes -> real upload_image -> URL ──
+
+def _fake_imgbb_success(captured: dict):
+    class _Resp:
+        status_code = 200
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"success": True, "data": {"url": "https://imgbb.test/v3-lesson.png"}}
+
+    def _post(url, data=None, files=None, timeout=None):
+        captured["url"] = url
+        captured["files"] = files
+        captured["calls"] = captured.get("calls", 0) + 1
+        return _Resp()
+
+    return _post
+
+
+def test_v3_delivery_uploads_exact_png_bytes(monkeypatch):
+    if not _typst_present():
+        import pytest as _pytest
+
+        _pytest.skip("needs Typst CLI for composed PNG (runs on Ubuntu)")
+    import httpx
+
+    from app.services.storage_service import upload_image
+
+    mode, payload = _run(render_v3_visual(_v3_torque()))
+    assert mode == "png"
+    assert isinstance(payload, (bytes, bytearray)) and payload[:8] == b"\x89PNG\r\n\x1a\n"
+    captured: dict = {}
+    monkeypatch.setattr(httpx, "post", _fake_imgbb_success(captured))
+    monkeypatch.setattr("app.config.settings.IMGBB_API_KEY", "test-key", raising=False)
+    url = upload_image(bytes(payload), {"title": "explain-visually"})
+    assert url == "https://imgbb.test/v3-lesson.png"
+    assert captured.get("calls", 0) == 1  # exactly one upload, no orphans/doubles
+    assert captured["files"]["image"] == bytes(payload)  # byte-identical file
+
+
+def test_v3_delivery_storage_failure_returns_none(monkeypatch):
+    if not _typst_present():
+        import pytest as _pytest
+
+        _pytest.skip("needs Typst CLI for composed PNG (runs on Ubuntu)")
+    import httpx
+
+    from app.services.storage_service import upload_image
+
+    mode, payload = _run(render_v3_visual(_v3_argand()))
+    assert mode == "png"
+
+    def _boom(*_a, **_k):
+        raise ConnectionError("imgbb down")
+
+    monkeypatch.setattr(httpx, "post", _boom)
+    monkeypatch.setattr("app.config.settings.IMGBB_API_KEY", "test-key", raising=False)
+    # Existing contract: storage failure -> None -> route raises the
+    # controlled UpstreamError (same lines as the generative path).
+    assert upload_image(bytes(payload), {"title": "explain-visually"}) is None
+
+
+def test_v3_delivery_touches_no_credits(monkeypatch):
+    import app.utils.credits_store as store
+
+    def _boom(*_a, **_k):
+        raise AssertionError("delivery path must not touch credits")
+
+    monkeypatch.setattr(store, "use_credits", _boom)
+    monkeypatch.setattr(store, "add_credits", _boom)
+    mode, payload = _run(render_v3_visual(_v3_torque()))
+    assert mode in ("svg", "png")
 
 
 # ── production fixture suite: Torque + Argand through the v3 boundary ──

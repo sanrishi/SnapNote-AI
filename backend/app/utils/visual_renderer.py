@@ -638,8 +638,8 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     y_axis_x = max(plot_x0, min(plot_x0 + plot_w, y_axis_x))
     parts.append(f'<line x1="{_f(plot_x0)}" y1="{_f(x_axis_y)}" x2="{_f(plot_x0+plot_w)}" y2="{_f(x_axis_y)}" stroke="{INK}" stroke-width="1.5"/>')
     parts.append(f'<line x1="{_f(y_axis_x)}" y1="{_f(plot_y0)}" x2="{_f(y_axis_x)}" y2="{_f(plot_y0+plot_h)}" stroke="{INK}" stroke-width="1.5"/>')
-    parts.append(f'<polygon points="{_arrowhead(plot_x0+plot_w, x_axis_y, 0)}" fill="{INK}"/>')
-    parts.append(f'<polygon points="{_arrowhead(y_axis_x, plot_y0, 90)}" fill="{INK}"/>')
+    parts.append(_arrowhead(plot_x0+plot_w, x_axis_y, 0))
+    parts.append(_arrowhead(y_axis_x, plot_y0, 90))
     # axis labels + ticks
     parts.append(f'<text x="{_f(plot_x0+plot_w+8)}" y="{_f(x_axis_y+4)}" font-family="{_FONT}" font-size="12" fill="{MUTED}" text-anchor="start">{_esc(plot.x_label or "x")}</text>')
     parts.append(f'<text x="{_f(y_axis_x+6)}" y="{_f(plot_y0-6)}" font-family="{_FONT}" font-size="12" fill="{MUTED}" text-anchor="start">{_esc(plot.y_label or "y")}</text>')

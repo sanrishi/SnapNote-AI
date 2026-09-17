@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time
 import uuid
 from fastapi import APIRouter, Form, Header, UploadFile, File, HTTPException
 
@@ -27,7 +28,7 @@ from app.services.vision_service import (
     extract_text_with_llm,
 )
 from app.services.visual_service import generate_visual
-from app.utils.visual_lesson import render_v3_visual, should_use_v3
+from app.utils.visual_lesson import render_v3_visual, should_use_v3, v3_store_mode
 from app.services.storage_service import upload_image
 from app.utils.render_notes import render_study_notes
 from app.utils.tags import parse_context, generate_tags
@@ -323,6 +324,7 @@ async def extract_visual_route(
     # v3 composition boundary (flag-gated). Same spec object — no second
     # understanding pipeline. Generative specs always use the legacy path.
     v3_composed = should_use_v3(spec)
+    t_visual = time.perf_counter()
     if v3_composed:
         logger.info("Explain Visually v3 composition path (diagram %s)", diagramId[:8])
         result = await render_v3_visual(spec)
@@ -332,6 +334,8 @@ async def extract_visual_route(
                 "Explain Visually v3 flag on but render_mode=%s; using legacy path (diagram %s)",
                 spec.render_mode, diagramId[:8],
             )
+        else:
+            logger.info("Explain Visually legacy path (v3 flag off, diagram %s)", diagramId[:8])
         result = await generate_visual(spec)
     if result is None:
         raise UpstreamError(
@@ -354,13 +358,19 @@ async def extract_visual_route(
             status="generated",
         )
 
+    t_upload = time.perf_counter()
     visual_url = await asyncio.to_thread(upload_image, payload, {"title": "explain-visually"})
+    upload_ms = (time.perf_counter() - t_upload) * 1000
     if not visual_url:
         raise UpstreamError(service="SnapNote AI", detail="Could not store the generated visual. Please try again.")
 
     # A v3-composed PNG is deterministic content (Typst from a validated spec),
     # not a generative illustration — label it honestly for observability.
-    store_mode = "deterministic" if (v3_composed and mode == "png") else "generative"
+    store_mode = v3_store_mode(v3_composed, mode)
+    logger.info(
+        "Explain Visually stored (diagram %s, v3=%s, mode=%s, stored_as=%s, upload=%.1fms, total=%.1fms)",
+        diagramId[:8], v3_composed, mode, store_mode, upload_ms, (time.perf_counter() - t_visual) * 1000,
+    )
     if not set_visual_result(diagramId, effective_id, store_mode, visual_url=visual_url):
         logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
         existing = get_visual_entitlement(diagramId)

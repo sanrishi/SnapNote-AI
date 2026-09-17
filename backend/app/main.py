@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 from app.config import settings
 from app.routes import auth, extract, payments
 from app.exceptions import SnapNoteError
+from app.utils.visual_lesson import typst_status
 
 logging.basicConfig(
     level=logging.INFO,
@@ -61,4 +62,13 @@ async def unhandled_error_handler(request: Request, exc: Exception):
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "version": settings.APP_VERSION}
+    ts = typst_status()
+    if not ts["available"]:
+        logger.warning("health: Typst CLI not available — v3 composition will use bare-hero fallback")
+    return {
+        "status": "ok",
+        "version": settings.APP_VERSION,
+        "typst_available": ts["available"],
+        "typst_version": ts["version"],
+        "explain_visually_v3": settings.EXPLAIN_VISUALLY_V3,
+    }

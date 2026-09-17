@@ -1,0 +1,5 @@
+# Test-only dependencies (kept out of the production image).
+# Verified together with backend/requirements.txt in a clean env:
+# full suite 185 passed, 2 skipped (Typst-gated).
+pytest
+pytest-asyncio==1.4.0
