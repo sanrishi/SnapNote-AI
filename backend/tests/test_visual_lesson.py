@@ -660,3 +660,250 @@ def test_v3_absent_composition_uses_derived_fallback():
     assert content.takeaway != ""
     mode, payload = _run(render_v3_visual(spec))
     _assert_v3_shape(mode, payload)
+
+
+# ── visual-quality hardening: flow layout (R1–R4) ──
+
+def _pid_like_spec():
+    """8-node fan-out/fan-in flow mirroring the real PID board spec."""
+    from app.models.schemas import FlowConnector, FlowNode, ProcessFlow
+
+    spec = _torque()
+    assert spec.deterministic.scene is not None
+    spec.deterministic.scene.scene_kind = "process_flow"  # type: ignore[assignment]
+    spec.deterministic.scene.force = None
+    spec.deterministic.scene.flow = ProcessFlow(
+        nodes=[FlowNode(label=l) for l in [
+            "Set Point r(t)", "Error e(t)", "Proportional Kp × e(t)", "Integral Ki × ∫ e(t) dt",
+            "Derivative Kd × de/dt", "Summation S", "Plant G(s)", "Output y(t)"]],
+        connectors=[FlowConnector(source=0, target=1, label="r(t)"),
+                    FlowConnector(source=1, target=2, label="e(t)"),
+                    FlowConnector(source=1, target=3, label="e(t)"),
+                    FlowConnector(source=1, target=4, label="e(t)"),
+                    FlowConnector(source=2, target=5), FlowConnector(source=3, target=5),
+                    FlowConnector(source=4, target=5), FlowConnector(source=5, target=6),
+                    FlowConnector(source=6, target=7),
+                    FlowConnector(source=7, target=1, label="Feedback (Sensor)", feedback=True)],
+    )
+    return spec
+
+
+def _flow_rects(svg: str) -> list[tuple[float, float, float, float]]:
+    import re
+
+    out = []
+    for m in re.finditer(r'<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"', svg):
+        out.append(tuple(float(m.group(i)) for i in range(1, 5)))
+    return out
+
+
+def test_flow_row_always_fits_stage():
+    """R1 regression (real PID board): the old max(92, ...) floor pushed an
+    8-node row to x0 < 0. Node boxes must stay inside the stage band."""
+    from app.utils.visual_renderer import STAGE_W, STAGE_X, render_hero_geometry
+
+    svg = render_hero_geometry(_pid_like_spec().deterministic)
+    rects = _flow_rects(svg)
+    node_rects = [r for r in rects if r[2] < 300]  # node boxes, not bg/stage
+    assert len(node_rects) == 8
+    for x, _y, w, _h in node_rects:
+        assert x >= STAGE_X - 1, f"box starts left of stage: {x}"
+        assert x + w <= STAGE_X + STAGE_W + 1, f"box ends right of stage: {x + w}"
+
+
+def test_flow_long_labels_wrapped_with_hyphens():
+    from app.utils.visual_renderer import _wrap
+
+    lines = _wrap("Proportional Kp × e(t)", 8, hyphenate=True)
+    assert lines[0].endswith("-")
+    assert max(len(line) for line in lines) <= 8
+    # Default path unchanged (no hyphens injected elsewhere).
+    assert _wrap("Proportional Kp × e(t)", 8) == ["Proporti", "onal Kp", "× e(t)"]
+
+
+def test_flow_connector_labels_clear_of_node_band():
+    """R2 regression: straight labels sit above boxes; feedback label sits
+    below the V — never inside the node band where boxes render."""
+    import re
+
+    from app.utils.visual_renderer import render_hero_geometry
+
+    svg = render_hero_geometry(_pid_like_spec().deterministic)
+    rects = _flow_rects(svg)
+    node_rects = [r for r in rects if r[2] < 300]
+    top = min(y for _x, y, _w, _h in node_rects)
+    bottom = max(yy + h for _x, yy, _w, h in node_rects)
+    texts = [(float(m.group(1)), float(m.group(2)), m.group(3))
+             for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="12.5"[^>]*>(.*?)</text>', svg)]
+    assert texts, "expected connector labels"
+    for _x, y, label in texts:
+        assert y < top - 2 or y > bottom + 2, f"label {label!r} inside node band"
+
+
+def test_flow_nonadjacent_edges_route_above():
+    """Non-adjacent (fan-out/fan-in) edges route above the row; adjacent
+    edges stay straight. R4: exact-duplicate edges draw once."""
+    import re
+
+    from app.models.schemas import FlowConnector
+    from app.utils.visual_renderer import render_hero_geometry
+
+    spec = _pid_like_spec()
+    assert spec.deterministic.scene is not None and spec.deterministic.scene.flow is not None
+    spec.deterministic.scene.flow.connectors.append(FlowConnector(source=0, target=1, label="r(t)"))
+    svg = render_hero_geometry(spec.deterministic)
+    elbows = [m.group(0) for m in re.finditer(r"<polyline[^>]*>", svg)]
+    # 4 non-adjacent edges ((1,3),(1,4),(2,5),(3,5); (4,5) is adjacent) +
+    # 1 feedback V = 5 polylines; the duplicate (0,1) edge must not add
+    # another straight line+arrowhead.
+    assert len(elbows) == 5
+    heads = re.findall(r"<polygon", svg)
+    assert len(heads) == 5 + 4 + 0  # 5 straight + 4 elbows, feedback has none
+
+
+# ── visual-quality hardening: plot (R5 + polar semantics) ──
+
+def _polar_spec() -> VisualSpec:
+    from app.models.schemas import VisualCurve, VisualPlot
+
+    spec = _torque()
+    assert spec.deterministic.scene is not None
+    spec.deterministic.scene.scene_kind = "plot"  # type: ignore[assignment]
+    spec.deterministic.scene.force = None
+    spec.deterministic.scene.plot = VisualPlot(
+        x_label="x", y_label="y", x_min=-3.0, x_max=3.0, y_min=-3.0, y_max=3.0,
+        curves=[VisualCurve(label="r = 1", expr="1"),
+                VisualCurve(label="r = √5", expr="sqrt(5)", color="green"),
+                VisualCurve(label="y = 2 ref", expr="2")],
+    )
+    return spec
+
+
+def test_polar_radial_bounds_render_as_circles():
+    """Polar semantics regression (real math board): r = const bounds must
+    draw as circles, not misleading Cartesian horizontal lines."""
+    import re
+
+    from app.utils.visual_renderer import render_hero_geometry
+
+    svg = render_hero_geometry(_polar_spec().deterministic)
+    assert len(re.findall(r"<ellipse", svg)) == 2
+    # The non-radial constant ("y = 2 ref") keeps its honest horizontal line.
+    assert len(re.findall(r"<polyline", svg)) == 1
+
+
+def test_polar_descriptive_radius_labels_become_circles():
+    """Generalization (real math board, round 2): bounds labeled
+    "Inner Radius g(θ) = 1" must also draw as circles, not lines."""
+    import re
+
+    from app.models.schemas import VisualCurve
+    from app.utils.visual_renderer import render_hero_geometry
+
+    spec = _polar_spec()
+    assert spec.deterministic.scene is not None and spec.deterministic.scene.plot is not None
+    spec.deterministic.scene.plot.curves = [
+        VisualCurve(label="Inner Radius g(θ) = 1", expr="1"),
+        VisualCurve(label="Outer Radius g(θ) = 2", expr="2", color="red"),
+    ]
+    svg = render_hero_geometry(spec.deterministic)
+    assert len(re.findall(r"<ellipse", svg)) == 2
+    assert len(re.findall(r"<polyline", svg)) == 0
+
+
+def test_curve_labels_stay_inside_plot_area():
+    """Long curve labels must not spill past the plot/card edge (real math
+    board: "Outer Radius..." clipped)."""
+    import re
+
+    from app.models.schemas import VisualCurve
+    from app.utils.visual_renderer import render_hero_geometry
+
+    spec = _polar_spec()
+    assert spec.deterministic.scene is not None and spec.deterministic.scene.plot is not None
+    spec.deterministic.scene.plot.curves = [
+        VisualCurve(label="Outer Radius g(θ) = some very long bound description here", expr="2"),
+    ]
+    svg = render_hero_geometry(spec.deterministic)
+    for m in re.finditer(r'<text x="([\d.]+)"[^>]*font-size="11"[^>]*>(.*?)</text>', svg):
+        x, label = float(m.group(1)), m.group(2)
+        est_right = x + len(label) * 6.6 + 8
+        assert est_right <= 752 + 4, f"label spills past plot: {label!r}"
+
+
+def test_polar_function_curves_unaffected():
+    import re
+
+    from app.models.schemas import VisualCurve
+    from app.utils.visual_renderer import render_hero_geometry
+
+    spec = _polar_spec()
+    assert spec.deterministic.scene is not None and spec.deterministic.scene.plot is not None
+    spec.deterministic.scene.plot.curves.append(VisualCurve(label="y=x", expr="x"))
+    svg = render_hero_geometry(spec.deterministic)
+    assert len(re.findall(r"<ellipse", svg)) == 2
+    assert len(re.findall(r"<polyline", svg)) == 2
+
+
+def test_plot_origin_tick_drawn_once():
+    """R5 regression (real math board): symmetric ranges jumbled "0.0"/"00"
+    at the crossing — now a single 0."""
+    import re
+
+    from app.utils.visual_renderer import render_hero_geometry
+
+    svg = render_hero_geometry(_polar_spec().deterministic)
+    zeros = re.findall(r">0</text>", svg)
+    assert len(zeros) == 1
+
+
+# ── visual-quality hardening: Typst composition (dedup + page height) ──
+
+def test_typst_figure_caption_does_not_repeat_takeaway():
+    from app.utils.visual_lesson import build_lesson_typst, extract_lesson_content
+
+    content = extract_lesson_content(_v3_torque(), hero_svg="<svg/>")
+    src = build_lesson_typst(content)
+    assert src.count(content.takeaway) == 1
+    assert "Figure 1" not in src or content.takeaway not in src.split("Figure 1")[1].split("]")[0]
+
+
+def test_typst_subtitle_matching_title_dropped():
+    from app.models.schemas import LessonComposition
+    from app.utils.visual_lesson import build_lesson_typst, extract_lesson_content
+
+    spec = _v3_torque()
+    assert spec.deterministic.composition is not None
+    spec.deterministic.composition.title = "Torque and Cross Product"
+    spec.deterministic.composition.framing = "Torque and Cross Product"
+    content = extract_lesson_content(spec, hero_svg="<svg/>")
+    src = build_lesson_typst(content)
+    assert src.count("Torque and Cross Product") == 1  # title only
+
+
+def test_typst_page_height_is_content_aware():
+    from app.utils.visual_lesson import build_lesson_typst, extract_lesson_content
+
+    src = build_lesson_typst(extract_lesson_content(_v3_torque(), hero_svg="<svg/>"))
+    assert "height: auto" in src
+    assert "height: 900pt" not in src
+
+
+def test_derived_flow_reasoning_drops_bare_word_labels():
+    """R9: connector labels that merely restate arrows ("allocates") are
+    filtered from derived reasoning; symbolic ones ("e(t)") are kept."""
+    from app.models.schemas import FlowConnector
+    from app.utils.visual_lesson import extract_lesson_content
+
+    spec = _flow_v3_spec()
+    spec.deterministic.composition = None
+    assert spec.deterministic.scene is not None and spec.deterministic.scene.flow is not None
+    spec.deterministic.scene.flow.connectors = [
+        FlowConnector(source=0, target=1, label="allocates"),
+        FlowConnector(source=1, target=2, label="e(t)"),
+        FlowConnector(source=2, target=3, label="Feedback (sensor)"),
+    ]
+    content = extract_lesson_content(spec, hero_svg="<svg/>")
+    assert "allocates" not in content.reasoning
+    assert "e(t)" in content.reasoning
+    assert "Feedback (sensor)" in content.reasoning

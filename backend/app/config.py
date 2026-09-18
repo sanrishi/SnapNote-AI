@@ -41,6 +41,10 @@ class Settings(BaseSettings):
     MAX_VISION_LONG_EDGE: int = 1280
     VISION_JPEG_QUALITY: int = 75
     GEMINI_CALL_TIMEOUT_SECONDS: float = 22.0
+    # Repair-leg sub-budget: reconciliation is a tiny operation (one pair of
+    # expressions), so it gets a tighter deadline than full understanding.
+    # Expiry refuses honestly; the timeout is never raised to force a pass.
+    GEMINI_REPAIR_TIMEOUT_SECONDS: float = 12.0
     DIAGRAM_TIMEOUT_SECONDS: float = 28.0
 
     # "semantic" = Gemini outputs a structured DiagramSpec, Python renders it

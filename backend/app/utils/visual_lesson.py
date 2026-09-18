@@ -333,8 +333,12 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             if (nd.label or "").strip():
                 callouts.append(LessonCallout(heading=nd.label.strip(), body=""))
         for c in flow.connectors:
-            if (c.label or "").strip():
-                reasoning_bits.append(c.label.strip())
+            label = (c.label or "").strip()
+            # Echo filter (R9): bare-word edge labels ("allocates", "Forward")
+            # merely restate what the arrows already show — keep only labels
+            # carrying symbols/digits ("e(t)", "Kp × e(t)"), which teach.
+            if label and any(not (ch.isalpha() or ch.isspace() or ch == "-") for ch in label):
+                reasoning_bits.append(label)
         if flow.relation is not None and (flow.relation.expression or "").strip():
             result_text = flow.relation.expression.strip()
     else:  # generic
@@ -394,21 +398,31 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
     takeaway_block = ""
     if content.takeaway:
         takeaway_block = f'#align(left)[#text(size: 9pt, fill: rgb("#64748b"))[{_typst_esc(content.takeaway)}]]\n'
+    # Dedup: subtitle identical to the title adds nothing — drop it.
+    subtitle = content.subtitle
+    if subtitle and " ".join(subtitle.split()).casefold() == " ".join(content.title.split()).casefold():
+        subtitle = ""
     subtitle_block = ""
-    if content.subtitle:
-        subtitle_block = f'#v(4pt)\n#align(center)[#text(size: 10pt, fill: rgb("#64748b"))[{_typst_esc(content.subtitle)}]]\n#v(6pt)\n'
+    if subtitle:
+        subtitle_block = f'#v(4pt)\n#align(center)[#text(size: 10pt, fill: rgb("#64748b"))[{_typst_esc(subtitle)}]]\n#v(6pt)\n'
     callouts_block = ""
     if content.callouts:
         callouts_block = f"#grid(columns: {cols}, gutter: 8pt,\n{chips}\n)\n"
+    # Dedup: the figure caption used to repeat the takeaway verbatim
+    # ("Figure 1: X" + gray "X"). Caption now frames the hero (subtitle);
+    # with no subtitle the figure stands captionless and the takeaway below
+    # carries the lesson alone.
+    figure_block = f'#figure(\n  image("{hero_filename}", width: 68%),\n'
+    if subtitle:
+        figure_block += f'  caption: [{_typst_esc(subtitle)}],\n'
+    figure_block += ') <lesson-hero>\n\n'
     return (
-        '#set page(width: 800pt, height: 900pt, margin: 18pt)\n'
+        '#set page(width: 800pt, height: auto, margin: 18pt)\n'
         '#set text(size: 10pt)\n\n'
         f'#align(center)[#text(size: 18pt, weight: "bold")[{_typst_esc(content.title)}]]\n'
         f'{subtitle_block}'
         '#v(6pt)\n'
-        f'#figure(\n  image("{hero_filename}", width: 68%),\n'
-        f'  caption: [{_typst_esc(content.takeaway) if content.takeaway else _typst_esc(content.subtitle)}],\n'
-        f') <lesson-hero>\n\n'
+        f'{figure_block}'
         f'{callouts_block}'
         f'{reasoning_block}'
         f'{result_block}'

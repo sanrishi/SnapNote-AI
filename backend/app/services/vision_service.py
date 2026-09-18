@@ -492,6 +492,26 @@ FIELD RULES:
 - "composition": emit it ONLY when you have enough structured evidence (scene labels + visible equations) to fill callouts/reasoning/result honestly. Omit the block entirely when evidence is thin — the renderer falls back gracefully. Never emit a composition whose values you invented."""
 
 
+def _minimal_notes_context(study_notes: StudyNotes) -> str:
+    """Compact grounded context for the repair leg: topic + formulas only.
+
+    The full notes JSON (uncertainties, analogy, visual context, ...) is
+    unnecessary for reconciling one expression pair and only slows the
+    repair call. Formulas carry confidence so the repair prefers clear
+    extractions.
+    """
+    topic = ""
+    try:
+        if study_notes.topic is not None:
+            topic = study_notes.topic.title or ""
+    except AttributeError:
+        topic = ""
+    formulas = []
+    for f in study_notes.key_formulas or []:
+        formulas.append({"formula": f.formula, "confidence": f.confidence})
+    return json.dumps({"topic": topic, "formulas": formulas}, ensure_ascii=False)
+
+
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:
     """Produce the structured VisualSpec that drives the Explain Visually image.
 
@@ -508,7 +528,9 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
     raw = await _call_gemini(prompt, image_bytes, json_mode=True)
     try:
         data = _clean_latex_in_dict(_extract_json(raw))
-        spec = VisualSpec(**data)
+        from app.utils.latex_clean import normalize_spec_math
+
+        spec = normalize_spec_math(VisualSpec(**data))
     except (json.JSONDecodeError, ValidationError) as e:
         logger.warning("VisualSpec parse failed: %s", e)
         raise UpstreamError(
@@ -537,12 +559,26 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
             .replace("{{PREVIOUS_JSON}}", json.dumps(data, ensure_ascii=False))
         )
         if study_notes is not None:
-            notes_json = study_notes.model_dump_json(exclude={"diagram_spec", "diagram"})
-            repair_prompt += "\n\nSTUDY NOTES (context — do not contradict the screenshot):\n" + notes_json
+            repair_prompt += (
+                "\n\nGROUNDED CONTEXT (reconcile only against these; "
+                "do not contradict the screenshot):\n" + _minimal_notes_context(study_notes)
+            )
         try:
-            repair_raw = await _call_gemini(repair_prompt, image_bytes, json_mode=True)
+            # Tight sub-budget, no retry: reconciliation is small; expiry
+            # refuses honestly instead of stretching the request.
+            from app.config import settings
+
+            repair_raw = await _call_gemini(
+                repair_prompt,
+                image_bytes,
+                max_retries=0,
+                json_mode=True,
+                timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
+            )
             repair_data = _clean_latex_in_dict(_extract_json(repair_raw))
-            repaired = VisualSpec(**repair_data)
+            from app.utils.latex_clean import normalize_spec_math
+
+            repaired = normalize_spec_math(VisualSpec(**repair_data))
         except (json.JSONDecodeError, ValidationError, UpstreamError) as e:
             logger.warning("VisualSpec contradiction repair failed: %s", e)
             raise UpstreamError(

@@ -506,7 +506,7 @@ def test_build_visual_spec_no_contradiction_single_call(monkeypatch):
 
     calls: list[str] = []
 
-    async def fake_call(prompt: str, image: bytes, json_mode: bool = False) -> str:
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False, **kwargs: object) -> str:
         calls.append(prompt)
         return _v3_torque_json()
 
@@ -521,9 +521,11 @@ def test_build_visual_spec_contradiction_repaired_once(monkeypatch):
 
     responses = [_v3_torque_json("ΔL = ∫τ dt"), _v3_torque_json()]
     calls: list[str] = []
+    call_kwargs: list[dict] = []
 
-    async def fake_call(prompt: str, image: bytes, json_mode: bool = False) -> str:
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False, **kwargs: object) -> str:
         calls.append(prompt)
+        call_kwargs.append(kwargs)
         return responses[min(len(calls) - 1, 1)]
 
     monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
@@ -534,6 +536,35 @@ def test_build_visual_spec_contradiction_repaired_once(monkeypatch):
     assert len(calls) == 2
     # Repair prompt quotes both disagreeing expressions for reconciliation.
     assert "τ = r × F" in calls[1] and "ΔL = ∫τ dt" in calls[1]
+    # Repair leg SLA: tight sub-budget, no retry — expiry refuses honestly.
+    assert call_kwargs[1].get("max_retries") == 0
+    assert call_kwargs[1].get("timeout_seconds") == 12.0
+
+
+def test_build_visual_spec_repair_context_is_minimal(monkeypatch):
+    """The repair prompt carries topic+formulas only — never the full notes
+    JSON (uncertainties, analogy, visual context). Smaller payload, faster leg."""
+    from app.models.schemas import FormulaEntry, StudyNotes, TopicInfo
+    from app.services import vision_service
+
+    responses = [_v3_torque_json("ΔL = ∫τ dt"), _v3_torque_json()]
+    calls: list[str] = []
+
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False, **kwargs: object) -> str:
+        calls.append(prompt)
+        return responses[min(len(calls) - 1, 1)]
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    notes = StudyNotes(
+        topic=TopicInfo(title="Torque"),
+        key_formulas=[FormulaEntry(formula="τ = r × F", explanation="t", confidence="clear")],
+    )
+    _run_build(vision_service.build_visual_spec(b"fake", notes))
+    assert len(calls) == 2
+    assert "GROUNDED CONTEXT" in calls[1]
+    assert "visual_context" not in calls[1]
+    assert "analogy" not in calls[1]
+    assert "τ = r × F" in calls[1]
 
 
 def test_build_visual_spec_contradiction_persists_refuses(monkeypatch):
@@ -542,7 +573,7 @@ def test_build_visual_spec_contradiction_persists_refuses(monkeypatch):
 
     calls: list[str] = []
 
-    async def fake_call(prompt: str, image: bytes, json_mode: bool = False) -> str:
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False, **kwargs: object) -> str:
         calls.append(prompt)
         return _v3_torque_json("τ = Iα")
 
