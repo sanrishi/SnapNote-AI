@@ -2,8 +2,10 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# NOTE: libgl1-mesa-glx was removed in Debian trixie (current python:3.11-slim
+# base); libgl1 is its replacement and provides the same libGL.so.1 for OpenCV.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     libsm6 \
     libxext6 \
