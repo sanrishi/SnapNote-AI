@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JEE Syllabus Corpus Entry",
+  "type": "object",
+  "required": ["id", "exam", "subject", "chapter", "subtopic", "in_syllabus",
+    "source_url", "source_publisher", "source_last_updated",
+    "verification_date", "verification_status"],
+  "properties": {
+    "id": { "type": "string" },
+    "exam": { "type": "string", "enum": ["JEE Main", "JEE Advanced"] },
+    "subject": { "type": "string" },
+    "chapter": { "type": "string" },
+    "subtopic": { "type": "string" },
+    "subtopic_segmentation": { "type": "string",
+      "enum": ["verbatim_official", "derived_by_contributor"] },
+    "prerequisite_concepts": { "type": "array", "items": { "type": "string" } },
+    "in_syllabus": { "type": "boolean" },
+    "source_url": { "type": "string", "format": "uri" },
+    "source_landing_page": { "type": "string", "format": "uri" },
+    "source_publisher": { "type": "string" },
+    "source_last_updated": { "type": "string", "format": "date" },
+    "verification_date": { "type": "string", "format": "date" },
+    "verification_status": { "type": "string", "enum": ["verified", "unverified"] }
+  }
+}
