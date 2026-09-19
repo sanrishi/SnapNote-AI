@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "JEE Physics Rotational Motion Concept Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "concept_id",
+    "display_name",
+    "subject",
+    "chapter",
+    "parent_concept_id",
+    "child_concept_ids",
+    "aliases",
+    "prerequisite_concept_ids",
+    "related_concept_ids",
+    "syllabus_subtopic_ref"
+  ],
+  "properties": {
+    "concept_id": {
+      "type": "string",
+      "pattern": "^jee-physics-rotational-motion-concept-[0-9]{3}$"
+    },
+    "display_name": { "type": "string", "minLength": 1 },
+    "subject": { "type": "string", "const": "Physics" },
+    "chapter": { "type": "string", "const": "Rotational Motion" },
+    "parent_concept_id": {
+      "type": ["string", "null"],
+      "pattern": "^jee-physics-rotational-motion-concept-[0-9]{3}$"
+    },
+    "child_concept_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^jee-physics-rotational-motion-concept-[0-9]{3}$" },
+      "uniqueItems": true
+    },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    },
+    "prerequisite_concept_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^jee-physics-rotational-motion-concept-[0-9]{3}$" },
+      "uniqueItems": true
+    },
+    "related_concept_ids": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^jee-physics-rotational-motion-concept-[0-9]{3}$" },
+      "uniqueItems": true
+    },
+    "syllabus_subtopic_ref": { "type": "string", "minLength": 1 },
+    "note": { "type": "string", "minLength": 1 }
+  }
+}
