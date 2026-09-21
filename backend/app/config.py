@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
     IMGBB_API_KEY: str = ""
 
+    # Storage backend for upload_image(): "imgbb" (default, production) or
+    # "data_uri" (staging/testing only — returns a data: URI, no network).
+    IMAGE_STORAGE_BACKEND: str = "imgbb"
+
     R2_ACCOUNT_ID: str = ""
     R2_ACCESS_KEY_ID: str = ""
     R2_SECRET_ACCESS_KEY: str = ""

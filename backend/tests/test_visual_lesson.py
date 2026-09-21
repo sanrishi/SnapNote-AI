@@ -512,6 +512,26 @@ def test_v3_delivery_storage_failure_returns_none(monkeypatch):
     assert upload_image(bytes(payload), {"title": "explain-visually"}) is None
 
 
+def test_v3_delivery_imgbb_http_error_reports_body_without_key(monkeypatch, caplog):
+    import httpx
+
+    from app.services import storage_service
+
+    class _Resp:
+        status_code = 400
+        text = '{"success": false, "error": "bad key SECRET-KEY"}'
+
+    def _post(*_a, **_k):
+        return _Resp()
+
+    monkeypatch.setattr(httpx, "post", _post)
+    monkeypatch.setattr("app.config.settings.IMGBB_API_KEY", " SECRET-KEY ", raising=False)
+    with caplog.at_level("WARNING", logger="app.services.storage_service"):
+        assert storage_service.upload_image(b"not-an-image") is None
+    assert "ImgBB HTTP 400" in caplog.text
+    assert "SECRET-KEY" not in caplog.text
+
+
 def test_v3_delivery_touches_no_credits(monkeypatch):
     import app.utils.credits_store as store
 
