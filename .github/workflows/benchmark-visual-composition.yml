@@ -110,7 +110,7 @@ jobs:
 
       - name: Boot container and check /health
         run: |
-          docker run -d --name gate2 -p 8000:8000 snapnote-api:gate2
+          docker run -d --name gate2 -p 8000:8000 -e IMAGE_STORAGE_BACKEND=data_uri snapnote-api:gate2
           for i in $(seq 1 30); do
             if curl -fsS http://localhost:8000/health >/tmp/health.json 2>/dev/null; then break; fi
             sleep 10
@@ -152,7 +152,7 @@ jobs:
 
       - name: ImgBB boundary without key returns None (no network)
         run: |
-          docker run --rm snapnote-api:gate2 python -c "
+          docker run --rm -e IMAGE_STORAGE_BACKEND=imgbb snapnote-api:gate2 python -c "
           from app.services.storage_service import upload_image
           assert upload_image(b'not-an-image', {'title': 'gate2'}) is None
           print('imgbb boundary OK (refuses without key, no crash)')
