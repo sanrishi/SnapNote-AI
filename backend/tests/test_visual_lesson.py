@@ -484,6 +484,7 @@ def test_v3_delivery_uploads_exact_png_bytes(monkeypatch):
     captured: dict = {}
     monkeypatch.setattr(httpx, "post", _fake_imgbb_success(captured))
     monkeypatch.setattr("app.config.settings.IMGBB_API_KEY", "test-key", raising=False)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "imgbb", raising=False)
     url = upload_image(bytes(payload), {"title": "explain-visually"})
     assert url == "https://imgbb.test/v3-lesson.png"
     assert captured.get("calls", 0) == 1  # exactly one upload, no orphans/doubles
@@ -507,6 +508,7 @@ def test_v3_delivery_storage_failure_returns_none(monkeypatch):
 
     monkeypatch.setattr(httpx, "post", _boom)
     monkeypatch.setattr("app.config.settings.IMGBB_API_KEY", "test-key", raising=False)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "imgbb", raising=False)
     # Existing contract: storage failure -> None -> route raises the
     # controlled UpstreamError (same lines as the generative path).
     assert upload_image(bytes(payload), {"title": "explain-visually"}) is None
@@ -526,6 +528,7 @@ def test_v3_delivery_imgbb_http_error_reports_body_without_key(monkeypatch, capl
 
     monkeypatch.setattr(httpx, "post", _post)
     monkeypatch.setattr("app.config.settings.IMGBB_API_KEY", " SECRET-KEY ", raising=False)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "imgbb", raising=False)
     with caplog.at_level("WARNING", logger="app.services.storage_service"):
         assert storage_service.upload_image(b"not-an-image") is None
     assert "ImgBB HTTP 400" in caplog.text

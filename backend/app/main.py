@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -14,8 +15,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION)
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from app.services.storage_service import validate_storage_config
+
+    validate_storage_config()  # fail fast when the storage backend cannot work
+    logger.info(
+        "Storage backend ready: %s", settings.IMAGE_STORAGE_BACKEND.strip().lower()
+    )
+    yield
+
+
+app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*", "null"],

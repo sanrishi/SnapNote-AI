@@ -402,7 +402,7 @@
     .explain-btn:disabled { opacity: .55; cursor: not-allowed; }
     .explain-btn .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: var(--amber); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 6px; vertical-align: -2px; }
 
-    .visual-wrap { margin-top: 12px; max-width: 720px; margin-left: auto; margin-right: auto; }
+    .visual-wrap { margin-top: 12px; max-width: 100%; margin-left: auto; margin-right: auto; }
     .visual-wrap img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--border); }
     .visual-wrap svg { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--border); background: #fff; }
     .visual-trust { font-size: 11.5px; color: var(--muted-2); margin-top: 8px; display: flex; align-items: center; gap: 6px; max-width: 720px; margin-left: auto; margin-right: auto; }
@@ -1504,6 +1504,7 @@
         hideProcessing();
         currentVisualUrl = result.imageUrl || null;
         currentVisualSvg = result.imageSvg || null;
+        if (result.visualContext) lastVisualContext = { present: true, summary: result.visualContext };
         if ((currentVisualUrl || currentVisualSvg) && currentDiagramId) {
           const hist = getHistory();
           for (const entry of hist) {

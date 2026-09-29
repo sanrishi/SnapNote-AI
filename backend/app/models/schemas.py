@@ -340,3 +340,6 @@ class VisualExplanationResponse(BaseModel):
     imageUrl: Optional[str] = None
     imageSvg: Optional[str] = None
     status: str = "generated"  # "generated" | "already_generated"
+    # Trust layer: study-notes context summary re-grounded against the emitted
+    # scene (None = keep the diagram-step text / hide when empty).
+    visualContext: Optional[str] = None
