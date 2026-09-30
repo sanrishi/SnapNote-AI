@@ -86,6 +86,8 @@ def _r2_object_key(image_bytes: bytes, context: dict | None) -> str:
 
 
 def _upload_to_r2(image_bytes: bytes, context: dict | None) -> str:
+    """S3-compatible object upload (Cloudflare R2 by default, or the provider
+    in S3_ENDPOINT_URL). Single PUT, content-hash key, public URL out."""
     import httpx
 
     from app.config import settings
@@ -95,16 +97,33 @@ def _upload_to_r2(image_bytes: bytes, context: dict | None) -> str:
     secret_key = settings.R2_SECRET_ACCESS_KEY.strip()
     bucket = settings.R2_BUCKET_NAME.strip()
     public_base = settings.R2_PUBLIC_URL.strip().rstrip("/")
-    if not (account_id and access_key and secret_key and bucket):
-        raise ValueError("R2 storage is not configured")
+    endpoint_override = settings.S3_ENDPOINT_URL.strip().rstrip("/")
+    region = settings.S3_REGION.strip() or "auto"
+    if not (access_key and secret_key and bucket):
+        raise ValueError("Object storage is not configured")
     if not public_base.startswith("https://") or "xxxxx" in public_base:
         raise ValueError("R2_PUBLIC_URL is not a real public base URL")
 
     mime = _detect_mime(image_bytes)
     key = _r2_object_key(image_bytes, context)
-    host = f"{account_id}.r2.cloudflarestorage.com"
-    path = f"/{bucket}/{quote(key, safe='/')}"
-    url = f"https://{host}{path}"
+    if endpoint_override:
+        # Path-style (Supabase and most S3 providers):
+        # {endpoint}/{bucket}/{key}
+        from urllib.parse import urlsplit
+
+        parts = urlsplit(endpoint_override)
+        host = parts.netloc
+        base_path = parts.path.rstrip("/")
+        path = f"{base_path}/{bucket}/{quote(key, safe='/')}"
+        url = f"{parts.scheme}://{host}{path}"
+    else:
+        # Virtual-hosted style (Cloudflare R2):
+        # {account}.r2.cloudflarestorage.com/{bucket}/{key}
+        if not account_id:
+            raise ValueError("Object storage is not configured")
+        host = f"{account_id}.r2.cloudflarestorage.com"
+        path = f"/{bucket}/{quote(key, safe='/')}"
+        url = f"https://{host}{path}"
 
     now = datetime.now(timezone.utc)
     amz_date = now.strftime("%Y%m%dT%H%M%SZ")
@@ -120,13 +139,13 @@ def _upload_to_r2(image_bytes: bytes, context: dict | None) -> str:
     canonical_request = (
         f"PUT\n{path}\n\n{canonical_headers}\n{signed_headers}\n{payload_hash}"
     )
-    scope = f"{date_stamp}/auto/s3/aws4_request"
+    scope = f"{date_stamp}/{region}/s3/aws4_request"
     string_to_sign = (
         f"AWS4-HMAC-SHA256\n{amz_date}\n{scope}\n"
         f"{hashlib.sha256(canonical_request.encode('utf-8')).hexdigest()}"
     )
     signing_key = ("AWS4" + secret_key).encode("utf-8")
-    for part in (date_stamp, "auto", "s3", "aws4_request"):
+    for part in (date_stamp, region, "s3", "aws4_request"):
         signing_key = hmac.new(signing_key, part.encode("utf-8"), hashlib.sha256).digest()
     signature = hmac.new(signing_key, string_to_sign.encode("utf-8"), hashlib.sha256).hexdigest()
 
@@ -147,7 +166,7 @@ def _upload_to_r2(image_bytes: bytes, context: dict | None) -> str:
     )
     if resp.status_code >= 400:
         detail = " ".join(resp.text.strip().split())[:300]
-        raise ValueError(f"R2 HTTP {resp.status_code}: {detail or 'no response body'}")
+        raise ValueError(f"Object storage HTTP {resp.status_code}: {detail or 'no response body'}")
     resp.raise_for_status()
 
     public_url = f"{public_base}/{key}"

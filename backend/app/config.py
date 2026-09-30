@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     R2_BUCKET_NAME: str = "snapnote-diagrams"
     R2_PUBLIC_URL: str = "https://pub-xxxxx.r2.dev"
 
+    # S3-compatible override. Empty = Cloudflare R2 (virtual-hosted style,
+    # region "auto"). Set to a provider endpoint (e.g. Supabase
+    # https://<ref>.storage.supabase.co/storage/v1/s3) for path-style
+    # requests with S3_REGION set to the provider region.
+    S3_ENDPOINT_URL: str = ""
+    S3_REGION: str = "auto"
+
     FREE_CREDITS_MONTHLY: int = 50
     TEXT_CREDIT_COST: int = 1
     REVISION_CREDIT_COST: int = 1

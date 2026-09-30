@@ -316,6 +316,42 @@ def test_validate_storage_config_accepts_r2_and_data_uri(monkeypatch):
         validate_storage_config()
 
 
+def test_s3_endpoint_override_uses_path_style(monkeypatch):
+    import httpx
+
+    captured: dict = {}
+
+    def _put(url, content=None, headers=None, timeout=None):
+        captured["url"] = url
+        captured["content"] = content
+        captured["headers"] = headers
+        captured["auth"] = (headers or {}).get("Authorization", "")
+        return _R2Resp(200)
+
+    monkeypatch.setattr(httpx, "put", _put)
+    _set_r2_settings(monkeypatch, public_url="https://ref.supabase.co/storage/v1/object/public/snapnote-diagrams")
+    monkeypatch.setattr(
+        "app.config.settings.S3_ENDPOINT_URL",
+        "https://ref.storage.supabase.co/storage/v1/s3",
+        raising=False,
+    )
+    monkeypatch.setattr("app.config.settings.S3_REGION", "ap-south-1", raising=False)
+    # No R2 account needed when an explicit endpoint is set.
+    monkeypatch.setattr("app.config.settings.R2_ACCOUNT_ID", "", raising=False)
+    png = _make_png()
+    url = upload_image(png, {"title": "explain-visually"})
+    assert url is not None and url.startswith(
+        "https://ref.supabase.co/storage/v1/object/public/snapnote-diagrams/visuals/"
+    )
+    assert captured["url"].startswith(
+        "https://ref.storage.supabase.co/storage/v1/s3/snapnote-diagrams/visuals/"
+    )
+    assert captured["content"] == png
+    assert captured["headers"]["Content-Type"] == "image/png"
+    assert "ap-south-1" in captured["auth"]
+    assert captured["auth"].startswith("AWS4-HMAC-SHA256 ")
+
+
 def test_visual_route_r2_generated_then_reused(sample_diagram_image, monkeypatch):
     import httpx
 
