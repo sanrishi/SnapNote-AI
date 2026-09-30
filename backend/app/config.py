@@ -12,11 +12,23 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = ""
     IMGBB_API_KEY: str = ""
 
+    # Storage backend for upload_image(): "r2" (default, production),
+    # "data_uri" (staging/testing only — returns a data: URI, no network), or
+    # "imgbb" (legacy/disabled — kept one migration cycle for rollback only).
+    IMAGE_STORAGE_BACKEND: str = "r2"
+
     R2_ACCOUNT_ID: str = ""
     R2_ACCESS_KEY_ID: str = ""
     R2_SECRET_ACCESS_KEY: str = ""
     R2_BUCKET_NAME: str = "snapnote-diagrams"
     R2_PUBLIC_URL: str = "https://pub-xxxxx.r2.dev"
+
+    # S3-compatible override. Empty = Cloudflare R2 (virtual-hosted style,
+    # region "auto"). Set to a provider endpoint (e.g. Supabase
+    # https://<ref>.storage.supabase.co/storage/v1/s3) for path-style
+    # requests with S3_REGION set to the provider region.
+    S3_ENDPOINT_URL: str = ""
+    S3_REGION: str = "auto"
 
     FREE_CREDITS_MONTHLY: int = 50
     TEXT_CREDIT_COST: int = 1
@@ -41,6 +53,10 @@ class Settings(BaseSettings):
     MAX_VISION_LONG_EDGE: int = 1280
     VISION_JPEG_QUALITY: int = 75
     GEMINI_CALL_TIMEOUT_SECONDS: float = 22.0
+    # Repair-leg sub-budget: reconciliation is a tiny operation (one pair of
+    # expressions), so it gets a tighter deadline than full understanding.
+    # Expiry refuses honestly; the timeout is never raised to force a pass.
+    GEMINI_REPAIR_TIMEOUT_SECONDS: float = 12.0
     DIAGRAM_TIMEOUT_SECONDS: float = 28.0
 
     # "semantic" = Gemini outputs a structured DiagramSpec, Python renders it
@@ -54,6 +70,11 @@ class Settings(BaseSettings):
     JWT_EXPIRES_HOURS: int = 168
 
     GOOGLE_CLIENT_ID: str = ""  # for Google Identity Services ID-token verification
+
+    # Explain Visually v3 composition boundary (visual_lesson.render_visual_lesson).
+    # false = legacy generate_visual path, byte-for-byte. true = v3 composition
+    # path for deterministic specs (generative specs always use legacy path).
+    EXPLAIN_VISUALLY_V3: bool = False
 
     CREDIT_PACKS: dict = {
         "starter": {"credits": 50, "price_paise": 4900},

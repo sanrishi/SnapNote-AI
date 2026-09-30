@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time
 import uuid
 from fastapi import APIRouter, Form, Header, UploadFile, File, HTTPException
 
@@ -27,7 +28,9 @@ from app.services.vision_service import (
     extract_text_with_llm,
 )
 from app.services.visual_service import generate_visual
+from app.utils.visual_lesson import render_v3_visual, should_use_v3, v3_store_mode
 from app.services.storage_service import upload_image
+from app.utils.grounding import ground_visual_context
 from app.utils.render_notes import render_study_notes
 from app.utils.tags import parse_context, generate_tags
 from app.utils.validation import validate_image_size
@@ -319,7 +322,30 @@ async def extract_visual_route(
             logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
     spec = await build_visual_spec(enhanced, study_notes)
 
-    result = await generate_visual(spec)
+    # Trust layer: the study-notes context summary describes the SOURCE
+    # screenshot, but it renders under OUR rebuilt visual — drop any sentence
+    # claiming structural elements the emitted scene does not draw.
+    visual_context: str | None = None
+    if study_notes is not None and study_notes.visual_context.present:
+        grounded = ground_visual_context(study_notes.visual_context.summary, spec)
+        visual_context = grounded or None
+
+    # v3 composition boundary (flag-gated). Same spec object — no second
+    # understanding pipeline. Generative specs always use the legacy path.
+    v3_composed = should_use_v3(spec)
+    t_visual = time.perf_counter()
+    if v3_composed:
+        logger.info("Explain Visually v3 composition path (diagram %s)", diagramId[:8])
+        result = await render_v3_visual(spec)
+    else:
+        if settings.EXPLAIN_VISUALLY_V3:
+            logger.info(
+                "Explain Visually v3 flag on but render_mode=%s; using legacy path (diagram %s)",
+                spec.render_mode, diagramId[:8],
+            )
+        else:
+            logger.info("Explain Visually legacy path (v3 flag off, diagram %s)", diagramId[:8])
+        result = await generate_visual(spec)
     if result is None:
         raise UpstreamError(
             service="SnapNote AI",
@@ -339,13 +365,23 @@ async def extract_visual_route(
             renderMode="deterministic",
             imageSvg=visual_svg,
             status="generated",
+            visualContext=visual_context,
         )
 
+    t_upload = time.perf_counter()
     visual_url = await asyncio.to_thread(upload_image, payload, {"title": "explain-visually"})
+    upload_ms = (time.perf_counter() - t_upload) * 1000
     if not visual_url:
         raise UpstreamError(service="SnapNote AI", detail="Could not store the generated visual. Please try again.")
 
-    if not set_visual_result(diagramId, effective_id, "generative", visual_url=visual_url):
+    # A v3-composed PNG is deterministic content (Typst from a validated spec),
+    # not a generative illustration — label it honestly for observability.
+    store_mode = v3_store_mode(v3_composed, mode)
+    logger.info(
+        "Explain Visually stored (diagram %s, v3=%s, mode=%s, stored_as=%s, upload=%.1fms, total=%.1fms)",
+        diagramId[:8], v3_composed, mode, store_mode, upload_ms, (time.perf_counter() - t_visual) * 1000,
+    )
+    if not set_visual_result(diagramId, effective_id, store_mode, visual_url=visual_url):
         logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
         existing = get_visual_entitlement(diagramId)
         if existing is not None:
@@ -353,7 +389,8 @@ async def extract_visual_route(
 
     return VisualExplanationResponse(
         diagramId=diagramId,
-        renderMode="generative",
+        renderMode=store_mode if v3_composed else "generative",
         imageUrl=visual_url,
         status="generated",
+        visualContext=visual_context,
     )

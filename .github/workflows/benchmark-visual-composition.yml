@@ -1,0 +1,163 @@
+name: Benchmark Visual Composition (disposable)
+
+# Disposable research workflow — not part of production.
+# Runs ONLY on the prototype branch, Ubuntu, for the 4-way battle.
+on:
+  push:
+    branches: [feat/prototype-visual-composition]
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/prototype-visual-composition
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Set up Node 20 (for Satori)
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install system deps (WeasyPrint + Typst deps)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcairo2 libpango-1.0-0 libpangoft2-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
+
+      - name: Install Typst CLI (official)
+        run: |
+          cargo --version || (curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && source $HOME/.cargo/env)
+          cargo install typst-cli --locked || echo "cargo install failed, trying binary download"
+          # fallback: download prebuilt binary if cargo not available
+          if ! command -v typst >/dev/null 2>&1; then
+            curl -L https://github.com/typst/typst/releases/download/v0.13.0/typst-x86_64-unknown-linux-musl.tar.xz | tar -xJ
+            sudo mv typst-x86_64-unknown-linux-musl/typst /usr/local/bin/typst
+          fi
+          typst --version
+          typst --help | head -n 20
+
+      - name: Install Python deps
+        run: |
+          pip install -r backend/requirements.txt
+          pip install -r backend/requirements-test.txt
+          pip install weasyprint==69.0 typst==0.15.0
+          npm install satori@0.10.13 @resvg/resvg-js@2.6.2 @fontsource/inter
+
+      - name: Run 4-way benchmark (same VisualSpec, Argand + Torque)
+        run: |
+          PYTHONPATH=backend python prototypes/visual_composition/bench.py | tee bench.log
+          # Also run a dedicated Satori bench if available (JS)
+          if [ -f prototypes/visual_composition/engine_d_satori.js ]; then
+            node prototypes/visual_composition/engine_d_satori.js 2>&1 | tee -a bench.log || true
+          fi
+          ls -lh prototypes/visual_composition/outputs/ || true
+          cat bench.log
+
+      - name: Run rich composition benchmark (one coherent infographic)
+        run: |
+          PYTHONPATH=backend python prototypes/visual_composition/rich_bench.py | tee -a bench.log
+          ls -lh prototypes/visual_composition/outputs/rich_* || true
+          cat bench.log
+
+      - name: Run lesson contract bench (BEFORE vs AFTER production boundary)
+        run: |
+          PYTHONPATH=backend python prototypes/visual_composition/lesson_bench.py | tee -a bench.log
+          ls -lh prototypes/visual_composition/outputs/lesson_* || true
+          cat bench.log
+
+      - name: Run lesson contract tests
+        run: |
+          PYTHONPATH=backend python -m pytest backend/tests/test_visual_lesson.py -q | tee -a bench.log
+
+      - name: Upload artifacts (8 visuals + log)
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-composition-benchmark
+          path: |
+            prototypes/visual_composition/outputs/
+            bench.log
+          if-no-files-found: warn
+
+  # Gate 2: prove the production Docker image actually runs v3.
+  # Clean Ubuntu runner, no secrets: build + Typst + /health + fixture render
+  # + ImgBB boundary (negative path only — live upload is a staging item).
+  docker-gate2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/prototype-visual-composition
+
+      - name: Build production image (Typst install fails loudly if broken)
+        run: docker build -t snapnote-api:gate2 -f Dockerfile .
+
+      - name: Pinned versions inside image
+        run: |
+          docker run --rm snapnote-api:gate2 pip show fastapi starlette | grep -E "Name|Version"
+          docker run --rm snapnote-api:gate2 python -c "import fastapi, starlette; assert fastapi.__version__ == '0.115.0', fastapi.__version__; assert starlette.__version__ == '0.37.2', starlette.__version__; print('pins OK')"
+
+      - name: Typst binary inside image
+        run: docker run --rm snapnote-api:gate2 typst --version
+
+      - name: Boot container and check /health
+        run: |
+          docker run -d --name gate2 -p 8000:8000 -e IMAGE_STORAGE_BACKEND=data_uri snapnote-api:gate2
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8000/health >/tmp/health.json 2>/dev/null; then break; fi
+            sleep 10
+          done
+          cat /tmp/health.json
+          python3 -c "
+          import json
+          h = json.load(open('/tmp/health.json'))
+          assert h['status'] == 'ok', h
+          assert h['typst_available'] is True, h
+          assert h['typst_version'], h
+          assert h['explain_visually_v3'] is False, h
+          print('health OK:', h)
+          "
+          docker logs gate2 | tail -n 20 || true
+
+      - name: Fixture v3 composed render inside container (Typst must be used)
+        run: |
+          docker run --rm -v $GITHUB_WORKSPACE/prototypes/visual_composition:/work \
+            snapnote-api:gate2 python -c "
+          import asyncio, sys
+          sys.path.insert(0, '/work')
+          from ground_truth_specs import torque_v3_spec_from_ground_truth, argand_v3_spec_from_ground_truth
+          from app.utils.visual_lesson import render_v3_visual, validate_lesson_spec, typst_status
+          print('typst:', typst_status())
+          assert typst_status()['available'] is True
+          async def main():
+              for name, spec in (('torque', torque_v3_spec_from_ground_truth()), ('argand', argand_v3_spec_from_ground_truth())):
+                  assert validate_lesson_spec(spec) == [], name
+                  out = await render_v3_visual(spec)
+                  assert out is not None, name
+                  mode, payload = out
+                  assert mode == 'png', (name, mode)
+                  assert payload[:8] == b'\x89PNG\r\n\x1a\n', name
+                  assert len(payload) > 2000, (name, len(payload))
+                  print(name, 'composed PNG bytes=', len(payload))
+          asyncio.run(main())
+          "
+
+      - name: ImgBB boundary without key returns None (no network)
+        run: |
+          docker run --rm -e IMAGE_STORAGE_BACKEND=imgbb snapnote-api:gate2 python -c "
+          from app.services.storage_service import upload_image
+          assert upload_image(b'not-an-image', {'title': 'gate2'}) is None
+          print('imgbb boundary OK (refuses without key, no crash)')
+          "
+
+      - name: Stop container
+        if: always()
+        run: docker rm -f gate2 || true

@@ -430,6 +430,20 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
 
   When the screenshot shows a graph/plot/trajectory (parabola, sine wave, polar curve, projectile), prefer "plot" with a safe expr. When it shows vectors/forces, prefer "force_diagram". When it shows boxes/arrows, prefer "process_flow".
 
+THE COMPOSITION BLOCK (explicit lesson content):
+Inside "deterministic.composition" you describe the LESSON the visual teaches — title, framing, callout chips, reasoning chain, highlighted result, takeaway. The renderer draws this block verbatim around the scene geometry, so every word must already be grounded.
+  - "title": short title, max 80 chars (usually repeats deterministic.title).
+  - "framing": one-line concept framing, max 200 chars.
+  - "callouts": 2-4 items, each {"id": "vec-r" (plain ASCII only: lowercase a-z, digits, _ and - only, max 32 chars, referencing what it describes — e.g. "vec-r", "node-err", NEVER Unicode subscripts like "node₀"), "label": "r" (max 24 chars), "value": "55° lever" (max 80 chars)}. Labels/values may use Unicode math (θ, τ, ×); ids MUST be plain ASCII.
+  - "reasoning": up to 4 steps, each {"id": "rs-theta" (same plain-ASCII id rule, e.g. "rs-1", "rs-tau"), "expression": "θ = 90° − 55° = 35°" (max 120 chars, exact Unicode math, NO LaTeX), "explanation": "angle between r and F" (max 200 chars)}.
+  - "result": {"expression": "τ = r × F" (max 120 chars), "emphasis": true}.
+  - "takeaway": one sentence, max 200 chars.
+  COMPOSITION GROUNDING (never invent to make the visual richer):
+  - Every callout label/value must come from a scene label you already emitted or verbatim text in the image/notes. Never invent new symbols, numbers, or names.
+  - Every reasoning expression must use ONLY equations/symbols visible in the image, the notes, or the scene you emitted. Arithmetic combining values you already emitted (e.g. θ = 90° − 55°) is allowed; new factual claims are forbidden.
+  - The result expression must EQUAL the scene's own relation expression when a relation exists; otherwise it must be an equation verbatim from the image/notes.
+  - If you cannot fill callouts/reasoning/result from visible evidence, OMIT the entire "composition" block. The renderer falls back to derived content automatically. Never hallucinate missing reasoning merely to fill the template.
+
 GROUNDING RULES:
 1. The screenshot is the source of truth. The study notes below are helpful context, but never invent content that conflicts with what the image actually shows.
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
@@ -454,7 +468,15 @@ OUTPUT: ONLY a JSON object with exactly this structure:
     },
     "equations": [{"expression": "exact formula in Unicode, no LaTeX, no backslash", "meaning": "one line: what each symbol means and what the relationship represents"}],
     "steps": ["ordered steps, each a short phrase"],
-    "points": ["key points, each a short phrase"]
+    "points": ["key points, each a short phrase"],
+    "composition": {
+      "title": "short title, max 80 chars",
+      "framing": "one-line concept framing, max 200 chars",
+      "callouts": [{"id": "vec-r", "label": "r", "value": "55° lever"}],
+      "reasoning": [{"id": "rs-theta", "expression": "θ = 90° − 55° = 35°", "explanation": "angle between r and F"}],
+      "result": {"expression": "τ = r × F", "emphasis": true},
+      "takeaway": "one sentence, max 200 chars"
+    }
   },
   "visual_form": "the chosen visual form, e.g. 'force vector diagram' or 'labeled block diagram' or 'step-by-step flowchart'",
   "key_elements": ["every box/axis/label/marker the visual must contain, verbatim text in quotes"],
@@ -466,7 +488,28 @@ OUTPUT: ONLY a JSON object with exactly this structure:
 FIELD RULES:
 - "text_required": true when readable text/symbols are essential to the visual (always true in deterministic mode). false only for a purely conceptual illustration that conveys meaning through pictures alone.
 - "deterministic": ALWAYS populate it. Prefer providing a "scene" (a real diagram) when the concept maps to force_diagram, process_flow or plot; the renderer draws it. IMPORTANT — Explain Visually is a VISUAL ARTIFACT, not a second study sheet: when you emit a scene, keep it geometry-first (objects, vectors, angles, arcs, relationships, labels) and do NOT fill equations/steps/points with the same material that already lives in the study notes. Leave equations/steps/points EMPTY when a scene is present; the only equation allowed inside the visual is the scene's own "relation" (e.g. "τ = r × F") plus the one-line caption. Fill equations/steps/points ONLY when there is no scene (the renderer then falls back to a card layout). In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
-- Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support."""
+- Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support.
+- "composition": emit it ONLY when you have enough structured evidence (scene labels + visible equations) to fill callouts/reasoning/result honestly. Omit the block entirely when evidence is thin — the renderer falls back gracefully. Never emit a composition whose values you invented."""
+
+
+def _minimal_notes_context(study_notes: StudyNotes) -> str:
+    """Compact grounded context for the repair leg: topic + formulas only.
+
+    The full notes JSON (uncertainties, analogy, visual context, ...) is
+    unnecessary for reconciling one expression pair and only slows the
+    repair call. Formulas carry confidence so the repair prefers clear
+    extractions.
+    """
+    topic = ""
+    try:
+        if study_notes.topic is not None:
+            topic = study_notes.topic.title or ""
+    except AttributeError:
+        topic = ""
+    formulas = []
+    for f in study_notes.key_formulas or []:
+        formulas.append({"formula": f.formula, "confidence": f.confidence})
+    return json.dumps({"topic": topic, "formulas": formulas}, ensure_ascii=False)
 
 
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:
@@ -485,10 +528,99 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
     raw = await _call_gemini(prompt, image_bytes, json_mode=True)
     try:
         data = _clean_latex_in_dict(_extract_json(raw))
-        return VisualSpec(**data)
+        from app.utils.latex_clean import normalize_spec_math
+
+        spec = normalize_spec_math(VisualSpec(**data))
     except (json.JSONDecodeError, ValidationError) as e:
         logger.warning("VisualSpec parse failed: %s", e)
         raise UpstreamError(
             service="SnapNote AI",
             detail="Could not plan an educational visual for this material.",
         )
+    # One-shot contradiction repair (v3 composition): the scene relation and
+    # the composition result both render as the visual's single highlighted
+    # answer, so a mismatch is refused downstream. Real boards can carry two
+    # grounded-but-complementary forms (e.g. "τ = r × F" and "|τ| = rF sin θ"),
+    # and Gemini non-deterministically picks different ones per slot — so give
+    # it exactly one bounded second chance to reconcile to a single grounded
+    # expression. Anything still mismatched (or any other failure) refuses
+    # honestly as before. At most one extra Gemini call, only on mismatch.
+    contradiction = _composition_contradiction(spec)
+    if contradiction is not None:
+        relation_expr, result_expr = contradiction
+        logger.warning(
+            "VisualSpec composition contradicts scene relation (%r != %r); attempting one repair",
+            result_expr,
+            relation_expr,
+        )
+        repair_prompt = (
+            COMPOSITION_RECONCILE_PROMPT.replace("{{RELATION}}", relation_expr)
+            .replace("{{RESULT}}", result_expr)
+            .replace("{{PREVIOUS_JSON}}", json.dumps(data, ensure_ascii=False))
+        )
+        if study_notes is not None:
+            repair_prompt += (
+                "\n\nGROUNDED CONTEXT (reconcile only against these; "
+                "do not contradict the screenshot):\n" + _minimal_notes_context(study_notes)
+            )
+        try:
+            # Tight sub-budget, no retry: reconciliation is small; expiry
+            # refuses honestly instead of stretching the request.
+            from app.config import settings
+
+            repair_raw = await _call_gemini(
+                repair_prompt,
+                image_bytes,
+                max_retries=0,
+                json_mode=True,
+                timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
+            )
+            repair_data = _clean_latex_in_dict(_extract_json(repair_raw))
+            from app.utils.latex_clean import normalize_spec_math
+
+            repaired = normalize_spec_math(VisualSpec(**repair_data))
+        except (json.JSONDecodeError, ValidationError, UpstreamError) as e:
+            logger.warning("VisualSpec contradiction repair failed: %s", e)
+            raise UpstreamError(
+                service="SnapNote AI",
+                detail="Could not plan an educational visual for this material.",
+            )
+        if _composition_contradiction(repaired) is not None:
+            logger.warning("VisualSpec contradiction persists after repair; refusing")
+            raise UpstreamError(
+                service="SnapNote AI",
+                detail="Could not plan an educational visual for this material.",
+            )
+        return repaired
+    return spec
+
+
+COMPOSITION_RECONCILE_PROMPT = r"""You previously emitted the visual spec below, but its scene relation and composition result disagree, so the visual would show two different highlighted answers.
+
+- Scene relation expression: "{{RELATION}}"
+- Composition result expression: "{{RESULT}}"
+
+YOUR PREVIOUS RESPONSE:
+{{PREVIOUS_JSON}}
+
+Re-emit the COMPLETE spec JSON with this fixed: choose the ONE expression that is actually grounded in the screenshot and study notes and put that identical expression in BOTH the scene relation and the composition result (whitespace differences are fine). If neither expression is truly grounded, omit the composition block entirely instead — never invent a third expression to paper over the disagreement. Keep every other field identical to your previous response above. Return ONLY the JSON object, no other text."""
+
+
+def _composition_contradiction(spec: VisualSpec) -> tuple[str, str] | None:
+    """Return (relation, result) when both are present but disagree (pure).
+
+    Whitespace-insensitive comparison; math is case-significant so no case
+    folding. None means no contradiction (either side absent, or agreement).
+    """
+    from app.utils.visual_lesson import _scene_relation_expression
+
+    det = spec.deterministic
+    comp = det.composition
+    if comp is None or det.scene is None:
+        return None
+    relation_expr = _scene_relation_expression(det.scene)
+    result_expr = (comp.result.expression if comp.result is not None else "") or ""
+    if relation_expr.strip() and result_expr.strip():
+        if " ".join(relation_expr.split()) != " ".join(result_expr.split()):
+            return relation_expr, result_expr
+    return None

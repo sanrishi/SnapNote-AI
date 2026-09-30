@@ -1,0 +1,33 @@
+{
+  "concept": "Square ABCD on Argand plane",
+  "source_note": "Synthetic JEE-style ground truth. Internally consistent by construction; renderer must reproduce these exact values, never alter them.",
+  "mapping": "z = x + iy maps to point (Re=x, Im=y)",
+  "points": {
+    "A": { "z": "1+i", "re": 1, "im": 1 },
+    "B": { "z": "1+3i", "re": 1, "im": 3 },
+    "C": { "z": "3+3i", "re": 3, "im": 3 },
+    "D": { "z": "3+i", "re": 3, "im": 1 }
+  },
+  "square": { "vertices": ["A", "B", "C", "D"], "closed": true },
+  "edges": [
+    { "from": "A", "to": "B", "length": 2 },
+    { "from": "B", "to": "C", "length": 2 },
+    { "from": "C", "to": "D", "length": 2 },
+    { "from": "D", "to": "A", "length": 2 }
+  ],
+  "relationships": [
+    { "kind": "conjugate_reflection", "of": "A", "conjugate_z": "1-i", "conjugate_point": [1, -1], "axis": "Re" },
+    { "kind": "modulus", "point": "A", "expression": "|1+i| = sqrt(1^2+1^2) = sqrt(2)" },
+    { "kind": "side_length", "edge": "AB", "expression": "|B-A| = |(1+3i)-(1+i)| = |2i| = 2" },
+    { "kind": "area", "expression": "Area = s^2 = 2^2 = 4" }
+  ],
+  "reasoning": [
+    { "step": 1, "eq": "A=(1,1), B=(1,3), C=(3,3), D=(3,1)", "why": "map z=x+iy to (Re,Im)", "consequence": "four corners placed" },
+    { "step": 2, "eq": "AB = |2i| = 2", "why": "distance formula", "consequence": "side s = 2" },
+    { "step": 3, "eq": "Area = s^2 = 4", "why": "square area", "consequence": "final result" }
+  ],
+  "takeaway": "Conjugate mirrors across Re axis; side from |B-A|; area is side squared.",
+  "result": { "eq": "Area = 4", "highlight": true },
+  "must_show": ["axes Re/Im", "square ABCD", "A/B/C/D points", "coordinates", "side s=2", "Area=4"],
+  "forbidden": ["B = -1+3i", "any coordinate not listed in points"]
+}

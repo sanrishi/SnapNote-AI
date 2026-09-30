@@ -21,8 +21,10 @@ from app.models.schemas import (
     ProcessFlow,
     VisualAngle,
     VisualArc,
+    VisualCurve,
     VisualEquation,
     VisualObject,
+    VisualPlot,
     VisualRelation,
     VisualRenderMode,
     VisualScene,
@@ -267,6 +269,66 @@ def test_scene_rotation_arc_arrowhead_present():
     assert len(polys) >= 4, f"only {len(polys)} polygons"
 
 
+def _argand_collision_scene() -> DeterministicVisual:
+    """Regression fixture: two plot curves ending at the same corner, like the
+    Argand square ("square ABCD") and its point marker ("A(1,1)")."""
+    return DeterministicVisual(
+        title="Square on Argand Plane",
+        scene=VisualScene(
+            scene_kind="plot",
+            plot=VisualPlot(
+                x_label="Re", y_label="Im",
+                x_min=-1, x_max=5, y_min=-1, y_max=5, show_grid=True,
+                curves=[
+                    VisualCurve(label="square ABCD", points=[[1, 1], [1, 3], [3, 3], [3, 1], [1, 1]]),
+                    VisualCurve(label="A(1,1)", points=[[1, 1], [1, 1]]),
+                ],
+            ),
+        ),
+    )
+
+
+def _curve_label_boxes(svg: str) -> list[tuple[float, float, float, float]]:
+    import re
+
+    boxes = []
+    for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="11"[^>]*>(.*?)</text>', svg):
+        x, y, text = float(m.group(1)), float(m.group(2)), m.group(3)
+        boxes.append((x, y - 11, len(text) * 6.6 + 8, 14))
+    return boxes
+
+
+def test_plot_curve_labels_never_overlap():
+    """Regression (Argand A(1,1)/ABCD collision): labels attached to the same
+    geometric point must be placed at deterministic non-overlapping offsets,
+    with exact coordinates and geometry untouched."""
+    svg = render_deterministic_visual(_argand_collision_scene())
+    assert "square ABCD" in svg
+    assert "A(1,1)" in svg
+    boxes = _curve_label_boxes(svg)
+    assert len(boxes) == 2, f"expected 2 curve labels, got {len(boxes)}"
+    (ax, ay, aw, ah), (bx, by, bw, bh) = boxes
+    overlaps = not (ax + aw <= bx or bx + bw <= ax or ay + ah <= by or by + bh <= ay)
+    assert not overlaps, f"curve labels overlap: {boxes}"
+
+
+def test_plot_single_label_keeps_legacy_placement():
+    """A lone curve label must render at the legacy (+6,-6) anchor offset."""
+    spec = DeterministicVisual(
+        title="Plot",
+        scene=VisualScene(
+            scene_kind="plot",
+            plot=VisualPlot(
+                x_min=0, x_max=4, y_min=0, y_max=4,
+                curves=[VisualCurve(label="y=x", points=[[0, 0], [4, 4]])],
+            ),
+        ),
+    )
+    svg = render_deterministic_visual(spec)
+    assert "y=x" in svg
+    assert len(_curve_label_boxes(svg)) == 1
+
+
 # ── Hybrid dispatcher ──
 
 
@@ -397,3 +459,126 @@ async def _run_generate(spec):
     from app.services.visual_service import generate_visual
 
     return await generate_visual(spec)
+
+
+# ── v3 contradiction repair (one bounded retry, then honest refusal) ──
+
+def _v3_torque_json(result_expr: str | None = None) -> str:
+    import json
+
+    from ground_truth_specs import torque_v3_spec_from_ground_truth
+
+    spec = torque_v3_spec_from_ground_truth()
+    if result_expr is not None:
+        assert spec.deterministic.composition is not None
+        assert spec.deterministic.composition.result is not None
+        spec.deterministic.composition.result.expression = result_expr
+    return spec.model_dump_json()
+
+
+def _run_build(coro):
+    return asyncio.run(coro)
+
+
+def test_composition_contradiction_helper_pure():
+    from ground_truth_specs import (
+        argand_v3_spec_from_ground_truth,
+        torque_v3_spec_from_ground_truth,
+    )
+    from app.services.vision_service import _composition_contradiction
+
+    assert _composition_contradiction(torque_v3_spec_from_ground_truth()) is None
+    # Plot scene carries no relation: result alone is never a contradiction.
+    assert _composition_contradiction(argand_v3_spec_from_ground_truth()) is None
+    clean = torque_v3_spec_from_ground_truth()
+    clean.deterministic.composition = None
+    assert _composition_contradiction(clean) is None
+    bad = torque_v3_spec_from_ground_truth()
+    assert bad.deterministic.composition is not None
+    assert bad.deterministic.composition.result is not None
+    bad.deterministic.composition.result.expression = "τ = Iα"
+    found = _composition_contradiction(bad)
+    assert found is not None and found[0] == "τ = r × F" and found[1] == "τ = Iα"
+
+
+def test_build_visual_spec_no_contradiction_single_call(monkeypatch):
+    from app.services import vision_service
+
+    calls: list[str] = []
+
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False, **kwargs: object) -> str:
+        calls.append(prompt)
+        return _v3_torque_json()
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    spec = _run_build(vision_service.build_visual_spec(b"fake", None))
+    assert spec.deterministic.title == "Torque and Angular Momentum"
+    assert len(calls) == 1
+
+
+def test_build_visual_spec_contradiction_repaired_once(monkeypatch):
+    from app.services import vision_service
+
+    responses = [_v3_torque_json("ΔL = ∫τ dt"), _v3_torque_json()]
+    calls: list[str] = []
+    call_kwargs: list[dict] = []
+
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False, **kwargs: object) -> str:
+        calls.append(prompt)
+        call_kwargs.append(kwargs)
+        return responses[min(len(calls) - 1, 1)]
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    spec = _run_build(vision_service.build_visual_spec(b"fake", None))
+    assert spec.deterministic.composition is not None
+    assert spec.deterministic.composition.result is not None
+    assert spec.deterministic.composition.result.expression == "τ = r × F"
+    assert len(calls) == 2
+    # Repair prompt quotes both disagreeing expressions for reconciliation.
+    assert "τ = r × F" in calls[1] and "ΔL = ∫τ dt" in calls[1]
+    # Repair leg SLA: tight sub-budget, no retry — expiry refuses honestly.
+    assert call_kwargs[1].get("max_retries") == 0
+    assert call_kwargs[1].get("timeout_seconds") == 12.0
+
+
+def test_build_visual_spec_repair_context_is_minimal(monkeypatch):
+    """The repair prompt carries topic+formulas only — never the full notes
+    JSON (uncertainties, analogy, visual context). Smaller payload, faster leg."""
+    from app.models.schemas import FormulaEntry, StudyNotes, TopicInfo
+    from app.services import vision_service
+
+    responses = [_v3_torque_json("ΔL = ∫τ dt"), _v3_torque_json()]
+    calls: list[str] = []
+
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False, **kwargs: object) -> str:
+        calls.append(prompt)
+        return responses[min(len(calls) - 1, 1)]
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    notes = StudyNotes(
+        topic=TopicInfo(title="Torque"),
+        key_formulas=[FormulaEntry(formula="τ = r × F", explanation="t", confidence="clear")],
+    )
+    _run_build(vision_service.build_visual_spec(b"fake", notes))
+    assert len(calls) == 2
+    assert "GROUNDED CONTEXT" in calls[1]
+    assert "visual_context" not in calls[1]
+    assert "analogy" not in calls[1]
+    assert "τ = r × F" in calls[1]
+
+
+def test_build_visual_spec_contradiction_persists_refuses(monkeypatch):
+    from app.exceptions import UpstreamError
+    from app.services import vision_service
+
+    calls: list[str] = []
+
+    async def fake_call(prompt: str, image: bytes, json_mode: bool = False, **kwargs: object) -> str:
+        calls.append(prompt)
+        return _v3_torque_json("τ = Iα")
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    with pytest.raises(UpstreamError):
+        _run_build(vision_service.build_visual_spec(b"fake", None))
+    # Exactly one repair attempt — never an unbounded retry loop.
+    assert len(calls) == 2

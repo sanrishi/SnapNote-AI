@@ -83,8 +83,13 @@ def _f(value: float) -> str:
     return f"{value:.1f}"
 
 
-def _wrap(text: str, max_chars: int) -> list[str]:
-    """Deterministic word-wrap (no font metrics). Breaks long tokens when needed."""
+def _wrap(text: str, max_chars: int, hyphenate: bool = False) -> list[str]:
+    """Deterministic word-wrap (no font metrics). Breaks long tokens when needed.
+
+    hyphenate=True marks mid-word breaks with a visible "-" (narrow flow
+    boxes): "Proportional" -> ["Proporti-", "onal"]. Spec values are never
+    altered — the hyphen is presentation only, like newspaper columns.
+    """
     words = text.split(" ")
     lines: list[str] = []
     cur = ""
@@ -93,8 +98,10 @@ def _wrap(text: str, max_chars: int) -> list[str]:
             if cur:
                 lines.append(cur)
                 cur = ""
-            lines.append(word[:max_chars])
-            word = word[max_chars:]
+            chunk_len = max_chars if not hyphenate else max_chars - 1
+            chunk_len = max(1, chunk_len)
+            piece, word = word[:chunk_len], word[chunk_len:]
+            lines.append(piece + "-" if hyphenate and word else piece)
         candidate = f"{cur} {word}".strip() if cur else word
         if len(candidate) > max_chars:
             if cur:
@@ -415,55 +422,90 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
         return "", STAGE_Y + STAGE_H + 24, [], None
 
     n = len(nodes)
-    box_w = min(150, int((CONTENT_W - 40 - (n - 1) * 30) / n))
-    box_w = max(92, box_w)
-    box_h = 54
+    # Fit guarantee (R1): the old max(92, ...) floor let wide rows overflow the
+    # stage (8-node PID hit x0 < 0). Boxes now size from their own text and the
+    # row ALWAYS fits: wrap harder / shrink gap+font until it does. Pure
+    # character-count arithmetic — no font metrics, stays byte-deterministic.
+    font_size = 14 if n <= 6 else 12
+    # Conservative mean glyph advance for 600-weight sans (measured against
+    # the real PID board: 0.58 let 8-char lines spill past box borders).
+    est_char = font_size * 0.64
+    gap = 30 if n <= 4 else (20 if n <= 6 else 12)
+    wrapped: list[list[str]] = []
+    box_w = 150
+    for max_chars in (16, 14, 12, 10, 8):
+        wrapped = [_wrap(node.label, max_chars, hyphenate=True) for node in nodes]
+        need = max(len(line) for lines in wrapped for line in lines) * est_char + 30
+        box_w = min(170, need)
+        if n * box_w + (n - 1) * gap <= CONTENT_W - 40:
+            break
+    else:
+        wrapped = [_wrap(node.label, 8, hyphenate=True) for node in nodes]
+    box_w = min(box_w, (CONTENT_W - 40 - (n - 1) * gap) / n)
+    max_lines = max(len(lines) for lines in wrapped)
+    box_h = max(54, 20 + 22 * max_lines)
     y_center = STAGE_Y + STAGE_H // 2 - 40
-    total_w = n * box_w + (n - 1) * 30
+    total_w = n * box_w + (n - 1) * gap
     x0 = (VIEW_W - total_w) / 2
 
     centers: list[tuple[float, float]] = []
     for i, node in enumerate(nodes):
-        cx = x0 + i * (box_w + 30) + box_w / 2
+        cx = x0 + i * (box_w + gap) + box_w / 2
         centers.append((cx, y_center))
-        lines = _wrap(node.label, 16)
+        lines = wrapped[i]
         bx = cx - box_w / 2
         by = y_center - box_h / 2
         parts.append(
-            f'<rect x="{_f(bx)}" y="{_f(by)}" width="{box_w}" height="{box_h}" rx="10" '
+            f'<rect x="{_f(bx)}" y="{_f(by)}" width="{_f(box_w)}" height="{box_h}" rx="10" '
             f'fill="{CARD_FILL}" stroke="{ACCENT}" stroke-width="1.5"/>'
         )
         ty = y_center - (len(lines) - 1) * 11
         for line in lines:
             parts.append(
-                f'<text x="{_f(cx)}" y="{_f(ty)}" font-family="{_FONT}" font-size="14" '
+                f'<text x="{_f(cx)}" y="{_f(ty)}" font-family="{_FONT}" font-size="{font_size}" '
                 f'font-weight="600" fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
             )
             ty += 22
 
-    # Connectors (arrows between boxes).
+    y_top = y_center - box_h / 2
+    y_bot = y_center + box_h / 2
+    # Connectors (arrows between boxes). Exact-duplicate edges are drawn once
+    # (R4): overlapping specs otherwise stack identical arrowheads.
+    seen_edges: set[tuple[int, int, bool]] = set()
+    elbow_index = 0
+    # Spread multiple elbow landings on the same target so their arrowheads
+    # never stack on one point (R4).
+    landings: dict[int, int] = {}
+    bottom = y_bot + 74
     for conn in flow.connectors:
         if not (0 <= conn.source < n and 0 <= conn.target < n):
             continue
+        key = (conn.source, conn.target, bool(conn.feedback))
+        if key in seen_edges:
+            continue
+        seen_edges.add(key)
         s = centers[conn.source]
         t = centers[conn.target]
         if conn.feedback:
-            # Curved return path below the row.
-            pts = [
-                (s[0], y_center + box_h / 2 + 8),
-                (s[0] + (t[0] - s[0]) * 0.5, y_center + box_h / 2 + 52),
-                (t[0], y_center + box_h / 2 + 8),
-            ]
+            # V return path below the row, clamped to the stage (R3).
+            lo_x = STAGE_X + 8
+            hi_x = STAGE_X + STAGE_W - 8
+            sx = max(lo_x, min(hi_x, s[0]))
+            tx = max(lo_x, min(hi_x, t[0]))
+            vy = y_bot + 52
+            pts = [(sx, y_bot + 8), ((sx + tx) / 2, vy), (tx, y_bot + 8)]
             path_pts = " ".join(f"{_f(x)},{_f(y)}" for x, y in pts)
             parts.append(
                 f'<polyline points="{path_pts}" fill="none" stroke="{RED}" stroke-width="2" stroke-dasharray="6 4"/>'
             )
             if conn.label:
+                # Label BELOW the V point — never inside the node band (R2).
                 parts.append(
-                    f'<text x="{_f((s[0] + t[0]) / 2)}" y="{_f(y_center + box_h / 2 + 46)}" '
+                    f'<text x="{_f((sx + tx) / 2)}" y="{_f(vy + 18)}" '
                     f'font-family="{_FONT}" font-size="12.5" fill="{RED}" text-anchor="middle">{_esc(conn.label)}</text>'
                 )
-        else:
+            bottom = max(bottom, vy + 34)
+        elif abs(conn.target - conn.source) == 1:
             from_x, to_x = s[0], t[0]
             arrow_deg = 0.0 if to_x >= from_x else 180.0
             y = y_center
@@ -471,14 +513,39 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
             tip_x = to_x - box_w / 2 if arrow_deg == 0.0 else to_x + box_w / 2
             parts.append(_arrowhead(tip_x, y, arrow_deg, 11))
             if conn.label:
-                lx = (from_x + to_x) / 2
+                # Label ABOVE the boxes — the gap midpoint sits inside the
+                # node band, so centering there renders through boxes (R2).
                 parts.append(
-                    f'<text x="{_f(lx)}" y="{_f(y - 12)}" font-family="{_FONT}" font-size="12.5" '
+                    f'<text x="{_f((from_x + to_x) / 2)}" y="{_f(y_top - 10)}" font-family="{_FONT}" font-size="12.5" '
                     f'fill="{MUTED}" text-anchor="middle">{_esc(conn.label)}</text>'
+                )
+        else:
+            # Non-adjacent edge (fan-out/fan-in/backward): elbow routed ABOVE
+            # the row so the line never crosses intermediate boxes. Heights
+            # stagger deterministically; landings on one target spread out.
+            route_y = y_top - 26 - 12 * elbow_index
+            elbow_index += 1
+            j = landings.get(conn.target, 0)
+            landings[conn.target] = j + 1
+            # Offset by running index — deterministic;exact group sizes are
+            # unknowable in one pass, and groups stay tiny in practice.
+            land_x = t[0] + (j * 14 if conn.target > conn.source else -j * 14)
+            ex = s[0]
+            seg = (
+                f'<polyline points="{_f(ex)},{_f(y_top)} {_f(ex)},{_f(route_y)} '
+                f'{_f(land_x)},{_f(route_y)} {_f(land_x)},{_f(y_top)}" '
+                f'fill="none" stroke="{ACCENT}" stroke-width="2"/>'
+            )
+            parts.append(seg)
+            parts.append(_arrowhead(land_x, y_top, 270, 11))
+            if conn.label:
+                parts.append(
+                    f'<text x="{_f((ex + land_x) / 2)}" y="{_f(route_y - 6)}" font-family="{_FONT}" '
+                    f'font-size="12.5" fill="{MUTED}" text-anchor="middle">{_esc(conn.label)}</text>'
                 )
 
     # Relation card below (returned for the caller to place after the legend).
-    return "".join(parts), y_center + box_h / 2 + 74, [], flow.relation
+    return "".join(parts), bottom, [], flow.relation
 
 
 # ── Plot renderer: pure-SVG axes + grid + curves (no matplotlib, stays deterministic) ──
@@ -558,6 +625,39 @@ def _safe_eval(expr: str, x_val: float) -> float | None:
         return None
 
 
+def _polar_radius(curve: VisualCurve, x_min: float, x_max: float) -> float | None:
+    """Constant polar radius for labels like "r = 1" / "r = √5", else None.
+
+    Only fires when the LABEL declares a radial bound AND the evaluated
+    expression is constant across the range — a genuine r = const bound.
+    Anything else (functions of x, explicit points) keeps Cartesian plotting.
+    Label forms: "r = 1" as well as descriptive bounds like
+    "Inner Radius g(θ) = 1" (real math-board spec).
+    """
+    import re
+
+    label = (curve.label or "").strip()
+    if not (re.match(r"(?i)^r\s*=", label) or re.search(r"(?i)radius", label)):
+        return None
+    if curve.points:
+        return None
+    expr = (curve.expr or "").strip()
+    if not expr:
+        return None
+    lo = float(curve.x_min) if curve.x_min != 0 or curve.x_max != 0 else x_min
+    hi = float(curve.x_max) if curve.x_max != 0 or curve.x_min != 0 else x_max
+    if hi <= lo:
+        return None
+    vals = [_safe_eval(expr, lo + (hi - lo) * i / 9) for i in range(10)]
+    vals = [v for v in vals if v is not None and math.isfinite(v)]
+    if len(vals) < 10 or max(vals) - min(vals) > 1e-9:
+        return None
+    radius = vals[0]
+    if radius <= 0:
+        return None
+    return radius
+
+
 def _curve_points(curve: VisualCurve, x_min: float, x_max: float) -> list[tuple[float, float]]:
     # explicit points take precedence (already in data coords)
     if curve.points:
@@ -591,6 +691,13 @@ def _curve_points(curve: VisualCurve, x_min: float, x_max: float) -> list[tuple[
         if yv is not None and math.isfinite(yv):
             pts.append((xv, yv))
     return pts
+
+
+def _boxes_overlap(a: tuple[float, float, float, float], b: tuple[float, float, float, float], pad: float = 0.0) -> bool:
+    """Do two (x, y, w, h) boxes overlap (with optional padding)? Deterministic."""
+    ax, ay, aw, ah = a
+    bx, by, bw, bh = b
+    return not (ax + aw + pad <= bx or bx + bw + pad <= ax or ay + ah + pad <= by or by + bh + pad <= ay)
 
 
 def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
@@ -631,18 +738,41 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     y_axis_x = max(plot_x0, min(plot_x0 + plot_w, y_axis_x))
     parts.append(f'<line x1="{_f(plot_x0)}" y1="{_f(x_axis_y)}" x2="{_f(plot_x0+plot_w)}" y2="{_f(x_axis_y)}" stroke="{INK}" stroke-width="1.5"/>')
     parts.append(f'<line x1="{_f(y_axis_x)}" y1="{_f(plot_y0)}" x2="{_f(y_axis_x)}" y2="{_f(plot_y0+plot_h)}" stroke="{INK}" stroke-width="1.5"/>')
-    parts.append(f'<polygon points="{_arrowhead(plot_x0+plot_w, x_axis_y, 0)}" fill="{INK}"/>')
-    parts.append(f'<polygon points="{_arrowhead(y_axis_x, plot_y0, 90)}" fill="{INK}"/>')
+    parts.append(_arrowhead(plot_x0+plot_w, x_axis_y, 0))
+    parts.append(_arrowhead(y_axis_x, plot_y0, 90))
     # axis labels + ticks
     parts.append(f'<text x="{_f(plot_x0+plot_w+8)}" y="{_f(x_axis_y+4)}" font-family="{_FONT}" font-size="12" fill="{MUTED}" text-anchor="start">{_esc(plot.x_label or "x")}</text>')
     parts.append(f'<text x="{_f(y_axis_x+6)}" y="{_f(plot_y0-6)}" font-family="{_FONT}" font-size="12" fill="{MUTED}" text-anchor="start">{_esc(plot.y_label or "y")}</text>')
-    for xv in [x_min, (x_min + x_max) / 2, x_max]:
+    # Origin tick dedupe (R5): when 0 sits inside both ranges the two mid
+    # ticks land on top of each other at the crossing — draw one "0" instead.
+    origin_inside = x_min < 0 < x_max and y_min < 0 < y_max
+    x_ticks = [x_min, x_max] if origin_inside else [x_min, (x_min + x_max) / 2, x_max]
+    y_ticks = [y_min, y_max] if origin_inside else [y_min, (y_min + y_max) / 2, y_max]
+    for xv in x_ticks:
         parts.append(f'<text x="{_f(map_x(xv))}" y="{_f(x_axis_y+14)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="middle">{_f(xv)}</text>')
-    for yv in [y_min, (y_min + y_max) / 2, y_max]:
+    for yv in y_ticks:
         parts.append(f'<text x="{_f(y_axis_x-8)}" y="{_f(map_y(yv)+3)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="end">{_f(yv)}</text>')
+    if origin_inside:
+        parts.append(f'<text x="{_f(y_axis_x-8)}" y="{_f(x_axis_y+14)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="end">0</text>')
 
-    # curves
+    # curves (labels placed in a second pass with collision avoidance)
+    label_anchors: list[tuple[tuple[float, float], str, str]] = []
     for curve in plot.curves:
+        radius = _polar_radius(curve, x_min, x_max)
+        if radius is not None:
+            # Polar radial bound (label like "r = √5", constant radius):
+            # a circle in data space, NOT a Cartesian horizontal line (which
+            # misreads as y = const). Ellipse radii follow each axis scale.
+            color = _VECTOR_COLORS.get(curve.color, ACCENT if curve.color == "" else INK)
+            rx = radius / (x_max - x_min) * plot_w
+            ry = radius / (y_max - y_min) * plot_h
+            parts.append(
+                f'<ellipse cx="{_f(map_x(0))}" cy="{_f(map_y(0))}" rx="{_f(rx)}" ry="{_f(ry)}" '
+                f'fill="none" stroke="{color}" stroke-width="2.2"/>'
+            )
+            if curve.label:
+                label_anchors.append(((map_x(0) + rx, map_y(0)), curve.label, color))
+            continue
         pts = _curve_points(curve, x_min, x_max)
         if not pts:
             continue
@@ -665,11 +795,47 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
                 continue
             points = " ".join(f"{_f(x)},{_f(y)}" for x, y in seg)
             parts.append(f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="2.2"{dash}/>')
-        if curve.label:
-            # label near the end of last segment
-            if segs and segs[-1]:
-                lx, ly = segs[-1][-1]
-                parts.append(f'<text x="{_f(lx+6)}" y="{_f(ly-6)}" font-family="{_FONT}" font-size="11" font-weight="600" fill="{color}" text-anchor="start">{_esc(curve.label)}</text>')
+        if curve.label and segs and segs[-1]:
+            label_anchors.append((segs[-1][-1], curve.label, color))
+    # Generic collision-aware curve labels: labels sharing an anchor point
+    # (e.g. "square ABCD" and "A(1,1)" ending at the same corner) get
+    # deterministic fallback offsets so they never occupy the same box.
+    # First candidate == legacy (+6,-6) placement, so non-colliding labels
+    # render byte-identically to before.
+    placed_boxes: list[tuple[float, float, float, float]] = []
+    for (ax, ay), label, color in label_anchors:
+        est_w = len(label) * 6.6 + 8
+        est_h = 14.0
+        candidates = [
+            (ax + 6, ay - 6 - est_h / 2),
+            (ax + 6, ay - 24 - est_h / 2),
+            (ax + 6, ay + 14 - est_h / 2),
+            (ax - est_w - 6, ay - 6 - est_h / 2),
+            (ax - est_w - 6, ay - 24 - est_h / 2),
+            (ax + 6, ay + 32 - est_h / 2),
+        ]
+        # Candidates must ALSO stay inside the plot area — the old code let a
+        # long label spill past the card edge (real math board: "Outer
+        # Radius..." clipped). est_w is conservative, so clamp loosely.
+        def _inside(cx: float) -> bool:
+            return plot_x0 - 4 <= cx and cx + est_w <= plot_x0 + plot_w + 4
+
+        chosen = candidates[0]
+        for cx, cy in candidates:
+            box = (cx, cy, est_w, est_h)
+            if _inside(cx) and not any(_boxes_overlap(box, other, pad=3.0) for other in placed_boxes):
+                chosen = (cx, cy)
+                break
+        else:
+            for cx, cy in candidates:
+                box = (cx, cy, est_w, est_h)
+                if not any(_boxes_overlap(box, other, pad=3.0) for other in placed_boxes):
+                    chosen = (cx, cy)
+                    break
+        placed_boxes.append((chosen[0], chosen[1], est_w, est_h))
+        # text-anchor=start at box left; baseline chosen so the legacy
+        # (+6,-6) candidate renders byte-identically to before.
+        parts.append(f'<text x="{_f(chosen[0])}" y="{_f(chosen[1] + est_h / 2)}" font-family="{_FONT}" font-size="11" font-weight="600" fill="{color}" text-anchor="start">{_esc(label)}</text>')
     return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
 
 
@@ -885,6 +1051,44 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
     if not svg:
         return ""
     return svg
+
+
+def render_hero_geometry(spec: DeterministicVisual) -> str:
+    """Geometry-only hero for composition engines (e.g. Typst).
+
+    Generic across scene kinds: keeps the stage rect + diagram geometry
+    (vectors, axes, curves, labels that belong to the geometry itself) and
+    drops ALL prose — no title, no legend, no relation/explanation cards, no
+    caption, no supplements. The composition layer (Typst) owns 100% of text.
+    Returns "" when there is no scene to draw.
+    """
+    if spec.scene is None:
+        return ""
+    scene = spec.scene
+    if scene.scene_kind == "force_diagram":
+        diagram, _, _, _ = _render_force_diagram(scene)
+    elif scene.scene_kind == "process_flow":
+        diagram, _, _, _ = _render_flow(scene)
+    elif scene.scene_kind == "plot":
+        diagram, _, _, _ = _render_plot(scene)
+    elif scene.scene_kind == "generic":
+        diagram, _, _, _ = _render_generic(scene, fallback_title="")
+    else:
+        return ""
+    if not diagram.strip():
+        return ""
+    pad = 16
+    vx, vy = STAGE_X - pad, STAGE_Y - pad
+    vw, vh = STAGE_W + 2 * pad, STAGE_H + 2 * pad
+    svg = (
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vx} {vy} {vw} {vh}" width="100%">'
+        f'<rect x="{vx}" y="{vy}" width="{vw}" height="{vh}" rx="14" fill="white"/>'
+        f'<rect x="{STAGE_X}" y="{STAGE_Y}" width="{STAGE_W}" height="{STAGE_H}" rx="14" '
+        f'fill="{BG_STAGE}" stroke="{STAGE_STROKE}" stroke-width="1.5"/>'
+        f"{diagram}</svg>"
+    )
+    svg = sanitize_svg(svg)
+    return svg or ""
 
 
 def _step_arrow(y_mid: int) -> str:
