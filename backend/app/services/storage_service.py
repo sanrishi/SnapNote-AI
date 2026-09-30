@@ -43,11 +43,12 @@ def validate_storage_config() -> None:
 
     backend = settings.IMAGE_STORAGE_BACKEND.strip().lower()
     if backend == "r2":
-        missing = [
-            name
-            for name in ("R2_ACCOUNT_ID", "R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUCKET_NAME")
-            if not getattr(settings, name, "").strip()
-        ]
+        required = ["R2_ACCESS_KEY_ID", "R2_SECRET_ACCESS_KEY", "R2_BUCKET_NAME"]
+        if not settings.S3_ENDPOINT_URL.strip():
+            # Cloudflare R2 virtual-hosted style needs the account ID;
+            # explicit S3 endpoints (Supabase, etc.) do not.
+            required.append("R2_ACCOUNT_ID")
+        missing = [name for name in required if not getattr(settings, name, "").strip()]
         if missing:
             raise RuntimeError(f"IMAGE_STORAGE_BACKEND=r2 but missing: {', '.join(missing)}")
         public_url = settings.R2_PUBLIC_URL.strip().rstrip("/")

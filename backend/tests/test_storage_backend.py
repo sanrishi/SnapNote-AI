@@ -316,6 +316,19 @@ def test_validate_storage_config_accepts_r2_and_data_uri(monkeypatch):
         validate_storage_config()
 
 
+def test_validate_allows_empty_account_with_explicit_endpoint(monkeypatch):
+    from app.services.storage_service import validate_storage_config
+
+    _set_r2_settings(monkeypatch)
+    monkeypatch.setattr("app.config.settings.R2_ACCOUNT_ID", "", raising=False)
+    monkeypatch.setattr(
+        "app.config.settings.S3_ENDPOINT_URL",
+        "https://ref.storage.supabase.co/storage/v1/s3",
+        raising=False,
+    )
+    validate_storage_config()  # Supabase-style config must boot
+
+
 def test_s3_endpoint_override_uses_path_style(monkeypatch):
     import httpx
 
