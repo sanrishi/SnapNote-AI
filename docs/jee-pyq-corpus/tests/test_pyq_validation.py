@@ -121,7 +121,6 @@ class TestPyqCorpus(unittest.TestCase):
         reasons = explain_match("jee-physics-rotational-motion-concept-005", recs[0])
         self.assertTrue(any("concept =" in r for r in reasons))
         self.assertEqual(explain_match("jee-physics-rotational-motion-concept-009", recs[0]), [])
-
     def test_coverage_matrix_recomputes(self):
         import subprocess
         result = subprocess.run(
@@ -133,6 +132,54 @@ class TestPyqCorpus(unittest.TestCase):
             matrix = json.load(fh)
         self.assertEqual(matrix["totals"]["verified_records"], len(_load_records()))
         self.assertNotIn("complete", {c["status"] for c in matrix["cells"]})
+
+    def _registry_by_url(self):
+        with open(os.path.join(CORPUS_DIR, "sources", "registry.json"), encoding="utf-8") as fh:
+            registry = json.load(fh)["sources"]
+        return registry
+
+    def test_no_duplicate_source_ids(self):
+        ids = [s["source_id"] for s in self._registry_by_url()]
+        self.assertEqual(len(ids), len(set(ids)), "duplicate source_id in registry")
+
+    def test_record_hash_matches_registry_source(self):
+        """Filename-independent identity: record provenance hash must equal
+        the registry source hash for the record's source_url."""
+        by_url = {s["source_url"]: s for s in self._registry_by_url()}
+        for record in _load_records():
+            source = by_url.get(record["source_url"])
+            self.assertIsNotNone(source, f"{record['question_id']}: source not in registry")
+            self.assertEqual(
+                record["provenance"]["pdf_sha256"], source["pdf_sha256"],
+                f"{record['question_id']}: hash mismatch — wrong source attribution",
+            )
+            self.assertEqual(
+                record["shift"], source["shift"],
+                f"{record['question_id']}: shift mismatch with registry source",
+            )
+
+    def test_q30_q31_belong_to_apr05_s2(self):
+        """Regression: Q30/Q31 (wheel, rolling) were once misattributed to
+        5 Apr Shift 1. They belong to 5 Apr Shift 2 by NTA ID sequence."""
+        by_id = {r["question_id"]: r for r in _load_records()}
+        for qid in (
+            "pyq-jee-main-2026-apr05-s2-phy-030",
+            "pyq-jee-main-2026-apr05-s2-phy-031",
+        ):
+            record = by_id[qid]
+            self.assertEqual(record["shift"], "Shift 2 (5 Apr 2026)")
+            self.assertIn("20260409829414602.pdf", record["source_url"])
+
+    def test_apr05_s1_zero_hit_classification(self):
+        """5 Apr Shift 1 was fully scanned with no rotational hits: the
+        registry says so AND no record references its paper."""
+        with open(os.path.join(CORPUS_DIR, "sources", "registry.json"), encoding="utf-8") as fh:
+            registry = json.load(fh)["sources"]
+        s1 = [s for s in registry if s["source_id"] == "nta-main-2026-apr05-s1"][0]
+        self.assertEqual(s1["rotational_hits"], [])
+        s1_url = "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409828731207.pdf"
+        for record in _load_records():
+            self.assertNotEqual(record["source_url"], s1_url)
 
 
 if __name__ == "__main__":

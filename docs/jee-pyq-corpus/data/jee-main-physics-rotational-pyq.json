@@ -189,11 +189,11 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2026-apr05-s1-phy-030",
+  "question_id": "pyq-jee-main-2026-apr05-s2-phy-030",
   "exam": "JEE Main",
   "year": 2026,
   "session": "April 2026",
-  "shift": "Shift 1 (5 Apr 2026)",
+  "shift": "Shift 2 (5 Apr 2026)",
   "subject": "Physics",
   "chapter": "Rotational Motion",
   "concept_ids": [
@@ -207,24 +207,24 @@
   "marks_basis": "Section Marks / Number of Questions from the official paper",
   "difficulty": null,
   "answer_key": null,
-  "content_fingerprint": "8f91ec2ade39110f",
+  "content_fingerprint": "9f31962a967bf6f1",
   "question_summary": "Uniformly accelerated wheel: theta2/theta1 for first vs next 2 s.",
-  "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409828731207.pdf",
-  "source_document": "NTA JEE Main 2026, B Tech 5th Apr 2026 Shift 1, Physics Section A",
+  "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409829414602.pdf",
+  "source_document": "NTA JEE Main 2026, B Tech 5th Apr 2026 Shift 2, Physics Section A",
   "verification_status": "verified",
   "verification_method": "Visually read from the official NTA paper PDF (page rendering inspected).",
   "provenance": {
    "retrieved_at": "2026-09-30",
    "parser": "extract_paper.py v1",
-   "pdf_sha256": "20a14808d521007d"
+   "pdf_sha256": "876efb4250b5d8e0"
   }
  },
  {
-  "question_id": "pyq-jee-main-2026-apr05-s1-phy-031",
+  "question_id": "pyq-jee-main-2026-apr05-s2-phy-031",
   "exam": "JEE Main",
   "year": 2026,
   "session": "April 2026",
-  "shift": "Shift 1 (5 Apr 2026)",
+  "shift": "Shift 2 (5 Apr 2026)",
   "subject": "Physics",
   "chapter": "Rotational Motion",
   "concept_ids": [
@@ -238,16 +238,16 @@
   "marks_basis": "Section Marks / Number of Questions from the official paper",
   "difficulty": null,
   "answer_key": null,
-  "content_fingerprint": "05d48d87b1043e02",
+  "content_fingerprint": "fc3fa8c8de16a5cd",
   "question_summary": "Object rolls up a curved track; max height reveals solid cylinder via rotational KE.",
-  "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409828731207.pdf",
-  "source_document": "NTA JEE Main 2026, B Tech 5th Apr 2026 Shift 1, Physics Section A",
+  "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409829414602.pdf",
+  "source_document": "NTA JEE Main 2026, B Tech 5th Apr 2026 Shift 2, Physics Section A",
   "verification_status": "verified",
   "verification_method": "Visually read from the official NTA paper PDF (page rendering inspected).",
   "provenance": {
    "retrieved_at": "2026-09-30",
    "parser": "extract_paper.py v1",
-   "pdf_sha256": "20a14808d521007d"
+   "pdf_sha256": "876efb4250b5d8e0"
   }
  },
  {

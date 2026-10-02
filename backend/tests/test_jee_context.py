@@ -111,8 +111,8 @@ def test_multi_record_chapter_retrieval():
         "pyq-jee-main-2026-apr02-s2-phy-028",
         "pyq-jee-main-2026-apr02-s2-phy-050",
         "pyq-jee-main-2026-apr04-s2-phy-035",
-        "pyq-jee-main-2026-apr05-s1-phy-030",
-        "pyq-jee-main-2026-apr05-s1-phy-031",
+        "pyq-jee-main-2026-apr05-s2-phy-030",
+        "pyq-jee-main-2026-apr05-s2-phy-031",
         "pyq-jee-main-2026-apr08-s2-phy-032",
     }
 

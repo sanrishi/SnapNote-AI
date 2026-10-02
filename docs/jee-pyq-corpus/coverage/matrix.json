@@ -60,13 +60,10 @@
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Rotational Motion",
-   "verified_questions": 2,
-   "verified_ids": [
-    "pyq-jee-main-2026-apr05-s1-phy-030",
-    "pyq-jee-main-2026-apr05-s1-phy-031"
-   ],
+   "verified_questions": 0,
+   "verified_ids": [],
    "source_status": "parsed",
-   "status": "partial"
+   "status": "verified"
   },
   {
    "exam": "JEE Main",
@@ -74,10 +71,13 @@
    "session": "April 2026",
    "shift": "Shift 2 (5 Apr 2026)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
-   "source_status": "discovered",
-   "status": "unavailable"
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-phy-030",
+    "pyq-jee-main-2026-apr05-s2-phy-031"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -127,8 +127,8 @@
  ],
  "totals": {
   "verified_records": 9,
-  "sources_parsed": 6,
-  "sources_discovered": 4
+  "sources_parsed": 7,
+  "sources_discovered": 3
  },
  "note": "Status is never 'complete': discovered question totals per paper are not yet authoritative."
 }
