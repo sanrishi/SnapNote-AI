@@ -36,6 +36,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY backend/ .
 
+# JEE corpora (single source of truth stays in docs/): copied read-only so the
+# API can serve syllabus/taxonomy/PYQ lookups without network or database.
+COPY docs/jee-concept-taxonomy/data/jee-physics-rotational-motion-taxonomy.json ./jee-data/taxonomy.json
+COPY docs/jee-syllabus-corpus/data/jee-main-physics-rotational-motion.json ./jee-data/syllabus.json
+COPY docs/jee-pyq-corpus/data/jee-main-physics-rotational-pyq.json ./jee-data/pyq.json
+
 EXPOSE 8000
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

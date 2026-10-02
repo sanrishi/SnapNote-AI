@@ -343,3 +343,58 @@ class VisualExplanationResponse(BaseModel):
     # Trust layer: study-notes context summary re-grounded against the emitted
     # scene (None = keep the diagram-step text / hide when empty).
     visualContext: Optional[str] = None
+
+
+class JEEPyQRef(BaseModel):
+    """One verified PYQ record, exactly as stored. No computed statistics."""
+
+    question_id: str = ""
+    exam: str = ""
+    year: int = 0
+    session: Optional[str] = None
+    shift: Optional[str] = None
+    paper_question_number: int = 0
+    question_type: str = ""
+    marks: Optional[int] = None
+    question_summary: Optional[str] = None
+    source_url: str = ""
+    source_document: str = ""
+
+
+class JEEConceptRef(BaseModel):
+    concept_id: str = ""
+    name: str = ""
+
+
+class JEESyllabusRef(BaseModel):
+    node_id: str = ""
+    subtopic: str = ""
+    source_url: str = ""
+
+
+class JEEConceptContext(BaseModel):
+    """Student-facing JEE context for one lecture concept.
+
+    Every factual field traces to the stored syllabus/taxonomy/PYQ corpora.
+    match_status is 'unresolved' (nothing matched) or 'ambiguous' (tie)
+    instead of a forced guess — the UI must say less, not invent more.
+    """
+
+    concept_id: Optional[str] = None
+    canonical_name: Optional[str] = None
+    subject: str = ""
+    chapter: str = ""
+    subtopic: Optional[str] = None
+    syllabus: Optional[JEESyllabusRef] = None
+    match_status: str = "unresolved"  # "matched" | "ambiguous" | "unresolved"
+    evidence: list[str] = []
+    candidates: list[JEEConceptRef] = []  # tied concepts when ambiguous
+    prerequisites: list[JEEConceptRef] = []
+    related: list[JEEConceptRef] = []
+    pyqs: list[JEEPyQRef] = []
+    pyq_count: int = 0
+
+
+class JEEMapRequest(BaseModel):
+    topic_title: str = ""
+    key_terms: list[str] = []

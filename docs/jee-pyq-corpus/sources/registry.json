@@ -1,0 +1,205 @@
+{
+ "registry_version": 1,
+ "updated": "2026-09-30",
+ "sources": [
+  {
+   "source_id": "nta-main-2026-apr02-s1",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (2 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/202604092096865379.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 2nd Apr 2026 Shift 1",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": "2026-09-30",
+   "parser": "extract_paper.py v1 (text-structure + visual read)",
+   "parser_status": "parsed",
+   "physics_pages": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+   ],
+   "rotational_hits": [
+    29,
+    31
+   ],
+   "verification_status": "verified"
+  },
+  {
+   "source_id": "nta-main-2026-apr02-s2",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409481957146.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 2nd Apr 2026 Shift 2",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": "2026-09-30",
+   "parser": "extract_paper.py v1 (text-structure + visual read)",
+   "parser_status": "parsed",
+   "physics_pages": "all 25 physics questions inspected",
+   "rotational_hits": [
+    28,
+    50
+   ],
+   "verification_status": "verified"
+  },
+  {
+   "source_id": "nta-main-2026-apr04-s1",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/202604091916616339.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 4th Apr 2026 Shift 1",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": "2026-09-30",
+   "parser": "extract_paper.py v1 (text-structure + visual read)",
+   "parser_status": "parsed",
+   "physics_pages": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+   ],
+   "rotational_hits": [
+    30
+   ],
+   "verification_status": "verified"
+  },
+  {
+   "source_id": "nta-main-2026-apr04-s2",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409432593766.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 4th Apr 2026 Shift 2",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": "2026-09-30",
+   "parser": "extract_paper.py v1 (text-structure + visual read)",
+   "parser_status": "parsed",
+   "physics_pages": "all 25 physics questions inspected",
+   "rotational_hits": [
+    35
+   ],
+   "verification_status": "verified"
+  },
+  {
+   "source_id": "nta-main-2026-apr05-s1",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409828731207.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 5th Apr 2026 Shift 1",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": "2026-09-30",
+   "parser": "extract_paper.py v1 (text-structure + visual read)",
+   "parser_status": "parsed",
+   "physics_pages": "all 25 physics questions inspected",
+   "rotational_hits": [
+    30,
+    31
+   ],
+   "verification_status": "verified"
+  },
+  {
+   "source_id": "nta-main-2026-apr05-s2",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409829414602.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 5th Apr 2026 Shift 2",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": null,
+   "parser": null,
+   "parser_status": "discovered",
+   "physics_pages": null,
+   "rotational_hits": null,
+   "verification_status": "unavailable"
+  },
+  {
+   "source_id": "nta-main-2026-apr06-s1",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/202604092007095685.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 6th Apr 2026 Shift 1",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": null,
+   "parser": null,
+   "parser_status": "discovered",
+   "physics_pages": null,
+   "rotational_hits": null,
+   "verification_status": "unavailable",
+   "note": "Direct PDF download returns HTTP 504 (3 attempts, 2026-09-30). Retry later; do not mark parsed without the file."
+  },
+  {
+   "source_id": "nta-main-2026-apr06-s2",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409725707539.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 6th Apr 2026 Shift 2",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": null,
+   "parser": null,
+   "parser_status": "discovered",
+   "physics_pages": null,
+   "rotational_hits": null,
+   "verification_status": "unavailable"
+  },
+  {
+   "source_id": "nta-main-2026-apr08-s2",
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2026/04/20260409932754345.pdf",
+   "source_document": "NTA JEE Main 2026, B Tech 8th Apr 2026 Shift 2",
+   "landing_page": "https://jeemain.nta.nic.in/document/syllabus-2026/",
+   "retrieved_at": "2026-09-30",
+   "parser": "extract_paper.py v1 (text-structure + visual read)",
+   "parser_status": "parsed",
+   "physics_pages": "all 25 physics questions inspected",
+   "rotational_hits": [
+    32
+   ],
+   "verification_status": "verified"
+  },
+  {
+   "source_id": "adv-archive-2007-2025",
+   "exam": "JEE Advanced",
+   "year": null,
+   "session": null,
+   "shift": null,
+   "source_url": "https://jeeadv.ac.in/archive.html",
+   "source_document": "JEE Advanced official past-paper archive (Paper 1 + Paper 2, 2007-2025, English+Hindi)",
+   "landing_page": "https://jeeadv.ac.in/archive.html",
+   "retrieved_at": "2026-09-30",
+   "parser": null,
+   "parser_status": "discovered",
+   "physics_pages": null,
+   "rotational_hits": null,
+   "verification_status": "unavailable",
+   "note": "38 papers discovered (19 years x 2). Per-paper ingestion not started; URL pattern past_qps/{YYYY}_{1,2}_English.pdf."
+  }
+ ]
+}

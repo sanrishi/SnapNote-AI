@@ -1,0 +1,139 @@
+"""Validation tests for the verified JEE PYQ corpus (#31).
+
+Guards: schema conformance, taxonomy cross-references, duplicate detection,
+registry consistency, and reproducible counts/coverage. Uses only the
+standard library so the corpus can be validated without backend dependencies.
+"""
+
+import json
+import os
+import re
+import sys
+import unittest
+
+CORPUS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_PATH = os.path.join(CORPUS_DIR, "data", "jee-main-physics-rotational-pyq.json")
+SCHEMA_PATH = os.path.join(CORPUS_DIR, "schema", "pyq-record.schema.json")
+TAXONOMY_PATH = os.path.join(
+    os.path.dirname(CORPUS_DIR), "jee-concept-taxonomy", "data",
+    "jee-physics-rotational-motion-taxonomy.json",
+)
+
+REQUIRED_FIELDS = [
+    "question_id", "exam", "year", "subject", "chapter", "concept_ids",
+    "question_type", "paper_question_number", "nta_question_id",
+    "source_url", "source_document", "verification_status", "verification_method",
+]
+
+
+def _load_records():
+    with open(DATA_PATH, encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _taxonomy_ids():
+    with open(TAXONOMY_PATH, encoding="utf-8") as fh:
+        return {c["concept_id"] for c in json.load(fh)}
+
+
+class TestPyqCorpus(unittest.TestCase):
+    def test_schema_file_is_valid_json(self):
+        with open(SCHEMA_PATH, encoding="utf-8") as fh:
+            schema = json.load(fh)
+        self.assertEqual(schema["title"], "Verified JEE PYQ metadata record")
+
+    def test_required_fields_present(self):
+        for record in _load_records():
+            for field in REQUIRED_FIELDS:
+                self.assertIn(field, record, f"{record.get('question_id')} missing {field}")
+
+    def test_no_unverifiable_exam_facts(self):
+        """Records must not contain invented statistics (frequency, weightage)."""
+        banned = {"frequency", "weightage", "appeared", "difficulty_stats"}
+        for record in _load_records():
+            overlap = banned & set(record.keys())
+            self.assertEqual(overlap, set(), f"{record['question_id']}: {overlap}")
+
+    def test_concept_ids_exist_in_taxonomy(self):
+        valid = _taxonomy_ids()
+        for record in _load_records():
+            for concept_id in record["concept_ids"]:
+                self.assertIn(concept_id, valid, f"{record['question_id']}: unknown {concept_id}")
+
+    def test_no_duplicate_question_ids(self):
+        ids = [r["question_id"] for r in _load_records()]
+        self.assertEqual(len(ids), len(set(ids)), "duplicate question_id")
+
+    def test_no_duplicate_paper_slots(self):
+        slots = [
+            (r["exam"], r["year"], r.get("session"), r.get("shift"), r["paper_question_number"])
+            for r in _load_records()
+        ]
+        self.assertEqual(len(slots), len(set(slots)), "duplicate paper slot")
+
+    def test_question_id_format(self):
+        pattern = re.compile(r"^pyq-jee-(main|advanced)-[0-9]{4}-[a-z0-9-]+$")
+        for record in _load_records():
+            self.assertRegex(record["question_id"], pattern)
+
+    def test_marks_have_basis(self):
+        for record in _load_records():
+            if record.get("marks") is not None:
+                self.assertTrue(record.get("marks_basis"), f"{record['question_id']}: marks without basis")
+
+    def test_counts_reproducible(self):
+        import sys
+        sys.path.insert(0, os.path.join(CORPUS_DIR, "queries"))
+        try:
+            from pyq_queries import count_by_concept, get_by_concept
+        finally:
+            sys.path.remove(os.path.join(CORPUS_DIR, "queries"))
+        concept = "jee-physics-rotational-motion-concept-005"
+        first = count_by_concept(concept)
+        second = len(get_by_concept(concept))
+        self.assertEqual(first, second)
+        self.assertGreaterEqual(first, 1)
+
+    def test_registry_consistency(self):
+        """Every record's source_url must exist in the source registry."""
+        with open(os.path.join(CORPUS_DIR, "sources", "registry.json"), encoding="utf-8") as fh:
+            registry = json.load(fh)["sources"]
+        known_urls = {s["source_url"] for s in registry}
+        for record in _load_records():
+            self.assertIn(record["source_url"], known_urls, record["question_id"])
+
+    def test_new_nullable_fields_allowed(self):
+        for record in _load_records():
+            self.assertIn("difficulty", record)
+            self.assertIsNone(record["difficulty"], "difficulty must stay unverified")
+            self.assertIn("content_fingerprint", record)
+            self.assertTrue(record["content_fingerprint"])
+
+    def test_shift_retrieval_and_explain(self):
+        import sys
+        sys.path.insert(0, os.path.join(CORPUS_DIR, "queries"))
+        try:
+            from pyq_queries import explain_match, get_by_shift
+        finally:
+            sys.path.remove(os.path.join(CORPUS_DIR, "queries"))
+        recs = get_by_shift("JEE Main", 2026, "April 2026", "Shift 1 (2 Apr 2026)")
+        self.assertEqual(len(recs), 2)
+        reasons = explain_match("jee-physics-rotational-motion-concept-005", recs[0])
+        self.assertTrue(any("concept =" in r for r in reasons))
+        self.assertEqual(explain_match("jee-physics-rotational-motion-concept-009", recs[0]), [])
+
+    def test_coverage_matrix_recomputes(self):
+        import subprocess
+        result = subprocess.run(
+            [sys.executable, os.path.join(CORPUS_DIR, "coverage", "build_matrix.py")],
+            capture_output=True, text=True, timeout=120,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        with open(os.path.join(CORPUS_DIR, "coverage", "matrix.json"), encoding="utf-8") as fh:
+            matrix = json.load(fh)
+        self.assertEqual(matrix["totals"]["verified_records"], len(_load_records()))
+        self.assertNotIn("complete", {c["status"] for c in matrix["cells"]})
+
+
+if __name__ == "__main__":
+    unittest.main()
