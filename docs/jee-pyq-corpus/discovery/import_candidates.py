@@ -72,6 +72,7 @@ def import_row(row: dict, dataset: str, record_id: str) -> dict:
         "candidate_id": f"cand-{dataset}-{record_id}",
         "source_dataset": dataset,
         "source_record_id": record_id,
+        "source_file": os.path.basename(record_id.split(":")[0]) if ":" in record_id else "",
         "question_text_hash": fingerprint(normalized, str(row.get("subject", ""))),
         "normalized_text_hash": fingerprint(normalized, "generic"),
         "subject": row.get("subject"),
@@ -101,13 +102,14 @@ def main(argv: list[str]) -> int:
     )
     do_premap = "--premap" in argv
     candidates = []
+    src_name = os.path.basename(argv[1])
     with open(argv[1], encoding="utf-8") as fh:
         for i, line in enumerate(fh):
             line = line.strip()
             if not line:
                 continue
             row = json.loads(line)
-            record = import_row(row, dataset, str(i))
+            record = import_row(row, dataset, f"{src_name}:{i}")
             if do_premap:
                 record["taxonomy_candidates"] = taxonomy_premap(
                     str(row.get("question", "")),
