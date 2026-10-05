@@ -20,7 +20,11 @@ def _load(name):
 
 def build_matrix():
     registry = _load(os.path.join("sources", "registry.json"))["sources"]
-    records = _load(os.path.join("data", "jee-main-physics-rotational-pyq.json"))
+    records = []
+    data_dir = os.path.join(CORPUS_DIR, "data")
+    for path in sorted(os.listdir(data_dir)):
+        if path.endswith("-pyq.json"):
+            records.extend(_load(os.path.join("data", path)))
     by_slot: dict[tuple, list] = {}
     for record in records:
         slot = (
@@ -43,25 +47,26 @@ def build_matrix():
                 "status": "unavailable",
             })
             continue
-        slot = (
-            source["exam"], source["year"], source.get("session"),
-            source.get("shift"), "Rotational Motion",
-        )
-        hits = by_slot.get(slot, [])
-        # Completeness is never claimed: discovered per-paper totals are not
-        # yet authoritative, so a covered cell is at most "partial".
-        status = "partial" if hits else source.get("verification_status", "unavailable")
-        cells.append({
-            "exam": source["exam"],
-            "year": source["year"],
-            "session": source.get("session"),
-            "shift": source.get("shift"),
-            "chapter": "Rotational Motion",
-            "verified_questions": len(hits),
-            "verified_ids": sorted(hits),
-            "source_status": source.get("parser_status", "discovered"),
-            "status": status,
-        })
+        base = (source["exam"], source["year"], source.get("session"), source.get("shift"))
+        chapters = sorted({r["chapter"] for r in records
+                           if (r.get("exam"), r.get("year"), r.get("session"), r.get("shift")) == base
+                           and r.get("chapter")}) or ["Rotational Motion"]
+        for chapter in chapters:
+            hits = by_slot.get(base + (chapter,), [])
+            # Completeness is never claimed: discovered per-paper totals are not
+            # yet authoritative, so a covered cell is at most "partial".
+            status = "partial" if hits else source.get("verification_status", "unavailable")
+            cells.append({
+                "exam": source["exam"],
+                "year": source["year"],
+                "session": source.get("session"),
+                "shift": source.get("shift"),
+                "chapter": chapter,
+                "verified_questions": len(hits),
+                "verified_ids": sorted(hits),
+                "source_status": source.get("parser_status", "discovered"),
+                "status": status,
+            })
     total_verified = sum(c["verified_questions"] for c in cells if isinstance(c["verified_questions"], int))
     dashboard = {
         "official_papers_indexed": 0,

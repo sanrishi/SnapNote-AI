@@ -28,8 +28,10 @@ logger = logging.getLogger(__name__)
 
 _SLICE_FILES = {
     # Canonical docs/ filenames first, then the flattened Docker image names.
+    # *-pyq.json shards aggregate (sorted, deduplicated by question_id).
     "taxonomy": [
         "jee-physics-rotational-motion-taxonomy.json",
+        "jee-chapters.json",
         "taxonomy.json",
     ],
     "syllabus": [
@@ -39,6 +41,7 @@ _SLICE_FILES = {
     "pyq": [
         "jee-main-physics-rotational-pyq.json",
         "pyq.json",
+        "*-pyq.json",  # shard glob: every verified chapter shard aggregates
     ],
 }
 
@@ -50,29 +53,55 @@ def _candidate_roots() -> list[Path]:
     here = Path(__file__).resolve()
     repo = here.parents[3]  # backend/app/services -> repo root
     roots.append(repo / "docs" / "jee-concept-taxonomy" / "data")
+    roots.append(repo / "docs" / "jee-chapter-taxonomy" / "data")
     roots.append(repo / "docs" / "jee-syllabus-corpus" / "data")
     roots.append(repo / "docs" / "jee-pyq-corpus" / "data")
     return roots
 
 
 def _load(name: str) -> list[dict]:
+    """Load corpus slices, aggregating every matching shard.
+
+    PyQ shards aggregate across files (deduplicated by question_id) so the
+    corpus grows by adding files, never by editing loaders. Taxonomy
+    aggregates sub-concept files with the chapter-level taxonomy.
+    """
     filenames = _SLICE_FILES[name]
+    aggregated: list[dict] = []
+    seen: set[str] = set()
     for root in _candidate_roots():
         for filename in filenames:
             direct = root / filename
-            if direct.is_file():
-                with direct.open(encoding="utf-8") as fh:
+            paths = [direct] if direct.is_file() else []
+            if root.is_dir():
+                paths.extend(p for p in sorted(root.rglob(filename)) if p not in paths)
+            for path in paths:
+                with path.open(encoding="utf-8") as fh:
                     data = json.load(fh)
-                logger.debug("JEE %s loaded from %s (%d records)", name, direct, len(data))
-                return data
-        if root.is_dir():
-            for filename in filenames:
-                matches = sorted(root.rglob(filename))
-                if matches:
-                    with matches[0].open(encoding="utf-8") as fh:
-                        return json.load(fh)
-    logger.warning("JEE %s corpus not found; returning empty", name)
-    return []
+                logger.debug("JEE %s loaded from %s (%d records)", name, path, len(data))
+                if name == "pyq":
+                    for record in data:
+                        qid = record.get("question_id")
+                        if qid not in seen:
+                            seen.add(qid)
+                            aggregated.append(record)
+                elif name == "taxonomy":
+                    for concept in data:
+                        # Chapter-level concepts carry chapter_id; normalize so
+                        # the matcher sees one shape (level marks granularity).
+                        if "concept_id" not in concept and "chapter_id" in concept:
+                            concept = {**concept, "concept_id": concept["chapter_id"],
+                                       "level": "chapter"}
+                        aggregated.append(concept)
+                else:
+                    aggregated.extend(data)
+                if name != "pyq" and name != "taxonomy":
+                    return aggregated
+        if aggregated and name not in ("pyq", "taxonomy"):
+            return aggregated
+    if not aggregated:
+        logger.warning("JEE %s corpus not found; returning empty", name)
+    return aggregated
 
 
 def _concepts() -> list[dict]:

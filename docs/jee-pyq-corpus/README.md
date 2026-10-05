@@ -27,9 +27,9 @@ options, images, or answer keys.
 
 ## Honest coverage (recomputed, 2026-10-06)
 
-58 verified records (9 from 2026 direct NTA PDFs + 49 from the 2024–2025
-transcribed index: 50 queued → 50 reviewed → 49 verified, 1 rejected on
-evidence) · 42 sources parsed · 3 undiscovered/blocked · 0 complete.
+73 verified records (9 from 2026 direct NTA PDFs + 49 rotational + 15 Current
+Electricity pilot across 2024 shifts) · 42 sources parsed ·
+3 undiscovered/blocked · 0 complete.
 A taxonomy recall sweep over all 929 indexed Physics stems found 22 extra
 keyword hits, all correctly other-chapter — the 50-queue captured the
 rotational population.
@@ -45,9 +45,12 @@ unreviewed mirrors — never verified records.
 - official papers indexed: 35 (2024–2025) + 7 parsed 2026 shifts
 - official questions indexed: 2,829 (2024–2025) + 175 (2026 Physics OCR)
 - source-linked review queue: 50 rotational-tagged 2024–2025 entries
-- verified questions: 58 (batch 1: 12/12; batch 2: 22/24 with 1 rejection +
-  1 demotion-then-recovery; batch 3: 14/14; numerical answers independently
-  recomputed wherever the mirror states one; audit clean)
+- verified questions: 73 (rotational 49/50 reviewed; Current Electricity
+  pilot 15/15; numerical answers independently recomputed wherever the mirror
+  states one; audit clean)
+- corpus factory: 2,829 indexed → 53 chapter queues (2,776 non-duplicate
+  candidates) → chapter taxonomy (53) → multi-shard verified persistence →
+  aggregating retrieval (`/api/jee` serves chapter concepts)
 - queue reduction is 2,829 indexed → 50 candidates = **56.6×** (candidates are
   ~1.77% of the index), not 17.6×
 - external candidates quarantined: 703 (eQOURSE mocks: 0 matches vs 175, and

@@ -9,13 +9,16 @@ from pathlib import Path
 from typing import cast
 
 CORPUS_DIR: Path = Path(__file__).resolve().parents[1]
-DATA_PATH: Path = CORPUS_DIR / "data" / "jee-main-physics-rotational-pyq.json"
+DATA_DIR: Path = CORPUS_DIR / "data"
 
 
 def _load_records() -> list[dict[str, object]]:
-    """Load all PYQ metadata records."""
-    with DATA_PATH.open(encoding="utf-8") as file:
-        return cast(list[dict[str, object]], json.load(file))
+    """Load verified PYQ metadata records from every *-pyq.json shard."""
+    records: list[dict[str, object]] = []
+    for path in sorted(DATA_DIR.glob("*-pyq.json")):
+        with path.open(encoding="utf-8") as file:
+            records.extend(cast(list[dict[str, object]], json.load(file)))
+    return records
 
 
 def get_by_concept(concept_id: str) -> list[dict[str, object]]:

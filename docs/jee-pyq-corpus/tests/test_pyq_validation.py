@@ -12,11 +12,15 @@ import sys
 import unittest
 
 CORPUS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(CORPUS_DIR, "data", "jee-main-physics-rotational-pyq.json")
+DATA_DIR = os.path.join(CORPUS_DIR, "data")
 SCHEMA_PATH = os.path.join(CORPUS_DIR, "schema", "pyq-record.schema.json")
 TAXONOMY_PATH = os.path.join(
     os.path.dirname(CORPUS_DIR), "jee-concept-taxonomy", "data",
     "jee-physics-rotational-motion-taxonomy.json",
+)
+CHAPTER_TAXONOMY_PATH = os.path.join(
+    os.path.dirname(CORPUS_DIR), "jee-chapter-taxonomy", "data",
+    "jee-chapters.json",
 )
 
 REQUIRED_FIELDS = [
@@ -27,13 +31,21 @@ REQUIRED_FIELDS = [
 
 
 def _load_records():
-    with open(DATA_PATH, encoding="utf-8") as fh:
-        return json.load(fh)
+    records = []
+    for path in sorted(os.listdir(DATA_DIR)):
+        if path.endswith("-pyq.json"):
+            with open(os.path.join(DATA_DIR, path), encoding="utf-8") as fh:
+                records.extend(json.load(fh))
+    return records
 
 
 def _taxonomy_ids():
     with open(TAXONOMY_PATH, encoding="utf-8") as fh:
-        return {c["concept_id"] for c in json.load(fh)}
+        ids = {c["concept_id"] for c in json.load(fh)}
+    if os.path.exists(CHAPTER_TAXONOMY_PATH):
+        with open(CHAPTER_TAXONOMY_PATH, encoding="utf-8") as fh:
+            ids |= {c["chapter_id"] for c in json.load(fh)}
+    return ids
 
 
 class TestPyqCorpus(unittest.TestCase):

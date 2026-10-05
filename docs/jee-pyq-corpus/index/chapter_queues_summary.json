@@ -1,0 +1,524 @@
+{
+ "chapters": [
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-atomic-structure-chapter",
+   "candidates": 33,
+   "states": {
+    "HIGH_CONFIDENCE": 30,
+    "CORRUPTED": 1,
+    "NEEDS_SOURCE_REVIEW": 2
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-biomolecules-chapter",
+   "candidates": 36,
+   "states": {
+    "CORRUPTED": 9,
+    "HIGH_CONFIDENCE": 26,
+    "NEEDS_SOURCE_REVIEW": 1
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-chemical-bonding-and-molecular-structure-chapter",
+   "candidates": 60,
+   "states": {
+    "CORRUPTED": 7,
+    "HIGH_CONFIDENCE": 53
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-chemical-kinetics-chapter",
+   "candidates": 40,
+   "states": {
+    "HIGH_CONFIDENCE": 38,
+    "CORRUPTED": 1,
+    "NEEDS_SOURCE_REVIEW": 1
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-chemical-thermodynamics-chapter",
+   "candidates": 45,
+   "states": {
+    "HIGH_CONFIDENCE": 41,
+    "CORRUPTED": 2,
+    "NEEDS_SOURCE_REVIEW": 2
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter",
+   "candidates": 36,
+   "states": {
+    "HIGH_CONFIDENCE": 32,
+    "CORRUPTED": 4
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-coordination-compounds-chapter",
+   "candidates": 64,
+   "states": {
+    "CORRUPTED": 10,
+    "HIGH_CONFIDENCE": 49,
+    "NEEDS_SOURCE_REVIEW": 5
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-d-and-f-block-elements-chapter",
+   "candidates": 59,
+   "states": {
+    "HIGH_CONFIDENCE": 47,
+    "NEEDS_SOURCE_REVIEW": 6,
+    "CORRUPTED": 6
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-equilibrium-chapter",
+   "candidates": 36,
+   "states": {
+    "HIGH_CONFIDENCE": 29,
+    "NEEDS_SOURCE_REVIEW": 6,
+    "DUPLICATE": 1
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-organic-compounds-containing-halogens-chapter",
+   "candidates": 47,
+   "states": {
+    "HIGH_CONFIDENCE": 42,
+    "NEEDS_SOURCE_REVIEW": 2,
+    "CORRUPTED": 3
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-organic-compounds-containing-nitrogen-chapter",
+   "candidates": 44,
+   "states": {
+    "HIGH_CONFIDENCE": 41,
+    "NEEDS_SOURCE_REVIEW": 2,
+    "CORRUPTED": 1
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+   "candidates": 80,
+   "states": {
+    "HIGH_CONFIDENCE": 70,
+    "CORRUPTED": 7,
+    "NEEDS_SOURCE_REVIEW": 3
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-p-block-elements-chapter",
+   "candidates": 45,
+   "states": {
+    "HIGH_CONFIDENCE": 35,
+    "CORRUPTED": 6,
+    "NEEDS_SOURCE_REVIEW": 4
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-principles-related-to-practical-chemistry-chapter",
+   "candidates": 32,
+   "states": {
+    "HIGH_CONFIDENCE": 29,
+    "NEEDS_SOURCE_REVIEW": 2,
+    "CORRUPTED": 1
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-purification-and-characterisation-of-organic-compounds-chapter",
+   "candidates": 40,
+   "states": {
+    "HIGH_CONFIDENCE": 35,
+    "CORRUPTED": 4,
+    "NEEDS_SOURCE_REVIEW": 1
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-redox-reactions-and-electrochemistry-chapter",
+   "candidates": 58,
+   "states": {
+    "HIGH_CONFIDENCE": 51,
+    "NEEDS_SOURCE_REVIEW": 3,
+    "CORRUPTED": 4
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-solutions-chapter",
+   "candidates": 42,
+   "states": {
+    "HIGH_CONFIDENCE": 39,
+    "NEEDS_SOURCE_REVIEW": 2,
+    "CORRUPTED": 1
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
+   "candidates": 36,
+   "states": {
+    "HIGH_CONFIDENCE": 34,
+    "CORRUPTED": 1,
+    "DUPLICATE": 1
+   }
+  },
+  {
+   "subject": "Chemistry",
+   "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+   "candidates": 104,
+   "states": {
+    "HIGH_CONFIDENCE": 82,
+    "CORRUPTED": 18,
+    "NEEDS_SOURCE_REVIEW": 4
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter",
+   "candidates": 41,
+   "states": {
+    "HIGH_CONFIDENCE": 28,
+    "CORRUPTED": 6,
+    "NEEDS_SOURCE_REVIEW": 7
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+   "candidates": 136,
+   "states": {
+    "HIGH_CONFIDENCE": 94,
+    "NEEDS_SOURCE_REVIEW": 41,
+    "CORRUPTED": 1
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-complex-numbers-and-quadratic-equations-chapter",
+   "candidates": 73,
+   "states": {
+    "HIGH_CONFIDENCE": 41,
+    "NEEDS_SOURCE_REVIEW": 23,
+    "CORRUPTED": 8,
+    "DUPLICATE": 1
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-diffrential-equations-chapter",
+   "candidates": 56,
+   "states": {
+    "HIGH_CONFIDENCE": 36,
+    "NEEDS_SOURCE_REVIEW": 18,
+    "CORRUPTED": 2
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-integral-calculas-chapter",
+   "candidates": 99,
+   "states": {
+    "HIGH_CONFIDENCE": 62,
+    "NEEDS_SOURCE_REVIEW": 25,
+    "CORRUPTED": 12
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+   "candidates": 100,
+   "states": {
+    "HIGH_CONFIDENCE": 67,
+    "NEEDS_SOURCE_REVIEW": 25,
+    "CORRUPTED": 8
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-matrices-and-determinants-chapter",
+   "candidates": 65,
+   "states": {
+    "HIGH_CONFIDENCE": 48,
+    "NEEDS_SOURCE_REVIEW": 15,
+    "DUPLICATE": 1,
+    "CORRUPTED": 1
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-permutations-and-combinations-chapter",
+   "candidates": 40,
+   "states": {
+    "HIGH_CONFIDENCE": 29,
+    "NEEDS_SOURCE_REVIEW": 8,
+    "CORRUPTED": 3
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-sequence-and-series-chapter",
+   "candidates": 60,
+   "states": {
+    "HIGH_CONFIDENCE": 39,
+    "NEEDS_SOURCE_REVIEW": 18,
+    "CORRUPTED": 3
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-sets-relations-and-functions-chapter",
+   "candidates": 68,
+   "states": {
+    "HIGH_CONFIDENCE": 42,
+    "NEEDS_SOURCE_REVIEW": 22,
+    "CORRUPTED": 4
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-statistics-and-probability-chapter",
+   "candidates": 64,
+   "states": {
+    "HIGH_CONFIDENCE": 38,
+    "NEEDS_SOURCE_REVIEW": 24,
+    "CORRUPTED": 2
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-three-dimensional-geometry-chapter",
+   "candidates": 68,
+   "states": {
+    "HIGH_CONFIDENCE": 48,
+    "NEEDS_SOURCE_REVIEW": 20
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-trigonometry-chapter",
+   "candidates": 39,
+   "states": {
+    "NEEDS_SOURCE_REVIEW": 13,
+    "HIGH_CONFIDENCE": 23,
+    "CORRUPTED": 3
+   }
+  },
+  {
+   "subject": "Mathematics",
+   "chapter_id": "jee-mathematics-vector-algebra-chapter",
+   "candidates": 54,
+   "states": {
+    "HIGH_CONFIDENCE": 40,
+    "NEEDS_SOURCE_REVIEW": 14
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-atoms-and-nuclei-chapter",
+   "candidates": 53,
+   "states": {
+    "HIGH_CONFIDENCE": 46,
+    "CORRUPTED": 1,
+    "NEEDS_SOURCE_REVIEW": 6
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-current-electricity-chapter",
+   "candidates": 55,
+   "states": {
+    "HIGH_CONFIDENCE": 52,
+    "NEEDS_SOURCE_REVIEW": 3
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-dual-nature-of-matter-and-radiation-chapter",
+   "candidates": 31,
+   "states": {
+    "HIGH_CONFIDENCE": 26,
+    "CORRUPTED": 2,
+    "NEEDS_SOURCE_REVIEW": 3
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-electromagnetic-induction-and-alternating-currents-chapter",
+   "candidates": 51,
+   "states": {
+    "HIGH_CONFIDENCE": 48,
+    "NEEDS_SOURCE_REVIEW": 3
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-electromagnetic-waves-chapter",
+   "candidates": 27,
+   "states": {
+    "HIGH_CONFIDENCE": 23,
+    "NEEDS_SOURCE_REVIEW": 4
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-electronic-devices-chapter",
+   "candidates": 35,
+   "states": {
+    "HIGH_CONFIDENCE": 33,
+    "CORRUPTED": 1,
+    "NEEDS_SOURCE_REVIEW": 1
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-electrostatics-chapter",
+   "candidates": 75,
+   "states": {
+    "HIGH_CONFIDENCE": 69,
+    "NEEDS_SOURCE_REVIEW": 5,
+    "CORRUPTED": 1
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-experimental-skills-chapter",
+   "candidates": 25,
+   "states": {
+    "HIGH_CONFIDENCE": 20,
+    "NEEDS_SOURCE_REVIEW": 4,
+    "CORRUPTED": 1
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-gravitation-chapter",
+   "candidates": 29,
+   "states": {
+    "HIGH_CONFIDENCE": 26,
+    "CORRUPTED": 1,
+    "NEEDS_SOURCE_REVIEW": 2
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-kinematics-chapter",
+   "candidates": 49,
+   "states": {
+    "HIGH_CONFIDENCE": 44,
+    "NEEDS_SOURCE_REVIEW": 5
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-kinetic-theory-of-gases-chapter",
+   "candidates": 27,
+   "states": {
+    "HIGH_CONFIDENCE": 24,
+    "CORRUPTED": 1,
+    "NEEDS_SOURCE_REVIEW": 2
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-laws-of-motion-chapter",
+   "candidates": 39,
+   "states": {
+    "HIGH_CONFIDENCE": 36,
+    "NEEDS_SOURCE_REVIEW": 3
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+   "candidates": 60,
+   "states": {
+    "HIGH_CONFIDENCE": 57,
+    "NEEDS_SOURCE_REVIEW": 3
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-optics-chapter",
+   "candidates": 87,
+   "states": {
+    "HIGH_CONFIDENCE": 77,
+    "NEEDS_SOURCE_REVIEW": 10
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-oscillations-and-waves-chapter",
+   "candidates": 41,
+   "states": {
+    "HIGH_CONFIDENCE": 39,
+    "NEEDS_SOURCE_REVIEW": 2
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+   "candidates": 74,
+   "states": {
+    "HIGH_CONFIDENCE": 68,
+    "CORRUPTED": 2,
+    "NEEDS_SOURCE_REVIEW": 4
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-rotational-motion-chapter",
+   "candidates": 50,
+   "states": {
+    "DUPLICATE": 49,
+    "HIGH_CONFIDENCE": 1
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-thermodynamics-chapter",
+   "candidates": 36,
+   "states": {
+    "HIGH_CONFIDENCE": 31,
+    "NEEDS_SOURCE_REVIEW": 3,
+    "CORRUPTED": 2
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-units-and-measurements-chapter",
+   "candidates": 48,
+   "states": {
+    "HIGH_CONFIDENCE": 41,
+    "CORRUPTED": 3,
+    "NEEDS_SOURCE_REVIEW": 4
+   }
+  },
+  {
+   "subject": "Physics",
+   "chapter_id": "jee-physics-work-energy-and-power-chapter",
+   "candidates": 37,
+   "states": {
+    "HIGH_CONFIDENCE": 33,
+    "NEEDS_SOURCE_REVIEW": 4
+   }
+  }
+ ],
+ "unmapped_labels": {},
+ "total_candidates": 2829
+}

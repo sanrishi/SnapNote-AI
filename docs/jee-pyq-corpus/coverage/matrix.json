@@ -129,10 +129,38 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (4 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s1-phy-041",
+    "pyq-jee-main-2024-apr04-s1-phy-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (4 Apr 2024)",
    "chapter": "Rotational Motion",
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr04-s1-phy-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (4 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-phy-042",
+    "pyq-jee-main-2024-apr04-s2-phy-055"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -155,10 +183,38 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (5 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s1-phy-042",
+    "pyq-jee-main-2024-apr05-s1-phy-055"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (5 Apr 2024)",
    "chapter": "Rotational Motion",
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr05-s1-phy-035"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (5 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s2-phy-042",
+    "pyq-jee-main-2024-apr05-s2-phy-056"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -181,10 +237,38 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (6 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-phy-040",
+    "pyq-jee-main-2024-apr06-s1-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (6 Apr 2024)",
    "chapter": "Rotational Motion",
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr06-s1-phy-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (6 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s2-phy-043",
+    "pyq-jee-main-2024-apr06-s2-phy-053"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -207,10 +291,37 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-phy-040",
+    "pyq-jee-main-2024-apr08-s1-phy-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Rotational Motion",
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr08-s1-phy-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (8 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s2-phy-041"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -593,7 +704,7 @@
   }
  ],
  "totals": {
-  "verified_records": 58,
+  "verified_records": 73,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -601,7 +712,7 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 58,
+  "verified_records": 73,
   "external_candidates_quarantined": 703,
   "review_batches": 4,
   "queue_cumulative": {
@@ -613,6 +724,7 @@
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
   "verification_rate_reviewed": 0.98,
   "concept_distribution": {
+   "jee-physics-current-electricity-chapter": 15,
    "jee-physics-rotational-motion-concept-001": 3,
    "jee-physics-rotational-motion-concept-002": 3,
    "jee-physics-rotational-motion-concept-005": 10,

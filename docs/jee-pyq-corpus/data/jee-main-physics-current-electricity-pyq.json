@@ -1,0 +1,467 @@
+[
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s1-phy-041",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "MCQ; platinum resistance thermometer (8 ohm ice, 10 ohm steam): resistance at 400 C is 16 ohm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 41,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Resistance of a platinum thermometer (8 ohm at ice point, 10 ohm at steam point) in a 400 C bath.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending.",
+  "content_fingerprint": "930eb21891969975",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s1-phy-056",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "Numerical; 2-ohm cube network with 6 V across face diagonal a-c: V(e) - V(f) = 1 V (nodal analysis with b-d/h-f symmetry). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 56,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Voltage between two bottom vertices of a 2-ohm cube network driven at 6 V across a top face diagonal.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (Ve = 4 V, Vf = 3 V).",
+  "content_fingerprint": "6028324118a2fce0",
+  "difficulty": null,
+  "answer_key": "1",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-042",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 50 W-200 V bulb on 100 V: dissipation 12.5 W. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 42,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Power dissipated by a 50 W-200 V bulb operated at 100 V.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending.",
+  "content_fingerprint": "7075edf9df26799d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-055",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "Numerical; same material and mass, radii 2 mm vs 4 mm (R proportional to 1/r^4): RA = 32 ohm given RB = 2 ohm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 55,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Resistance of wire A (2 mm radius) given wire B (4 mm radius) is 2 ohm, same material and mass.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending. Answer basis: Mirror-claimed official final answer, independently recomputed ((4/2)^4 x 2).",
+  "content_fingerprint": "877338ef5e070737",
+  "difficulty": null,
+  "answer_key": "32",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s1-phy-042",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 10/8/4/8 ohm network on 12 V: equivalent 12 ohm, battery current 1 A. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 42,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Equivalent resistance and battery current for a 10/8/4/8 ohm network on a 12 V battery.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending.",
+  "content_fingerprint": "ac2101334251f881",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s1-phy-055",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "Numerical; capacitor discharge to one-third in 6.6 us with C = 1.5 uF and ln 3 = 1.1: R = 4 ohm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 55,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Discharge wire resistance given a 1.5 uF capacitor's field falls to one-third in 6.6 us.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (6.6 / (1.5 x 1.1)).",
+  "content_fingerprint": "231a4329bf38633c",
+  "difficulty": null,
+  "answer_key": "4",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s2-phy-042",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 10 V with 20 ohm series and 5\u201610 ohm: heat ratio 5-ohm to 10-ohm is 2:1. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 42,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Ratio of heat dissipated per second in 5 ohm vs 10 ohm parallel branches fed via 20 ohm from 10 V.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending.",
+  "content_fingerprint": "25b0eb79e1fac135",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s2-phy-056",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "Numerical; 20 ohm wire cut into ten 2-ohm parts, paired in parallel then in series: 5 ohm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 56,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Equivalent resistance of ten cut parts paired in parallel and stacked in series.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (5 x 1 ohm).",
+  "content_fingerprint": "40919d9e194ec6d6",
+  "difficulty": null,
+  "answer_key": "5",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-phy-040",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "MCQ; Wheatstone-style network (12 / 0.5 / x\u201624 / 0.5 arms): balance at x = 24 ohm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 40,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Unknown resistance x for zero potential difference between bridge midpoints B and D.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending.",
+  "content_fingerprint": "578bce8204a556cf",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-phy-058",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "Numerical; wire stretched to half radius at constant volume: resistance scales 16x. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 58,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Resistance multiplier when a wire is stretched until its radius halves.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (4 x 4).",
+  "content_fingerprint": "ec4cf415125c6ee1",
+  "difficulty": null,
+  "answer_key": "16",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s2-phy-043",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 110 W-220 V bulb: 3.125 x 10^18 electrons per second. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 43,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Electrons per second through a 110 W-220 V bulb filament.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending.",
+  "content_fingerprint": "3e3df0ae40cd7b38",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s2-phy-053",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "Numerical; 240-ohm coil with 10-ohm shunt in a 140.4-ohm, 24 V loop: ammeter reads 160 mA. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 53,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Ammeter reading for a shunted 240-ohm coil in series with 140.4 ohm on 24 V.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (24 / 150 A).",
+  "content_fingerprint": "8625e6f148e74a4a",
+  "difficulty": null,
+  "answer_key": "160",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-phy-040",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 3 V cell with 1 ohm internal resistance across two parallel 4-ohm resistors: terminal p.d. 2 V. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 40,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Terminal potential difference of a 3 V cell (1 ohm internal) across two parallel 4-ohm resistors.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending.",
+  "content_fingerprint": "84175d6a324d8b90",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-phy-056",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "Numerical; Pt wire 10 / 10.2 / 10.95 ohm at 0 / 100 / t C: t = 475 C = 748 K. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 56,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Temperature in kelvin for a wire reading 10.95 ohm given 10 ohm at 0 C and 10.2 ohm at 100 C.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (475 + 273).",
+  "content_fingerprint": "2a614a3c041617c8",
+  "difficulty": null,
+  "answer_key": "748",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s2-phy-041",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Current Electricity",
+  "concept_ids": [
+   "jee-physics-current-electricity-chapter"
+  ],
+  "concept_mapping_note": "MCQ; kettle boiling time 20 to 15 min at same supply: element length scaled 3/4 (power inversely with length). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 41,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Heating-element length factor to cut kettle boiling time from 20 to 15 minutes.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Current Electricity is pending.",
+  "content_fingerprint": "20b917d880e19bf0",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ }
+]

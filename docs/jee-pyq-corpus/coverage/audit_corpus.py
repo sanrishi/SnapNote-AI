@@ -1,9 +1,13 @@
 """Phase 3: deterministic full-corpus audit. Reports findings; fixes nothing
 silently — prints FIXABLE items for explicit follow-up. Exit 1 on failure."""
+import glob
 import json
 import os
 import re
 import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ingestion"))
+from source_classes import SourceClass, label_is_honest  # noqa: E402
 
 CORPUS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(CORPUS, "data", "jee-main-physics-rotational-pyq.json")
@@ -11,9 +15,14 @@ REG = os.path.join(CORPUS, "sources", "registry.json")
 TAX = os.path.join(CORPUS, "..", "jee-concept-taxonomy", "data",
                    "jee-physics-rotational-motion-taxonomy.json")
 
-records = json.load(open(DATA, encoding="utf-8"))
+records = []
+for path in sorted(glob.glob(os.path.join(CORPUS, "data", "*-pyq.json"))):
+    records.extend(json.load(open(path, encoding="utf-8")))
 registry = {s["source_id"]: s for s in json.load(open(REG, encoding="utf-8"))["sources"]}
 tax_ids = {c["concept_id"] for c in json.load(open(TAX, encoding="utf-8"))}
+CH_TAX = os.path.join(CORPUS, "..", "jee-chapter-taxonomy", "data", "jee-chapters.json")
+if os.path.exists(CH_TAX):
+    tax_ids |= {c["chapter_id"] for c in json.load(open(CH_TAX, encoding="utf-8"))}
 
 # Numerical records whose official answer was never recovered keep null, but
 # only with an explicit documented reason in the verification method.
@@ -62,16 +71,8 @@ for r in records:
         check(a is None or (isinstance(a, str) and "MR" in a.replace(" ", "")) or
               (isinstance(a, str) and len(a) <= 16),
               f"{r['question_id']}: MCQ answer_key suspicious: {a!r}")
-    # Provenance honesty: third-party records must never claim NTA-PDF origin.
-    doc = (r.get("source_document") or "") + " " + (r.get("verification_method") or "")
-    if "jeeprep" in (r.get("source_url") or ""):
-        check("third-party transcription" in doc,
-              f"{r['question_id']}: jeeprep record missing transcription label")
-        check("official NTA paper PDF (page rendering inspected)" not in doc,
-              f"{r['question_id']}: jeeprep record claims NTA-PDF origin")
-    else:
-        check("cdnbbsr.s3waas.gov.in" in (r.get("source_url") or ""),
-              f"{r['question_id']}: non-jeeprep record without NTA URL")
+    # Provenance honesty enforced via the SourceClass enum.
+    check(label_is_honest(r), f"{r['question_id']}: provenance label dishonest")
     # Shift/session coherence with registry paper identity.
     sid = None
     m = re.search(r"/pyq/([\w-]+)/physics", r.get("source_url") or "")
