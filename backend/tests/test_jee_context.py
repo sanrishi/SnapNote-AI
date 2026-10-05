@@ -72,11 +72,25 @@ def test_unknown_concept_unresolved():
     assert body["pyqs"] == [] and body["pyq_count"] == 0
 
 
-# 5. Matched concept with no PYQs yet (honest empty state)
+# 5. Matched concept with no PYQs yet (honest empty state).
+# Data-driven: finds a taxonomy concept with zero verified records so the test
+# stays valid as the corpus grows (until every concept has evidence).
 def test_concept_with_no_pyqs():
-    body = asyncio.run(_map("Equilibrium of rigid bodies", []))
+    import os
+    repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    with open(os.path.join(repo_root, "docs", "jee-pyq-corpus", "data",
+                            "jee-main-physics-rotational-pyq.json"), encoding="utf-8") as fh:
+        records = json.load(fh)
+    used = {c for r in records for c in r["concept_ids"]}
+    with open(os.path.join(repo_root, "docs", "jee-concept-taxonomy", "data",
+                            "jee-physics-rotational-motion-taxonomy.json"), encoding="utf-8") as fh:
+        concepts = json.load(fh)
+    empty = [c for c in concepts if c["concept_id"] not in used]
+    assert empty, "every concept has PYQs; retire this test"
+    target = empty[0]
+    body = asyncio.run(_map(target["display_name"], []))
     assert body["match_status"] == "matched"
-    assert body["concept_id"] == "jee-physics-rotational-motion-concept-013"
+    assert body["concept_id"] == target["concept_id"]
     assert body["pyqs"] == [] and body["pyq_count"] == 0
 
 

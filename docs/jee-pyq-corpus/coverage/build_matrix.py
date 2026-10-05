@@ -81,6 +81,23 @@ def build_matrix():
             len([h for h in s.get("rotational_hits", [])])
             for s in registry if s.get("source_id", "").startswith("jeeprep-main-")
         )
+    review_path = os.path.join(CORPUS_DIR, "index", "review_log.json")
+    if os.path.exists(review_path):
+        with open(review_path, encoding="utf-8") as fh:
+            review = json.load(fh)
+        dashboard["review_batches"] = len(review.get("batches", []))
+        dashboard["queue_cumulative"] = review.get("cumulative", {})
+        dashboard["queue_state"] = review.get("queue_state")
+        reviewed = (review.get("cumulative", {}).get("reviewed") or 0)
+        verified_q = (review.get("cumulative", {}).get("verified") or 0)
+        dashboard["verification_rate_reviewed"] = (
+            round(verified_q / reviewed, 4) if reviewed else None
+        )
+    concept_dist: dict[str, int] = {}
+    for record in records:
+        for c in record.get("concept_ids", []):
+            concept_dist[c] = concept_dist.get(c, 0) + 1
+    dashboard["concept_distribution"] = dict(sorted(concept_dist.items()))
     return {
         "cells": cells,
         "totals": {

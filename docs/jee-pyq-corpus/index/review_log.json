@@ -1,1 +1,72 @@
-{"batches": [{"ambiguous": 0, "batch": 1, "classes": "A_HIGH_CONFIDENCE", "date": "2026-10-06", "rejected": 0, "reviewed": 12, "scope": "first 12 A candidates (2024 shifts)", "verified": 12}, {"ambiguous": 0, "batch": 2, "classes": "A_HIGH_CONFIDENCE", "date": "2026-10-06", "rejected": 2, "rejections": [{"queue_id": "verify-jeeprep-main-2024-2024-jan31-s2-q52", "reason": "mirror-claimed answer 53 contradicts independent recomputation 61; answer uncorroborated, record stays out"}, {"queue_id": "verify-jeeprep-main-2025-2025-jan23-s2-q29", "reason": "transcribed stem lacks numeric M/R values needed for power; returned to NEEDS_SOURCE_REVIEW"}], "reviewed": 24, "scope": "remaining 24 A candidates (2024 Jan + 2025 shifts)", "verified": 22}], "cumulative": {"ambiguous": 0, "rejected": 2, "reviewed": 36, "verified": 34}, "method": "Human visual read of stem + identity + mirror-claimed answer; numerical answers independently recomputed; MCQs keep answer_key null (options not independently confirmable).", "note": "12/12 verified in batch 1; 22/24 in batch 2. Never claim 100% on unreviewed candidates."}
+{
+ "batches": [
+  {
+   "ambiguous": 0,
+   "batch": 1,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "rejected": 0,
+   "reviewed": 12,
+   "scope": "first 12 A candidates (2024 shifts)",
+   "verified": 12
+  },
+  {
+   "ambiguous": 0,
+   "batch": 2,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "rejected": 2,
+   "rejections": [
+    {
+     "queue_id": "verify-jeeprep-main-2024-2024-jan31-s2-q52",
+     "reason": "mirror-claimed answer 53 contradicts independent recomputation 61; answer uncorroborated, record stays out"
+    },
+    {
+     "queue_id": "verify-jeeprep-main-2025-2025-jan23-s2-q29",
+     "reason": "transcribed stem lacks numeric M/R values needed for power; returned to NEEDS_SOURCE_REVIEW"
+    }
+   ],
+   "reviewed": 24,
+   "scope": "remaining 24 A candidates (2024 Jan + 2025 shifts)",
+   "verified": 22
+  },
+  {
+   "batch": 3,
+   "classes": "B_NEEDS_SOURCE_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 14,
+   "verified": 14,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "all 14 B candidates (weak-signal, option-truncated, tag disagreements)",
+   "note": "jan28-s1-q49 looked contradictory (disc MI 2.5x ring MI) but the ratio is given data implying different radii; recomputation confirmed n = 4."
+  },
+  {
+   "batch": "2-recovery",
+   "classes": "demoted-A",
+   "date": "2026-10-06",
+   "reviewed": 1,
+   "verified": 1,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "jan23-s2-q29 symbolic disc-power question",
+   "note": "Options recovered from the same mirror article HTML (A 8MR^2 / B 60MR^2 / C 72MR^2 / D 108MR^2); letter B matches independent recomputation; cross-checked against an independent coaching mirror with identical options."
+  }
+ ],
+ "cumulative": {
+  "reviewed": 50,
+  "verified": 49,
+  "rejected": 1,
+  "ambiguous": 0
+ },
+ "method": "Human visual read of stem + identity + mirror-claimed answer; numerical answers independently recomputed; MCQs keep answer_key null (options not independently confirmable).",
+ "note": "12/12 verified in batch 1; 22/24 in batch 2. Never claim 100% on unreviewed candidates.",
+ "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
+ "recall_sweep": {
+  "date": "2026-10-06",
+  "method": "taxonomy rotational patterns over all 929 indexed 2024-2025 Physics stems, excluding the 50 queued",
+  "extra_keyword_hits": 22,
+  "verdict": "no expansion",
+  "reason": "all 22 hits belong to other chapters (EMI motional emf, Bohr angular momentum, torque dimensions, gravitation orbits, magnetic/electric dipoles, circular-motion friction). Boundary cases (rotating table/coin/string-ball) are circular dynamics under Laws of Motion, not rigid-body rotation; forcing them in would corrupt chapter boundaries."
+ }
+}
