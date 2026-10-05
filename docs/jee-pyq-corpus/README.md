@@ -9,7 +9,13 @@ options, images, or answer keys.
 - `schema/pyq-record.schema.json` — canonical QuestionRecord (nullable
   difficulty/answer_key; provenance + content fingerprint).
 - `data/jee-main-physics-rotational-pyq.json` — **9 verified records**, each
-  visually read from official NTA 2026 papers (2 Apr S1 Q29/Q31, 4 Apr S1 Q30).
+  visually read from official NTA 2026 papers (Apr 2 S1/S2, Apr 4 S1/S2,
+  Apr 5 S2, Apr 8 S2).
+- `index/build_transcribed_index.py` — third-party transcription indexer
+  (JEEPrep HTML mirror); raw stems stay local/gitignored, only
+  `index/transcribed_index_summary.json` (structure + counts) is committed.
+- `index/verification_queue.json` — 50 rotational-tagged 2024–2025 index
+  entries awaiting human review (hashes + provenance, no stems).
 - `sources/registry.json` — 10 known sources: 9 NTA 2026 shifts (3 parsed,
   6 discovered, 1 retrieval-blocked) + the Advanced 2007–2025 archive.
 - `ingestion/extract_paper.py` — PDF → candidate structure (75/75 questions
@@ -19,11 +25,24 @@ options, images, or answer keys.
 - `queries/pyq_queries.py` — by concept/chapter/year/shift, reproducible
   counts, `explain_match` reasons citing stored fields only.
 
-## Honest coverage (recomputed, 2026-09-30)
+## Honest coverage (recomputed, 2026-10-06)
 
-3 verified records · 3 sources parsed · 7 discovered · 0 complete.
-5th Apr S1 scanned end-to-end with **zero** rotational hits — shifts vary,
-which is itself a finding: per-shift coverage must be measured, not assumed.
+9 verified records · 42 sources parsed · 3 undiscovered/blocked · 0 complete.
+2026 official direct-PDF index: 7 shifts, 175 Physics questions (OCR).
+2024–2025 transcribed-official index: 35 papers, 2,829 questions
+(2024: 1,620; 2025: 1,209; Physics/Chemistry/Mathematics), via a third-party
+transcription of official NTA PDFs that claims official final-answer alignment.
+Direct 2024–2025 NTA paper PDFs are login-walled, so these are indexed,
+unreviewed mirrors — never verified records.
+
+## Index dashboard
+
+- official papers indexed: 35 (2024–2025) + 7 parsed 2026 shifts
+- official questions indexed: 2,829 (2024–2025) + 175 (2026 Physics OCR)
+- source-linked review queue: 50 rotational-tagged 2024–2025 entries
+- verified questions: 9
+- external candidates quarantined: 703 (eQOURSE mocks: 0 matches vs 175, and
+  0 matches vs 2,829 — max similarity 0.72, threshold 0.85; disjoint cohorts)
 
 ## Verification pipeline
 

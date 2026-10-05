@@ -63,6 +63,24 @@ def build_matrix():
             "status": status,
         })
     total_verified = sum(c["verified_questions"] for c in cells if isinstance(c["verified_questions"], int))
+    dashboard = {
+        "official_papers_indexed": 0,
+        "official_questions_indexed": 0,
+        "source_linked_queue": 0,
+        "verified_records": total_verified,
+        "external_candidates_quarantined": 703,
+    }
+    summary_path = os.path.join(CORPUS_DIR, "index", "transcribed_index_summary.json")
+    if os.path.exists(summary_path):
+        with open(summary_path, encoding="utf-8") as fh:
+            summary = json.load(fh).get("index", {})
+        dashboard["official_papers_indexed"] = len(summary.get("source_ids", []))
+        dashboard["official_questions_indexed"] = summary.get("total_records", 0)
+        # Rotational-tagged index entries awaiting human review (not verified).
+        dashboard["source_linked_queue"] = sum(
+            len([h for h in s.get("rotational_hits", [])])
+            for s in registry if s.get("source_id", "").startswith("jeeprep-main-")
+        )
     return {
         "cells": cells,
         "totals": {
@@ -70,6 +88,7 @@ def build_matrix():
             "sources_parsed": sum(1 for s in registry if s.get("parser_status") == "parsed"),
             "sources_discovered": sum(1 for s in registry if s.get("parser_status") != "parsed"),
         },
+        "index_dashboard": dashboard,
         "note": "Status is never 'complete': discovered question totals per paper are not yet authoritative.",
     }
 
