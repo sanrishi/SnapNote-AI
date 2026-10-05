@@ -141,10 +141,12 @@
    "session": "April 2024",
    "shift": "Shift 2 (4 Apr 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-phy-058"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -152,10 +154,12 @@
    "session": "April 2024",
    "shift": "Shift 1 (5 Apr 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s1-phy-035"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -163,10 +167,12 @@
    "session": "April 2024",
    "shift": "Shift 2 (5 Apr 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s2-phy-052"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -196,10 +202,12 @@
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-phy-052"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -207,10 +215,12 @@
    "session": "April 2024",
    "shift": "Shift 2 (8 Apr 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s2-phy-035"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -218,10 +228,12 @@
    "session": "April 2024",
    "shift": "Shift 1 (9 Apr 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s1-phy-052"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -237,24 +249,28 @@
   {
    "exam": "JEE Main",
    "year": 2024,
-   "session": "Feb 2024",
+   "session": "January 2024",
    "shift": "Shift 1 (1 Feb 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s1-phy-052"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
    "year": 2024,
-   "session": "Feb 2024",
+   "session": "January 2024",
    "shift": "Shift 2 (1 Feb 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s2-phy-035"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -262,10 +278,12 @@
    "session": "January 2024",
    "shift": "Shift 1 (27 Jan 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan27-s1-phy-052"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -273,10 +291,12 @@
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-phy-052"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -284,10 +304,13 @@
    "session": "January 2024",
    "shift": "Shift 1 (30 Jan 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s1-phy-032",
+    "pyq-jee-main-2024-jan30-s1-phy-052"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -511,7 +534,7 @@
   }
  ],
  "totals": {
-  "verified_records": 9,
+  "verified_records": 21,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -519,7 +542,7 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 9,
+  "verified_records": 21,
   "external_candidates_quarantined": 703
  },
  "note": "Status is never 'complete': discovered question totals per paper are not yet authoritative."

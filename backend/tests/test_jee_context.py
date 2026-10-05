@@ -74,8 +74,9 @@ def test_unknown_concept_unresolved():
 
 # 5. Matched concept with no PYQs yet (honest empty state)
 def test_concept_with_no_pyqs():
-    body = asyncio.run(_map("Radius of gyration", []))
+    body = asyncio.run(_map("Equilibrium of rigid bodies", []))
     assert body["match_status"] == "matched"
+    assert body["concept_id"] == "jee-physics-rotational-motion-concept-013"
     assert body["pyqs"] == [] and body["pyq_count"] == 0
 
 
@@ -85,8 +86,9 @@ def test_concept_with_verified_pyqs():
     assert body["match_status"] == "matched"
     assert body["concept_id"] == TORQUE_05
     assert body["pyq_count"] >= 1
-    pyq = body["pyqs"][0]
-    assert pyq["question_id"] == "pyq-jee-main-2026-apr02-s1-phy-029"
+    ids = {pyq["question_id"] for pyq in body["pyqs"]}
+    assert "pyq-jee-main-2026-apr02-s1-phy-029" in ids  # founding verified record
+    pyq = next(p for p in body["pyqs"] if p["question_id"] == "pyq-jee-main-2026-apr02-s1-phy-029")
     assert pyq["year"] == 2026 and pyq["shift"] == "Shift 1 (2 Apr 2026)"
     assert pyq["paper_question_number"] == 29 and pyq["marks"] == 4
     assert "cdnbbsr.s3waas.gov.in" in pyq["source_url"]
@@ -97,14 +99,17 @@ def test_concept_with_verified_pyqs():
 def test_multi_record_chapter_retrieval():
     import sys
     import os
-    sys.path.insert(0, os.path.join("docs", "jee-pyq-corpus", "queries"))
+    repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    queries_dir = os.path.join(repo_root, "docs", "jee-pyq-corpus", "queries")
+    sys.path.insert(0, queries_dir)
     try:
         from pyq_queries import get_by_chapter
     finally:
-        sys.path.remove(os.path.join("docs", "jee-pyq-corpus", "queries"))
+        sys.path.remove(queries_dir)
     records = get_by_chapter("Rotational Motion")
-    assert len(records) == 9
-    assert {r["question_id"] for r in records} == {
+    ids = {r["question_id"] for r in records}
+    # Founding 2026 records must always be present; corpus only grows.
+    assert {
         "pyq-jee-main-2026-apr02-s1-phy-029",
         "pyq-jee-main-2026-apr02-s1-phy-031",
         "pyq-jee-main-2026-apr04-s1-phy-030",
@@ -114,7 +119,8 @@ def test_multi_record_chapter_retrieval():
         "pyq-jee-main-2026-apr05-s2-phy-030",
         "pyq-jee-main-2026-apr05-s2-phy-031",
         "pyq-jee-main-2026-apr08-s2-phy-032",
-    }
+    } <= ids
+    assert len(records) == len(ids)  # no duplicate ingestions
 
 
 # 8. Full path: screenshot-style StudyNotes -> concept -> syllabus -> PYQs
@@ -131,9 +137,9 @@ def test_e2e_torque_fixture():
     # taxonomy relationships intact
     assert any(p.concept_id == "jee-physics-rotational-motion-concept-004" for p in ctx.prerequisites)
     assert any(r.concept_id == ANGMOM_06 for r in ctx.related)
-    # verified exam evidence attached
-    assert ctx.pyq_count == 1
-    assert ctx.pyqs[0].question_id == "pyq-jee-main-2026-apr02-s1-phy-029"
+    # verified exam evidence attached (corpus grows; founding record stays)
+    assert ctx.pyq_count >= 1
+    assert "pyq-jee-main-2026-apr02-s1-phy-029" in {p.question_id for p in ctx.pyqs}
 
 
 def test_concept_endpoint_serves_stored_context():
@@ -144,7 +150,7 @@ def test_concept_endpoint_serves_stored_context():
     body = asyncio.run(run()).json()
     assert body["match_status"] == "matched"
     assert body["canonical_name"] == "Torque"
-    assert body["pyq_count"] == 1
+    assert body["pyq_count"] >= 1
 
 
 def test_concept_endpoint_unknown_id():
@@ -161,7 +167,8 @@ def test_angular_momentum_resolves_with_pyq():
     body = asyncio.run(_map("Angular momentum", []))
     assert body["match_status"] == "matched"
     assert body["concept_id"] == ANGMOM_06
-    assert body["pyq_count"] == 1  # same verified Q29 record
+    assert body["pyq_count"] >= 1  # founding Q29 record plus later additions
+    assert "pyq-jee-main-2026-apr02-s1-phy-029" in {p["question_id"] for p in body["pyqs"]}
 
 
 def test_mapping_touches_no_credits():

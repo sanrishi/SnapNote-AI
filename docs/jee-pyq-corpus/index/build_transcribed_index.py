@@ -97,7 +97,11 @@ def _parse_shift(metas: list[str]) -> dict:
     m = re.search(r"JEE Main\s+(\d{4})\s+([A-Za-z]+)\s+(\d{1,2})\s+Shift\s+(\d)", joined)
     if m:
         year, month, day, shift = m.groups()
-        season = "January" if month.lower().startswith("jan") else "April" if month.lower().startswith("apr") else month
+        # NTA 2024 Session 1 ran 27 Jan–1 Feb: Feb-1 shifts belong to January.
+        if year == "2024" and month.lower().startswith("feb"):
+            season = "January"
+        else:
+            season = "January" if month.lower().startswith("jan") else "April" if month.lower().startswith("apr") else month
         return {
             "year": int(year),
             "session": f"{season} {year}",
@@ -130,7 +134,10 @@ def parse_subject_page(html: str, *, slug: str, subject: str) -> list[dict]:
             m = re.match(r"(20\d{2})-([a-z]{3})-(\d{1,2})-shift-(\d)", slug)
             if m:
                 y, mon, day, sh = m.groups()
-                season = "January" if mon == "jan" else "April" if mon == "apr" else mon
+                if y == "2024" and mon == "feb":
+                    season = "January"  # 2024 Session 1 ran 27 Jan–1 Feb.
+                else:
+                    season = "January" if mon == "jan" else "April" if mon == "apr" else mon
                 shift = {"year": int(y), "session": f"{season} {y}", "shift": f"Shift {sh} ({day} {mon} {y})", "exam_label": slug}
         normalized = normalize_text(stem)
         out.append(

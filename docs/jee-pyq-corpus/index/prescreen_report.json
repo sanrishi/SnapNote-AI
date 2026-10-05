@@ -1,0 +1,441 @@
+{
+ "total": 50,
+ "classes": {
+  "B_NEEDS_SOURCE_REVIEW": 14,
+  "A_HIGH_CONFIDENCE": 36
+ },
+ "entries": [
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-4-shift-1-q52",
+   "source_id": "jeeprep-main-2024-2024-apr-4-shift-1",
+   "question_number": 52,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "weak_only:cylinder,sphere"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-5-shift-1-q35",
+   "source_id": "jeeprep-main-2024-2024-apr-5-shift-1",
+   "question_number": 35,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-6-shift-1-q56",
+   "source_id": "jeeprep-main-2024-2024-apr-6-shift-1",
+   "question_number": 56,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "no_rotational_signal"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-8-shift-1-q52",
+   "source_id": "jeeprep-main-2024-2024-apr-8-shift-1",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-9-shift-1-q33",
+   "source_id": "jeeprep-main-2024-2024-apr-9-shift-1",
+   "question_number": 33,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "no_rotational_signal"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-9-shift-1-q52",
+   "source_id": "jeeprep-main-2024-2024-apr-9-shift-1",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-4-shift-2-q58",
+   "source_id": "jeeprep-main-2024-2024-apr-4-shift-2",
+   "question_number": 58,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-5-shift-2-q52",
+   "source_id": "jeeprep-main-2024-2024-apr-5-shift-2",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-6-shift-2-q56",
+   "source_id": "jeeprep-main-2024-2024-apr-6-shift-2",
+   "question_number": 56,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "weak_only:moment of"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-8-shift-2-q35",
+   "source_id": "jeeprep-main-2024-2024-apr-8-shift-2",
+   "question_number": 35,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-apr-9-shift-2-q58",
+   "source_id": "jeeprep-main-2024-2024-apr-9-shift-2",
+   "question_number": 58,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "weak_only:disc"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-feb-1-shift-1-q52",
+   "source_id": "jeeprep-main-2024-2024-feb-1-shift-1",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-feb-1-shift-2-q35",
+   "source_id": "jeeprep-main-2024-2024-feb-1-shift-2",
+   "question_number": 35,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-feb-1-shift-2-q52",
+   "source_id": "jeeprep-main-2024-2024-feb-1-shift-2",
+   "question_number": 52,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "no_rotational_signal"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-jan-27-shift-1-q52",
+   "source_id": "jeeprep-main-2024-2024-jan-27-shift-1",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-jan-29-shift-1-q52",
+   "source_id": "jeeprep-main-2024-2024-jan-29-shift-1",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-jan-30-shift-1-q32",
+   "source_id": "jeeprep-main-2024-2024-jan-30-shift-1",
+   "question_number": 32,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-jan-30-shift-1-q52",
+   "source_id": "jeeprep-main-2024-2024-jan-30-shift-1",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-jan-31-shift-1-q52",
+   "source_id": "jeeprep-main-2024-2024-jan-31-shift-1",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-jan-30-shift-2-q52",
+   "source_id": "jeeprep-main-2024-2024-jan-30-shift-2",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-jan-31-shift-2-q51",
+   "source_id": "jeeprep-main-2024-2024-jan-31-shift-2",
+   "question_number": 51,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2024-2024-jan-31-shift-2-q52",
+   "source_id": "jeeprep-main-2024-2024-jan-31-shift-2",
+   "question_number": 52,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-2-shift-1-q28",
+   "source_id": "jeeprep-main-2025-2025-apr-2-shift-1",
+   "question_number": 28,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-2-shift-1-q30",
+   "source_id": "jeeprep-main-2025-2025-apr-2-shift-1",
+   "question_number": 30,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "weak_only:pivot"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-2-shift-1-q32",
+   "source_id": "jeeprep-main-2025-2025-apr-2-shift-1",
+   "question_number": 32,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-3-shift-1-q31",
+   "source_id": "jeeprep-main-2025-2025-apr-3-shift-1",
+   "question_number": 31,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "weak_only:sphere"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-4-shift-1-q28",
+   "source_id": "jeeprep-main-2025-2025-apr-4-shift-1",
+   "question_number": 28,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-4-shift-1-q31",
+   "source_id": "jeeprep-main-2025-2025-apr-4-shift-1",
+   "question_number": 31,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "abrupt_ending"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-7-shift-1-q29",
+   "source_id": "jeeprep-main-2025-2025-apr-7-shift-1",
+   "question_number": 29,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-7-shift-1-q46",
+   "source_id": "jeeprep-main-2025-2025-apr-7-shift-1",
+   "question_number": 46,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-2-shift-2-q28",
+   "source_id": "jeeprep-main-2025-2025-apr-2-shift-2",
+   "question_number": 28,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-2-shift-2-q46",
+   "source_id": "jeeprep-main-2025-2025-apr-2-shift-2",
+   "question_number": 46,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-4-shift-2-q28",
+   "source_id": "jeeprep-main-2025-2025-apr-4-shift-2",
+   "question_number": 28,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-4-shift-2-q50",
+   "source_id": "jeeprep-main-2025-2025-apr-4-shift-2",
+   "question_number": 50,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-7-shift-2-q46",
+   "source_id": "jeeprep-main-2025-2025-apr-7-shift-2",
+   "question_number": 46,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-8-shift-2-q28",
+   "source_id": "jeeprep-main-2025-2025-apr-8-shift-2",
+   "question_number": 28,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-apr-8-shift-2-q47",
+   "source_id": "jeeprep-main-2025-2025-apr-8-shift-2",
+   "question_number": 47,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-22-shift-1-q4",
+   "source_id": "jeeprep-main-2025-2025-jan-22-shift-1",
+   "question_number": 4,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-22-shift-1-q21",
+   "source_id": "jeeprep-main-2025-2025-jan-22-shift-1",
+   "question_number": 21,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-24-shift-1-q27",
+   "source_id": "jeeprep-main-2025-2025-jan-24-shift-1",
+   "question_number": 27,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-24-shift-1-q30",
+   "source_id": "jeeprep-main-2025-2025-jan-24-shift-1",
+   "question_number": 30,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "abrupt_ending",
+    "weak_only:cylinder"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-28-shift-1-q26",
+   "source_id": "jeeprep-main-2025-2025-jan-28-shift-1",
+   "question_number": 26,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-28-shift-1-q48",
+   "source_id": "jeeprep-main-2025-2025-jan-28-shift-1",
+   "question_number": 48,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "weak_only:disc,moment of"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-28-shift-1-q49",
+   "source_id": "jeeprep-main-2025-2025-jan-28-shift-1",
+   "question_number": 49,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-22-shift-2-q28",
+   "source_id": "jeeprep-main-2025-2025-jan-22-shift-2",
+   "question_number": 28,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "abrupt_ending"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-22-shift-2-q46",
+   "source_id": "jeeprep-main-2025-2025-jan-22-shift-2",
+   "question_number": 46,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-23-shift-2-q29",
+   "source_id": "jeeprep-main-2025-2025-jan-23-shift-2",
+   "question_number": 29,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-24-shift-2-q28",
+   "source_id": "jeeprep-main-2025-2025-jan-24-shift-2",
+   "question_number": 28,
+   "class": "A_HIGH_CONFIDENCE",
+   "flags": [],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-24-shift-2-q30",
+   "source_id": "jeeprep-main-2025-2025-jan-24-shift-2",
+   "question_number": 30,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "abrupt_ending",
+    "weak_only:sphere"
+   ],
+   "topic_tag": "Rotational Motion"
+  },
+  {
+   "queue_id": "verify-jeeprep-main-2025-2025-jan-28-shift-2-q30",
+   "source_id": "jeeprep-main-2025-2025-jan-28-shift-2",
+   "question_number": 30,
+   "class": "B_NEEDS_SOURCE_REVIEW",
+   "flags": [
+    "abrupt_ending",
+    "weak_only:balance"
+   ],
+   "topic_tag": "Rotational Motion"
+  }
+ ],
+ "note": "Phase 1 pre-screen only. Nothing is VERIFIED. Flags are machine signals; class A still needs human visual read before verification."
+}

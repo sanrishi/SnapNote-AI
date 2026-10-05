@@ -94,13 +94,19 @@ class TestPyqCorpus(unittest.TestCase):
         self.assertEqual(first, second)
         self.assertGreaterEqual(first, 1)
 
+    def _paper_url(self, url):
+        """Registry keys on paper-level URLs; records may point at the exact
+        subject page (paper URL + /physics|chemistry|mathematics)."""
+        import re
+        return re.sub(r"/(physics|chemistry|mathematics)$", "", url or "")
+
     def test_registry_consistency(self):
         """Every record's source_url must exist in the source registry."""
         with open(os.path.join(CORPUS_DIR, "sources", "registry.json"), encoding="utf-8") as fh:
             registry = json.load(fh)["sources"]
         known_urls = {s["source_url"] for s in registry}
         for record in _load_records():
-            self.assertIn(record["source_url"], known_urls, record["question_id"])
+            self.assertIn(self._paper_url(record["source_url"]), known_urls, record["question_id"])
 
     def test_new_nullable_fields_allowed(self):
         for record in _load_records():
@@ -147,7 +153,7 @@ class TestPyqCorpus(unittest.TestCase):
         the registry source hash for the record's source_url."""
         by_url = {s["source_url"]: s for s in self._registry_by_url()}
         for record in _load_records():
-            source = by_url.get(record["source_url"])
+            source = by_url.get(self._paper_url(record["source_url"]))
             self.assertIsNotNone(source, f"{record['question_id']}: source not in registry")
             self.assertEqual(
                 record["provenance"]["pdf_sha256"], source["pdf_sha256"],

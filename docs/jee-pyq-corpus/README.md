@@ -27,7 +27,9 @@ options, images, or answer keys.
 
 ## Honest coverage (recomputed, 2026-10-06)
 
-9 verified records · 42 sources parsed · 3 undiscovered/blocked · 0 complete.
+21 verified records (9 from 2026 direct NTA PDFs + 12 batch-1 from the
+2024–2025 transcribed index) · 42 sources parsed · 3 undiscovered/blocked ·
+0 complete.
 2026 official direct-PDF index: 7 shifts, 175 Physics questions (OCR).
 2024–2025 transcribed-official index: 35 papers, 2,829 questions
 (2024: 1,620; 2025: 1,209; Physics/Chemistry/Mathematics), via a third-party
@@ -40,7 +42,8 @@ unreviewed mirrors — never verified records.
 - official papers indexed: 35 (2024–2025) + 7 parsed 2026 shifts
 - official questions indexed: 2,829 (2024–2025) + 175 (2026 Physics OCR)
 - source-linked review queue: 50 rotational-tagged 2024–2025 entries
-- verified questions: 9
+- verified questions: 21 (batch 1: 12 reviewed → 12 verified; 7 of 8
+  numerical answers independently recomputed and matched)
 - external candidates quarantined: 703 (eQOURSE mocks: 0 matches vs 175, and
   0 matches vs 2,829 — max similarity 0.72, threshold 0.85; disjoint cohorts)
 

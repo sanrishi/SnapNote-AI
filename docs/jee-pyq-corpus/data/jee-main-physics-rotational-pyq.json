@@ -281,5 +281,383 @@
    "parser": "extract_paper.py v1",
    "pdf_sha256": "079e3b7ae67b7030"
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s1-phy-035",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-009",
+   "jee-physics-rotational-motion-concept-008",
+   "jee-physics-rotational-motion-concept-010"
+  ],
+  "concept_mapping_note": "MCQ (options in figure/option block); asks value of x in sqrt(8/x) for k_hollow-sphere/k_solid-cylinder about diameter axis.",
+  "question_type": "MCQ",
+  "paper_question_number": 35,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Ratio of radius of gyration of a hollow sphere to a solid cylinder of equal mass about diameter axis AB equals sqrt(8/x); find x.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF.",
+  "content_fingerprint": "c59349bfff82c876",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-phy-052",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-002"
+  ],
+  "concept_mapping_note": "Numerical; centre of mass (x:y ratio form n/9) of a 10 kg plate with rectangular notch; figure-dependent geometry fully described.",
+  "question_type": "Numerical",
+  "paper_question_number": 52,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Centre-of-mass coordinate ratio of a uniform plate with a rectangular notch, in the form n/9; find n.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Answer basis: Mirror-claimed official final answer, independently recomputed from the described geometry.",
+  "content_fingerprint": "151129a6b8b8d125",
+  "difficulty": null,
+  "answer_key": "15",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr09-s1-phy-052",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (9 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-005",
+   "jee-physics-rotational-motion-concept-014"
+  ],
+  "concept_mapping_note": "Numerical; torque (40 N on 10 cm rim, I = 0.40 kg m^2) applied for 10 s; omega = 100 rad/s recomputed.",
+  "question_type": "Numerical",
+  "paper_question_number": 52,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Angular velocity of a wheel (I = 0.40 kg m^2, r = 10 cm) initially at rest after a 40 N tangential pull for 10 s.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Answer basis: Mirror-claimed official final answer, independently recomputed (tau = 4 N m, alpha = 10 rad/s^2).",
+  "content_fingerprint": "6a0ee8f5552d930f",
+  "difficulty": null,
+  "answer_key": "100",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-058",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-001"
+  ],
+  "concept_mapping_note": "Numerical; two-particle COM held fixed: 3 kg moved 2 cm toward COM, 2 kg compensates 3 cm.",
+  "question_type": "Numerical",
+  "paper_question_number": 58,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Distance the 2 kg particle must move toward the COM to keep it fixed when the 3 kg particle moves 2 cm toward it.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Answer basis: Mirror-claimed official final answer, independently recomputed (3x2 = 2x).",
+  "content_fingerprint": "826bc42ed8724751",
+  "difficulty": null,
+  "answer_key": "3",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s2-phy-052",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-014"
+  ],
+  "concept_mapping_note": "Numerical; rolling hollow sphere: rotational/total KE = x/5 gives x = 2 (I = 2/3 MR^2).",
+  "question_type": "Numerical",
+  "paper_question_number": 52,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Ratio of rotational to total kinetic energy of a rolling hollow sphere, in the form x/5; find x.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Answer basis: Mirror-claimed official final answer, independently recomputed ((1/3)/(5/6) = 2/5).",
+  "content_fingerprint": "b3210a275361ece5",
+  "difficulty": null,
+  "answer_key": "2",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s2-phy-035",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-007",
+   "jee-physics-rotational-motion-concept-006"
+  ],
+  "concept_mapping_note": "MCQ; M/2 disc placed coaxially on rotating disc M: new omega = 2/3 omega by angular-momentum conservation.",
+  "question_type": "MCQ",
+  "paper_question_number": 35,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "New angular velocity after an identical-dimension M/2 disc is placed gently coaxially on a rotating disc.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF.",
+  "content_fingerprint": "c106535e3bf0b0de",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s1-phy-052",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (1 Feb 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-001"
+  ],
+  "concept_mapping_note": "Numerical; COM position magnitude of three 2M spheres at right-triangle corners (4 m sides): 4sqrt(2)/3, x = 3.",
+  "question_type": "Numerical",
+  "paper_question_number": 52,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Magnitude of the COM position vector of identical spheres at the corners of a 4 m right triangle, in the form 4sqrt(2)/x; find x.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "d9e4486f2154485c",
+  "difficulty": null,
+  "answer_key": "3",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s2-phy-035",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (1 Feb 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-014"
+  ],
+  "concept_mapping_note": "MCQ; disc rolling up a smooth incline: rotation persists (no torque), only translational KE converts; h = v^2/2g form.",
+  "question_type": "MCQ",
+  "paper_question_number": 35,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Maximum height a rolling disc reaches on a smooth incline (rotation unchanged, translation converts to potential).",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF.",
+  "content_fingerprint": "244cd3d5fc38102b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan27-s1-phy-052",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (27 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-008",
+   "jee-physics-rotational-motion-concept-010"
+  ],
+  "concept_mapping_note": "Numerical; MI of four 1 kg masses at square corners (side 2 m) about a perpendicular axis through one vertex: 16 kg m^2.",
+  "question_type": "Numerical",
+  "paper_question_number": 52,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Moment of inertia of four 1 kg corner masses of a 2 m square about a perpendicular axis through one vertex.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-27-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 27 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Answer basis: Mirror-claimed official final answer, independently recomputed (0+4+4+8).",
+  "content_fingerprint": "f8f401d9de272913",
+  "difficulty": null,
+  "answer_key": "16",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan29-s1-phy-052",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (29 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-014"
+  ],
+  "concept_mapping_note": "Numerical; solid cylinder rolling down 60-degree incline: a = 10/sqrt(3) m/s^2, x = 10.",
+  "question_type": "Numerical",
+  "paper_question_number": 52,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Rolling acceleration of a solid cylinder down a 60-degree incline (g = 10 m/s^2), in the form x/sqrt(3); find x.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-29-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 29 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Answer basis: Mirror-claimed official final answer, independently recomputed ((2/3) g sin60).",
+  "content_fingerprint": "35508eec9d63eed2",
+  "difficulty": null,
+  "answer_key": "10",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s1-phy-032",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (30 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-006"
+  ],
+  "concept_mapping_note": "MCQ; angular momentum of a projectile about the point of projection at maximum height. Mirror stem has a degree-symbol glyph loss ('30?'), fully intelligible.",
+  "question_type": "MCQ",
+  "paper_question_number": 32,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Magnitude of angular momentum of a projectile (u at 30 degrees) about the projection point at maximum height h.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF.",
+  "content_fingerprint": "d5e7b97edcdb0a36",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s1-phy-052",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (30 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Rotational Motion",
+  "concept_ids": [
+   "jee-physics-rotational-motion-concept-007",
+   "jee-physics-rotational-motion-concept-006"
+  ],
+  "concept_mapping_note": "Numerical; identical disc dropped on rotating disc (5 kg, 2 m, 10 rad/s): energy dissipated 250 J (500 -> 250).",
+  "question_type": "Numerical",
+  "paper_question_number": 52,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Energy dissipated when an identical disc is placed gently on a rotating disc so both rotate together.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Answer basis: Mirror-claimed official final answer, independently recomputed (omega halves, KE 500 J -> 250 J).",
+  "content_fingerprint": "e9065a13ebf9a0ae",
+  "difficulty": null,
+  "answer_key": "250",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
