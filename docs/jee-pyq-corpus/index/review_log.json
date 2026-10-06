@@ -117,6 +117,20 @@
    "duplicate_skips": {
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q17": "misqueued Mathematics differential-equations item; already verified as pyq-jee-main-2025-jan22-s1-mat-017 in the LCD shard"
    }
+  },
+  {
+   "batch": 9,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 41,
+   "verified": 39,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Complex Numbers and Quadratic Equations HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q3",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q24"
+   ]
   }
  ],
  "cumulative": {
@@ -357,6 +371,18 @@
    "reason": "enantiomer-level recompute gives 6 optically active isomers versus mirror-claimed 3 (pairs-counting convention ambiguous); stays out",
    "date": "2026-10-06",
    "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q3",
+   "reason": "mirror carries no claimed answer; recomputed minimum 3/2 is uncorroborated by any official key",
+   "date": "2026-10-06",
+   "scope": "Complex Numbers and Quadratic Equations HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q24",
+   "reason": "recompute gives 56/3 for 12(a^2+b^2) versus mirror-claimed 36; range-model mismatch, needs source review",
+   "date": "2026-10-06",
+   "scope": "Complex Numbers and Quadratic Equations HIGH_CONFIDENCE sweep"
   }
  ]
 }
