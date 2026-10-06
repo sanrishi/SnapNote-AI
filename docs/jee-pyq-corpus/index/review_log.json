@@ -75,6 +75,18 @@
    "chapter": "Laws of Motion",
    "reason": "movable-pulley rigging ambiguous from the figure description; constraint relations unresolvable; NEEDS_SOURCE_REVIEW",
    "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan22-s2-q30",
+   "chapter": "Work, Energy and Power",
+   "reason": "C-side angular placement ambiguous from the figure description; KE ratio unresolvable",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan23-s1-q47",
+   "chapter": "Work, Energy and Power",
+   "reason": "plane constraint x+y=10 contradicts endpoints (0,0)-(4,2); straight-path recomputation ~35 vs mirror 152",
+   "date": "2026-10-06"
   }
  ]
 }
