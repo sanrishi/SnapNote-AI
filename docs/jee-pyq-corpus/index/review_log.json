@@ -189,6 +189,12 @@
    "chapter": "GOC",
    "reason": "nitrobenzoic pi-count 6 vs mirror 5 (NO2 convention ambiguity)",
    "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q89",
+   "chapter": "Oxygen Compounds",
+   "reason": "OH count 1 vs mirror 0 (Grignard acid-base: product retains phenolic OH)",
+   "date": "2026-10-06"
   }
  ]
 }
