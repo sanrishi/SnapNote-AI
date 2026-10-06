@@ -1,0 +1,560 @@
+[
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s1-phy-049",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; lens error propagation form. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 49,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Focal-length error formula.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "d225bdd4ec23842c",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s1-phy-050",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; potentiometer internal resistance 2.5 ohm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 50,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Battery internal resistance.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "110cbb86f868ce48",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-031",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; forward-bias AC+DC circuit for dynamic resistance. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 31,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Correct biasing for dynamic resistance.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "cdf7c6e8c2966897",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s2-phy-036",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; MSD 2 mm from LC relation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 36,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Main-scale division from least count.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "095154d1f410d017",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-phy-041",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; screw-gauge diameter 1.42 mm: x = 71. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 41,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Wire diameter from screw gauge.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "bf8e21c3335a1390",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s2-phy-040",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 1 cm holds 20 MSD of 0.5 mm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 40,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Scale divisions per centimetre.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "8c2777e9643b566a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s2-phy-050",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; travelling-microscope slab index ~1.42. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 50,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Glass-slab index from microscope readings.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "5b99c424411f28fe",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-phy-048",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; graphical Y error 2%. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 48,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Young-modulus percentage error.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "9588f9b71a54c60d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-phy-049",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; vernier sphere density 2 g/cc. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 49,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Sphere density from vernier diameter.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "e86d3d25e7e99fe2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s2-phy-049",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; zero-corrected screw reading 4.65 mm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 49,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Wire diameter with zero error.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "80dc027670d86df3",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr09-s1-phy-049",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (9 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; retrograde least count m/(n+1). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 49,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Least count of a retrograde vernier.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "4d9a848b8278bdb5",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s1-phy-049",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (1 Feb 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 10:11 vernier least count MSD/10. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 49,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Least count from coincidence ratio.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "cfdb135131805584",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s2-phy-050",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (1 Feb 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; shunt shifts balance by 22.5 cm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 50,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Metre-bridge balance shift on shunting.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "67b2fa55a02c4fac",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan27-s1-phy-050",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (27 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; bridge resistivity R = 66 (x 1e-7). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 50,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Wire resistivity from a metre bridge.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-27-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 27 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "00a114f79eb0e0d3",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-phy-059",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "Numerical; Newton-form focal length from (20,20): 20 cm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 59,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Lens focal length from y-x data.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (xy = f^2).",
+  "content_fingerprint": "1915adf7547b85fe",
+  "difficulty": null,
+  "answer_key": "20",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr04-s2-phy-026",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (4 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; microscope least count 0.002 cm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 26,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Travelling-microscope least count.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 4 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "e5171071720fd446",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-phy-030",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "MCQ; viscosity-experiment facts: A, C, D true; B, E false. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 30,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "True statements on a viscosity experiment.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending.",
+  "content_fingerprint": "b752b6608a5d4448",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-phy-047",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Experimental Skills",
+  "concept_ids": [
+   "jee-physics-experimental-skills-chapter"
+  ],
+  "concept_mapping_note": "Numerical; area fractional error 3/100: x = 3. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 47,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Maximum area error from screw gauge.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Experimental Skills is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "882448bc76ebdd08",
+  "difficulty": null,
+  "answer_key": "3",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ }
+]
