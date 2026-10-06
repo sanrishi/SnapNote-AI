@@ -213,6 +213,12 @@
    "chapter": "Redox",
    "reason": "recomputation gives 8 H+ vs mirror 4",
    "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q81",
+   "chapter": "Chemical Bonding",
+   "reason": "fractional-charge form unresolvable (1.2e-10 vs x1e-1 form)",
+   "date": "2026-10-06"
   }
  ]
 }
