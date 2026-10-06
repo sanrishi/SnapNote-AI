@@ -131,6 +131,19 @@
     "cand-jeeprep-main-2024-2024-feb-1-shift-2-q3",
     "cand-jeeprep-main-2024-2024-jan-31-shift-2-q24"
    ]
+  },
+  {
+   "batch": 10,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 40,
+   "verified": 39,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Vector Algebra HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14"
+   ]
   }
  ],
  "cumulative": {
@@ -383,6 +396,12 @@
    "reason": "recompute gives 56/3 for 12(a^2+b^2) versus mirror-claimed 36; range-model mismatch, needs source review",
    "date": "2026-10-06",
    "scope": "Complex Numbers and Quadratic Equations HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14",
+   "reason": "queue item self-flags destroyed stem images with unreliable recovered numerics; needs another copy of the paper",
+   "date": "2026-10-06",
+   "scope": "Vector Algebra HIGH_CONFIDENCE sweep"
   }
  ]
 }
