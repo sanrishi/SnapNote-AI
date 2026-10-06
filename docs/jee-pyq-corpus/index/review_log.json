@@ -117,6 +117,48 @@
    "chapter": "Chemical Kinetics",
    "reason": "graph-reading rate constant unconfirmable from approximate figure values (range spans mirror answer)",
    "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q27",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "matrix-equation locus ambiguity",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q26",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "QR-slope family underdetermined as transcribed",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q27",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "b^2 form mismatch: 3\u221a3 vs (l/m)(1+\u221an)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q27",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "hyperbola data inconsistent: directrix vs LR vs tangent",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-2-q11",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "foci-distance phrasing underdetermined as transcribed",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q12",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "A/B pair ambiguous among 4 intersections",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q27",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "LR-angle form mismatch (see review notes)",
+   "date": "2026-10-06"
   }
  ]
 }
