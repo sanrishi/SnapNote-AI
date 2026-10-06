@@ -111,6 +111,12 @@
    "chapter": "Integral Calculus",
    "reason": "recomputation gives alpha + 2 beta = 14 vs mirror 16",
    "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-2-q71",
+   "chapter": "Chemical Kinetics",
+   "reason": "graph-reading rate constant unconfirmable from approximate figure values (range spans mirror answer)",
+   "date": "2026-10-06"
   }
  ]
 }

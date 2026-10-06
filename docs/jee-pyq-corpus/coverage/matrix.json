@@ -143,6 +143,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (4 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s1-che-085"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (4 Apr 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -435,6 +448,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr04-s2-phy-048",
     "pyq-jee-main-2024-apr04-s2-phy-051"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (4 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-che-085"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -744,6 +770,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr05-s1-phy-048",
     "pyq-jee-main-2024-apr05-s1-phy-059"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (5 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s1-che-085"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1066,6 +1105,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (5 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s2-che-085"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (5 Apr 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -1369,6 +1421,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr06-s1-phy-048",
     "pyq-jee-main-2024-apr06-s1-phy-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (6 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-che-085"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1699,6 +1764,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (6 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s2-che-085"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (6 Apr 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -2011,6 +2089,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-che-085"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Coordination Compounds",
    "verified_questions": 3,
    "verified_ids": [
@@ -2299,6 +2390,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr08-s2-phy-047",
     "pyq-jee-main-2024-apr08-s2-phy-048"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (8 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s2-che-065"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2619,6 +2723,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (9 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s1-che-086"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (9 Apr 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -2903,6 +3020,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (9 Apr 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-che-085"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (9 Apr 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -3164,6 +3294,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-feb01-s1-phy-047",
     "pyq-jee-main-2024-feb01-s1-phy-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (1 Feb 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s1-che-086"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -3469,6 +3612,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (1 Feb 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s2-che-086"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (1 Feb 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -3746,6 +3902,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-jan27-s1-phy-047",
     "pyq-jee-main-2024-jan27-s1-phy-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (27 Jan 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan27-s1-che-087"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -4052,6 +4221,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-che-087"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Coordination Compounds",
    "verified_questions": 2,
    "verified_ids": [
@@ -4312,6 +4494,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-jan30-s1-phy-047",
     "pyq-jee-main-2024-jan30-s1-phy-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (30 Jan 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s1-che-087"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -4617,6 +4812,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (30 Jan 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-che-085"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (30 Jan 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -4911,6 +5119,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (31 Jan 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s1-che-065"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (31 Jan 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -5182,6 +5403,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (31 Jan 2024)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-che-085"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (31 Jan 2024)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -5437,6 +5671,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (2 Apr 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr02-s1-che-072"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (2 Apr 2025)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -5651,6 +5898,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr02-s2-phy-038",
     "pyq-jee-main-2025-apr02-s2-phy-040"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (2 Apr 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr02-s2-che-056"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -5932,6 +6192,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (3 Apr 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-che-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (3 Apr 2025)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -6124,6 +6397,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr03-s2-phy-044",
     "pyq-jee-main-2025-apr03-s2-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (3 Apr 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-che-057"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -6368,6 +6654,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr04-s2-phy-042"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (4 Apr 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s2-che-054",
+    "pyq-jee-main-2025-apr04-s2-che-055"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -6647,6 +6947,20 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (7 Apr 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-che-056",
+    "pyq-jee-main-2025-apr07-s1-che-057"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (7 Apr 2025)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -6839,6 +7153,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr07-s2-phy-044"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (7 Apr 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s2-che-057"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -7130,6 +7457,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (8 Apr 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-che-054"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (8 Apr 2025)",
    "chapter": "Coordination Compounds",
    "verified_questions": 3,
    "verified_ids": [
@@ -7306,6 +7646,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-jan22-s1-phy-004",
     "pyq-jee-main-2025-jan22-s1-phy-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (22 Jan 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan22-s2-che-057"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -7542,6 +7895,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-che-073"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -7704,6 +8070,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan23-s2-phy-044"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (23 Jan 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s2-che-057"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -8076,6 +8455,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (24 Jan 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s2-che-057",
+    "pyq-jee-main-2025-jan24-s2-che-072"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (24 Jan 2025)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 2,
    "verified_ids": [
@@ -8309,6 +8702,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (28 Jan 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-che-057"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (28 Jan 2025)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -8474,6 +8880,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan28-s2-phy-043"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (28 Jan 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s2-che-056",
+    "pyq-jee-main-2025-jan28-s2-che-057"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -8720,7 +9140,7 @@
   }
  ],
  "totals": {
-  "verified_records": 971,
+  "verified_records": 1007,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -8728,7 +9148,7 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 971,
+  "verified_records": 1007,
   "external_candidates_quarantined": 703,
   "review_batches": 4,
   "queue_cumulative": {
@@ -8740,6 +9160,7 @@
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
   "verification_rate_reviewed": 0.98,
   "concept_distribution": {
+   "jee-chemistry-chemical-kinetics-chapter": 36,
    "jee-chemistry-chemical-thermodynamics-chapter": 37,
    "jee-chemistry-coordination-compounds-chapter": 48,
    "jee-mathematics-integral-calculas-chapter": 60,
