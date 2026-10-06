@@ -51,6 +51,20 @@
    "ambiguous": 0,
    "scope": "jan23-s2-q29 symbolic disc-power question",
    "note": "Options recovered from the same mirror article HTML (A 8MR^2 / B 60MR^2 / C 72MR^2 / D 108MR^2); letter B matches independent recomputation; cross-checked against an independent coaching mirror with identical options."
+  },
+  {
+   "batch": 5,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 48,
+   "verified": 46,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Three Dimensional Geometry HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14"
+   ]
   }
  ],
  "cumulative": {
@@ -133,7 +147,7 @@
   {
    "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q27",
    "chapter": "Co-ordinate Geometry",
-   "reason": "b^2 form mismatch: 3\u221a3 vs (l/m)(1+\u221an)",
+   "reason": "b^2 form mismatch: 3√3 vs (l/m)(1+√n)",
    "date": "2026-10-06"
   },
   {
@@ -219,6 +233,18 @@
    "chapter": "Chemical Bonding",
    "reason": "fractional-charge form unresolvable (1.2e-10 vs x1e-1 form)",
    "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
+   "reason": "transcribed stem ends at 'then :' with the asked m/n expression and options missing; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Three Dimensional Geometry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14",
+   "reason": "transcribed stem ends at 'among the statements (S1) and (S2),' with the asked judgment and options missing; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Three Dimensional Geometry HIGH_CONFIDENCE sweep"
   }
  ]
 }
