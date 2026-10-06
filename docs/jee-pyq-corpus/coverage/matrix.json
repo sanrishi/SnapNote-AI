@@ -505,6 +505,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (4 Apr 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s1-mat-001",
+    "pyq-jee-main-2024-apr04-s1-mat-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (4 Apr 2024)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 2,
    "verified_ids": [
@@ -916,6 +930,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr04-s2-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (4 Apr 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-mat-001",
+    "pyq-jee-main-2024-apr04-s2-mat-021"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1354,6 +1382,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr05-s1-phy-035"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (5 Apr 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s1-mat-001",
+    "pyq-jee-main-2024-apr05-s1-mat-021"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2719,6 +2761,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (6 Apr 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s2-mat-001",
+    "pyq-jee-main-2024-apr06-s2-mat-002"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (6 Apr 2024)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 2,
    "verified_ids": [
@@ -4010,6 +4066,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (9 Apr 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s1-mat-001",
+    "pyq-jee-main-2024-apr09-s1-mat-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (9 Apr 2024)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -4408,6 +4478,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr09-s2-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (9 Apr 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-mat-021"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -4845,6 +4928,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (1 Feb 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s1-mat-014",
+    "pyq-jee-main-2024-feb01-s1-mat-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (1 Feb 2024)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 3,
    "verified_ids": [
@@ -5269,6 +5366,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (1 Feb 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s2-mat-001"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (1 Feb 2024)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -5669,6 +5779,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan27-s1-phy-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (27 Jan 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan27-s1-mat-001",
+    "pyq-jee-main-2024-jan27-s1-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -6508,6 +6632,21 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (30 Jan 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s1-mat-001",
+    "pyq-jee-main-2024-jan30-s1-mat-021",
+    "pyq-jee-main-2024-jan30-s1-mat-029"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (30 Jan 2024)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -6899,6 +7038,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan30-s2-phy-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (30 Jan 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-mat-021"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -7311,6 +7463,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (31 Jan 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s1-mat-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (31 Jan 2024)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 3,
    "verified_ids": [
@@ -7681,6 +7846,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan31-s2-phy-051"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (31 Jan 2024)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-mat-001",
+    "pyq-jee-main-2024-jan31-s2-mat-021"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -8064,6 +8243,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (2 Apr 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr02-s1-mat-012"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (2 Apr 2025)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 2,
    "verified_ids": [
@@ -8436,6 +8628,20 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr02-s2-phy-028",
     "pyq-jee-main-2025-apr02-s2-phy-046"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (2 Apr 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr02-s2-mat-001",
+    "pyq-jee-main-2025-apr02-s2-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -9200,6 +9406,19 @@
    "exam": "JEE Main",
    "year": 2025,
    "session": "April 2025",
+   "shift": "Shift 1 (4 Apr 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s1-mat-001"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
    "shift": "Shift 2 (4 Apr 2025)",
    "chapter": "Atoms and Nuclei",
    "verified_questions": 1,
@@ -9528,6 +9747,20 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (4 Apr 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s2-mat-001",
+    "pyq-jee-main-2025-apr04-s2-mat-002"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (4 Apr 2025)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 3,
    "verified_ids": [
@@ -9845,6 +10078,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr07-s1-phy-029",
     "pyq-jee-main-2025-apr07-s1-phy-046"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (7 Apr 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-mat-024"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -10285,6 +10531,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (7 Apr 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s2-mat-002"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (7 Apr 2025)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -10560,6 +10819,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (8 Apr 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-mat-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (8 Apr 2025)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 2,
    "verified_ids": [
@@ -10663,6 +10935,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-jan22-s1-phy-004",
     "pyq-jee-main-2025-jan22-s1-phy-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (22 Jan 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan22-s1-mat-001"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -10920,6 +11205,20 @@
    "verified_ids": [
     "pyq-jee-main-2025-jan22-s2-phy-028",
     "pyq-jee-main-2025-jan22-s2-phy-046"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (22 Jan 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan22-s2-mat-001",
+    "pyq-jee-main-2025-jan22-s2-mat-025"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -11213,6 +11512,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan23-s1-phy-034"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -11525,6 +11837,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan23-s2-phy-029"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (23 Jan 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s2-mat-001",
+    "pyq-jee-main-2025-jan23-s2-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -12138,6 +12464,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-jan24-s2-phy-028",
     "pyq-jee-main-2025-jan24-s2-phy-030"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (24 Jan 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s2-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -12803,6 +13142,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (28 Jan 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s2-mat-002"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (28 Jan 2025)",
    "chapter": "Some Basic Principles of Organic Chemistry",
    "verified_questions": 3,
    "verified_ids": [
@@ -12869,7 +13221,7 @@
   }
  ],
  "totals": {
-  "verified_records": 1520,
+  "verified_records": 1560,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -12877,9 +13229,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 1520,
+  "verified_records": 1560,
   "external_candidates_quarantined": 703,
-  "review_batches": 6,
+  "review_batches": 7,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -12902,6 +13254,7 @@
    "jee-mathematics-integral-calculas-chapter": 60,
    "jee-mathematics-limit-continuity-and-differentiability-chapter": 66,
    "jee-mathematics-matrices-and-determinants-chapter": 48,
+   "jee-mathematics-sets-relations-and-functions-chapter": 40,
    "jee-mathematics-three-dimensional-geometry-chapter": 46,
    "jee-physics-atoms-and-nuclei-chapter": 45,
    "jee-physics-current-electricity-chapter": 15,

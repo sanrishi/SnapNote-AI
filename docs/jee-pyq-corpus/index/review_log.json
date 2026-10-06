@@ -84,6 +84,20 @@
    "duplicate_skips": {
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q10": "misqueued Mathematics coordinate-geometry item; already verified as pyq-jee-main-2025-jan22-s1-mat-010 in the coordinate-geometry shard"
    }
+  },
+  {
+   "batch": 7,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 42,
+   "verified": 40,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Sets, Relations and Functions HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q1",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1"
+   ]
   }
  ],
  "cumulative": {
@@ -288,6 +302,18 @@
    "reason": "stem unrecoverable (queue-flagged corrupted PDF page in both languages); mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q1",
+   "reason": "stem ends at 'among the statements (S1) and (S2)' with the asked judgment and options missing; underlying facts verified (count 16 not 18; S2 characterization holds) but option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "Sets, Relations and Functions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1",
+   "reason": "stem missing (queue-flagged corrupted page-1 PDF in both languages); mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Sets, Relations and Functions HIGH_CONFIDENCE sweep"
   }
  ]
 }
