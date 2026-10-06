@@ -143,6 +143,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (4 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s1-phy-043",
+    "pyq-jee-main-2024-apr04-s1-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (4 Apr 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -203,6 +217,20 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr04-s2-phy-042",
     "pyq-jee-main-2024-apr04-s2-phy-055"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (4 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-phy-044",
+    "pyq-jee-main-2024-apr04-s2-phy-053"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -281,6 +309,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (5 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s1-phy-044",
+    "pyq-jee-main-2024-apr05-s1-phy-057"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (5 Apr 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -341,6 +383,20 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr05-s2-phy-042",
     "pyq-jee-main-2024-apr05-s2-phy-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (5 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s2-phy-041",
+    "pyq-jee-main-2024-apr05-s2-phy-059"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -420,6 +476,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (6 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-phy-044",
+    "pyq-jee-main-2024-apr06-s1-phy-055"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (6 Apr 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 1,
    "verified_ids": [
@@ -479,6 +549,20 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr06-s2-phy-043",
     "pyq-jee-main-2024-apr06-s2-phy-053"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (6 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s2-phy-044",
+    "pyq-jee-main-2024-apr06-s2-phy-059"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -557,6 +641,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-phy-050",
+    "pyq-jee-main-2024-apr08-s1-phy-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -625,6 +723,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (8 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s2-phy-043",
+    "pyq-jee-main-2024-apr08-s2-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (8 Apr 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -671,6 +783,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr08-s2-phy-035"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (9 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s1-phy-043",
+    "pyq-jee-main-2024-apr09-s1-phy-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -736,6 +862,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (9 Apr 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-phy-045",
+    "pyq-jee-main-2024-apr09-s2-phy-053"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (9 Apr 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -791,6 +931,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (1 Feb 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s1-phy-043",
+    "pyq-jee-main-2024-feb01-s1-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (1 Feb 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -837,6 +991,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-feb01-s1-phy-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (1 Feb 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s2-phy-043",
+    "pyq-jee-main-2024-feb01-s2-phy-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -902,6 +1070,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (27 Jan 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan27-s1-phy-043",
+    "pyq-jee-main-2024-jan27-s1-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (27 Jan 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -957,6 +1139,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-phy-043",
+    "pyq-jee-main-2024-jan29-s1-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -1003,6 +1199,21 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan29-s1-phy-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (30 Jan 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s1-phy-043",
+    "pyq-jee-main-2024-jan30-s1-phy-050",
+    "pyq-jee-main-2024-jan30-s1-phy-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1068,6 +1279,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (30 Jan 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-phy-043",
+    "pyq-jee-main-2024-jan30-s2-phy-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (30 Jan 2024)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -1112,6 +1337,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan30-s2-phy-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (31 Jan 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s1-phy-043",
+    "pyq-jee-main-2024-jan31-s1-phy-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1166,6 +1405,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan31-s1-phy-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (31 Jan 2024)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-phy-043",
+    "pyq-jee-main-2024-jan31-s2-phy-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1289,6 +1542,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (2 Apr 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr02-s2-phy-043"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (2 Apr 2025)",
    "chapter": "Electrostatics",
    "verified_questions": 3,
    "verified_ids": [
@@ -1401,6 +1667,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (3 Apr 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-phy-037"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (3 Apr 2025)",
    "chapter": "Electrostatics",
    "verified_questions": 1,
    "verified_ids": [
@@ -1457,6 +1736,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (4 Apr 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s2-phy-048"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (4 Apr 2025)",
    "chapter": "Electrostatics",
    "verified_questions": 2,
    "verified_ids": [
@@ -1491,6 +1783,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr04-s2-phy-028",
     "pyq-jee-main-2025-apr04-s2-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (7 Apr 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-phy-049"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1535,6 +1840,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr07-s1-phy-029",
     "pyq-jee-main-2025-apr07-s1-phy-046"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (7 Apr 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s2-phy-048"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1658,6 +1976,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (22 Jan 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan22-s2-phy-038"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (22 Jan 2025)",
    "chapter": "Electrostatics",
    "verified_questions": 1,
    "verified_ids": [
@@ -1711,6 +2042,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-phy-037",
+    "pyq-jee-main-2025-jan23-s1-phy-049"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
    "chapter": "Electrostatics",
    "verified_questions": 1,
    "verified_ids": [
@@ -1742,6 +2087,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-jan23-s1-phy-040",
     "pyq-jee-main-2025-jan23-s1-phy-041"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (23 Jan 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s2-phy-049"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1905,6 +2263,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (28 Jan 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s2-phy-039",
+    "pyq-jee-main-2025-jan28-s2-phy-049"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (28 Jan 2025)",
    "chapter": "Magnetic Effects of Current and Magnetism",
    "verified_questions": 1,
    "verified_ids": [
@@ -1943,7 +2315,7 @@
   }
  ],
  "totals": {
-  "verified_records": 254,
+  "verified_records": 302,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -1951,7 +2323,7 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 254,
+  "verified_records": 302,
   "external_candidates_quarantined": 703,
   "review_batches": 4,
   "queue_cumulative": {
@@ -1964,6 +2336,7 @@
   "verification_rate_reviewed": 0.98,
   "concept_distribution": {
    "jee-physics-current-electricity-chapter": 15,
+   "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 48,
    "jee-physics-electrostatics-chapter": 57,
    "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 53,
    "jee-physics-optics-chapter": 71,
