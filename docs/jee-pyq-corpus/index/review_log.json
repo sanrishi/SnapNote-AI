@@ -195,6 +195,12 @@
    "chapter": "Oxygen Compounds",
    "reason": "OH count 1 vs mirror 0 (Grignard acid-base: product retains phenolic OH)",
    "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-2-q10",
+   "chapter": "LCD",
+   "reason": "floor-discontinuity count not re-derived to standard; re-queued",
+   "date": "2026-10-06"
   }
  ]
 }
