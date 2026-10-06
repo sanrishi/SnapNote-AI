@@ -98,6 +98,25 @@
     "cand-jeeprep-main-2025-2025-apr-8-shift-2-q1",
     "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1"
    ]
+  },
+  {
+   "batch": 8,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 42,
+   "verified": 37,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Organic Compounds Containing Halogens HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-8-shift-1-q77",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q74",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q73",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q88"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q17": "misqueued Mathematics differential-equations item; already verified as pyq-jee-main-2025-jan22-s1-mat-017 in the LCD shard"
+   }
   }
  ],
  "cumulative": {
@@ -314,6 +333,30 @@
    "reason": "stem missing (queue-flagged corrupted page-1 PDF in both languages); mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Sets, Relations and Functions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q77",
+   "reason": "stem asks for the fastest-SN2 compound but the option compounds are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q74",
+   "reason": "multi-step figure chain (bicyclobutane, Grignard-deuteration, CoF2) not closable from the text description alone; B/C identities unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q73",
+   "reason": "stem asks for the correct statement but the option statements are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q88",
+   "reason": "enantiomer-level recompute gives 6 optically active isomers versus mirror-claimed 3 (pairs-counting convention ambiguous); stays out",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
   }
  ]
 }
