@@ -68,5 +68,13 @@
   "extra_keyword_hits": 22,
   "verdict": "no expansion",
   "reason": "all 22 hits belong to other chapters (EMI motional emf, Bohr angular momentum, torque dimensions, gravitation orbits, magnetic/electric dipoles, circular-motion friction). Boundary cases (rotating table/coin/string-ball) are circular dynamics under Laws of Motion, not rigid-body rotation; forcing them in would corrupt chapter boundaries."
- }
+ },
+ "demotions": [
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q34",
+   "chapter": "Laws of Motion",
+   "reason": "movable-pulley rigging ambiguous from the figure description; constraint relations unresolvable; NEEDS_SOURCE_REVIEW",
+   "date": "2026-10-06"
+  }
+ ]
 }
