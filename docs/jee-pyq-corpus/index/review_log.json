@@ -65,6 +65,25 @@
     "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
     "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14"
    ]
+  },
+  {
+   "batch": 6,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 47,
+   "verified": 42,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "d- and f-Block Elements HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q86",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q61",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q60",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q62"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q10": "misqueued Mathematics coordinate-geometry item; already verified as pyq-jee-main-2025-jan22-s1-mat-010 in the coordinate-geometry shard"
+   }
   }
  ],
  "cumulative": {
@@ -245,6 +264,30 @@
    "reason": "transcribed stem ends at 'among the statements (S1) and (S2),' with the asked judgment and options missing; mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Three Dimensional Geometry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q86",
+   "reason": "recompute gives V(IV) d1 mu sqrt(3) ~ 2 for amphoteric V2O4, contradicting mirror-claimed 0; possible official-key controversy, stays out",
+   "date": "2026-10-06",
+   "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q61",
+   "reason": "stem asks for the incorrect ionisation-enthalpy pair but the option pairs are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q60",
+   "reason": "stem asks for the same-colour ion set but the option sets are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q62",
+   "reason": "stem unrecoverable (queue-flagged corrupted PDF page in both languages); mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
   }
  ]
 }
