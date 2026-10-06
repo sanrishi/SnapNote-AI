@@ -159,6 +159,36 @@
    "chapter": "Co-ordinate Geometry",
    "reason": "LR-angle form mismatch (see review notes)",
    "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q89",
+   "chapter": "GOC",
+   "reason": "effect-triple count 5 vs mirror 4 (structure detail in figure may change it)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q88",
+   "chapter": "GOC",
+   "reason": "monochlorination count 5 vs mirror 6 (methyl-equivalence judgment)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q90",
+   "chapter": "GOC",
+   "reason": "regio/stereo count 2 vs 4 (minor regio product unconfirmed)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-2-q74",
+   "chapter": "GOC",
+   "reason": "X structure unresolvable from description; sigma count unconfirmable",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q89",
+   "chapter": "GOC",
+   "reason": "nitrobenzoic pi-count 6 vs mirror 5 (NO2 convention ambiguity)",
+   "date": "2026-10-06"
   }
  ]
 }
