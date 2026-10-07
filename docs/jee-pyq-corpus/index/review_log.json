@@ -201,6 +201,19 @@
     "cand-jeeprep-main-2025-2025-jan-24-shift-1-q54",
     "cand-jeeprep-main-2025-2025-jan-28-shift-2-q53"
    ]
+  },
+  {
+   "batch": 14,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 38,
+   "verified": 37,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Statistics and Probability HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8"
+   ]
   }
  ],
  "cumulative": {
@@ -561,6 +574,12 @@
    "reason": "mirror carries no claimed answer and the option outcomes are absent; hypertonic-shrink analysis uncorroborated",
    "date": "2026-10-06",
    "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8",
+   "reason": "stem truncated mid-sentence with the event description lost in both languages; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Statistics and Probability HIGH_CONFIDENCE sweep"
   }
  ]
 }
