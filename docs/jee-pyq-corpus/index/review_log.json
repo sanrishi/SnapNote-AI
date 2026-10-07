@@ -346,6 +346,23 @@
    "demotions": [
     "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22"
    ]
+  },
+  {
+   "batch": 23,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 30,
+   "verified": 27,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Atomic Structure HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q52",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q52"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q1": "misqueued Mathematics fraction item; already verified in the sets-relations-functions shard"
+   }
   }
  ],
  "cumulative": {
@@ -838,6 +855,18 @@
    "reason": "stem truncated with the counted objects lost in both languages; mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Permutations and Combinations HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q52",
+   "reason": "stem asks for the incorrect Bohr statement but the option statements are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Atomic Structure HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q52",
+   "reason": "stem asks for the non-QM postulate but the option postulates are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Atomic Structure HIGH_CONFIDENCE sweep"
   }
  ]
 }
