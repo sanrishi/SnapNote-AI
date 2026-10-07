@@ -613,6 +613,17 @@
    "demotions": [
     "cand-jeeprep-main-2025-2025-apr-2-shift-1-q41"
    ]
+  },
+  {
+   "batch": 42,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 6,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Atoms NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
   }
  ],
  "cumulative": {

@@ -6097,9 +6097,10 @@
    "session": "April 2024",
    "shift": "Shift 2 (9 Apr 2024)",
    "chapter": "Atoms and Nuclei",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2024-apr09-s2-phy-035"
+    "pyq-jee-main-2024-apr09-s2-phy-035",
+    "pyq-jee-main-2024-apr09-s2-phy-037"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -10003,9 +10004,10 @@
    "session": "January 2024",
    "shift": "Shift 2 (30 Jan 2024)",
    "chapter": "Atoms and Nuclei",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2024-jan30-s2-phy-047"
+    "pyq-jee-main-2024-jan30-s2-phy-047",
+    "pyq-jee-main-2024-jan30-s2-phy-048"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -10677,8 +10679,9 @@
    "session": "January 2024",
    "shift": "Shift 1 (31 Jan 2024)",
    "chapter": "Atoms and Nuclei",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-jan31-s1-phy-047",
     "pyq-jee-main-2024-jan31-s1-phy-060"
    ],
    "source_status": "parsed",
@@ -15074,8 +15077,9 @@
    "session": "April 2025",
    "shift": "Shift 1 (7 Apr 2025)",
    "chapter": "Atoms and Nuclei",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-phy-043",
     "pyq-jee-main-2025-apr07-s1-phy-044"
    ],
    "source_status": "parsed",
@@ -16277,6 +16281,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr08-s2-che-051",
     "pyq-jee-main-2025-apr08-s2-che-072"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (8 Apr 2025)",
+   "chapter": "Atoms and Nuclei",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-phy-044"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -18583,6 +18600,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (24 Jan 2025)",
+   "chapter": "Atoms and Nuclei",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s1-phy-044"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (24 Jan 2025)",
    "chapter": "Binomial Theorem and Its Simple Applications",
    "verified_questions": 1,
    "verified_ids": [
@@ -20781,7 +20811,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2412,
+  "verified_records": 2418,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -20789,9 +20819,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2412,
+  "verified_records": 2418,
   "external_candidates_quarantined": 703,
-  "review_batches": 41,
+  "review_batches": 42,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -20834,7 +20864,7 @@
    "jee-mathematics-three-dimensional-geometry-chapter": 66,
    "jee-mathematics-trigonometry-chapter": 36,
    "jee-mathematics-vector-algebra-chapter": 53,
-   "jee-physics-atoms-and-nuclei-chapter": 45,
+   "jee-physics-atoms-and-nuclei-chapter": 51,
    "jee-physics-current-electricity-chapter": 40,
    "jee-physics-dual-nature-of-matter-and-radiation-chapter": 26,
    "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 48,
