@@ -165,6 +165,19 @@
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q18": "misqueued Mathematics integration item; already verified as pyq-jee-main-2025-jan22-s1-mat-018 in the integral-calculus shard",
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q25": "misqueued Mathematics integration item; already verified as pyq-jee-main-2025-jan22-s1-mat-025 in the integral-calculus shard"
    }
+  },
+  {
+   "batch": 12,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 39,
+   "verified": 38,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Sequence and Series HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q16"
+   ]
   }
  ],
  "cumulative": {
@@ -453,6 +466,12 @@
    "reason": "stem unrecoverable (queue-flagged corrupted pages in both languages); mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q16",
+   "reason": "stem ends at 'then :' with the asked relation and options missing; underlying P/Q sums verified but option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "Sequence and Series HIGH_CONFIDENCE sweep"
   }
  ]
 }
