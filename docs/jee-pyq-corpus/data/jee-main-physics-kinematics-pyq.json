@@ -1331,5 +1331,98 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr07-s1-phy-031",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (7 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Kinematics",
+  "concept_ids": [
+   "jee-physics-kinematics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; complementary-angle flight-time ratio. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 31,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Time ratio is sin(45+a)/sin(45-a).",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-7-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 7 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Kinematics is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "0392285d69edd78a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr08-s2-phy-030",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (8 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Kinematics",
+  "concept_ids": [
+   "jee-physics-kinematics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; height-time scaling. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 30,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Height ratio 8 gives time ratio 2√2.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-8-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 8 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Kinematics is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "cd0e55d6f960ce88",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s2-phy-029",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (24 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Kinematics",
+  "concept_ids": [
+   "jee-physics-kinematics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; parametric velocity evaluation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 29,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Velocity (20,-5); magnitude 5√17.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Kinematics is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "b9a76ddeeec4df89",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

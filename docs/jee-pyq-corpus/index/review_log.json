@@ -660,6 +660,20 @@
    "ambiguous": 0,
    "scope": "Coordination NEEDS_REVIEW recovery (2024 Apr + 2025 Apr)",
    "demotions": []
+  },
+  {
+   "batch": 46,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 5,
+   "verified": 3,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Kinematics NEEDS_REVIEW recovery (2024 Jan + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q32",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q29"
+   ]
   }
  ],
  "cumulative": {
@@ -1410,6 +1424,18 @@
    "reason": "stem asks for the affected species but the option species are absent; mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Equilibrium NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q32",
+   "reason": "stem ends before the asked quantity; options unknown",
+   "date": "2026-10-06",
+   "scope": "Kinematics NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q29",
+   "reason": "stem asks for the graph presentation but option graphs are absent",
+   "date": "2026-10-06",
+   "scope": "Kinematics NEEDS_REVIEW recovery"
   }
  ]
 }
