@@ -363,6 +363,21 @@
    "duplicate_skips": {
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q1": "misqueued Mathematics fraction item; already verified in the sets-relations-functions shard"
    }
+  },
+  {
+   "batch": 24,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 29,
+   "verified": 26,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Practical Chemistry HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q72",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-1-q87",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q58"
+   ]
   }
  ],
  "cumulative": {
@@ -867,6 +882,24 @@
    "reason": "stem asks for the non-QM postulate but the option postulates are absent; mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Atomic Structure HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q72",
+   "reason": "greenish-yellow gas fixes chloride but the option salts are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Practical Chemistry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-1-q87",
+   "reason": "green-bead salt ambiguous among listed metals (moment 6 fits Mn2+ or Fe3+); option identity unverifiable",
+   "date": "2026-10-06",
+   "scope": "Practical Chemistry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q58",
+   "reason": "yellow-ammonium-sulphide inclusion genuinely uncertain; option set unverifiable against official key",
+   "date": "2026-10-06",
+   "scope": "Practical Chemistry HIGH_CONFIDENCE sweep"
   }
  ]
 }
