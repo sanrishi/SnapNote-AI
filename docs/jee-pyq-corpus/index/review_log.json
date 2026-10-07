@@ -578,6 +578,17 @@
     "cand-jeeprep-main-2024-2024-jan-29-shift-1-q5",
     "cand-jeeprep-main-2025-2025-apr-8-shift-2-q4"
    ]
+  },
+  {
+   "batch": 39,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 14,
+   "verified": 14,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Vector NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
   }
  ],
  "cumulative": {
