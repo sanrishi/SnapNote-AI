@@ -1347,8 +1347,9 @@
    "session": "April 2024",
    "shift": "Shift 2 (4 Apr 2024)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-mat-016",
     "pyq-jee-main-2024-apr04-s2-mat-029"
    ],
    "source_status": "parsed",
@@ -3306,8 +3307,9 @@
    "session": "April 2024",
    "shift": "Shift 1 (6 Apr 2024)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-mat-017",
     "pyq-jee-main-2024-apr06-s1-mat-028"
    ],
    "source_status": "parsed",
@@ -4618,6 +4620,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr08-s1-phy-037"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (8 Apr 2024)",
+   "chapter": "Three Dimensional Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-mat-014",
+    "pyq-jee-main-2024-apr08-s1-mat-017"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -6522,8 +6538,9 @@
    "session": "April 2024",
    "shift": "Shift 2 (9 Apr 2024)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-mat-016",
     "pyq-jee-main-2024-apr09-s2-mat-029"
    ],
    "source_status": "parsed",
@@ -9103,8 +9120,9 @@
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-mat-016",
     "pyq-jee-main-2024-jan29-s1-mat-029"
    ],
    "source_status": "parsed",
@@ -10403,8 +10421,9 @@
    "session": "January 2024",
    "shift": "Shift 2 (30 Jan 2024)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-mat-017",
     "pyq-jee-main-2024-jan30-s2-mat-029"
    ],
    "source_status": "parsed",
@@ -11549,8 +11568,10 @@
    "session": "January 2024",
    "shift": "Shift 2 (31 Jan 2024)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 3,
    "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-mat-016",
+    "pyq-jee-main-2024-jan31-s2-mat-017",
     "pyq-jee-main-2024-jan31-s2-mat-029"
    ],
    "source_status": "parsed",
@@ -13261,6 +13282,20 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (3 Apr 2025)",
+   "chapter": "Three Dimensional Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-mat-014",
+    "pyq-jee-main-2025-apr03-s1-mat-015"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (3 Apr 2025)",
    "chapter": "Trigonometry",
    "verified_questions": 1,
    "verified_ids": [
@@ -13791,6 +13826,20 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (3 Apr 2025)",
+   "chapter": "Three Dimensional Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-mat-014",
+    "pyq-jee-main-2025-apr03-s2-mat-015"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (3 Apr 2025)",
    "chapter": "Units and Measurements",
    "verified_questions": 2,
    "verified_ids": [
@@ -13975,6 +14024,20 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr04-s1-mat-008",
     "pyq-jee-main-2025-apr04-s1-mat-009"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (4 Apr 2025)",
+   "chapter": "Three Dimensional Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s1-mat-014",
+    "pyq-jee-main-2025-apr04-s1-mat-015"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -15090,9 +15153,10 @@
    "session": "April 2025",
    "shift": "Shift 1 (7 Apr 2025)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2025-apr07-s1-mat-013"
+    "pyq-jee-main-2025-apr07-s1-mat-013",
+    "pyq-jee-main-2025-apr07-s1-mat-014"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -16185,8 +16249,9 @@
    "session": "April 2025",
    "shift": "Shift 2 (8 Apr 2025)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-mat-015",
     "pyq-jee-main-2025-apr08-s2-mat-024"
    ],
    "source_status": "parsed",
@@ -17342,6 +17407,19 @@
    "exam": "JEE Main",
    "year": 2025,
    "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Three Dimensional Geometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-mat-015"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
    "shift": "Shift 2 (23 Jan 2025)",
    "chapter": "Atomic Structure",
    "verified_questions": 1,
@@ -18355,9 +18433,10 @@
    "session": "January 2025",
    "shift": "Shift 1 (24 Jan 2025)",
    "chapter": "Three Dimensional Geometry",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2025-jan24-s1-mat-014"
+    "pyq-jee-main-2025-jan24-s1-mat-014",
+    "pyq-jee-main-2025-jan24-s1-mat-015"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -19419,6 +19498,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (28 Jan 2025)",
+   "chapter": "Three Dimensional Geometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-mat-015"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (28 Jan 2025)",
    "chapter": "Trigonometry",
    "verified_questions": 1,
    "verified_ids": [
@@ -20088,7 +20180,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2307,
+  "verified_records": 2327,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -20096,9 +20188,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2307,
+  "verified_records": 2327,
   "external_candidates_quarantined": 703,
-  "review_batches": 34,
+  "review_batches": 35,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -20138,7 +20230,7 @@
    "jee-mathematics-sequence-and-series-chapter": 38,
    "jee-mathematics-sets-relations-and-functions-chapter": 57,
    "jee-mathematics-statistics-and-probability-chapter": 61,
-   "jee-mathematics-three-dimensional-geometry-chapter": 46,
+   "jee-mathematics-three-dimensional-geometry-chapter": 66,
    "jee-mathematics-trigonometry-chapter": 23,
    "jee-mathematics-vector-algebra-chapter": 39,
    "jee-physics-atoms-and-nuclei-chapter": 45,
