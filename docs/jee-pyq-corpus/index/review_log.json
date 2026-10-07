@@ -698,6 +698,27 @@
    "demotions": [
     "cand-jeeprep-main-2024-2024-jan-30-shift-2-q5"
    ]
+  },
+  {
+   "batch": 49,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 75,
+   "verified": 66,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Bulk scattered NEEDS_REVIEW recovery (29 chapters, 2024-2025)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-8-shift-1-q80",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q57",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q54",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q65",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q64",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q55",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q73",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q36",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-1-q29"
+   ]
   }
  ],
  "cumulative": {
@@ -1466,6 +1487,60 @@
    "reason": "consecutive-coefficient premises inconsistent; no mirror answer",
    "date": "2026-10-06",
    "scope": "Binomial NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q80",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q57",
+   "reason": "initial pressure absent and option values unseen",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q54",
+   "reason": "stem asks for the expression but the option expressions are absent",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q65",
+   "reason": "retrosynthesis underdetermined without option structures",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q64",
+   "reason": "stem asks for the top solution but the option solutions are absent",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q55",
+   "reason": "stem asks for the relation but the option relations are absent",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q73",
+   "reason": "compound unspecified in the transcription",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q36",
+   "reason": "side-length reference underdetermined as transcribed",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-1-q29",
+   "reason": "two equations with three unknowns; underdetermined",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
   }
  ]
 }
