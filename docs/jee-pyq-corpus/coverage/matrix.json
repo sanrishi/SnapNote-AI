@@ -461,6 +461,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (4 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s1-che-090"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (4 Apr 2024)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 3,
    "verified_ids": [
@@ -939,6 +952,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (4 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-che-087",
+    "pyq-jee-main-2024-apr04-s2-che-090"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (4 Apr 2024)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 2,
    "verified_ids": [
@@ -1406,6 +1433,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr05-s1-che-088"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (5 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s1-che-090"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1925,6 +1965,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (5 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr05-s2-che-090"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (5 Apr 2024)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 3,
    "verified_ids": [
@@ -2404,6 +2457,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr06-s1-che-076"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (6 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-che-090"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2906,6 +2972,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (6 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s2-che-090"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (6 Apr 2024)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 3,
    "verified_ids": [
@@ -3359,6 +3438,20 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr08-s1-phy-043",
     "pyq-jee-main-2024-apr08-s1-phy-059"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (8 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-che-087",
+    "pyq-jee-main-2024-apr08-s1-che-090"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -3834,6 +3927,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (8 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s2-che-079"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (8 Apr 2024)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 3,
    "verified_ids": [
@@ -4294,6 +4400,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-apr09-s1-che-073"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (9 Apr 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s1-che-078"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -5221,6 +5340,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (1 Feb 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s1-che-072"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (1 Feb 2024)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 2,
    "verified_ids": [
@@ -5693,6 +5825,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-feb01-s2-che-076",
     "pyq-jee-main-2024-feb01-s2-che-078"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (1 Feb 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s2-che-089"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -7060,6 +7205,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (30 Jan 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s1-che-080"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (30 Jan 2024)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 3,
    "verified_ids": [
@@ -7520,6 +7678,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan30-s2-che-075"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (30 Jan 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-che-079"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -8380,6 +8551,21 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (31 Jan 2024)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-che-079",
+    "pyq-jee-main-2024-jan31-s2-che-080",
+    "pyq-jee-main-2024-jan31-s2-che-088"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (31 Jan 2024)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 1,
    "verified_ids": [
@@ -8798,6 +8984,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr02-s1-che-066"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (2 Apr 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr02-s1-che-069"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -9242,6 +9441,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (2 Apr 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr02-s2-che-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (2 Apr 2025)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 1,
    "verified_ids": [
@@ -9591,6 +9803,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (3 Apr 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-che-066"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (3 Apr 2025)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 2,
    "verified_ids": [
@@ -9919,6 +10144,19 @@
     "pyq-jee-main-2025-apr03-s2-phy-042",
     "pyq-jee-main-2025-apr03-s2-phy-043",
     "pyq-jee-main-2025-apr03-s2-phy-049"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (3 Apr 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-che-074"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -10431,6 +10669,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (4 Apr 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s2-che-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (4 Apr 2025)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 2,
    "verified_ids": [
@@ -10800,6 +11051,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr07-s1-che-065"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (7 Apr 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-che-069"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -11282,6 +11546,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (7 Apr 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s2-che-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (7 Apr 2025)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 2,
    "verified_ids": [
@@ -11596,6 +11873,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr08-s2-che-066"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (8 Apr 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-che-069"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -12071,6 +12361,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (22 Jan 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan22-s2-che-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (22 Jan 2025)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 1,
    "verified_ids": [
@@ -12445,6 +12748,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-che-068",
+    "pyq-jee-main-2025-jan23-s1-che-074"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 2,
    "verified_ids": [
@@ -12747,6 +13064,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan23-s2-che-067"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (23 Jan 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s2-che-075"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -13757,6 +14087,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (28 Jan 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-che-075"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (28 Jan 2025)",
    "chapter": "Organic Compounds Containing Oxygen",
    "verified_questions": 1,
    "verified_ids": [
@@ -14174,6 +14517,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (28 Jan 2025)",
+   "chapter": "Organic Compounds Containing Nitrogen",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s2-che-066",
+    "pyq-jee-main-2025-jan28-s2-che-068"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (28 Jan 2025)",
    "chapter": "Oscillations and Waves",
    "verified_questions": 1,
    "verified_ids": [
@@ -14320,7 +14677,7 @@
   }
  ],
  "totals": {
-  "verified_records": 1675,
+  "verified_records": 1708,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -14328,9 +14685,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 1675,
+  "verified_records": 1708,
   "external_candidates_quarantined": 703,
-  "review_batches": 10,
+  "review_batches": 11,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -14347,6 +14704,7 @@
    "jee-chemistry-d-and-f-block-elements-chapter": 42,
    "jee-chemistry-equilibrium-chapter": 29,
    "jee-chemistry-organic-compounds-containing-halogens-chapter": 37,
+   "jee-chemistry-organic-compounds-containing-nitrogen-chapter": 33,
    "jee-chemistry-organic-compounds-containing-oxygen-chapter": 69,
    "jee-chemistry-redox-reactions-and-electrochemistry-chapter": 47,
    "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter": 73,

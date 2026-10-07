@@ -144,6 +144,27 @@
    "demotions": [
     "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14"
    ]
+  },
+  {
+   "batch": 11,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 40,
+   "verified": 33,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Organic Compounds Containing Nitrogen HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q80",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q69",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-2-q69",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-2-q69",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q68"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q18": "misqueued Mathematics integration item; already verified as pyq-jee-main-2025-jan22-s1-mat-018 in the integral-calculus shard",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q25": "misqueued Mathematics integration item; already verified as pyq-jee-main-2025-jan22-s1-mat-025 in the integral-calculus shard"
+   }
   }
  ],
  "cumulative": {
@@ -402,6 +423,36 @@
    "reason": "queue item self-flags destroyed stem images with unreliable recovered numerics; needs another copy of the paper",
    "date": "2026-10-06",
    "scope": "Vector Algebra HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q80",
+   "reason": "stem asks for the excluded arenium ion but the option structures are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q69",
+   "reason": "stem asks for the incorrect diazonium conversion but the option conversions are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-2-q69",
+   "reason": "stem asks for the tribromoaniline sequence but the option sequences are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q69",
+   "reason": "stem asks for the ortho-bromoaniline reagent set but the option sets are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q68",
+   "reason": "stem unrecoverable (queue-flagged corrupted pages in both languages); mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
   }
  ]
 }
