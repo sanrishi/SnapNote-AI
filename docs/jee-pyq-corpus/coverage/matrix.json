@@ -914,6 +914,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 2 (4 Apr 2024)",
+   "chapter": "Coordination Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-che-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (4 Apr 2024)",
    "chapter": "Current Electricity",
    "verified_questions": 2,
    "verified_ids": [
@@ -12671,9 +12684,10 @@
    "session": "April 2025",
    "shift": "Shift 2 (2 Apr 2025)",
    "chapter": "Coordination Compounds",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2025-apr02-s2-che-060"
+    "pyq-jee-main-2025-apr02-s2-che-060",
+    "pyq-jee-main-2025-apr02-s2-che-061"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -13256,6 +13270,20 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr03-s1-mat-003",
     "pyq-jee-main-2025-apr03-s1-mat-004"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (3 Apr 2025)",
+   "chapter": "Coordination Compounds",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-che-063",
+    "pyq-jee-main-2025-apr03-s1-che-072"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -15217,8 +15245,9 @@
    "session": "April 2025",
    "shift": "Shift 1 (7 Apr 2025)",
    "chapter": "Coordination Compounds",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-che-062",
     "pyq-jee-main-2025-apr07-s1-che-073"
    ],
    "source_status": "parsed",
@@ -20869,7 +20898,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2428,
+  "verified_records": 2433,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -20877,9 +20906,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2428,
+  "verified_records": 2433,
   "external_candidates_quarantined": 703,
-  "review_batches": 44,
+  "review_batches": 45,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -20895,7 +20924,7 @@
    "jee-chemistry-chemical-kinetics-chapter": 36,
    "jee-chemistry-chemical-thermodynamics-chapter": 37,
    "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter": 33,
-   "jee-chemistry-coordination-compounds-chapter": 48,
+   "jee-chemistry-coordination-compounds-chapter": 53,
    "jee-chemistry-d-and-f-block-elements-chapter": 48,
    "jee-chemistry-equilibrium-chapter": 33,
    "jee-chemistry-organic-compounds-containing-halogens-chapter": 37,
