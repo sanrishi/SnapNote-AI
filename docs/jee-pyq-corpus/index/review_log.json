@@ -227,6 +227,20 @@
    "demotions": [
     "cand-jeeprep-main-2024-2024-feb-1-shift-2-q12"
    ]
+  },
+  {
+   "batch": 16,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 35,
+   "verified": 33,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "p-Block Elements HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68"
+   ]
   }
  ],
  "cumulative": {
@@ -599,6 +613,18 @@
    "reason": "transcribed conditions admit no non-zero alpha and mirror carries no claimed answer; likely dropped item",
    "date": "2026-10-06",
    "scope": "Differential Equations HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
+   "reason": "stem asks which product is not formed but the option products are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "p-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68",
+   "reason": "IE1 option order contradicts standard data (B highest, not Tl); matching unclosable; needs source review",
+   "date": "2026-10-06",
+   "scope": "p-Block Elements HIGH_CONFIDENCE sweep"
   }
  ]
 }
