@@ -884,8 +884,9 @@
    "session": "April 2024",
    "shift": "Shift 2 (4 Apr 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 2,
+   "verified_questions": 3,
    "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-mat-014",
     "pyq-jee-main-2024-apr04-s2-mat-015",
     "pyq-jee-main-2024-apr04-s2-mat-028"
    ],
@@ -1471,10 +1472,11 @@
    "session": "April 2024",
    "shift": "Shift 1 (5 Apr 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 3,
+   "verified_questions": 4,
    "verified_ids": [
     "pyq-jee-main-2024-apr05-s1-mat-013",
     "pyq-jee-main-2024-apr05-s1-mat-014",
+    "pyq-jee-main-2024-apr05-s1-mat-015",
     "pyq-jee-main-2024-apr05-s1-mat-028"
    ],
    "source_status": "parsed",
@@ -2837,8 +2839,10 @@
    "session": "April 2024",
    "shift": "Shift 1 (6 Apr 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 2,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-mat-010",
+    "pyq-jee-main-2024-apr06-s1-mat-015",
     "pyq-jee-main-2024-apr06-s1-mat-016",
     "pyq-jee-main-2024-apr06-s1-mat-026"
    ],
@@ -4120,8 +4124,11 @@
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 1,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-mat-005",
+    "pyq-jee-main-2024-apr08-s1-mat-015",
+    "pyq-jee-main-2024-apr08-s1-mat-016",
     "pyq-jee-main-2024-apr08-s1-mat-029"
    ],
    "source_status": "parsed",
@@ -5972,8 +5979,10 @@
    "session": "April 2024",
    "shift": "Shift 2 (9 Apr 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 2,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-mat-014",
+    "pyq-jee-main-2024-apr09-s2-mat-015",
     "pyq-jee-main-2024-apr09-s2-mat-027",
     "pyq-jee-main-2024-apr09-s2-mat-028"
    ],
@@ -8521,8 +8530,10 @@
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 2,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-mat-014",
+    "pyq-jee-main-2024-jan29-s1-mat-015",
     "pyq-jee-main-2024-jan29-s1-mat-027",
     "pyq-jee-main-2024-jan29-s1-mat-028"
    ],
@@ -9110,9 +9121,10 @@
    "session": "January 2024",
    "shift": "Shift 1 (30 Jan 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 2,
+   "verified_questions": 3,
    "verified_ids": [
     "pyq-jee-main-2024-jan30-s1-mat-013",
+    "pyq-jee-main-2024-jan30-s1-mat-014",
     "pyq-jee-main-2024-jan30-s1-mat-015"
    ],
    "source_status": "parsed",
@@ -9774,8 +9786,11 @@
    "session": "January 2024",
    "shift": "Shift 2 (30 Jan 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 1,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-mat-014",
+    "pyq-jee-main-2024-jan30-s2-mat-015",
+    "pyq-jee-main-2024-jan30-s2-mat-016",
     "pyq-jee-main-2024-jan30-s2-mat-028"
    ],
    "source_status": "parsed",
@@ -10385,9 +10400,11 @@
    "session": "January 2024",
    "shift": "Shift 1 (31 Jan 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 1,
+   "verified_questions": 3,
    "verified_ids": [
-    "pyq-jee-main-2024-jan31-s1-mat-013"
+    "pyq-jee-main-2024-jan31-s1-mat-013",
+    "pyq-jee-main-2024-jan31-s1-mat-014",
+    "pyq-jee-main-2024-jan31-s1-mat-028"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -10951,8 +10968,11 @@
    "session": "January 2024",
    "shift": "Shift 2 (31 Jan 2024)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 1,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-mat-010",
+    "pyq-jee-main-2024-jan31-s2-mat-014",
+    "pyq-jee-main-2024-jan31-s2-mat-015",
     "pyq-jee-main-2024-jan31-s2-mat-028"
    ],
    "source_status": "parsed",
@@ -12681,9 +12701,11 @@
    "session": "April 2025",
    "shift": "Shift 1 (3 Apr 2025)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 2,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-mat-011",
     "pyq-jee-main-2025-apr03-s1-mat-012",
+    "pyq-jee-main-2025-apr03-s1-mat-013",
     "pyq-jee-main-2025-apr03-s1-mat-023"
    ],
    "source_status": "parsed",
@@ -13161,8 +13183,10 @@
    "session": "April 2025",
    "shift": "Shift 2 (3 Apr 2025)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 2,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-mat-010",
+    "pyq-jee-main-2025-apr03-s2-mat-011",
     "pyq-jee-main-2025-apr03-s2-mat-012",
     "pyq-jee-main-2025-apr03-s2-mat-023"
    ],
@@ -13526,8 +13550,10 @@
    "session": "April 2025",
    "shift": "Shift 1 (4 Apr 2025)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 1,
+   "verified_questions": 3,
    "verified_ids": [
+    "pyq-jee-main-2025-apr04-s1-mat-010",
+    "pyq-jee-main-2025-apr04-s1-mat-011",
     "pyq-jee-main-2025-apr04-s1-mat-023"
    ],
    "source_status": "parsed",
@@ -14330,8 +14356,11 @@
    "session": "April 2025",
    "shift": "Shift 1 (7 Apr 2025)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 1,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-mat-010",
+    "pyq-jee-main-2025-apr07-s1-mat-011",
+    "pyq-jee-main-2025-apr07-s1-mat-012",
     "pyq-jee-main-2025-apr07-s1-mat-023"
    ],
    "source_status": "parsed",
@@ -15441,8 +15470,11 @@
    "session": "April 2025",
    "shift": "Shift 2 (8 Apr 2025)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 1,
+   "verified_questions": 4,
    "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-mat-010",
+    "pyq-jee-main-2025-apr08-s2-mat-011",
+    "pyq-jee-main-2025-apr08-s2-mat-012",
     "pyq-jee-main-2025-apr08-s2-mat-023"
    ],
    "source_status": "parsed",
@@ -16600,6 +16632,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-mat-009",
+    "pyq-jee-main-2025-jan23-s1-mat-012"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
    "chapter": "Complex Numbers and Quadratic Equations",
    "verified_questions": 2,
    "verified_ids": [
@@ -17559,6 +17605,21 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan24-s1-che-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (24 Jan 2025)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s1-mat-009",
+    "pyq-jee-main-2025-jan24-s1-mat-010",
+    "pyq-jee-main-2025-jan24-s1-mat-011"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -18551,8 +18612,10 @@
    "session": "January 2025",
    "shift": "Shift 1 (28 Jan 2025)",
    "chapter": "Co-ordinate Geometry",
-   "verified_questions": 1,
+   "verified_questions": 3,
    "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-mat-010",
+    "pyq-jee-main-2025-jan28-s1-mat-012",
     "pyq-jee-main-2025-jan28-s1-mat-023"
    ],
    "source_status": "parsed",
@@ -19525,7 +19588,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2164,
+  "verified_records": 2203,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -19533,9 +19596,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2164,
+  "verified_records": 2203,
   "external_candidates_quarantined": 703,
-  "review_batches": 28,
+  "review_batches": 29,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -19565,7 +19628,7 @@
    "jee-chemistry-some-basic-concepts-in-chemistry-chapter": 33,
    "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter": 73,
    "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 28,
-   "jee-mathematics-co-ordinate-geometry-chapter": 90,
+   "jee-mathematics-co-ordinate-geometry-chapter": 129,
    "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 39,
    "jee-mathematics-diffrential-equations-chapter": 34,
    "jee-mathematics-integral-calculas-chapter": 60,
