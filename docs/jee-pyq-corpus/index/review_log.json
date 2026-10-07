@@ -542,6 +542,17 @@
    "ambiguous": 0,
    "scope": "3D NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
    "demotions": []
+  },
+  {
+   "batch": 36,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 18,
+   "verified": 18,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Sequence NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
   }
  ],
  "cumulative": {
