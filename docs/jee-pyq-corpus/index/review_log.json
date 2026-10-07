@@ -241,6 +241,22 @@
     "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
     "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68"
    ]
+  },
+  {
+   "batch": 17,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 35,
+   "verified": 33,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Purification and Characterisation HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q73"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q24": "misqueued Mathematics 3D-lines item; already verified with answer 216 in the three-dimensional-geometry shard"
+   }
   }
  ],
  "cumulative": {
@@ -625,6 +641,12 @@
    "reason": "IE1 option order contradicts standard data (B highest, not Tl); matching unclosable; needs source review",
    "date": "2026-10-06",
    "scope": "p-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q73",
+   "reason": "stem asks for the correct chromatography statement but the option statements are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Purification and Characterisation HIGH_CONFIDENCE sweep"
   }
  ]
 }
