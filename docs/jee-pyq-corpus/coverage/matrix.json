@@ -900,8 +900,9 @@
    "session": "April 2024",
    "shift": "Shift 2 (4 Apr 2024)",
    "chapter": "Complex Numbers and Quadratic Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-mat-002",
     "pyq-jee-main-2024-apr04-s2-mat-022"
    ],
    "source_status": "parsed",
@@ -4161,6 +4162,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-mat-002"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Coordination Compounds",
    "verified_questions": 3,
    "verified_ids": [
@@ -6011,6 +6025,19 @@
     "pyq-jee-main-2024-apr09-s2-mat-015",
     "pyq-jee-main-2024-apr09-s2-mat-027",
     "pyq-jee-main-2024-apr09-s2-mat-028"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (9 Apr 2024)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -8601,8 +8628,9 @@
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Complex Numbers and Quadratic Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-mat-003",
     "pyq-jee-main-2024-jan29-s1-mat-021"
    ],
    "source_status": "parsed",
@@ -9863,8 +9891,9 @@
    "session": "January 2024",
    "shift": "Shift 2 (30 Jan 2024)",
    "chapter": "Complex Numbers and Quadratic Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-mat-002",
     "pyq-jee-main-2024-jan30-s2-mat-022"
    ],
    "source_status": "parsed",
@@ -10506,9 +10535,10 @@
    "session": "January 2024",
    "shift": "Shift 1 (31 Jan 2024)",
    "chapter": "Complex Numbers and Quadratic Equations",
-   "verified_questions": 3,
+   "verified_questions": 4,
    "verified_ids": [
     "pyq-jee-main-2024-jan31-s1-mat-002",
+    "pyq-jee-main-2024-jan31-s1-mat-007",
     "pyq-jee-main-2024-jan31-s1-mat-008",
     "pyq-jee-main-2024-jan31-s1-mat-022"
    ],
@@ -11081,6 +11111,19 @@
     "pyq-jee-main-2024-jan31-s2-mat-014",
     "pyq-jee-main-2024-jan31-s2-mat-015",
     "pyq-jee-main-2024-jan31-s2-mat-028"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (31 Jan 2024)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-mat-003"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -12841,6 +12884,20 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (3 Apr 2025)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-mat-003",
+    "pyq-jee-main-2025-apr03-s1-mat-004"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (3 Apr 2025)",
    "chapter": "Current Electricity",
    "verified_questions": 1,
    "verified_ids": [
@@ -13325,6 +13382,20 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (3 Apr 2025)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-mat-004",
+    "pyq-jee-main-2025-apr03-s2-mat-005"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (3 Apr 2025)",
    "chapter": "Coordination Compounds",
    "verified_questions": 1,
    "verified_ids": [
@@ -13720,8 +13791,9 @@
    "session": "April 2025",
    "shift": "Shift 1 (4 Apr 2025)",
    "chapter": "Complex Numbers and Quadratic Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2025-apr04-s1-mat-003",
     "pyq-jee-main-2025-apr04-s1-mat-021"
    ],
    "source_status": "parsed",
@@ -14556,9 +14628,10 @@
    "session": "April 2025",
    "shift": "Shift 1 (7 Apr 2025)",
    "chapter": "Complex Numbers and Quadratic Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2025-apr07-s1-mat-002"
+    "pyq-jee-main-2025-apr07-s1-mat-002",
+    "pyq-jee-main-2025-apr07-s1-mat-003"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -15697,8 +15770,10 @@
    "session": "April 2025",
    "shift": "Shift 2 (8 Apr 2025)",
    "chapter": "Complex Numbers and Quadratic Equations",
-   "verified_questions": 1,
+   "verified_questions": 3,
    "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-mat-002",
+    "pyq-jee-main-2025-apr08-s2-mat-003",
     "pyq-jee-main-2025-apr08-s2-mat-005"
    ],
    "source_status": "parsed",
@@ -17883,6 +17958,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (24 Jan 2025)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s1-mat-002",
+    "pyq-jee-main-2025-jan24-s1-mat-003"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (24 Jan 2025)",
    "chapter": "Coordination Compounds",
    "verified_questions": 1,
    "verified_ids": [
@@ -18895,6 +18984,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (28 Jan 2025)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-mat-004"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (28 Jan 2025)",
    "chapter": "Dual Nature of Matter and Radiation",
    "verified_questions": 1,
    "verified_ids": [
@@ -19885,7 +19987,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2272,
+  "verified_records": 2290,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -19893,9 +19995,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2272,
+  "verified_records": 2290,
   "external_candidates_quarantined": 703,
-  "review_batches": 32,
+  "review_batches": 33,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -19926,7 +20028,7 @@
    "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter": 73,
    "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 28,
    "jee-mathematics-co-ordinate-geometry-chapter": 129,
-   "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 39,
+   "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 57,
    "jee-mathematics-diffrential-equations-chapter": 34,
    "jee-mathematics-integral-calculas-chapter": 85,
    "jee-mathematics-limit-continuity-and-differentiability-chapter": 86,
