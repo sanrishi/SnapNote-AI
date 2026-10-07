@@ -1238,5 +1238,532 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-mat-001",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; symmetric-closure census on two relations. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Six pairs each wayward; M + N = 10.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "c0b722c1fb63ba23",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-mat-007",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; neither-multiple census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 7,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Inclusion-exclusion gives 300.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "9482b89757414236",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-mat-001",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; injective-map census to computed range. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Range size 5 gives 5! = 120 maps.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "959758d872ba501a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s2-mat-001",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (8 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; equivalence-property audit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Reflexive and symmetric but not transitive.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "1a3d71eeef04b4bc",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan29-s1-mat-001",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (29 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; piecewise composition range. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Composition range is [-4, 2).",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-29-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 29 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "8ac144cad58c2ba0",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-mat-001",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; log plus inverse-cosine domain. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Intersection gives (3/4, 3]; form 12.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "ec1533f659e8c30d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s1-mat-001",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; fractional-linear iterate. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Involution gives identity; value 4.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "d9879857762e5f2d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s1-mat-001",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; relation census plus reflexive closure. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Relation size 15 with 4 missing diagonal; total 19.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "3c3c9762abf3e656",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s1-mat-002",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; log plus arcsine domain. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 2,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Domain [-3, -5/4); form 4.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "ca535c189f8f39b4",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s2-mat-001",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; max-function relation census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Sizes 6, 3, 3 give total 12.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "5d57ce57eac040b8",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s2-mat-002",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; nested-log domain. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 2,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Intersection gives (2,3) U (6,7); total 18.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "72be67f3ed08fc0b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s2-mat-003",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; reciprocal functional equation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 3,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Reciprocal system gives 11.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "294c95699544bcd6",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr04-s1-mat-002",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (4 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; composition range on interval. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 2,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Monotone composition gives range; reciprocal 56.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 4 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "9c2d07991ae8de15",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr07-s2-mat-001",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (7 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; rectangle-ellipse containment. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Ellipse inside rectangle; containment holds.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-7-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 7 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "8fbd43aea61b4062",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan23-s1-mat-001",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (23 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; log-composition domain. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Numerator always positive; domain R.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-23-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 23 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "595a3ca62f201034",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-mat-002",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; complementary pairing sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 2,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Pairing gives 81/2.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "0cf6e9fdfe2b188b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-mat-019",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; Cauchy-type quadratic recovery; absolute sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 19,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Quadratic match gives total 675.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "e1fc61cfac01df65",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
