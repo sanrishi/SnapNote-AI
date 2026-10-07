@@ -31,37 +31,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr04-s2-phy-036",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (4 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Work, Energy and Power",
-  "concept_ids": [
-   "jee-physics-work-energy-and-power-chapter"
-  ],
-  "concept_mapping_note": "MCQ; slide from 45-degree mark to bottom (R = 14 m): ~22 m/s. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 36,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Speed after sliding down a circular track.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
-  "content_fingerprint": "d7b8ee7abb13d85f",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr05-s1-phy-034",
   "exam": "JEE Main",
   "year": 2024,
@@ -84,37 +53,6 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
   "content_fingerprint": "1e8c024faf996382",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr05-s2-phy-035",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (5 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Work, Energy and Power",
-  "concept_ids": [
-   "jee-physics-work-energy-and-power-chapter"
-  ],
-  "concept_mapping_note": "MCQ; constant power implies displacement proportional to t^3/2. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 35,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Displacement scaling under constant power.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
-  "content_fingerprint": "33951c46e3f611fb",
   "difficulty": null,
   "answer_key": null,
   "provenance": {
@@ -186,37 +124,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr06-s2-phy-036",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (6 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Work, Energy and Power",
-  "concept_ids": [
-   "jee-physics-work-energy-and-power-chapter"
-  ],
-  "concept_mapping_note": "MCQ; 36x energy means 6x momentum: +500%. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 36,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Momentum increase from energy scaling.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
-  "content_fingerprint": "b0994f557d2029f5",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr08-s1-phy-033",
   "exam": "JEE Main",
   "year": 2024,
@@ -279,37 +186,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr08-s2-phy-034",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (8 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Work, Energy and Power",
-  "concept_ids": [
-   "jee-physics-work-energy-and-power-chapter"
-  ],
-  "concept_mapping_note": "MCQ; spring compression from energy balance: 2 m. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 34,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Spring compression after incline plus friction.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
-  "content_fingerprint": "292da89127ffdb19",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr09-s1-phy-035",
   "exam": "JEE Main",
   "year": 2024,
@@ -332,6 +208,130 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
   "content_fingerprint": "0faa76967245a639",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-036",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; slide from 45-degree mark to bottom (R = 14 m): ~22 m/s. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 36,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Speed after sliding down a circular track.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "d7b8ee7abb13d85f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s2-phy-035",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; constant power implies displacement proportional to t^3/2. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 35,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Displacement scaling under constant power.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "33951c46e3f611fb",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s2-phy-036",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 36x energy means 6x momentum: +500%. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 36,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Momentum increase from energy scaling.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "b0994f557d2029f5",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s2-phy-034",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; spring compression from energy balance: 2 m. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 34,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Spring compression after incline plus friction.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "292da89127ffdb19",
   "difficulty": null,
   "answer_key": null,
   "provenance": {
@@ -527,37 +527,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-jan30-s2-phy-035",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "January 2024",
-  "shift": "Shift 2 (30 Jan 2024)",
-  "subject": "Physics",
-  "chapter": "Work, Energy and Power",
-  "concept_ids": [
-   "jee-physics-work-energy-and-power-chapter"
-  ],
-  "concept_mapping_note": "MCQ; friction work on a 60-degree push: 5 J. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 35,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Work against friction on an incline.",
-  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
-  "content_fingerprint": "66ad74e37690a3e4",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-jan31-s1-phy-035",
   "exam": "JEE Main",
   "year": 2024,
@@ -580,6 +549,37 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
   "content_fingerprint": "ae9b14cd58fffa02",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-phy-035",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; friction work on a 60-degree push: 5 J. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 35,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Work against friction on an incline.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "66ad74e37690a3e4",
   "difficulty": null,
   "answer_key": null,
   "provenance": {
@@ -642,6 +642,37 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
   "content_fingerprint": "363bc77efcd53f06",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr07-s1-phy-028",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (7 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; power from integrated motion: 2t^3 + 3t^5. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 28,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Power of a time-dependent force.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-7-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 7 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "628dfc299146e00d",
   "difficulty": null,
   "answer_key": null,
   "provenance": {
@@ -744,37 +775,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2025-apr07-s1-phy-028",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "April 2025",
-  "shift": "Shift 1 (7 Apr 2025)",
-  "subject": "Physics",
-  "chapter": "Work, Energy and Power",
-  "concept_ids": [
-   "jee-physics-work-energy-and-power-chapter"
-  ],
-  "concept_mapping_note": "MCQ; power from integrated motion: 2t^3 + 3t^5. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 28,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Power of a time-dependent force.",
-  "source_url": "https://jeeprep.app/pyq/2025-apr-7-shift-1/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 7 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
-  "content_fingerprint": "628dfc299146e00d",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2025-apr07-s2-phy-030",
   "exam": "JEE Main",
   "year": 2025,
@@ -797,68 +797,6 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
   "content_fingerprint": "1a6a63659a50b73c",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2025-jan22-s2-phy-031",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "January 2025",
-  "shift": "Shift 2 (22 Jan 2025)",
-  "subject": "Physics",
-  "chapter": "Work, Energy and Power",
-  "concept_ids": [
-   "jee-physics-work-energy-and-power-chapter"
-  ],
-  "concept_mapping_note": "MCQ; orthogonality condition: b = 1/2. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 31,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Parameter for zero work.",
-  "source_url": "https://jeeprep.app/pyq/2025-jan-22-shift-2/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 22 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
-  "content_fingerprint": "5b4f12710fd86c2d",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2025-jan23-s2-phy-028",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "January 2025",
-  "shift": "Shift 2 (23 Jan 2025)",
-  "subject": "Physics",
-  "chapter": "Work, Energy and Power",
-  "concept_ids": [
-   "jee-physics-work-energy-and-power-chapter"
-  ],
-  "concept_mapping_note": "MCQ; top-point KE at 60 degrees: KE/4. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 28,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Projectile top-point kinetic energy.",
-  "source_url": "https://jeeprep.app/pyq/2025-jan-23-shift-2/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 23 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
-  "content_fingerprint": "124068c719701b3d",
   "difficulty": null,
   "answer_key": null,
   "provenance": {
@@ -921,6 +859,99 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
   "content_fingerprint": "c66952798e670520",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan22-s2-phy-030",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (22 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; vertical-circle energy ratio. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 30,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "KE ratio 4/(3-√3).",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-22-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 22 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "111f0055e005e964",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan22-s2-phy-031",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (22 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; orthogonality condition: b = 1/2. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 31,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Parameter for zero work.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-22-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 22 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "5b4f12710fd86c2d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan23-s2-phy-028",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (23 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Work, Energy and Power",
+  "concept_ids": [
+   "jee-physics-work-energy-and-power-chapter"
+  ],
+  "concept_mapping_note": "MCQ; top-point KE at 60 degrees: KE/4. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 28,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Projectile top-point kinetic energy.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-23-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 23 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Work, Energy and Power is pending.",
+  "content_fingerprint": "124068c719701b3d",
   "difficulty": null,
   "answer_key": null,
   "provenance": {

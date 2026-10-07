@@ -11249,9 +11249,10 @@
    "session": "January 2024",
    "shift": "Shift 2 (31 Jan 2024)",
    "chapter": "Rotational Motion",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2024-jan31-s2-phy-051"
+    "pyq-jee-main-2024-jan31-s2-phy-051",
+    "pyq-jee-main-2024-jan31-s2-phy-052"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -16482,8 +16483,9 @@
    "session": "January 2025",
    "shift": "Shift 2 (22 Jan 2025)",
    "chapter": "Work, Energy and Power",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2025-jan22-s2-phy-030",
     "pyq-jee-main-2025-jan22-s2-phy-031"
    ],
    "source_status": "parsed",
@@ -17094,9 +17096,10 @@
    "session": "January 2025",
    "shift": "Shift 2 (23 Jan 2025)",
    "chapter": "Electrostatics",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2025-jan23-s2-phy-036"
+    "pyq-jee-main-2025-jan23-s2-phy-036",
+    "pyq-jee-main-2025-jan23-s2-phy-038"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -17617,6 +17620,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (24 Jan 2025)",
+   "chapter": "Electrostatics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s1-phy-037"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (24 Jan 2025)",
    "chapter": "Equilibrium",
    "verified_questions": 2,
    "verified_ids": [
@@ -18054,6 +18070,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan24-s2-phy-045"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (24 Jan 2025)",
+   "chapter": "Electrostatics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s2-phy-037",
+    "pyq-jee-main-2025-jan24-s2-phy-038"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -18559,6 +18589,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (28 Jan 2025)",
+   "chapter": "Electrostatics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-phy-038",
+    "pyq-jee-main-2025-jan28-s1-phy-039"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (28 Jan 2025)",
    "chapter": "Equilibrium",
    "verified_questions": 1,
    "verified_ids": [
@@ -18603,6 +18647,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan28-s1-mat-025"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (28 Jan 2025)",
+   "chapter": "Magnetic Effects of Current and Magnetism",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-phy-035"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -19082,6 +19139,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (28 Jan 2025)",
+   "chapter": "Electrostatics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s2-phy-037",
+    "pyq-jee-main-2025-jan28-s2-phy-047"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (28 Jan 2025)",
    "chapter": "Equilibrium",
    "verified_questions": 1,
    "verified_ids": [
@@ -19454,7 +19525,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2153,
+  "verified_records": 2164,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -19462,9 +19533,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2153,
+  "verified_records": 2164,
   "external_candidates_quarantined": 703,
-  "review_batches": 27,
+  "review_batches": 28,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -19513,16 +19584,17 @@
    "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 48,
    "jee-physics-electromagnetic-waves-chapter": 23,
    "jee-physics-electronic-devices-chapter": 32,
-   "jee-physics-electrostatics-chapter": 57,
+   "jee-physics-electrostatics-chapter": 65,
    "jee-physics-experimental-skills-chapter": 18,
    "jee-physics-gravitation-chapter": 25,
    "jee-physics-kinematics-chapter": 43,
    "jee-physics-kinetic-theory-of-gases-chapter": 24,
    "jee-physics-laws-of-motion-chapter": 35,
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 53,
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 54,
    "jee-physics-optics-chapter": 71,
    "jee-physics-oscillations-and-waves-chapter": 39,
    "jee-physics-properties-of-solids-and-liquids-chapter": 64,
+   "jee-physics-rotational-motion-chapter": 1,
    "jee-physics-rotational-motion-concept-001": 3,
    "jee-physics-rotational-motion-concept-002": 3,
    "jee-physics-rotational-motion-concept-005": 10,
@@ -19537,7 +19609,7 @@
    "jee-physics-rotational-motion-concept-015": 1,
    "jee-physics-thermodynamics-chapter": 31,
    "jee-physics-units-and-measurements-chapter": 40,
-   "jee-physics-work-energy-and-power-chapter": 31
+   "jee-physics-work-energy-and-power-chapter": 32
   }
  },
  "note": "Status is never 'complete': discovered question totals per paper are not yet authoritative."

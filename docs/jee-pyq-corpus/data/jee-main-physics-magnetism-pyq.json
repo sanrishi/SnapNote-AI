@@ -62,68 +62,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr04-s2-phy-043",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (4 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "MCQ; rotating a bar magnet stable-to-unstable: work 2MB = 0.08 J. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 43,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Work rotating a bar magnet from stable to unstable equilibrium.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
-  "content_fingerprint": "1ca4376a54b2d34b",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr04-s2-phy-054",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (4 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "Numerical; two-wire field ratio at asymmetric points: x/7 with x = 5. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 54,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Field ratio for I and 2I wires at mirrored exterior points.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed ((1+2/3)/(2+1/3)).",
-  "content_fingerprint": "ec6e101053c4286a",
-  "difficulty": null,
-  "answer_key": "5",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr05-s1-phy-043",
   "exam": "JEE Main",
   "year": 2024,
@@ -177,6 +115,254 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (mg/IL).",
   "content_fingerprint": "47bc2a3c3f873780",
+  "difficulty": null,
+  "answer_key": "5",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-phy-043",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; Biot-Savart for a 1 cm element at 0.5 m: 40 nT along +z. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 43,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Field of a short current element on its perpendicular bisector.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
+  "content_fingerprint": "5bcbd360a6e66a0a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-phy-057",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "Numerical; rotating a coil dipole 90 degrees in 1 T: work 5 uJ. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 57,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Work rotating a current coil from aligned to perpendicular.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (NIAB).",
+  "content_fingerprint": "be1ad67e85b9dfb1",
+  "difficulty": null,
+  "answer_key": "5",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-phy-041",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; paramagnetic statements: align + slight positive susceptibility true; strong attraction and weak-field drift false. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 41,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "True statements about paramagnetic substances.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
+  "content_fingerprint": "1d530e94c4c48160",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-phy-057",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "Numerical; velocity selector (5 eV electron, 3 uT): E = 4 N/C. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 57,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Balancing electric field for undeflected motion.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (vB).",
+  "content_fingerprint": "b5d74a54cbb7b848",
+  "difficulty": null,
+  "answer_key": "4",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr09-s1-phy-042",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (9 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; field momentum completes Newton III for time-varying currents (true); Ampere independent of Biot-Savart (false). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 42,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Assertion-reason on field momentum and Ampere's law.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
+  "content_fingerprint": "145a9f34caff9564",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr09-s1-phy-057",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (9 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "Numerical; square loop (2 m, 2 A) in B0(1+4x): net force 160 N. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 57,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Net force on a current loop in a gradient field.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-1/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (I w dB).",
+  "content_fingerprint": "1ef60f28c97c74fb",
+  "difficulty": null,
+  "answer_key": "160",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-043",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; rotating a bar magnet stable-to-unstable: work 2MB = 0.08 J. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 43,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Work rotating a bar magnet from stable to unstable equilibrium.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
+  "content_fingerprint": "1ca4376a54b2d34b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-054",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "Numerical; two-wire field ratio at asymmetric points: x/7 with x = 5. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 54,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Field ratio for I and 2I wires at mirrored exterior points.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed ((1+2/3)/(2+1/3)).",
+  "content_fingerprint": "ec6e101053c4286a",
   "difficulty": null,
   "answer_key": "5",
   "provenance": {
@@ -279,68 +465,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr06-s1-phy-043",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 1 (6 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "MCQ; Biot-Savart for a 1 cm element at 0.5 m: 40 nT along +z. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 43,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Field of a short current element on its perpendicular bisector.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
-  "content_fingerprint": "5bcbd360a6e66a0a",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr06-s1-phy-057",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 1 (6 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "Numerical; rotating a coil dipole 90 degrees in 1 T: work 5 uJ. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 57,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Work rotating a current coil from aligned to perpendicular.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (NIAB).",
-  "content_fingerprint": "be1ad67e85b9dfb1",
-  "difficulty": null,
-  "answer_key": "5",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr06-s2-phy-035",
   "exam": "JEE Main",
   "year": 2024,
@@ -403,68 +527,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr08-s1-phy-041",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 1 (8 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "MCQ; paramagnetic statements: align + slight positive susceptibility true; strong attraction and weak-field drift false. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 41,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "True statements about paramagnetic substances.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
-  "content_fingerprint": "1d530e94c4c48160",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr08-s1-phy-057",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 1 (8 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "Numerical; velocity selector (5 eV electron, 3 uT): E = 4 N/C. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 57,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Balancing electric field for undeflected motion.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (vB).",
-  "content_fingerprint": "b5d74a54cbb7b848",
-  "difficulty": null,
-  "answer_key": "4",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr08-s2-phy-042",
   "exam": "JEE Main",
   "year": 2024,
@@ -520,68 +582,6 @@
   "content_fingerprint": "3d104287b838cf6f",
   "difficulty": null,
   "answer_key": "10",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr09-s1-phy-042",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 1 (9 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "MCQ; field momentum completes Newton III for time-varying currents (true); Ampere independent of Biot-Savart (false). Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 42,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Assertion-reason on field momentum and Ampere's law.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-1/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
-  "content_fingerprint": "145a9f34caff9564",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr09-s1-phy-057",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 1 (9 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "Numerical; square loop (2 m, 2 A) in B0(1+4x): net force 160 N. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 57,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Net force on a current loop in a gradient field.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-1/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (I w dB).",
-  "content_fingerprint": "1ef60f28c97c74fb",
-  "difficulty": null,
-  "answer_key": "160",
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",
@@ -706,68 +706,6 @@
   "content_fingerprint": "6dc2e5a1131bff64",
   "difficulty": null,
   "answer_key": "72",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-feb01-s2-phy-042",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "January 2024",
-  "shift": "Shift 2 (1 Feb 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "MCQ; 5%-through-G ammeter: meter resistance G/20. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 42,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Effective resistance of a shunted ammeter.",
-  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
-  "content_fingerprint": "77c2fbbc3333e37e",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-feb01-s2-phy-057",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "January 2024",
-  "shift": "Shift 2 (1 Feb 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "Numerical; MCG torsional constant (100 turns, 2 cm^2, 0.01 T, 0.05 rad at 10 mA): 4 x 1e-5. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 57,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Suspension torsional constant from deflection data.",
-  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (NIAB/theta).",
-  "content_fingerprint": "346db00830684acf",
-  "difficulty": null,
-  "answer_key": "4",
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",
@@ -961,37 +899,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-jan30-s2-phy-057",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "January 2024",
-  "shift": "Shift 2 (30 Jan 2024)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "Numerical; square-loop centre field (1 m, 5 A): X sqrt(2) x 1e-7 with X = 40. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 57,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Centre field of a square current loop.",
-  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
-  "content_fingerprint": "1a20e744fabc1b86",
-  "difficulty": null,
-  "answer_key": "40",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-jan31-s1-phy-042",
   "exam": "JEE Main",
   "year": 2024,
@@ -1016,6 +923,99 @@
   "content_fingerprint": "0d19a00bb9346175",
   "difficulty": null,
   "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s2-phy-042",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (1 Feb 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; 5%-through-G ammeter: meter resistance G/20. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 42,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Effective resistance of a shunted ammeter.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
+  "content_fingerprint": "77c2fbbc3333e37e",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s2-phy-057",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (1 Feb 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "Numerical; MCG torsional constant (100 turns, 2 cm^2, 0.01 T, 0.05 rad at 10 mA): 4 x 1e-5. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 57,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Suspension torsional constant from deflection data.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (NIAB/theta).",
+  "content_fingerprint": "346db00830684acf",
+  "difficulty": null,
+  "answer_key": "4",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-phy-057",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "Numerical; square-loop centre field (1 m, 5 A): X sqrt(2) x 1e-7 with X = 40. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 57,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Centre field of a square current loop.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "1a20e744fabc1b86",
+  "difficulty": null,
+  "answer_key": "40",
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",
@@ -1147,37 +1147,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2025-apr02-s2-phy-045",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "April 2025",
-  "shift": "Shift 2 (2 Apr 2025)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "MCQ; voltage-sensitivity ratio of two MCGs with same spring: 1:1. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 45,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Voltage-sensitivity comparison of two galvanometers.",
-  "source_url": "https://jeeprep.app/pyq/2025-apr-2-shift-2/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 2 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
-  "content_fingerprint": "601c7261198bde58",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2025-apr03-s1-phy-047",
   "exam": "JEE Main",
   "year": 2025,
@@ -1233,68 +1202,6 @@
   "content_fingerprint": "4bfd45eb7513a720",
   "difficulty": null,
   "answer_key": "1",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2025-apr03-s2-phy-036",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "April 2025",
-  "shift": "Shift 2 (3 Apr 2025)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "MCQ; dipole energy U = -80 J at 60 degrees with 80 sqrt(3) N m torque. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 36,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Potential energy of a dipole from its torque.",
-  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
-  "content_fingerprint": "127608234cd33091",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2025-apr03-s2-phy-040",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "April 2025",
-  "shift": "Shift 2 (3 Apr 2025)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "MCQ; both ion-path statements false (curvature direction and equal radii). Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 40,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Assertion-reason on ion curvature in magnetic fields.",
-  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
-  "content_fingerprint": "b3e409f823f92714",
-  "difficulty": null,
-  "answer_key": null,
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",
@@ -1395,6 +1302,99 @@
   }
  },
  {
+  "question_id": "pyq-jee-main-2025-apr02-s2-phy-045",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (2 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; voltage-sensitivity ratio of two MCGs with same spring: 1:1. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 45,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Voltage-sensitivity comparison of two galvanometers.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-2-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 2 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
+  "content_fingerprint": "601c7261198bde58",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s2-phy-036",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (3 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; dipole energy U = -80 J at 60 degrees with 80 sqrt(3) N m torque. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 36,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Potential energy of a dipole from its torque.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
+  "content_fingerprint": "127608234cd33091",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s2-phy-040",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (3 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; both ion-path statements false (curvature direction and equal radii). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 40,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Assertion-reason on ion curvature in magnetic fields.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending.",
+  "content_fingerprint": "b3e409f823f92714",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
   "question_id": "pyq-jee-main-2025-apr07-s2-phy-036",
   "exam": "JEE Main",
   "year": 2025,
@@ -1419,37 +1419,6 @@
   "content_fingerprint": "4f97aef09768f266",
   "difficulty": null,
   "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2025-jan22-s2-phy-049",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "January 2025",
-  "shift": "Shift 2 (22 Jan 2025)",
-  "subject": "Physics",
-  "chapter": "Magnetic Effects of Current and Magnetism",
-  "concept_ids": [
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
-  ],
-  "concept_mapping_note": "Numerical; velocity selector (2e5 m/s, 2 cm radius): E = 2 x 1e4 N/C. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 49,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Electric field from undeflected motion plus cyclotron radius.",
-  "source_url": "https://jeeprep.app/pyq/2025-jan-22-shift-2/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 22 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (vB).",
-  "content_fingerprint": "2151659b98f05316",
-  "difficulty": null,
-  "answer_key": "2",
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",
@@ -1512,6 +1481,68 @@
   "content_fingerprint": "7553b9b0b35335f6",
   "difficulty": null,
   "answer_key": "8",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-phy-035",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "MCQ; charged-particle wire turnaround. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 35,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Turning radius a exp(-4πMv0/μ0qI).",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetic Effects of Current and Magnetism is pending.",
+  "content_fingerprint": "a621a75e4cccc39d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan22-s2-phy-049",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (22 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Magnetic Effects of Current and Magnetism",
+  "concept_ids": [
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter"
+  ],
+  "concept_mapping_note": "Numerical; velocity selector (2e5 m/s, 2 cm radius): E = 2 x 1e4 N/C. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 49,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Electric field from undeflected motion plus cyclotron radius.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-22-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 22 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Magnetism is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (vB).",
+  "content_fingerprint": "2151659b98f05316",
+  "difficulty": null,
+  "answer_key": "2",
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",

@@ -414,6 +414,35 @@
    "ambiguous": 0,
    "scope": "Trigonometry HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
    "demotions": []
+  },
+  {
+   "batch": 28,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 27,
+   "verified": 11,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Scattered leftover HC sweep (electrostatics/magnetism/WEP/optics/experimental/rotational/kinematics/thermo)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-7-shift-1-q38",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q50",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q57",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q49",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q47",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q59",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q40",
+    "cand-jeeprep-main-2024-2024-apr-8-shift-2-q50",
+    "cand-jeeprep-main-2024-2024-apr-8-shift-1-q83",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q83",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q73",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q2",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q12": "misqueued Mathematics parabola item; already verified in the coordinate-geometry shard"
+   }
   }
  ],
  "cumulative": {
@@ -948,6 +977,90 @@
    "reason": "dipeptide order (Ala-Gly vs Gly-Ala) underdetermined without options; components identified but mapping unverifiable",
    "date": "2026-10-06",
    "scope": "Biomolecules HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-1-q38",
+   "reason": "charge magnitudes absent from the description; K underdetermined",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q50",
+   "reason": "shaded sub-region areas not recoverable from the description",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q57",
+   "reason": "recompute gives B0 = -5 versus mirror-claimed 5; sign contradiction",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q49",
+   "reason": "recompute gives period 0.01 s versus mirror-claimed 0",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39",
+   "reason": "Amperian enclosed-current reading ambiguous from the description",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q47",
+   "reason": "endpoints off the stated plane and recompute 35 versus mirror 152",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q59",
+   "reason": "recompute gives 0.2 mm versus mirror-claimed 0",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q40",
+   "reason": "concave/convex underdetermined without options",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-2-q50",
+   "reason": "vernier equation has no integer solution as transcribed",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q83",
+   "reason": "recompute gives 52.5 versus mirror-claimed 55",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q83",
+   "reason": "Hess recompute gives 82 versus mirror-claimed 164",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q73",
+   "reason": "single-bond energy missing; resonance structures ambiguous",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q2",
+   "reason": "misqueued Mathematics equivalence-relation orphan (solved 5, mirror B); held for chapter assignment",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22",
+   "reason": "misqueued Mathematics binomial orphan (solved 2035, mirror matches); held for chapter assignment",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
   }
  ]
 }

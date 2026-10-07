@@ -62,68 +62,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr04-s2-phy-041",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (4 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; charge at face-centre of a cube: linked flux q/2 epsilon0. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 41,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Flux through a cube due to a charge at the centre of one face.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "bc1cb1767bdf77b4",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr04-s2-phy-060",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (4 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "Numerical; 12.5 pF at 12 V, battery disconnected, epsilon_r = 6 inserted: energy change 750 x 1e-12 J. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 60,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Potential-energy change on inserting a dielectric slab with the battery disconnected.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (900 - 150).",
-  "content_fingerprint": "eb2eb78b3d3f2e04",
-  "difficulty": null,
-  "answer_key": "750",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr05-s1-phy-041",
   "exam": "JEE Main",
   "year": 2024,
@@ -186,68 +124,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr05-s2-phy-040",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (5 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; earthing chains on inflammable-fluid vehicles drain static charge. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 40,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Why tankers use metallic chains touching the ground.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "d2dd3074315ce701",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr05-s2-phy-058",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (5 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "Numerical; dipole axial field at r vs equatorial field at 2r: ratio 16. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 58,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Axial-to-equatorial dipole field ratio (axial at r, equatorial at 2r); find x.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed ((2/r^3)/(1/8r^3)).",
-  "content_fingerprint": "dd1c3dcf10852b5a",
-  "difficulty": null,
-  "answer_key": "16",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr06-s1-phy-038",
   "exam": "JEE Main",
   "year": 2024,
@@ -272,68 +148,6 @@
   "content_fingerprint": "17397f71eb956c9e",
   "difficulty": null,
   "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr06-s2-phy-042",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (6 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; successive-contact charge sharing (Q,Q then uncharged R): new force 6 N. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 42,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Repulsion after an uncharged identical sphere touches each charged sphere in turn.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "5d719aa218b28a48",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr06-s2-phy-052",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (6 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "Numerical; partially filled capacitor (K1 = 2, K2 = 3 side by side), 8 N plate force at fixed V: supply 80 V. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 52,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Supply voltage for 8 N plate force in a half-filled capacitor (energy method at fixed V).",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (sqrt(2 F d / C)).",
-  "content_fingerprint": "c003d245cd72e1d1",
-  "difficulty": null,
-  "answer_key": "80",
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",
@@ -403,68 +217,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-apr08-s2-phy-040",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (8 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; dielectric slab inserted, plate moved 0.2 cm to keep C: K = 1.5. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 40,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Dielectric constant from the plate shift needed to preserve capacitance.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "b1e0df348f49b328",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-apr08-s2-phy-055",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "April 2024",
-  "shift": "Shift 2 (8 Apr 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "Numerical; two-charge field balance at P (4 cm height): |q2/q3| = 8/(5 sqrt(x)), x = 5. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 55,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Charge ratio for zero net field at P above two base charges.",
-  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (1/(10 sqrt(5)) = 4/125... cross-checked).",
-  "content_fingerprint": "fabc524b701eef9c",
-  "difficulty": null,
-  "answer_key": "5",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-apr09-s1-phy-040",
   "exam": "JEE Main",
   "year": 2024,
@@ -520,6 +272,254 @@
   "content_fingerprint": "c2b86727fe9d11b2",
   "difficulty": null,
   "answer_key": "36",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-041",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; charge at face-centre of a cube: linked flux q/2 epsilon0. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 41,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Flux through a cube due to a charge at the centre of one face.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "bc1cb1767bdf77b4",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-phy-060",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; 12.5 pF at 12 V, battery disconnected, epsilon_r = 6 inserted: energy change 750 x 1e-12 J. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 60,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Potential-energy change on inserting a dielectric slab with the battery disconnected.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (900 - 150).",
+  "content_fingerprint": "eb2eb78b3d3f2e04",
+  "difficulty": null,
+  "answer_key": "750",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s2-phy-040",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; earthing chains on inflammable-fluid vehicles drain static charge. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 40,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Why tankers use metallic chains touching the ground.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "d2dd3074315ce701",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s2-phy-058",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (5 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; dipole axial field at r vs equatorial field at 2r: ratio 16. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 58,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Axial-to-equatorial dipole field ratio (axial at r, equatorial at 2r); find x.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed ((2/r^3)/(1/8r^3)).",
+  "content_fingerprint": "dd1c3dcf10852b5a",
+  "difficulty": null,
+  "answer_key": "16",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s2-phy-042",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; successive-contact charge sharing (Q,Q then uncharged R): new force 6 N. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 42,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Repulsion after an uncharged identical sphere touches each charged sphere in turn.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "5d719aa218b28a48",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s2-phy-052",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (6 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; partially filled capacitor (K1 = 2, K2 = 3 side by side), 8 N plate force at fixed V: supply 80 V. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 52,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Supply voltage for 8 N plate force in a half-filled capacitor (energy method at fixed V).",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (sqrt(2 F d / C)).",
+  "content_fingerprint": "c003d245cd72e1d1",
+  "difficulty": null,
+  "answer_key": "80",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s2-phy-040",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; dielectric slab inserted, plate moved 0.2 cm to keep C: K = 1.5. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 40,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Dielectric constant from the plate shift needed to preserve capacitance.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "b1e0df348f49b328",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s2-phy-055",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (8 Apr 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; two-charge field balance at P (4 cm height): |q2/q3| = 8/(5 sqrt(x)), x = 5. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 55,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Charge ratio for zero net field at P above two base charges.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (1/(10 sqrt(5)) = 4/125... cross-checked).",
+  "content_fingerprint": "fabc524b701eef9c",
+  "difficulty": null,
+  "answer_key": "5",
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",
@@ -642,68 +642,6 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (1.5/0.5).",
   "content_fingerprint": "b39df1bda6b70fbc",
-  "difficulty": null,
-  "answer_key": "3",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-feb01-s2-phy-040",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "January 2024",
-  "shift": "Shift 2 (1 Feb 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; nested-cube flux ratio (2Q inside both vs 2Q+3Q): 2:5. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 40,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Flux ratio through concentric cubes enclosing 2Q and 2Q+3Q.",
-  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "f97c2d8b44e7886d",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-feb01-s2-phy-055",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "January 2024",
-  "shift": "Shift 2 (1 Feb 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "Numerical; particle held 10 cm from a charged wall by a 20 cm thread: charge (1/sqrt(x)) uC, x = 3. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 55,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Charge held at 30 degrees from a uniform-field wall.",
-  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (mg tan30 / E).",
-  "content_fingerprint": "f1f35aa7f037f4f9",
   "difficulty": null,
   "answer_key": "3",
   "provenance": {
@@ -899,68 +837,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2024-jan30-s2-phy-040",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "January 2024",
-  "shift": "Shift 2 (30 Jan 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; circular motion around a line charge: T = 2 pi r sqrt(m / 2 k lambda q). Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 40,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Orbital period of a charge around a line charge.",
-  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "9d610362391022e8",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2024-jan30-s2-phy-055",
-  "exam": "JEE Main",
-  "year": 2024,
-  "session": "January 2024",
-  "shift": "Shift 2 (30 Jan 2024)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "Numerical; same-angle suspension in liquid (rho 1.4, liquid 0.7): K = 2. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "Numerical",
-  "paper_question_number": 55,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
-  "question_summary": "Dielectric constant from unchanged suspension angle (tan37 = 3/4 given).",
-  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
-  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (1.4/0.7).",
-  "content_fingerprint": "161fe5623e8282cd",
-  "difficulty": null,
-  "answer_key": "2",
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2024-jan31-s1-phy-040",
   "exam": "JEE Main",
   "year": 2024,
@@ -1014,6 +890,130 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (5/(3+2/K) = 1.25).",
   "content_fingerprint": "19c4461e15463135",
+  "difficulty": null,
+  "answer_key": "2",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s2-phy-040",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (1 Feb 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; nested-cube flux ratio (2Q inside both vs 2Q+3Q): 2:5. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 40,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Flux ratio through concentric cubes enclosing 2Q and 2Q+3Q.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "f97c2d8b44e7886d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s2-phy-055",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (1 Feb 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; particle held 10 cm from a charged wall by a 20 cm thread: charge (1/sqrt(x)) uC, x = 3. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 55,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Charge held at 30 degrees from a uniform-field wall.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (mg tan30 / E).",
+  "content_fingerprint": "f1f35aa7f037f4f9",
+  "difficulty": null,
+  "answer_key": "3",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-phy-040",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; circular motion around a line charge: T = 2 pi r sqrt(m / 2 k lambda q). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 40,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Orbital period of a charge around a line charge.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "9d610362391022e8",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-phy-055",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; same-angle suspension in liquid (rho 1.4, liquid 0.7): K = 2. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 55,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Dielectric constant from unchanged suspension angle (tan37 = 3/4 given).",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/physics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed (1.4/0.7).",
+  "content_fingerprint": "161fe5623e8282cd",
   "difficulty": null,
   "answer_key": "2",
   "provenance": {
@@ -1178,6 +1178,68 @@
   }
  },
  {
+  "question_id": "pyq-jee-main-2025-apr03-s1-phy-038",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (3 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; series vs parallel dielectric fill: C1/C2 = 4 eps1 eps2/(eps1+eps2)^2. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 38,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Capacitance ratio for series vs parallel dielectric configurations.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "f7f6226e078be4c3",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s1-phy-039",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (3 Apr 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; charged shell: 120 V at centre, at 5 cm, and 80 V at 15 cm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 39,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Potential at centre/inside/outside a charged shell (surface 120 V, R = 10 cm).",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "8fb95ba3785fbe2d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
   "question_id": "pyq-jee-main-2025-apr02-s2-phy-041",
   "exam": "JEE Main",
   "year": 2025,
@@ -1262,68 +1324,6 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
   "content_fingerprint": "5194c8c52a9eac67",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2025-apr03-s1-phy-038",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "April 2025",
-  "shift": "Shift 1 (3 Apr 2025)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; series vs parallel dielectric fill: C1/C2 = 4 eps1 eps2/(eps1+eps2)^2. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 38,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Capacitance ratio for series vs parallel dielectric configurations.",
-  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "f7f6226e078be4c3",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
-  "question_id": "pyq-jee-main-2025-apr03-s1-phy-039",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "April 2025",
-  "shift": "Shift 1 (3 Apr 2025)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; charged shell: 120 V at centre, at 5 cm, and 80 V at 15 cm. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 39,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Potential at centre/inside/outside a charged shell (surface 120 V, R = 10 cm).",
-  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "8fb95ba3785fbe2d",
   "difficulty": null,
   "answer_key": null,
   "provenance": {
@@ -1674,37 +1674,6 @@
   }
  },
  {
-  "question_id": "pyq-jee-main-2025-jan22-s2-phy-037",
-  "exam": "JEE Main",
-  "year": 2025,
-  "session": "January 2025",
-  "shift": "Shift 2 (22 Jan 2025)",
-  "subject": "Physics",
-  "chapter": "Electrostatics",
-  "concept_ids": [
-   "jee-physics-electrostatics-chapter"
-  ],
-  "concept_mapping_note": "MCQ; dipole on x-axis: point B on y-axis at 2r has V = 0, E = E0/16. Chapter-level mapping; sub-concept taxonomy pending.",
-  "question_type": "MCQ",
-  "paper_question_number": 37,
-  "nta_question_id": null,
-  "marks": 4,
-  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
-  "question_summary": "Potential and field on the equatorial axis from axial values V0, E0.",
-  "source_url": "https://jeeprep.app/pyq/2025-jan-22-shift-2/physics",
-  "source_document": "NTA JEE Main 2025, B Tech 22 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
-  "verification_status": "verified",
-  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
-  "content_fingerprint": "08e6b5957ff765fa",
-  "difficulty": null,
-  "answer_key": null,
-  "provenance": {
-   "retrieved_at": "2026-10-06",
-   "parser": "build_transcribed_index.py v1",
-   "pdf_sha256": null
-  }
- },
- {
   "question_id": "pyq-jee-main-2025-jan23-s1-phy-036",
   "exam": "JEE Main",
   "year": 2025,
@@ -1727,6 +1696,130 @@
   "verification_status": "verified",
   "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
   "content_fingerprint": "79155c859416204a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s1-phy-037",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (24 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; capacitance scaling census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 37,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Tenfold ways are A, C, E.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "7d706552a103b771",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-phy-038",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; charging-curve inference. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 38,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Smaller C charges faster but stores less; U1 < U2.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "e5cfdadc84bf1570",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-phy-039",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; three-wire equipotential surface. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 39,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Equipotential is xyz = const.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "1683ed48d9bebb6d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan22-s2-phy-037",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (22 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; dipole on x-axis: point B on y-axis at 2r has V = 0, E = E0/16. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 37,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Potential and field on the equatorial axis from axial values V0, E0.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-22-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 22 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "08e6b5957ff765fa",
   "difficulty": null,
   "answer_key": null,
   "provenance": {
@@ -1760,6 +1853,161 @@
   "content_fingerprint": "647aca55ca128bce",
   "difficulty": null,
   "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan23-s2-phy-038",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (23 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; two-charge potential energy. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 38,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Pair energy -1.8 J.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-23-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 23 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "ae2419613b6a6d8d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s2-phy-037",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (24 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; contact-sharing Coulomb distance. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 37,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Shared charge gives 2 cm separation.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "c0c7fa79f363e41d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s2-phy-038",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (24 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; square-configuration energy difference. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 38,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Corner-to-midpoint energy gap is Kq^2(3√2-2)/a.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "da2a8ee2e4b178b5",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s2-phy-037",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (28 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; capacitor energy density. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 37,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Energy density 1770 J/m^3.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending.",
+  "content_fingerprint": "0672d2ed64f5fd43",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s2-phy-047",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (28 Jan 2025)",
+  "subject": "Physics",
+  "chapter": "Electrostatics",
+  "concept_ids": [
+   "jee-physics-electrostatics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; dipole reversal work. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 47,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Reversal work 2pE = 12 J.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-2/physics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Electrostatics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "c9e8125eba79c4d1",
+  "difficulty": null,
+  "answer_key": "12",
   "provenance": {
    "retrieved_at": "2026-10-06",
    "parser": "build_transcribed_index.py v1",
