@@ -3106,8 +3106,9 @@
    "session": "April 2024",
    "shift": "Shift 1 (6 Apr 2024)",
    "chapter": "Matrices and Determinants",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-mat-005",
     "pyq-jee-main-2024-apr06-s1-mat-022"
    ],
    "source_status": "parsed",
@@ -4442,8 +4443,9 @@
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Matrices and Determinants",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-mat-004",
     "pyq-jee-main-2024-apr08-s1-mat-022"
    ],
    "source_status": "parsed",
@@ -6366,8 +6368,9 @@
    "session": "April 2024",
    "shift": "Shift 2 (9 Apr 2024)",
    "chapter": "Matrices and Determinants",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-mat-004",
     "pyq-jee-main-2024-apr09-s2-mat-022"
    ],
    "source_status": "parsed",
@@ -8964,6 +8967,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-mat-004"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Optics",
    "verified_questions": 2,
    "verified_ids": [
@@ -10880,6 +10896,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan31-s1-phy-042"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (31 Jan 2024)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s1-mat-003",
+    "pyq-jee-main-2024-jan31-s1-mat-004"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -13211,6 +13241,20 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (3 Apr 2025)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-mat-005",
+    "pyq-jee-main-2025-apr03-s1-mat-016"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (3 Apr 2025)",
    "chapter": "Optics",
    "verified_questions": 2,
    "verified_ids": [
@@ -15106,8 +15150,10 @@
    "session": "April 2025",
    "shift": "Shift 1 (7 Apr 2025)",
    "chapter": "Matrices and Determinants",
-   "verified_questions": 1,
+   "verified_questions": 3,
    "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-mat-004",
+    "pyq-jee-main-2025-apr07-s1-mat-005",
     "pyq-jee-main-2025-apr07-s1-mat-022"
    ],
    "source_status": "parsed",
@@ -17479,6 +17525,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-mat-004",
+    "pyq-jee-main-2025-jan23-s1-mat-005"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
    "chapter": "Optics",
    "verified_questions": 2,
    "verified_ids": [
@@ -18493,8 +18553,9 @@
    "session": "January 2025",
    "shift": "Shift 1 (24 Jan 2025)",
    "chapter": "Matrices and Determinants",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2025-jan24-s1-mat-004",
     "pyq-jee-main-2025-jan24-s1-mat-022"
    ],
    "source_status": "parsed",
@@ -20468,7 +20529,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2363,
+  "verified_records": 2376,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -20476,9 +20537,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2363,
+  "verified_records": 2376,
   "external_candidates_quarantined": 703,
-  "review_batches": 37,
+  "review_batches": 38,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -20513,7 +20574,7 @@
    "jee-mathematics-diffrential-equations-chapter": 52,
    "jee-mathematics-integral-calculas-chapter": 85,
    "jee-mathematics-limit-continuity-and-differentiability-chapter": 86,
-   "jee-mathematics-matrices-and-determinants-chapter": 48,
+   "jee-mathematics-matrices-and-determinants-chapter": 61,
    "jee-mathematics-permutations-and-combinations-chapter": 28,
    "jee-mathematics-sequence-and-series-chapter": 56,
    "jee-mathematics-sets-relations-and-functions-chapter": 57,
