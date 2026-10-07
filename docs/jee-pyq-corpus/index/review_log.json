@@ -307,6 +307,32 @@
     "pyq-jee-main-2025-jan23-s2-che-060",
     "pyq-jee-main-2025-jan28-s2-che-074"
    ]
+  },
+  {
+   "batch": 21,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 37,
+   "verified": 25,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Current Electricity leftover HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q41",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q56",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q43",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-1-q41",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q41",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q56",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q56",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q37",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q36",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q14"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q11": "misqueued Mathematics circle item; already verified in the coordinate-geometry shard",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q13": "misqueued Mathematics hyperbola item; already verified in the coordinate-geometry shard"
+   }
   }
  ],
  "cumulative": {
@@ -733,6 +759,66 @@
    "reason": "statement D (equal EN of C in CH4 and CCl4) is genuinely ambiguous and the option set is absent; mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q41",
+   "reason": "resistor-network topology not recoverable from the figure description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q56",
+   "reason": "diamond-circuit branch topology not recoverable from the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q43",
+   "reason": "multi-bridge network topology not recoverable from the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-1-q41",
+   "reason": "voltmeter loop topology and tap points not recoverable; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q41",
+   "reason": "capacitor-bridge arm topology not recoverable; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q56",
+   "reason": "branch-resistor topology garbled in the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q56",
+   "reason": "square-network topology vague in the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q37",
+   "reason": "options are circuit figures absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q36",
+   "reason": "wire-bridge topology garbled in the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q14",
+   "reason": "misqueued Mathematics inverse-trig item and chapter orphan; solved 22 pi^2 consistent with mirror B but held for proper chapter assignment",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
   }
  ]
 }

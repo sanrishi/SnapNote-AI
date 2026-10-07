@@ -4299,9 +4299,10 @@
    "session": "April 2024",
    "shift": "Shift 2 (8 Apr 2024)",
    "chapter": "Current Electricity",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2024-apr08-s2-phy-041"
+    "pyq-jee-main-2024-apr08-s2-phy-041",
+    "pyq-jee-main-2024-apr08-s2-phy-056"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -4904,6 +4905,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (9 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s1-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (9 Apr 2024)",
    "chapter": "Differential Equations",
    "verified_questions": 1,
    "verified_ids": [
@@ -5427,6 +5441,19 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr09-s2-che-070",
     "pyq-jee-main-2024-apr09-s2-che-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (9 Apr 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-phy-055"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -5970,6 +5997,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-feb01-s1-che-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (1 Feb 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s1-phy-056"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -6542,6 +6582,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-feb01-s2-mat-004"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (1 Feb 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-feb01-s2-phy-049",
+    "pyq-jee-main-2024-feb01-s2-phy-056"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -7133,6 +7187,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (27 Jan 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan27-s1-phy-041",
+    "pyq-jee-main-2024-jan27-s1-phy-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (27 Jan 2024)",
    "chapter": "Differential Equations",
    "verified_questions": 2,
    "verified_ids": [
@@ -7682,6 +7750,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-phy-041",
+    "pyq-jee-main-2024-jan29-s1-phy-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Differential Equations",
    "verified_questions": 1,
    "verified_ids": [
@@ -8196,6 +8278,21 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan30-s1-che-068"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (30 Jan 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s1-phy-041",
+    "pyq-jee-main-2024-jan30-s1-phy-049",
+    "pyq-jee-main-2024-jan30-s1-phy-056"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -8800,6 +8897,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (30 Jan 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-phy-041",
+    "pyq-jee-main-2024-jan30-s2-phy-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (30 Jan 2024)",
    "chapter": "Differential Equations",
    "verified_questions": 1,
    "verified_ids": [
@@ -9335,6 +9446,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (31 Jan 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s1-phy-041"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (31 Jan 2024)",
    "chapter": "Dual Nature of Matter and Radiation",
    "verified_questions": 1,
    "verified_ids": [
@@ -9811,6 +9935,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2024-jan31-s2-che-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (31 Jan 2024)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-phy-041"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -10316,6 +10453,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr02-s1-che-060",
     "pyq-jee-main-2025-apr02-s1-che-074"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (2 Apr 2025)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr02-s1-phy-035"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -11367,6 +11517,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (3 Apr 2025)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-phy-049"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (3 Apr 2025)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -11786,6 +11949,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr03-s2-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (3 Apr 2025)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-phy-048"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -12288,6 +12464,19 @@
     "pyq-jee-main-2025-apr04-s2-che-059",
     "pyq-jee-main-2025-apr04-s2-che-060",
     "pyq-jee-main-2025-apr04-s2-che-075"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (4 Apr 2025)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s2-phy-036"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -12837,6 +13026,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr07-s1-che-073"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (7 Apr 2025)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-phy-036"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -15206,6 +15408,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (23 Jan 2025)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s2-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (23 Jan 2025)",
    "chapter": "Differential Equations",
    "verified_questions": 1,
    "verified_ids": [
@@ -15682,6 +15897,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan24-s1-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (24 Jan 2025)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s1-phy-048"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -16905,6 +17133,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (28 Jan 2025)",
+   "chapter": "Current Electricity",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s2-phy-048"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (28 Jan 2025)",
    "chapter": "Differential Equations",
    "verified_questions": 1,
    "verified_ids": [
@@ -17317,7 +17558,7 @@
   }
  ],
  "totals": {
-  "verified_records": 1972,
+  "verified_records": 1997,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -17325,9 +17566,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 1972,
+  "verified_records": 1997,
   "external_candidates_quarantined": 703,
-  "review_batches": 20,
+  "review_batches": 21,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -17365,7 +17606,7 @@
    "jee-mathematics-three-dimensional-geometry-chapter": 46,
    "jee-mathematics-vector-algebra-chapter": 39,
    "jee-physics-atoms-and-nuclei-chapter": 45,
-   "jee-physics-current-electricity-chapter": 15,
+   "jee-physics-current-electricity-chapter": 40,
    "jee-physics-dual-nature-of-matter-and-radiation-chapter": 26,
    "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 48,
    "jee-physics-electromagnetic-waves-chapter": 23,
