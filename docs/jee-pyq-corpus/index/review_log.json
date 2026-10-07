@@ -624,6 +624,20 @@
    "ambiguous": 0,
    "scope": "Atoms NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
    "demotions": []
+  },
+  {
+   "batch": 43,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 6,
+   "verified": 4,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Equilibrium NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q56",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q55"
+   ]
   }
  ],
  "cumulative": {
@@ -1362,6 +1376,18 @@
    "reason": "image tilt ~1° with option form unknown; 'ahead' interpretation sensitive",
    "date": "2026-10-06",
    "scope": "Optics NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q56",
+   "reason": "stem asks for the precipitating combination but the option combinations are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Equilibrium NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q55",
+   "reason": "stem asks for the affected species but the option species are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Equilibrium NEEDS_REVIEW recovery"
   }
  ]
 }

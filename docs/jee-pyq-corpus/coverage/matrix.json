@@ -4359,6 +4359,19 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
+   "chapter": "Equilibrium",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-che-063"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Experimental Skills",
    "verified_questions": 2,
    "verified_ids": [
@@ -11535,6 +11548,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (31 Jan 2024)",
+   "chapter": "Equilibrium",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-che-064"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (31 Jan 2024)",
    "chapter": "Gravitation",
    "verified_questions": 1,
    "verified_ids": [
@@ -16443,6 +16469,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (8 Apr 2025)",
+   "chapter": "Equilibrium",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-che-074"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (8 Apr 2025)",
    "chapter": "Integral Calculus",
    "verified_questions": 2,
    "verified_ids": [
@@ -19820,8 +19859,9 @@
    "session": "January 2025",
    "shift": "Shift 1 (28 Jan 2025)",
    "chapter": "Equilibrium",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-che-054",
     "pyq-jee-main-2025-jan28-s1-che-055"
    ],
    "source_status": "parsed",
@@ -20811,7 +20851,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2418,
+  "verified_records": 2422,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -20819,9 +20859,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2418,
+  "verified_records": 2422,
   "external_candidates_quarantined": 703,
-  "review_batches": 42,
+  "review_batches": 43,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -20839,7 +20879,7 @@
    "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter": 33,
    "jee-chemistry-coordination-compounds-chapter": 48,
    "jee-chemistry-d-and-f-block-elements-chapter": 42,
-   "jee-chemistry-equilibrium-chapter": 29,
+   "jee-chemistry-equilibrium-chapter": 33,
    "jee-chemistry-organic-compounds-containing-halogens-chapter": 37,
    "jee-chemistry-organic-compounds-containing-nitrogen-chapter": 33,
    "jee-chemistry-organic-compounds-containing-oxygen-chapter": 69,
