@@ -685,6 +685,19 @@
    "ambiguous": 0,
    "scope": "P&C NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
    "demotions": []
+  },
+  {
+   "batch": 48,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 7,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Binomial NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q5"
+   ]
   }
  ],
  "cumulative": {
@@ -1447,6 +1460,12 @@
    "reason": "stem asks for the graph presentation but option graphs are absent",
    "date": "2026-10-06",
    "scope": "Kinematics NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q5",
+   "reason": "consecutive-coefficient premises inconsistent; no mirror answer",
+   "date": "2026-10-06",
+   "scope": "Binomial NEEDS_REVIEW recovery"
   }
  ]
 }

@@ -866,5 +866,191 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr09-s2-mat-006",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (9 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Binomial Theorem and Its Simple Applications",
+  "concept_ids": [
+   "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter"
+  ],
+  "concept_mapping_note": "MCQ; fractional-power coefficients. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 6,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Term powers give 21/4.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Binomial Theorem is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "6cbafc7249871c73",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s1-mat-008",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Binomial Theorem and Its Simple Applications",
+  "concept_ids": [
+   "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter"
+  ],
+  "concept_mapping_note": "MCQ; weighted binomial sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Split sums give α = 6, β = 3; norm 81.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Binomial Theorem is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "784d76253bda5cc6",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s1-mat-009",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Binomial Theorem and Its Simple Applications",
+  "concept_ids": [
+   "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter"
+  ],
+  "concept_mapping_note": "MCQ; rational-term sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Even powers sum to 18817.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Binomial Theorem is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "85b252dd0f3240b4",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr04-s1-mat-006",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (4 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Binomial Theorem and Its Simple Applications",
+  "concept_ids": [
+   "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter"
+  ],
+  "concept_mapping_note": "MCQ; end-to-end term ratio. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 6,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Symmetric ratio forces n = 31; C(31,3) = 4495.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 4 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Binomial Theorem is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "4ec5b18e0a0161c6",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr04-s1-mat-007",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (4 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Binomial Theorem and Its Simple Applications",
+  "concept_ids": [
+   "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter"
+  ],
+  "concept_mapping_note": "MCQ; coefficient-mean point distance. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 7,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Mean forces n = 5; distance 3√2.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 4 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Binomial Theorem is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "e3b82554bf11df79",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr08-s2-mat-008",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (8 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Binomial Theorem and Its Simple Applications",
+  "concept_ids": [
+   "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter"
+  ],
+  "concept_mapping_note": "MCQ; integral-term census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Eighth multiples give 128 terms.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 8 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Binomial Theorem is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "ea377965a6c3b6e9",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
