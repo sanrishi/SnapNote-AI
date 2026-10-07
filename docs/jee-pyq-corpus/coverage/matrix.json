@@ -1319,8 +1319,9 @@
    "session": "April 2024",
    "shift": "Shift 2 (4 Apr 2024)",
    "chapter": "Statistics and Probability",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-mat-019",
     "pyq-jee-main-2024-apr04-s2-mat-030"
    ],
    "source_status": "parsed",
@@ -3262,6 +3263,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (6 Apr 2024)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-mat-018",
+    "pyq-jee-main-2024-apr06-s1-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (6 Apr 2024)",
    "chapter": "Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -4545,8 +4560,9 @@
    "session": "April 2024",
    "shift": "Shift 1 (8 Apr 2024)",
    "chapter": "Statistics and Probability",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-mat-019",
     "pyq-jee-main-2024-apr08-s1-mat-030"
    ],
    "source_status": "parsed",
@@ -6415,6 +6431,20 @@
     "pyq-jee-main-2024-apr09-s2-che-073",
     "pyq-jee-main-2024-apr09-s2-che-076",
     "pyq-jee-main-2024-apr09-s2-che-090"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 2 (9 Apr 2024)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-mat-019",
+    "pyq-jee-main-2024-apr09-s2-mat-020"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -8965,8 +8995,9 @@
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Statistics and Probability",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-mat-019",
     "pyq-jee-main-2024-jan29-s1-mat-030"
    ],
    "source_status": "parsed",
@@ -10262,6 +10293,19 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 2 (30 Jan 2024)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan30-s2-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (30 Jan 2024)",
    "chapter": "Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -10843,6 +10887,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (31 Jan 2024)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s1-mat-017",
+    "pyq-jee-main-2024-jan31-s1-mat-019"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (31 Jan 2024)",
    "chapter": "Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -11369,6 +11427,20 @@
     "pyq-jee-main-2024-jan31-s2-che-073",
     "pyq-jee-main-2024-jan31-s2-che-075",
     "pyq-jee-main-2024-jan31-s2-che-077"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 2 (31 Jan 2024)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-mat-018",
+    "pyq-jee-main-2024-jan31-s2-mat-019"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -13550,6 +13622,20 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (3 Apr 2025)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-mat-008",
+    "pyq-jee-main-2025-apr03-s2-mat-009"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (3 Apr 2025)",
    "chapter": "Units and Measurements",
    "verified_questions": 2,
    "verified_ids": [
@@ -13718,6 +13804,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr04-s1-mat-001"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (4 Apr 2025)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s1-mat-008",
+    "pyq-jee-main-2025-apr04-s1-mat-009"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -14805,6 +14905,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (7 Apr 2025)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-mat-009"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (7 Apr 2025)",
    "chapter": "Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -15875,6 +15988,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr08-s2-che-063",
     "pyq-jee-main-2025-apr08-s2-che-064"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (8 Apr 2025)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-mat-009"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -17028,6 +17154,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-mat-008",
+    "pyq-jee-main-2025-jan23-s1-mat-017"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
    "chapter": "Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -18001,6 +18141,20 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan24-s1-che-065"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (24 Jan 2025)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan24-s1-mat-007",
+    "pyq-jee-main-2025-jan24-s1-mat-008"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -19048,6 +19202,20 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (28 Jan 2025)",
+   "chapter": "Statistics and Probability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-mat-008",
+    "pyq-jee-main-2025-jan28-s1-mat-009"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (28 Jan 2025)",
    "chapter": "Trigonometry",
    "verified_questions": 1,
    "verified_ids": [
@@ -19717,7 +19885,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2248,
+  "verified_records": 2272,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -19725,9 +19893,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2248,
+  "verified_records": 2272,
   "external_candidates_quarantined": 703,
-  "review_batches": 31,
+  "review_batches": 32,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -19766,7 +19934,7 @@
    "jee-mathematics-permutations-and-combinations-chapter": 28,
    "jee-mathematics-sequence-and-series-chapter": 38,
    "jee-mathematics-sets-relations-and-functions-chapter": 40,
-   "jee-mathematics-statistics-and-probability-chapter": 37,
+   "jee-mathematics-statistics-and-probability-chapter": 61,
    "jee-mathematics-three-dimensional-geometry-chapter": 46,
    "jee-mathematics-trigonometry-chapter": 23,
    "jee-mathematics-vector-algebra-chapter": 39,
