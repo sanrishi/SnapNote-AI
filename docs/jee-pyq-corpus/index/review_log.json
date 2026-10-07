@@ -333,6 +333,19 @@
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q11": "misqueued Mathematics circle item; already verified in the coordinate-geometry shard",
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q13": "misqueued Mathematics hyperbola item; already verified in the coordinate-geometry shard"
    }
+  },
+  {
+   "batch": 22,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 29,
+   "verified": 28,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Permutations and Combinations HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22"
+   ]
   }
  ],
  "cumulative": {
@@ -819,6 +832,12 @@
    "reason": "misqueued Mathematics inverse-trig item and chapter orphan; solved 22 pi^2 consistent with mirror B but held for proper chapter assignment",
    "date": "2026-10-06",
    "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22",
+   "reason": "stem truncated with the counted objects lost in both languages; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Permutations and Combinations HIGH_CONFIDENCE sweep"
   }
  ]
 }
