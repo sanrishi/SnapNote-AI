@@ -589,6 +589,17 @@
    "ambiguous": 0,
    "scope": "Vector NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
    "demotions": []
+  },
+  {
+   "batch": 40,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 13,
+   "verified": 13,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Trig NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
   }
  ],
  "cumulative": {
