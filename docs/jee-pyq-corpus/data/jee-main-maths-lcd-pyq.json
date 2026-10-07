@@ -2044,5 +2044,625 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-mat-008",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; continuity via exponential limits. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Standard limits give a = 12√2; a² = 288.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "96e81a24c677ce31",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-mat-009",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; integral-form limit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Triple L'Hôpital gives -1/6.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "3aef78afde5b2fdc",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-mat-009",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; trigonometric maxima census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Sign analysis gives 3 maxima.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "98250fdaf1ef0cb0",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr09-s2-mat-009",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (9 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; integral-form limit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Double L'Hôpital gives 9π²/8.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "3c0bd2c4fb26d032",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan29-s1-mat-008",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (29 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; integral-form limit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Double L'Hôpital gives 3π²/8.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-29-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 29 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "25ac5430d9bd546a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan29-s1-mat-009",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (29 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; product-form derivative at zero. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "First-order expansion gives √π.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-29-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 29 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "8157cdf1af5f5f06",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan29-s1-mat-010",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (29 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; monotonicity plus exact root. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 10,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Monotone gives unique root; triple-angle pins it.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-29-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 29 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "a1e33702e1b47168",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-mat-008",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; piecewise differentiability; integral. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Continuity forces a = 3, b = 5; integral 11.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "7b4d4f8673949b27",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-mat-009",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; polynomial max-min range. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Critical values give range 608.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "39630eefe7003609",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s1-mat-009",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; exponential-limit continuity; slope condition. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Right-hand limit pins g; slope matching gives g(3).",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "1c46acdd2722f665",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s2-mat-008",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; continuity-differentiability census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Corner analysis gives m = 0, n = 1; total 1.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "427c980042d09e3d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s2-mat-009",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; ratio limit for increasing functions. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Slow variation forces limit 0.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "6f5889493374f701",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s2-mat-016",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; absolute-value extrema census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 16,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Kink analysis gives 2 minima and 2 maxima; total 4.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "8d29e4b328d311f4",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr04-s1-mat-017",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (4 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; limit coefficient matching. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 17,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Series matching gives λ = 6, μ = 12; total 18.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 4 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "dc0094e2a81448c2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr04-s1-mat-018",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (4 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; functional telescoping sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 18,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Telescoping gives G(x) = x; sum 385.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 4 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "aa46c761714f861e",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr07-s1-mat-016",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (7 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; fractional-power limit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 16,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Leading orders cancel to 1/3.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-7-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 7 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "170c8ba613e9c822",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr08-s2-mat-017",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (8 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; rational-function monotonicity partition. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 17,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Sign analysis gives critical points ±3; norm 36.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 8 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "608667b8d6074166",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan23-s1-mat-016",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (23 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; two-sided continuity recovery. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 16,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Two-sided limits give k1 = 3, k2 = -1; norm 10.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-23-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 23 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "245637df15a486bc",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s1-mat-016",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (24 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; reciprocal functional equation; limit form. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 16,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Reciprocal system gives α = 3, β = 1/2; total 4.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "d98d3851dd719c4c",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-mat-016",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; piecewise minima sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 16,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Piecewise minima 7/3 and -11/72; sum 157/72.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "2e8d08c0441695b2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

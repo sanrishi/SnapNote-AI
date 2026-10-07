@@ -457,6 +457,23 @@
     "cand-jeeprep-main-2024-2024-apr-4-shift-2-q13",
     "cand-jeeprep-main-2024-2024-jan-31-shift-1-q16"
    ]
+  },
+  {
+   "batch": 30,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 25,
+   "verified": 20,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "LCD NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q7",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q6",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q8",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q9",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q7"
+   ]
   }
  ],
  "cumulative": {
@@ -1087,6 +1104,36 @@
    "reason": "transcribed point fails the hyperbola equation; likely transcription error",
    "date": "2026-10-06",
    "scope": "Co-ordinate Geometry NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q7",
+   "reason": "mirror carries no claimed answer; recomputed 42 uncorroborated",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q6",
+   "reason": "mirror carries no claimed answer and limit diverges; transcription suspect",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q8",
+   "reason": "stem ends at 'then' with the ask and options missing",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q9",
+   "reason": "stem ends at 'then' with the ask and options missing",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q7",
+   "reason": "stem ends at 'then' with the ask and options missing",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
   }
  ]
 }
