@@ -257,6 +257,19 @@
    "duplicate_skips": {
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q24": "misqueued Mathematics 3D-lines item; already verified with answer 216 in the three-dimensional-geometry shard"
    }
+  },
+  {
+   "batch": 18,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 34,
+   "verified": 33,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Some Basic Concepts HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51"
+   ]
   }
  ],
  "cumulative": {
@@ -647,6 +660,12 @@
    "reason": "stem asks for the correct chromatography statement but the option statements are absent; mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Purification and Characterisation HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51",
+   "reason": "queue references an item with no index record; no source to verify against",
+   "date": "2026-10-06",
+   "scope": "Some Basic Concepts HIGH_CONFIDENCE sweep"
   }
  ]
 }
