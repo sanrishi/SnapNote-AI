@@ -389,6 +389,20 @@
    "ambiguous": 0,
    "scope": "Binomial Theorem HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
    "demotions": []
+  },
+  {
+   "batch": 26,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 26,
+   "verified": 24,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Biomolecules HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q80",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q70"
+   ]
   }
  ],
  "cumulative": {
@@ -911,6 +925,18 @@
    "reason": "yellow-ammonium-sulphide inclusion genuinely uncertain; option set unverifiable against official key",
    "date": "2026-10-06",
    "scope": "Practical Chemistry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q80",
+   "reason": "stem asks for the incorrect DNA base structure but the option structures are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Biomolecules HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q70",
+   "reason": "dipeptide order (Ala-Gly vs Gly-Ala) underdetermined without options; components identified but mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "Biomolecules HIGH_CONFIDENCE sweep"
   }
  ]
 }
