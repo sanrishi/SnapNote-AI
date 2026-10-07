@@ -928,8 +928,9 @@
    "session": "April 2024",
    "shift": "Shift 2 (4 Apr 2024)",
    "chapter": "Differential Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr04-s2-mat-012",
     "pyq-jee-main-2024-apr04-s2-mat-027"
    ],
    "source_status": "parsed",
@@ -2916,6 +2917,20 @@
    "year": 2024,
    "session": "April 2024",
    "shift": "Shift 1 (6 Apr 2024)",
+   "chapter": "Differential Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr06-s1-mat-013",
+    "pyq-jee-main-2024-apr06-s1-mat-014"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (6 Apr 2024)",
    "chapter": "Dual Nature of Matter and Radiation",
    "verified_questions": 1,
    "verified_ids": [
@@ -4225,6 +4240,20 @@
    "verified_ids": [
     "pyq-jee-main-2024-apr08-s1-phy-040",
     "pyq-jee-main-2024-apr08-s1-phy-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "April 2024",
+   "shift": "Shift 1 (8 Apr 2024)",
+   "chapter": "Differential Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-apr08-s1-mat-012",
+    "pyq-jee-main-2024-apr08-s1-mat-013"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -6146,8 +6175,9 @@
    "session": "April 2024",
    "shift": "Shift 2 (9 Apr 2024)",
    "chapter": "Differential Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-apr09-s2-mat-013",
     "pyq-jee-main-2024-apr09-s2-mat-026"
    ],
    "source_status": "parsed",
@@ -8743,8 +8773,9 @@
    "session": "January 2024",
    "shift": "Shift 1 (29 Jan 2024)",
    "chapter": "Differential Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-jan29-s1-mat-013",
     "pyq-jee-main-2024-jan29-s1-mat-026"
    ],
    "source_status": "parsed",
@@ -10681,6 +10712,20 @@
    "year": 2024,
    "session": "January 2024",
    "shift": "Shift 1 (31 Jan 2024)",
+   "chapter": "Differential Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2024-jan31-s1-mat-011",
+    "pyq-jee-main-2024-jan31-s1-mat-012"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2024,
+   "session": "January 2024",
+   "shift": "Shift 1 (31 Jan 2024)",
    "chapter": "Dual Nature of Matter and Radiation",
    "verified_questions": 1,
    "verified_ids": [
@@ -11278,8 +11323,9 @@
    "session": "January 2024",
    "shift": "Shift 2 (31 Jan 2024)",
    "chapter": "Differential Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2024-jan31-s2-mat-013",
     "pyq-jee-main-2024-jan31-s2-mat-027"
    ],
    "source_status": "parsed",
@@ -13044,6 +13090,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 1 (3 Apr 2025)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s1-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (3 Apr 2025)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -13596,6 +13655,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (3 Apr 2025)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr03-s2-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (3 Apr 2025)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 1,
    "verified_ids": [
@@ -14011,6 +14083,19 @@
    "verified_ids": [
     "pyq-jee-main-2025-apr04-s1-mat-003",
     "pyq-jee-main-2025-apr04-s1-mat-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (4 Apr 2025)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s1-mat-020"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -14903,6 +14988,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-apr07-s1-phy-036"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 1 (7 Apr 2025)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr07-s1-mat-020"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -16037,6 +16135,19 @@
     "pyq-jee-main-2025-apr08-s2-che-055",
     "pyq-jee-main-2025-apr08-s2-che-059",
     "pyq-jee-main-2025-apr08-s2-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (8 Apr 2025)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr08-s2-mat-020"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -17234,6 +17345,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (23 Jan 2025)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan23-s1-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (23 Jan 2025)",
    "chapter": "Dual Nature of Matter and Radiation",
    "verified_questions": 1,
    "verified_ids": [
@@ -18287,8 +18411,9 @@
    "session": "January 2025",
    "shift": "Shift 1 (24 Jan 2025)",
    "chapter": "Differential Equations",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2025-jan24-s1-mat-020",
     "pyq-jee-main-2025-jan24-s1-mat-025"
    ],
    "source_status": "parsed",
@@ -19290,6 +19415,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan28-s1-mat-004"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (28 Jan 2025)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan28-s1-mat-018"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -20330,7 +20468,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2345,
+  "verified_records": 2363,
   "sources_parsed": 42,
   "sources_discovered": 3
  },
@@ -20338,9 +20476,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2345,
+  "verified_records": 2363,
   "external_candidates_quarantined": 703,
-  "review_batches": 36,
+  "review_batches": 37,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -20372,7 +20510,7 @@
    "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 28,
    "jee-mathematics-co-ordinate-geometry-chapter": 129,
    "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 57,
-   "jee-mathematics-diffrential-equations-chapter": 34,
+   "jee-mathematics-diffrential-equations-chapter": 52,
    "jee-mathematics-integral-calculas-chapter": 85,
    "jee-mathematics-limit-continuity-and-differentiability-chapter": 86,
    "jee-mathematics-matrices-and-determinants-chapter": 48,

@@ -1052,5 +1052,563 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s2-mat-012",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (4 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; rational integrating factor. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 12,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Integrating factor gives π/32.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "7fac7826216d6511",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-mat-013",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; exponential integrating factor. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 13,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Exponential factor gives (1-e^{π/2})/2.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "58aba87a77be6c7b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr06-s1-mat-014",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (6 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; logarithmic integrating factor. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 14,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Log factor gives -3/e.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 6 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "af5fe65c36c3a028",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-mat-012",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; area-to-DE elimination. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 12,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Area differentiation pins f; elimination gives DE.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "97262cb5757ca116",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s1-mat-013",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (8 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; exponential-tangent separation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 13,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Separation gives 1/e.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "5b818a5d5dea6858",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr09-s2-mat-013",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (9 Apr 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; integral-equation reduction. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 13,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Reduction gives sine; form 1.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-9-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 9 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "09b4d94e441f832b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan29-s1-mat-013",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (29 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; trigonometric integrating factor. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 13,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Integrating factor gives 1.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-29-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 29 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "48b5561d77da33d2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s1-mat-011",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; cotangent integrating factor. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 11,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Cotangent factor gives closed form.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "2143a4ee300264db",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s1-mat-012",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; homogeneous reduction. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 12,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Homogeneous substitution gives x = ye^y.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "25b4ce8700d1e612",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s2-mat-013",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; Newton cooling evaluation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 13,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Exponential decay gives 90.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "f8cf2656a21c307b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s1-mat-020",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; integral-defined coefficient; linear solve. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Auxiliary integral gives g; cosine factor gives 4π/3.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "93f581dc42e584da",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s2-mat-020",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; exponential integrating factor. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Exponential factor gives 4/3.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "01e750d1d2528171",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr04-s1-mat-020",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (4 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; Volterra equation reduction; triangle area. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Double differentiation gives f = 1 - x; area 1/2.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 4 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "cbbe3ece7e2ad13a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr07-s1-mat-020",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (7 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; rational-exponential particular solution. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Guess-and-check gives 7/(4+e²).",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-7-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 7 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "6418d05781e87174",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr08-s2-mat-020",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (8 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; nested-function substitution; linear solve. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Root substitution gives (e-1)/e⁴.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 8 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "e673d376bbd55e21",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan23-s1-mat-020",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (23 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; separable exponential evaluation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Separation gives k = 8.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-23-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 23 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "719280de2180d677",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s1-mat-020",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (24 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; root integrating factor. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Root factor gives 5√3/2.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "b19b979799562f15",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-mat-018",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Differential Equations",
+  "concept_ids": [
+   "jee-mathematics-diffrential-equations-chapter"
+  ],
+  "concept_mapping_note": "MCQ; integral-equation differentiation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 18,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Differentiation gives f = 6/x; value 1.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Differential Equations is pending. Recovered from NEEDS_SOURCE_REVIEW (abrupt_ending flag was a false positive; stem verified complete).",
+  "content_fingerprint": "ceb09807088d1b44",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
