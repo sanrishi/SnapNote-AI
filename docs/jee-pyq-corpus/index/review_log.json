@@ -270,6 +270,43 @@
    "demotions": [
     "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51"
    ]
+  },
+  {
+   "batch": 19,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 37,
+   "verified": 31,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Periodicity HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q56",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q58",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q60"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q9": "misqueued Mathematics probability item; already verified as m+n = 14 in the statistics-probability shard"
+   }
+  },
+  {
+   "batch": 20,
+   "classes": "REASSIGNMENT",
+   "date": "2026-10-06",
+   "reviewed": 5,
+   "verified": 0,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Move 5 periodicity-content records from p-block shard to periodicity shard (queue contamination fix)",
+   "moved": [
+    "pyq-jee-main-2025-apr07-s2-che-060",
+    "pyq-jee-main-2025-apr08-s2-che-057",
+    "pyq-jee-main-2025-jan22-s2-che-060",
+    "pyq-jee-main-2025-jan23-s2-che-060",
+    "pyq-jee-main-2025-jan28-s2-che-074"
+   ]
   }
  ],
  "cumulative": {
@@ -666,6 +703,36 @@
    "reason": "queue references an item with no index record; no source to verify against",
    "date": "2026-10-06",
    "scope": "Some Basic Concepts HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
+   "reason": "stem asks which product is not formed but the option products are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68",
+   "reason": "IE1 option order contradicts standard data (B highest, not Tl); matching unclosable; needs source review",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q56",
+   "reason": "stem asks for the lowest-IE1 element but the option elements are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q58",
+   "reason": "stem asks for the odd-period element but the option elements are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q60",
+   "reason": "statement D (equal EN of C in CH4 and CCl4) is genuinely ambiguous and the option set is absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
   }
  ]
 }
