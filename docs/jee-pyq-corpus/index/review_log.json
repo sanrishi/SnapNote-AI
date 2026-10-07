@@ -214,6 +214,19 @@
    "demotions": [
     "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8"
    ]
+  },
+  {
+   "batch": 15,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 35,
+   "verified": 34,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Differential Equations HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q12"
+   ]
   }
  ],
  "cumulative": {
@@ -580,6 +593,12 @@
    "reason": "stem truncated mid-sentence with the event description lost in both languages; mirror option letter unverifiable",
    "date": "2026-10-06",
    "scope": "Statistics and Probability HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q12",
+   "reason": "transcribed conditions admit no non-zero alpha and mirror carries no claimed answer; likely dropped item",
+   "date": "2026-10-06",
+   "scope": "Differential Equations HIGH_CONFIDENCE sweep"
   }
  ]
 }
