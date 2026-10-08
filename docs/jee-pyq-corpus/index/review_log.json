@@ -719,6 +719,89 @@
     "cand-jeeprep-main-2024-2024-jan-31-shift-1-q36",
     "cand-jeeprep-main-2025-2025-apr-4-shift-1-q29"
    ]
+  },
+  {
+   "batch": 50,
+   "classes": "C_CORRUPTED",
+   "date": "2026-10-06",
+   "reviewed": 147,
+   "verified": 76,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "CORRUPTED triage (all 2024-2025 chapters)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-1-q62",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q67",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q64",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q70",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q61",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q66",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q62",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q63",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q70",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q52",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q62",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-1-q75",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q75",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q75",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q74",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q73",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q74",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q71",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q73",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q65",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-2-q65",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-2-q66",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q64",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q65",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q65",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q59",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-1-q80",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-1-q80",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q80",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q70",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q70",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q59",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q58",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q4",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-2-q76",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q73",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q74",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q77",
+    "cand-jeeprep-main-2024-2024-apr-8-shift-2-q78",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q79",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q72",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q76",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q61",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q63",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q52",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q71",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q67",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q80",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q72",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-1-q64",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q65",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q56",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-2-q56",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q62",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q61",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q5",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q2",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q30",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-2-q47",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q44",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q48",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q50",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q49",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-1-q37",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q31",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q33"
+   ]
   }
  ],
  "cumulative": {
@@ -1541,6 +1624,432 @@
    "reason": "two equations with three unknowns; underdetermined",
    "date": "2026-10-06",
    "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q62",
+   "reason": "stem asks for the max-dipole molecule but the option molecules are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q70",
+   "reason": "stem asks for the ligand order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q67",
+   "reason": "stem asks for the IE order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-1-q70",
+   "reason": "stem asks for the ligand order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q64",
+   "reason": "stem asks for the non-semiconductor but the option materials are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q70",
+   "reason": "stem asks for the IUPAC name but the option names are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-1-q70",
+   "reason": "stem asks for the homoleptic complex but the option complexes are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q61",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q66",
+   "reason": "stem asks for the strongest agent but the option agents are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q62",
+   "reason": "stem asks for the incorrect item but the option items are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q63",
+   "reason": "stem asks for the shape but the option shapes are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q70",
+   "reason": "stem asks for the correct property but the content is absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q52",
+   "reason": "stem asks for the correct statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q62",
+   "reason": "stem asks for the complex but the option complexes are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q75",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q75",
+   "reason": "stem asks for the group but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q75",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q74",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q73",
+   "reason": "stem asks for the group but the option groups are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q74",
+   "reason": "stem asks for the set but the option sets are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q70",
+   "reason": "stem asks for the structure but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q71",
+   "reason": "stem asks for the species but the option species are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q73",
+   "reason": "stem asks for the order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q65",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-2-q65",
+   "reason": "stem asks for the cation but the option cations are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-2-q66",
+   "reason": "stem asks for the alkane but the option alkanes are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q64",
+   "reason": "stem asks for the cation but the option cations are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q65",
+   "reason": "stem asks for the element but the option elements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q65",
+   "reason": "stem asks for the incorrect pair but the option pairs are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q59",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q80",
+   "reason": "stem asks for the structure but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-1-q80",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q80",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q70",
+   "reason": "stem asks for the correct statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q70",
+   "reason": "stem asks for the structure but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q59",
+   "reason": "stem asks for the incorrect trend but the option trends are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q58",
+   "reason": "stem asks for the incorrect order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q4",
+   "reason": "stem admits multiple p+q values without options",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-2-q76",
+   "reason": "stem asks for the reaction but the option reactions are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q73",
+   "reason": "stem asks for the example but the option examples are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q74",
+   "reason": "stem asks for the structure but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q77",
+   "reason": "stem asks for the strongest base but the option bases are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-2-q78",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q79",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q72",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q76",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q61",
+   "reason": "stem asks for the molecule but the option molecules are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q63",
+   "reason": "stem asks for the entity but the option entities are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q52",
+   "reason": "stem asks for the molecules but the option molecules are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q71",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q67",
+   "reason": "stem asks for the ions but the option ions are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q80",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q70",
+   "reason": "stem asks for the basis but the option bases are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q72",
+   "reason": "stem asks for the set but option element-set mapping is ambiguous",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-1-q64",
+   "reason": "stem asks for the reaction but the option reactions are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q65",
+   "reason": "stem asks for the method but the option methods are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q56",
+   "reason": "stem asks for the order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-2-q56",
+   "reason": "stem asks for the species but the option species are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q62",
+   "reason": "stem asks for the mixture but the option mixtures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q61",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q5",
+   "reason": "stem ends before the consequent; options missing",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q2",
+   "reason": "stem ends before the asked property; options missing",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q30",
+   "reason": "recompute gives 320/11 versus mirror-claimed 29",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-2-q47",
+   "reason": "stem asks for the phenomenon but the option phenomena are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q44",
+   "reason": "stem asks for the phenomenon but the option phenomena are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q48",
+   "reason": "stem asks for the circuit but the option circuits are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q50",
+   "reason": "stem truncated mid-sentence with no mirror answer",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q49",
+   "reason": "stem asks for the quantity but the option quantities are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-1-q37",
+   "reason": "mirror carries no claimed answer; uncorroborated",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q31",
+   "reason": "stem asks for the true statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q33",
+   "reason": "stem asks for the relation but the option relations are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
   }
  ]
 }

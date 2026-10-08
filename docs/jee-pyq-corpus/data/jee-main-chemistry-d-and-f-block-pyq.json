@@ -1486,5 +1486,129 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr05-s1-che-069",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (5 Apr 2024)",
+  "subject": "Chemistry",
+  "chapter": "d- and f-Block Elements",
+  "concept_ids": [
+   "jee-chemistry-d-and-f-block-elements-chapter"
+  ],
+  "concept_mapping_note": "MCQ; maximum oxidation state. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 69,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Mn shows +7.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-5-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2024, B Tech 5 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for d- and f-Block Elements is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "8130e65b5a7dee5f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s2-che-068",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (1 Feb 2024)",
+  "subject": "Chemistry",
+  "chapter": "d- and f-Block Elements",
+  "concept_ids": [
+   "jee-chemistry-d-and-f-block-elements-chapter"
+  ],
+  "concept_mapping_note": "MCQ; third-ionization maximum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 68,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Zinc has highest IE3.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for d- and f-Block Elements is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "9abb4ce093264b71",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan29-s1-che-067",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (29 Jan 2024)",
+  "subject": "Chemistry",
+  "chapter": "d- and f-Block Elements",
+  "concept_ids": [
+   "jee-chemistry-d-and-f-block-elements-chapter"
+  ],
+  "concept_mapping_note": "MCQ; permanganate decomposition. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 67,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Manganate plus dioxide.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-29-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2024, B Tech 29 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for d- and f-Block Elements is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "124364f5b3a96d4f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan29-s1-che-068",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (29 Jan 2024)",
+  "subject": "Chemistry",
+  "chapter": "d- and f-Block Elements",
+  "concept_ids": [
+   "jee-chemistry-d-and-f-block-elements-chapter"
+  ],
+  "concept_mapping_note": "MCQ; permanganate oxidation product. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 68,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Iodate in alkali.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-29-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2024, B Tech 29 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for d- and f-Block Elements is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "352f9e55f0bbe49f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

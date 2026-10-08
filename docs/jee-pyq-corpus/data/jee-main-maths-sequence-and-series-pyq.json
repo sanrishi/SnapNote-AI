@@ -1734,5 +1734,98 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s1-mat-006",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (1 Feb 2024)",
+  "subject": "Mathematics",
+  "chapter": "Sequence and Series",
+  "concept_ids": [
+   "jee-mathematics-sequence-and-series-chapter"
+  ],
+  "concept_mapping_note": "MCQ; AP-GP bridge mean. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 6,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "AP-GP link gives 11.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sequence and Series is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "67fa83f840d28909",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr03-s1-mat-007",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (3 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sequence and Series",
+  "concept_ids": [
+   "jee-mathematics-sequence-and-series-chapter"
+  ],
+  "concept_mapping_note": "MCQ; quadratic-polynomial sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 7,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Second differences give 7240.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-3-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 3 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sequence and Series is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "8453a910bc9b614f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr04-s1-mat-005",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 1 (4 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sequence and Series",
+  "concept_ids": [
+   "jee-mathematics-sequence-and-series-chapter"
+  ],
+  "concept_mapping_note": "MCQ; alternating-pattern sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 5,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Interleaved sums give 41880.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 4 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sequence and Series is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "909ef8baebec3eea",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

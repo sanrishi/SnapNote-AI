@@ -2354,5 +2354,160 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr04-s1-che-088",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 1 (4 Apr 2024)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "Numerical; alkane isomer census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 88,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "C7H16 has 9 chain isomers.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-4-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2024, B Tech 4 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles of Organic Chemistry is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable). Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "1e5d8c497a5d0852",
+  "difficulty": null,
+  "answer_key": "9",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-apr08-s2-che-073",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "April 2024",
+  "shift": "Shift 2 (8 Apr 2024)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; carbocation geometry. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 73,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Carbocation is trigonal planar.",
+  "source_url": "https://jeeprep.app/pyq/2024-apr-8-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2024, B Tech 8 Apr 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles of Organic Chemistry is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "ac550969bec593b4",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-feb01-s1-che-089",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 1 (1 Feb 2024)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "Numerical; optical-isomer count. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 89,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "2-chlorobutane has 2 optical isomers.",
+  "source_url": "https://jeeprep.app/pyq/2024-feb-1-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2024, B Tech 1 Feb 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles of Organic Chemistry is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable). Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "24436a5cf289c6a0",
+  "difficulty": null,
+  "answer_key": "2",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan30-s2-che-074",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (30 Jan 2024)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; IUPAC naming. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 74,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "3-aminobutanenitrile.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-30-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2024, B Tech 30 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles of Organic Chemistry is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "2aa55864d02fdea2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s2-che-075",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (24 Jan 2025)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "Numerical; stereoisomer census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 75,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "2x2 stereoisomers give 4.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles of Organic Chemistry is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable). Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "f0764161bd34eba6",
+  "difficulty": null,
+  "answer_key": "4",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

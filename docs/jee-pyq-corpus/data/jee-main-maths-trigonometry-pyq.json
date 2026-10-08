@@ -1114,5 +1114,98 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s2-mat-002",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Trigonometry",
+  "concept_ids": [
+   "jee-mathematics-trigonometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; exponential-trig root census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 2,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "No admissible angle; count 0.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Trigonometry is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "0aec73006806d11b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2024-jan31-s2-mat-020",
+  "exam": "JEE Main",
+  "year": 2024,
+  "session": "January 2024",
+  "shift": "Shift 2 (31 Jan 2024)",
+  "subject": "Mathematics",
+  "chapter": "Trigonometry",
+  "concept_ids": [
+   "jee-mathematics-trigonometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; inverse-trig evaluation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2024",
+  "question_summary": "Principal reduction gives closed form.",
+  "source_url": "https://jeeprep.app/pyq/2024-jan-31-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2024, B Tech 31 Jan 2024 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Trigonometry is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "8ea75d590824a7d2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan23-s1-mat-011",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (23 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Trigonometry",
+  "concept_ids": [
+   "jee-mathematics-trigonometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; trig product identity. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 11,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Angle-addition collapses to 1.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-23-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 23 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Trigonometry is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "08c69db355aab747",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

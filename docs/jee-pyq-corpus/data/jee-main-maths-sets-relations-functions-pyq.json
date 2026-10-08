@@ -1765,5 +1765,67 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s2-mat-001",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (24 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; tanh injectivity audit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Strict monotone gives injective only.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "9cc8748dabfa2b1f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan28-s1-mat-001",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (28 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Sets, Relations and Functions",
+  "concept_ids": [
+   "jee-mathematics-sets-relations-and-functions-chapter"
+  ],
+  "concept_mapping_note": "MCQ; parity equivalence audit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 1,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Parity relation is equivalence.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-28-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 28 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Sets, Relations and Functions is pending. Recovered from CORRUPTED triage (flag was overbroad; stem verified complete and solvable).",
+  "content_fingerprint": "012eae9ac01e013f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
