@@ -950,6 +950,17 @@
    "ambiguous": 0,
    "scope": "2026 Equilibrium sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 63,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 13,
+   "verified": 13,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 d-block sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
