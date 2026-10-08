@@ -1188,6 +1188,17 @@
    "ambiguous": 0,
    "scope": "2026 Solutions sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 84,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Bonding sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
