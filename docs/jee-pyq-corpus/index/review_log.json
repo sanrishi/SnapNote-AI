@@ -1098,6 +1098,17 @@
    "ambiguous": 0,
    "scope": "2026 Integral sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 76,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Thermodynamics sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
