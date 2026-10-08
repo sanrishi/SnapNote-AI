@@ -1307,6 +1307,17 @@
    "demotions": [
     "cand-jeeprep-main-2026-2026-apr-4-shift-2-q15"
    ]
+  },
+  {
+   "batch": 94,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Binomial sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
