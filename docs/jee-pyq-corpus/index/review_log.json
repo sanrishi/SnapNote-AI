@@ -928,6 +928,17 @@
    "ambiguous": 0,
    "scope": "2026 Sequence sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 61,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 14,
+   "verified": 14,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Oxygen sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
