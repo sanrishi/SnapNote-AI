@@ -1281,6 +1281,19 @@
     "cand-jeeprep-main-2026-2026-apr-5-shift-1-q25",
     "cand-jeeprep-main-2026-2026-apr-5-shift-2-q25"
    ]
+  },
+  {
+   "batch": 92,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 SRF sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-6-shift-2-q1"
+   ]
   }
  ],
  "cumulative": {
@@ -2637,6 +2650,12 @@
    "reason": "IF integral non-elementary; likely transcription issue",
    "date": "2026-10-07",
    "scope": "2026 DE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-6-shift-2-q1",
+   "reason": "corrupted stem (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 SRF sweep"
   }
  ]
 }
