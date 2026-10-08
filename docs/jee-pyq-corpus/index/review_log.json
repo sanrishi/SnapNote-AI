@@ -1256,6 +1256,17 @@
    "demotions": [
     "cand-jeeprep-main-2026-2026-apr-5-shift-1-q72"
    ]
+  },
+  {
+   "batch": 90,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Mole Concept sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
