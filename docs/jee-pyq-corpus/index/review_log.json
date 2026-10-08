@@ -1076,6 +1076,17 @@
    "ambiguous": 0,
    "scope": "2026 Units sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 74,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 4,
+   "verified": 4,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Rotational sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {

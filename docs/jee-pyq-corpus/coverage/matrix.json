@@ -1790,6 +1790,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-phy-031",
+    "pyq-jee-main-2026-apr06-s1-phy-033"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Sequence and Series",
    "verified_questions": 3,
    "verified_ids": [
@@ -2087,6 +2101,20 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-phy-033",
     "pyq-jee-main-2026-apr06-s2-phy-034"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-phy-028",
+    "pyq-jee-main-2026-apr06-s2-phy-032"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -26024,6 +26052,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-phy-031",
+    "pyq-jee-main-2026-apr06-s1-phy-033"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Sequence and Series",
    "verified_questions": 3,
    "verified_ids": [
@@ -26321,6 +26363,20 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-phy-033",
     "pyq-jee-main-2026-apr06-s2-phy-034"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-phy-028",
+    "pyq-jee-main-2026-apr06-s2-phy-032"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -26739,7 +26795,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2914,
+  "verified_records": 2918,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -26747,9 +26803,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2914,
+  "verified_records": 2918,
   "external_candidates_quarantined": 703,
-  "review_batches": 73,
+  "review_batches": 74,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -26819,7 +26875,7 @@
    "jee-physics-rotational-motion-concept-010": 7,
    "jee-physics-rotational-motion-concept-011": 6,
    "jee-physics-rotational-motion-concept-013": 3,
-   "jee-physics-rotational-motion-concept-014": 20,
+   "jee-physics-rotational-motion-concept-014": 24,
    "jee-physics-rotational-motion-concept-015": 1,
    "jee-physics-thermodynamics-chapter": 33,
    "jee-physics-units-and-measurements-chapter": 56,
