@@ -169,6 +169,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 2,
    "verified_ids": [
@@ -687,6 +700,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 1,
    "verified_ids": [
@@ -1192,6 +1218,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr04-s2-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-mat-019"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2156,6 +2195,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-mat-019"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 3,
    "verified_ids": [
@@ -2665,6 +2717,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s1-phy-046"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-mat-025"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -3218,6 +3283,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-mat-018"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 1,
    "verified_ids": [
@@ -3737,6 +3815,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr08-s2-phy-049"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-mat-017"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -26038,6 +26129,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 2,
    "verified_ids": [
@@ -26556,6 +26660,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-mat-020"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 1,
    "verified_ids": [
@@ -27061,6 +27178,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr04-s2-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-mat-019"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -28025,6 +28155,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-mat-019"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 3,
    "verified_ids": [
@@ -28534,6 +28677,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s1-phy-046"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-mat-025"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -29087,6 +29243,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-mat-018"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 1,
    "verified_ids": [
@@ -29615,6 +29784,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Differential Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-mat-017"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
    "verified_questions": 1,
    "verified_ids": [
@@ -30009,7 +30191,7 @@
   }
  ],
  "totals": {
-  "verified_records": 3073,
+  "verified_records": 3080,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -30017,9 +30199,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3073,
+  "verified_records": 3080,
   "external_candidates_quarantined": 703,
-  "review_batches": 90,
+  "review_batches": 91,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -30051,7 +30233,7 @@
    "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 38,
    "jee-mathematics-co-ordinate-geometry-chapter": 160,
    "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 80,
-   "jee-mathematics-diffrential-equations-chapter": 54,
+   "jee-mathematics-diffrential-equations-chapter": 61,
    "jee-mathematics-integral-calculas-chapter": 119,
    "jee-mathematics-limit-continuity-and-differentiability-chapter": 109,
    "jee-mathematics-matrices-and-determinants-chapter": 75,

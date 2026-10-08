@@ -1267,6 +1267,20 @@
    "ambiguous": 0,
    "scope": "2026 Mole Concept sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 91,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 7,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 DE sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-1-q25",
+    "cand-jeeprep-main-2026-2026-apr-5-shift-2-q25"
+   ]
   }
  ],
  "cumulative": {
@@ -2611,6 +2625,18 @@
    "reason": "recompute 42 (41.56) vs mirror 41; mismatch, left unverified",
    "date": "2026-10-07",
    "scope": "2026 Purification sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-1-q25",
+   "reason": "solution domain x<=e excludes e^12; inconsistent",
+   "date": "2026-10-07",
+   "scope": "2026 DE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q25",
+   "reason": "IF integral non-elementary; likely transcription issue",
+   "date": "2026-10-07",
+   "scope": "2026 DE sweep"
   }
  ]
 }
