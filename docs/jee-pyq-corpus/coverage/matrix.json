@@ -19,6 +19,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-che-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 1,
    "verified_ids": [
@@ -325,6 +338,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-052",
+    "pyq-jee-main-2026-apr04-s1-che-053"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 2,
    "verified_ids": [
@@ -616,6 +643,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-che-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 1,
    "verified_ids": [
@@ -883,6 +923,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-052",
+    "pyq-jee-main-2026-apr05-s1-che-053"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 1,
    "verified_ids": [
@@ -1135,6 +1189,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s1-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-052"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1436,6 +1503,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-052",
+    "pyq-jee-main-2026-apr06-s1-che-053"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 2,
    "verified_ids": [
@@ -1727,6 +1808,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-052"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 1,
    "verified_ids": [
@@ -1997,6 +2091,19 @@
     "pyq-jee-main-2026-apr06-s2-che-060"
    ],
    "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-073"
+   ],
+   "source_status": "parsed",
    "status": "partial"
   },
   {
@@ -24052,6 +24159,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-che-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 1,
    "verified_ids": [
@@ -24358,6 +24478,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-052",
+    "pyq-jee-main-2026-apr04-s1-che-053"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 2,
    "verified_ids": [
@@ -24649,6 +24783,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-che-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 1,
    "verified_ids": [
@@ -24916,6 +25063,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-052",
+    "pyq-jee-main-2026-apr05-s1-che-053"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 1,
    "verified_ids": [
@@ -25168,6 +25329,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s1-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-052"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -25469,6 +25643,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-052",
+    "pyq-jee-main-2026-apr06-s1-che-053"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 2,
    "verified_ids": [
@@ -25760,6 +25948,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Biomolecules",
    "verified_questions": 1,
    "verified_ids": [
@@ -26028,6 +26229,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-073"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -26337,7 +26551,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2893,
+  "verified_records": 2904,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -26345,9 +26559,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2893,
+  "verified_records": 2904,
   "external_candidates_quarantined": 703,
-  "review_batches": 71,
+  "review_batches": 72,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -26357,7 +26571,7 @@
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
   "verification_rate_reviewed": 0.98,
   "concept_distribution": {
-   "jee-chemistry-atomic-structure-chapter": 29,
+   "jee-chemistry-atomic-structure-chapter": 40,
    "jee-chemistry-biomolecules-chapter": 37,
    "jee-chemistry-chemical-bonding-and-molecular-structure-chapter": 53,
    "jee-chemistry-chemical-kinetics-chapter": 45,
