@@ -866,5 +866,160 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-che-070",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Principles Related to Practical Chemistry",
+  "concept_ids": [
+   "jee-chemistry-principles-related-to-practical-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; phenolphthalein colour. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 70,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Excess-alkali form is colourless.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Principles Related to Practical Chemistry is pending.",
+  "content_fingerprint": "0519bd2554f5bcef",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-che-069",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Principles Related to Practical Chemistry",
+  "concept_ids": [
+   "jee-chemistry-principles-related-to-practical-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; qualitative-analysis pick. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 69,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Group-IV sulfide picks Mn(+7).",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Principles Related to Practical Chemistry is pending.",
+  "content_fingerprint": "4e9a303bfa9bf571",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-che-070",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Principles Related to Practical Chemistry",
+  "concept_ids": [
+   "jee-chemistry-principles-related-to-practical-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; test match. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 70,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Functional-test matching matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Principles Related to Practical Chemistry is pending.",
+  "content_fingerprint": "ce881cfc17da751d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-che-070",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Principles Related to Practical Chemistry",
+  "concept_ids": [
+   "jee-chemistry-principles-related-to-practical-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; statement evaluation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 70,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Standard-indicator logic (both false).",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Principles Related to Practical Chemistry is pending.",
+  "content_fingerprint": "bc7ee56b398bd485",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-che-070",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Principles Related to Practical Chemistry",
+  "concept_ids": [
+   "jee-chemistry-principles-related-to-practical-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; green-paper test. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 70,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "SO2 redox paper picks dichromate.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Principles Related to Practical Chemistry is pending.",
+  "content_fingerprint": "1eab0e19311785cb",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

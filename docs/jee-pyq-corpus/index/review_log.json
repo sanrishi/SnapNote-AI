@@ -1406,6 +1406,17 @@
    "ambiguous": 0,
    "scope": "2026 Experimental sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 103,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 5,
+   "verified": 5,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Practical sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
