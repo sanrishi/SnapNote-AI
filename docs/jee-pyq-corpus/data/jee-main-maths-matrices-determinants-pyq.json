@@ -1920,5 +1920,408 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-mat-003",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; infinite-solution point locus. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 3,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Dependency gives point on line.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "01920c63c1cc5a58",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-mat-022",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "Numerical; two-sided matrix equations. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 22,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Inverses give diagonal sum 34.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "2082516de3583188",
+  "difficulty": null,
+  "answer_key": "34",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-mat-005",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; minimal-polynomial matrix census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 5,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Eigenvalue census gives 19.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "0423c532ba9501b9",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-mat-006",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; nested adjoint element sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 6,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Adjoint calculus gives -3/256.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "29d2c186d1fe7285",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-mat-003",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; infinite-solution parameters. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 3,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Dependency gives λ + μ = 18.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "f7dfeca72fd48050",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-mat-004",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; universal-dependence function. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 4,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Dependency plus consistency pins f.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "16f9fbbe42230f22",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-mat-003",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; determinant sum identity. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 3,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Cancellation gives k = 3.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "48b24edc6dab31ff",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-mat-004",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; explicit matrix solve. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 4,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Direct solve gives sum 5.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "9430f233d3f5385c",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-mat-021",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "Numerical; adjoint-identity parameters. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 21,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Consistent solve gives 4.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "4e8d98e725a0e017",
+  "difficulty": null,
+  "answer_key": "4",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-mat-004",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; trig-determinant root sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 4,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Determinant zero gives sum 4π.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "d57a88c50e09b299",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-mat-005",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; unipotent power ratio. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 5,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Nilpotent expansion gives 149.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "410ecf2561e7fc38",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-mat-003",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; infinite-solution parameters. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 3,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Dependency gives λ + μ = 24.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "b5df2ea8bc58bf27",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-mat-004",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; adjoint determinant recovery. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 4,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Determinant match gives 441.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "c58f6a8e0c1d127b",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

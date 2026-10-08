@@ -903,6 +903,20 @@
    "ambiguous": 0,
    "scope": "2026 3D sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 59,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 15,
+   "verified": 13,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Matrices sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-1-q3",
+    "cand-jeeprep-main-2026-2026-apr-4-shift-2-q6"
+   ]
   }
  ],
  "cumulative": {
@@ -2205,6 +2219,18 @@
    "reason": "parameter set open at both ends but stated half-closed; inconsistent",
    "date": "2026-10-06",
    "scope": "2026 LCD sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-1-q3",
+   "reason": "given data inconsistent; no such matrix exists",
+   "date": "2026-10-06",
+   "scope": "2026 Matrices sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q6",
+   "reason": "characteristic cubic has no clean root; unclosable without options",
+   "date": "2026-10-06",
+   "scope": "2026 Matrices sweep"
   }
  ]
 }
