@@ -2044,5 +2044,470 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-mat-015",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; foot-midpoint parameter recovery. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 15,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Midpoint plus orthogonality force origin; total 1.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "b7102c9764bd8387",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-mat-014",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; transversal length scaling. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 14,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Transversal parameters give 225α² = 1014.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "f707fe7f61ca2d70",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-mat-015",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; distance along a transversal. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 15,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Meeting point gives distance² 6.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "3b7529dc6897683e",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-mat-013",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; skew-line distance. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 13,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Cross norm 3 gives SD 3.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "895a1d88013a6fc5",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-mat-014",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; image-parameter recovery. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 14,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Both conditions force α = 3.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "726a91e7ba0bfb45",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-mat-013",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; point-line distance square. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 13,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Point distance squared 6.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "07058b197d7db1f7",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-mat-015",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; line-intersection norm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 15,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Intersection norm gives 17.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "73dd7950c3b4986a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-mat-014",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; centroid coordinate sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 14,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Two-point solve gives sum 6.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "c631fbb1ac4912ca",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-mat-015",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; image-distance parameter sum. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 15,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Image norm gives sum 6.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "7078fdb89fdbfac2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-mat-015",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; image-line parameter recovery. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 15,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Branch filter gives closed form.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "46d0812143f68c41",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-mat-016",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; common-perpendicular angle. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 16,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Cross ratio gives 5√2/2.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "48daf273f3e6007c",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-mat-014",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; skew-line distance. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 14,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Cross norm √5 gives 3√5.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "fe25ca1703c90968",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-mat-024",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "Numerical; image-parallelogram area square. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 24,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Image quadrilateral gives 162.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "e9cf17387e495fe9",
+  "difficulty": null,
+  "answer_key": "162",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-mat-015",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; parallel-line distance. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 15,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Foot parameters give √146/7.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending.",
+  "content_fingerprint": "33fe7781dabc5442",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-mat-023",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Three Dimensional Geometry",
+  "concept_ids": [
+   "jee-mathematics-three-dimensional-geometry-chapter"
+  ],
+  "concept_mapping_note": "Numerical; lattice-point norm square. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 23,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Integer filter gives 4.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Three Dimensional Geometry is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "09258eceef9c7b6e",
+  "difficulty": null,
+  "answer_key": "4",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

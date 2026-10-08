@@ -892,6 +892,17 @@
    "ambiguous": 0,
    "scope": "2026 Complex sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 58,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 15,
+   "verified": 15,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 3D sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
