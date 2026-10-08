@@ -1007,6 +1007,20 @@
    "ambiguous": 0,
    "scope": "2026 EMI sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 68,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 12,
+   "verified": 10,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Biomolecules sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-2-q68",
+    "cand-jeeprep-main-2026-2026-apr-8-shift-2-q69"
+   ]
   }
  ],
  "cumulative": {
@@ -2327,6 +2341,18 @@
    "reason": "corrupted stem truncated (options missing); unverifiable",
    "date": "2026-10-07",
    "scope": "2026 Nitrogen sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q68",
+   "reason": "corrupted stem (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Biomolecules sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-8-shift-2-q69",
+   "reason": "corrupted stem (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Biomolecules sweep"
   }
  ]
 }
