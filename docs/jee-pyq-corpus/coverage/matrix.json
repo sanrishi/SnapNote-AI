@@ -391,6 +391,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-mat-013"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Units and Measurements",
    "verified_questions": 1,
    "verified_ids": [
@@ -768,6 +781,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr04-s1-mat-014",
     "pyq-jee-main-2026-apr04-s1-mat-015"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-mat-023"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1469,6 +1495,21 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-mat-006",
+    "pyq-jee-main-2026-apr05-s1-mat-012",
+    "pyq-jee-main-2026-apr05-s1-mat-024"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Units and Measurements",
    "verified_questions": 1,
    "verified_ids": [
@@ -1831,6 +1872,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s2-mat-014",
     "pyq-jee-main-2026-apr05-s2-mat-015"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-mat-023"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2240,6 +2294,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-mat-013",
+    "pyq-jee-main-2026-apr06-s1-mat-014"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Units and Measurements",
    "verified_questions": 2,
    "verified_ids": [
@@ -2617,6 +2685,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-mat-014",
     "pyq-jee-main-2026-apr06-s2-mat-024"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-mat-013"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -3015,6 +3096,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr08-s2-mat-015",
     "pyq-jee-main-2026-apr08-s2-mat-023"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-mat-012"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -25169,6 +25263,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-mat-013"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Units and Measurements",
    "verified_questions": 1,
    "verified_ids": [
@@ -25546,6 +25653,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr04-s1-mat-014",
     "pyq-jee-main-2026-apr04-s1-mat-015"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-mat-023"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -26247,6 +26367,21 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-mat-006",
+    "pyq-jee-main-2026-apr05-s1-mat-012",
+    "pyq-jee-main-2026-apr05-s1-mat-024"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Units and Measurements",
    "verified_questions": 1,
    "verified_ids": [
@@ -26609,6 +26744,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s2-mat-014",
     "pyq-jee-main-2026-apr05-s2-mat-015"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-mat-023"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -27018,6 +27166,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-mat-013",
+    "pyq-jee-main-2026-apr06-s1-mat-014"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Units and Measurements",
    "verified_questions": 2,
    "verified_ids": [
@@ -27395,6 +27557,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-mat-014",
     "pyq-jee-main-2026-apr06-s2-mat-024"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-mat-013"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -27802,6 +27977,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Trigonometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-mat-012"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
    "chapter": "Units and Measurements",
    "verified_questions": 2,
    "verified_ids": [
@@ -27827,7 +28015,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2978,
+  "verified_records": 2988,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -27835,9 +28023,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2978,
+  "verified_records": 2988,
   "external_candidates_quarantined": 703,
-  "review_batches": 79,
+  "review_batches": 80,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -27878,7 +28066,7 @@
    "jee-mathematics-sets-relations-and-functions-chapter": 59,
    "jee-mathematics-statistics-and-probability-chapter": 78,
    "jee-mathematics-three-dimensional-geometry-chapter": 81,
-   "jee-mathematics-trigonometry-chapter": 39,
+   "jee-mathematics-trigonometry-chapter": 49,
    "jee-mathematics-vector-algebra-chapter": 53,
    "jee-physics-atoms-and-nuclei-chapter": 62,
    "jee-physics-current-electricity-chapter": 54,
