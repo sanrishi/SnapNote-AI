@@ -985,6 +985,17 @@
    "ambiguous": 0,
    "scope": "2026 Coordination sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 66,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 12,
+   "verified": 12,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Electrostatics sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
