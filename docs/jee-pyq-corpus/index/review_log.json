@@ -996,6 +996,17 @@
    "ambiguous": 0,
    "scope": "2026 Electrostatics sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 67,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 11,
+   "verified": 11,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 EMI sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
