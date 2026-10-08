@@ -1395,6 +1395,17 @@
    "ambiguous": 0,
    "scope": "2026 Gravitation sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 102,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 4,
+   "verified": 4,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Experimental sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
