@@ -917,6 +917,17 @@
     "cand-jeeprep-main-2026-2026-apr-5-shift-1-q3",
     "cand-jeeprep-main-2026-2026-apr-4-shift-2-q6"
    ]
+  },
+  {
+   "batch": 60,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 14,
+   "verified": 14,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Sequence sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
