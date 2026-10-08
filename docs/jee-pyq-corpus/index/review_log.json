@@ -1164,6 +1164,19 @@
    "ambiguous": 0,
    "scope": "2026 P&C sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 82,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 10,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Chemical Thermodynamics sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-2-q55"
+   ]
   }
  ],
  "cumulative": {
@@ -2496,6 +2509,12 @@
    "reason": "corrupted stem (options missing); unverifiable",
    "date": "2026-10-07",
    "scope": "2026 Biomolecules sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q55",
+   "reason": "corrupted stem (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Chemical Thermodynamics sweep"
   }
  ]
 }
