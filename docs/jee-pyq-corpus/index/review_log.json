@@ -1232,6 +1232,17 @@
    "ambiguous": 0,
    "scope": "2026 p-block sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 88,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Halogens sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {

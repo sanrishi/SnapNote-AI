@@ -307,6 +307,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-che-065"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Organic Compounds Containing Nitrogen",
    "verified_questions": 2,
    "verified_ids": [
@@ -777,6 +790,19 @@
     "pyq-jee-main-2026-apr04-s1-phy-033",
     "pyq-jee-main-2026-apr04-s1-phy-039",
     "pyq-jee-main-2026-apr04-s1-phy-044"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-065"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1685,6 +1711,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-066"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Organic Compounds Containing Nitrogen",
    "verified_questions": 1,
    "verified_ids": [
@@ -2127,6 +2166,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s2-phy-041",
     "pyq-jee-main-2026-apr05-s2-phy-042"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-072"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2641,6 +2693,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-066"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Organic Compounds Containing Nitrogen",
    "verified_questions": 2,
    "verified_ids": [
@@ -3126,6 +3191,19 @@
     "pyq-jee-main-2026-apr06-s2-phy-042",
     "pyq-jee-main-2026-apr06-s2-phy-045",
     "pyq-jee-main-2026-apr06-s2-phy-050"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-065"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -3630,6 +3708,20 @@
     "pyq-jee-main-2026-apr08-s2-phy-030",
     "pyq-jee-main-2026-apr08-s2-phy-042",
     "pyq-jee-main-2026-apr08-s2-phy-047"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-065",
+    "pyq-jee-main-2026-apr08-s2-che-066"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -25889,6 +25981,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-che-065"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Organic Compounds Containing Nitrogen",
    "verified_questions": 2,
    "verified_ids": [
@@ -26359,6 +26464,19 @@
     "pyq-jee-main-2026-apr04-s1-phy-033",
     "pyq-jee-main-2026-apr04-s1-phy-039",
     "pyq-jee-main-2026-apr04-s1-phy-044"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-065"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -27267,6 +27385,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-066"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Organic Compounds Containing Nitrogen",
    "verified_questions": 1,
    "verified_ids": [
@@ -27709,6 +27840,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s2-phy-041",
     "pyq-jee-main-2026-apr05-s2-phy-042"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-072"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -28223,6 +28367,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-066"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Organic Compounds Containing Nitrogen",
    "verified_questions": 2,
    "verified_ids": [
@@ -28708,6 +28865,19 @@
     "pyq-jee-main-2026-apr06-s2-phy-042",
     "pyq-jee-main-2026-apr06-s2-phy-045",
     "pyq-jee-main-2026-apr06-s2-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-065"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -29221,6 +29391,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Organic Compounds Containing Halogens",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-065",
+    "pyq-jee-main-2026-apr08-s2-che-066"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
    "chapter": "Organic Compounds Containing Nitrogen",
    "verified_questions": 2,
    "verified_ids": [
@@ -29435,7 +29619,7 @@
   }
  ],
  "totals": {
-  "verified_records": 3050,
+  "verified_records": 3058,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -29443,9 +29627,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3050,
+  "verified_records": 3058,
   "external_candidates_quarantined": 703,
-  "review_batches": 87,
+  "review_batches": 88,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -29464,7 +29648,7 @@
    "jee-chemistry-coordination-compounds-chapter": 68,
    "jee-chemistry-d-and-f-block-elements-chapter": 65,
    "jee-chemistry-equilibrium-chapter": 46,
-   "jee-chemistry-organic-compounds-containing-halogens-chapter": 39,
+   "jee-chemistry-organic-compounds-containing-halogens-chapter": 47,
    "jee-chemistry-organic-compounds-containing-nitrogen-chapter": 46,
    "jee-chemistry-organic-compounds-containing-oxygen-chapter": 88,
    "jee-chemistry-p-block-elements-chapter": 40,

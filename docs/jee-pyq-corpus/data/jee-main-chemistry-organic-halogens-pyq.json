@@ -1207,5 +1207,253 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-che-065",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Organic Compounds Containing Halogens",
+  "concept_ids": [
+   "jee-chemistry-organic-compounds-containing-halogens-chapter"
+  ],
+  "concept_mapping_note": "MCQ; halide statement set. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 65,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Alkyl-halide set (A,E) matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Organic Compounds Containing Halogens is pending.",
+  "content_fingerprint": "169d04cc8b5b0bac",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-che-065",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Organic Compounds Containing Halogens",
+  "concept_ids": [
+   "jee-chemistry-organic-compounds-containing-halogens-chapter"
+  ],
+  "concept_mapping_note": "MCQ; reaction-reagent match. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 65,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Named-reaction matching matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Organic Compounds Containing Halogens is pending.",
+  "content_fingerprint": "52d32fd1d7d41b82",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-che-066",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Organic Compounds Containing Halogens",
+  "concept_ids": [
+   "jee-chemistry-organic-compounds-containing-halogens-chapter"
+  ],
+  "concept_mapping_note": "MCQ; isocyanide routes. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 66,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Isocyanide-route pair matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Organic Compounds Containing Halogens is pending.",
+  "content_fingerprint": "71c92b276dbf7a37",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-che-072",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Organic Compounds Containing Halogens",
+  "concept_ids": [
+   "jee-chemistry-organic-compounds-containing-halogens-chapter"
+  ],
+  "concept_mapping_note": "Numerical; Wurtz product mass. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 72,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Grignard-Wurtz chain gives 30.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Organic Compounds Containing Halogens is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "9fc644d797811c78",
+  "difficulty": null,
+  "answer_key": "30",
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-che-066",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Organic Compounds Containing Halogens",
+  "concept_ids": [
+   "jee-chemistry-organic-compounds-containing-halogens-chapter"
+  ],
+  "concept_mapping_note": "MCQ; statement evaluation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 66,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Addition-plus-name logic (I true, II false).",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Organic Compounds Containing Halogens is pending.",
+  "content_fingerprint": "b521e50e061b6efd",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-che-065",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Organic Compounds Containing Halogens",
+  "concept_ids": [
+   "jee-chemistry-organic-compounds-containing-halogens-chapter"
+  ],
+  "concept_mapping_note": "MCQ; alkyne-ketone chain. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 65,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Elimination-addition chain matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Organic Compounds Containing Halogens is pending.",
+  "content_fingerprint": "c8697d07758ab4bd",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-che-065",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Organic Compounds Containing Halogens",
+  "concept_ids": [
+   "jee-chemistry-organic-compounds-containing-halogens-chapter"
+  ],
+  "concept_mapping_note": "MCQ; dichloro count. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 65,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Second-chlorination census gives 4.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Organic Compounds Containing Halogens is pending.",
+  "content_fingerprint": "30df05965c0a5b00",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-che-066",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Organic Compounds Containing Halogens",
+  "concept_ids": [
+   "jee-chemistry-organic-compounds-containing-halogens-chapter"
+  ],
+  "concept_mapping_note": "MCQ; statement evaluation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 66,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "bp-mp logic (both true).",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Organic Compounds Containing Halogens is pending.",
+  "content_fingerprint": "d75c8a9f584b4ba9",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
