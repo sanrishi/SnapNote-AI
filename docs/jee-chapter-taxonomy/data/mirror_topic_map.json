@@ -308,5 +308,80 @@
   "chapter_id": "jee-chemistry-p-block-elements-chapter",
   "subject": "Chemistry",
   "via": "exact-unit-match"
+ },
+ "Vectors": {
+  "chapter_id": "jee-mathematics-vector-algebra-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Determinants": {
+  "chapter_id": "jee-mathematics-matrices-and-determinants-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Coordinate Geometry": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Sequence and Series": {
+  "chapter_id": "jee-mathematics-sequence-and-series-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Complex Numbers and Quadratic Equations": {
+  "chapter_id": "jee-mathematics-complex-numbers-and-quadratic-equations-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Binomial Theorem and its Simple Applications": {
+  "chapter_id": "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Motion in a Plane": {
+  "chapter_id": "jee-physics-kinematics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Physics and Measurement": {
+  "chapter_id": "jee-physics-units-and-measurements-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Electronic Devices and Communication": {
+  "chapter_id": "jee-physics-electronic-devices-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Oscillations and Waves": {
+  "chapter_id": "jee-physics-oscillations-and-waves-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Haloalkanes and Haloarenes": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-halogens-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Alcohols, Phenols and Ethers": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Amines": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-nitrogen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "The d- and f-Block Elements": {
+  "chapter_id": "jee-chemistry-d-and-f-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Co-ordinate Geometry": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
  }
 }

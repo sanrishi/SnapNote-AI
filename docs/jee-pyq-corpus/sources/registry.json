@@ -1331,6 +1331,23 @@
    "verification_status": "indexed-unreviewed",
    "pdf_sha256": null,
    "source_class": "THIRD_PARTY_TRANSCRIPTION"
+  },
+  {
+   "source_id": "jeenify-main-2023-jan-24-shift-1",
+   "exam": "JEE Main",
+   "year": 2023,
+   "session": "January 2023",
+   "shift": "Shift 1 (24 January 2023)",
+   "source_url": "https://www.jeenify.com/jee-main-pyq/2023/january-24-shift-1",
+   "source_document": "JEEnify JEE Main 2023, 24 Jan Shift 1 (third-party transcription with expert solutions; direct NTA PDF login-walled)",
+   "landing_page": "https://www.jeenify.com/jee-main-pyq",
+   "retrieved_at": "2026-10-08",
+   "parser": "parse_jeenify.py v1 (JSON-LD + server-rendered HTML)",
+   "parser_status": "parsed",
+   "source_class": "THIRD_PARTY_TRANSCRIPTION",
+   "verification_status": "in-progress",
+   "pdf_sha256": null,
+   "n_questions": 88
   }
  ]
 }
