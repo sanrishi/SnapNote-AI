@@ -67,7 +67,7 @@ def build_matrix():
                 "source_status": source.get("parser_status", "discovered"),
                 "status": status,
             })
-    total_verified = sum(c["verified_questions"] for c in cells if isinstance(c["verified_questions"], int))
+    total_verified = len({qid for c in cells for qid in c.get("verified_ids", [])})
     dashboard = {
         "official_papers_indexed": 0,
         "official_questions_indexed": 0,

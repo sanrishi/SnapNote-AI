@@ -802,6 +802,19 @@
     "cand-jeeprep-main-2025-2025-apr-2-shift-1-q31",
     "cand-jeeprep-main-2025-2025-apr-3-shift-1-q33"
    ]
+  },
+  {
+   "batch": 51,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 31,
+   "verified": 30,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Co-ordinate Geometry sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-4-shift-2-q11"
+   ]
   }
  ],
  "cumulative": {
@@ -2050,6 +2063,12 @@
    "reason": "stem asks for the relation but the option relations are absent",
    "date": "2026-10-06",
    "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q11",
+   "reason": "area exceeds achievable maximum; inconsistent transcription",
+   "date": "2026-10-06",
+   "scope": "2026 Co-ordinate Geometry sweep"
   }
  ]
 }
