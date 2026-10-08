@@ -2509,5 +2509,470 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-che-063",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; carbocation-carbanion resonance audit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 63,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Both resonance rationales hold.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "e34f6852ac87e90c",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-che-064",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; hydrocarbon identification chain. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 64,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "All three reactions pin n-heptane.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "d391d8b72059d1f9",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-che-063",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; electron-withdrawing order. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 63,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Order d < b < a < c.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "88c2d4b6a6ac4923",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-che-056",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; reaction-mechanism matching. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 56,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Mechanism match III-IV-I-II.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "377ae0902cc973d3",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-che-061",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; C-O bond-length order. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 61,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Bond order x > z > y.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "25073b0f20ef72cf",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-che-064",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; elimination-methylation-reduction chain. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 64,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Chain gives trans-alkene mass 118.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "8e00a3c2dd96f68a",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-che-063",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; carbanion stability audit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 63,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "First true, second false.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "ac6354a306c0c0c7",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-che-065",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; Friedel-Crafts audit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 65,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Rearrangement rules give B and C.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "4eb4e78be1fc099f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-che-063",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; alkene stability order. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 63,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Substitution order C > A > B > D.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "fe8ecfc35a0c8631",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-che-064",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; isomer identification. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 64,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Five-carbon branches give isopentane.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "998ba9ba3c69f156",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-che-064",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; metamer-tautomer audit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 64,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "First true, second false.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "c9024ff14576d43c",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-che-065",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; methane-preparation audit. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 65,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Kolbe flaw sinks I; II holds.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "d9f29f5afe308065",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-che-063",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; ester bond-length order. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 63,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Resonance shortens to γ > β > α.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "9eb4425898700e7d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-che-072",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "Numerical; single-product alkane. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 72,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Symmetry forces neopentane; 4 primaries.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "78e157761fd6cfbe",
+  "difficulty": null,
+  "answer_key": "4",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-che-064",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Some Basic Principles of Organic Chemistry",
+  "concept_ids": [
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter"
+  ],
+  "concept_mapping_note": "MCQ; aromatic-species census. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 64,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Hückel count gives 4.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Some Basic Principles is pending.",
+  "content_fingerprint": "6cf10aaf57b0638e",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
