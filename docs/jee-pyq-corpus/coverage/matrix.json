@@ -209,6 +209,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-phy-037"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -1358,6 +1371,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-phy-040"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 2,
    "verified_ids": [
@@ -1890,6 +1916,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-phy-037"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -2412,6 +2451,19 @@
     "pyq-jee-main-2026-apr05-s2-phy-036",
     "pyq-jee-main-2026-apr05-s2-phy-048",
     "pyq-jee-main-2026-apr05-s2-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-phy-039"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2981,6 +3033,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s1-phy-043",
     "pyq-jee-main-2026-apr06-s1-phy-045"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-phy-040"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -3598,6 +3663,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-phy-031"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -4182,6 +4260,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr08-s2-phy-040"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-phy-038"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -26536,6 +26627,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-phy-037"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -27685,6 +27789,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-phy-040"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 2,
    "verified_ids": [
@@ -28217,6 +28334,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-phy-037"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -28739,6 +28869,19 @@
     "pyq-jee-main-2026-apr05-s2-phy-036",
     "pyq-jee-main-2026-apr05-s2-phy-048",
     "pyq-jee-main-2026-apr05-s2-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-phy-039"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -29308,6 +29451,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s1-phy-043",
     "pyq-jee-main-2026-apr06-s1-phy-045"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-phy-040"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -29925,6 +30081,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-phy-031"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -30518,6 +30687,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-phy-038"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
    "chapter": "Electronic Devices",
    "verified_questions": 1,
    "verified_ids": [
@@ -30925,7 +31107,7 @@
   }
  ],
  "totals": {
-  "verified_records": 3111,
+  "verified_records": 3118,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -30933,9 +31115,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3111,
+  "verified_records": 3118,
   "external_candidates_quarantined": 703,
-  "review_batches": 95,
+  "review_batches": 96,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -30982,7 +31164,7 @@
    "jee-physics-current-electricity-chapter": 54,
    "jee-physics-dual-nature-of-matter-and-radiation-chapter": 35,
    "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 62,
-   "jee-physics-electromagnetic-waves-chapter": 27,
+   "jee-physics-electromagnetic-waves-chapter": 34,
    "jee-physics-electronic-devices-chapter": 43,
    "jee-physics-electrostatics-chapter": 81,
    "jee-physics-experimental-skills-chapter": 22,
