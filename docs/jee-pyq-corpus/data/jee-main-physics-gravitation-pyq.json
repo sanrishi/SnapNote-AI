@@ -835,5 +835,129 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-phy-031",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Physics",
+  "chapter": "Gravitation",
+  "concept_ids": [
+   "jee-physics-gravitation-chapter"
+  ],
+  "concept_mapping_note": "MCQ; infall velocity-energy. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 31,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Escape-energy pair matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/physics",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Gravitation is pending.",
+  "content_fingerprint": "8ff4aba7c6817a03",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-phy-030",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Physics",
+  "chapter": "Gravitation",
+  "concept_ids": [
+   "jee-physics-gravitation-chapter"
+  ],
+  "concept_mapping_note": "MCQ; g/9 height. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 30,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Inverse-square inversion gives 2R.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/physics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Gravitation is pending.",
+  "content_fingerprint": "9525698306406d02",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-phy-028",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Physics",
+  "chapter": "Gravitation",
+  "concept_ids": [
+   "jee-physics-gravitation-chapter"
+  ],
+  "concept_mapping_note": "MCQ; g percent change. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 28,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Depth-height differential matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/physics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Gravitation is pending.",
+  "content_fingerprint": "b243ca990e9ebee1",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-phy-032",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Physics",
+  "chapter": "Gravitation",
+  "concept_ids": [
+   "jee-physics-gravitation-chapter"
+  ],
+  "concept_mapping_note": "MCQ; PE increase. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 32,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Potential-lift formula matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/physics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Gravitation is pending.",
+  "content_fingerprint": "8ff34b4668fdfea2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
