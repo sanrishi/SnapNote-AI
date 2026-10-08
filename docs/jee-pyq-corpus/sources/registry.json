@@ -1,6 +1,6 @@
 {
  "registry_version": 1,
- "updated": "2026-10-06",
+ "updated": "2026-10-08",
  "sources": [
   {
    "source_id": "nta-main-2026-apr02-s1",
@@ -32,7 +32,8 @@
     31
    ],
    "verification_status": "verified",
-   "pdf_sha256": "ba8b5256533e0a29"
+   "pdf_sha256": "ba8b5256533e0a29",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "nta-main-2026-apr02-s2",
@@ -52,7 +53,8 @@
     50
    ],
    "verification_status": "verified",
-   "pdf_sha256": "7c9f31086094684c"
+   "pdf_sha256": "7c9f31086094684c",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "nta-main-2026-apr04-s1",
@@ -81,7 +83,8 @@
     30
    ],
    "verification_status": "verified",
-   "pdf_sha256": "1d8b98a5ebe417b5"
+   "pdf_sha256": "1d8b98a5ebe417b5",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "nta-main-2026-apr04-s2",
@@ -100,7 +103,8 @@
     35
    ],
    "verification_status": "verified",
-   "pdf_sha256": "2146491216c3ef79"
+   "pdf_sha256": "2146491216c3ef79",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "nta-main-2026-apr05-s1",
@@ -117,7 +121,8 @@
    "physics_pages": "all 25 physics questions inspected",
    "rotational_hits": [],
    "verification_status": "verified",
-   "pdf_sha256": "20a14808d521007d"
+   "pdf_sha256": "20a14808d521007d",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "nta-main-2026-apr05-s2",
@@ -137,7 +142,8 @@
     31
    ],
    "verification_status": "verified",
-   "pdf_sha256": "876efb4250b5d8e0"
+   "pdf_sha256": "876efb4250b5d8e0",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "nta-main-2026-apr06-s1",
@@ -154,7 +160,8 @@
    "physics_pages": null,
    "rotational_hits": null,
    "verification_status": "unavailable",
-   "note": "Direct PDF download returns HTTP 504 (3 attempts, 2026-09-30). Retry later; do not mark parsed without the file."
+   "note": "Direct PDF download returns HTTP 504 (3 attempts, 2026-09-30). Retry later; do not mark parsed without the file.",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "nta-main-2026-apr06-s2",
@@ -170,7 +177,8 @@
    "parser_status": "discovered",
    "physics_pages": null,
    "rotational_hits": null,
-   "verification_status": "unavailable"
+   "verification_status": "unavailable",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "nta-main-2026-apr08-s2",
@@ -189,7 +197,8 @@
     32
    ],
    "verification_status": "verified",
-   "pdf_sha256": "079e3b7ae67b7030"
+   "pdf_sha256": "079e3b7ae67b7030",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "adv-archive-2007-2025",
@@ -206,7 +215,8 @@
    "physics_pages": null,
    "rotational_hits": null,
    "verification_status": "unavailable",
-   "note": "38 papers discovered (19 years x 2). Per-paper ingestion not started; URL pattern past_qps/{YYYY}_{1,2}_English.pdf."
+   "note": "38 papers discovered (19 years x 2). Per-paper ingestion not started; URL pattern past_qps/{YYYY}_{1,2}_English.pdf.",
+   "source_class": "OFFICIAL"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-4-shift-1",
@@ -231,7 +241,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-4-shift-2",
@@ -256,7 +267,8 @@
     58
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-5-shift-1",
@@ -281,7 +293,8 @@
     35
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-5-shift-2",
@@ -306,7 +319,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-6-shift-1",
@@ -331,7 +345,8 @@
     56
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-6-shift-2",
@@ -356,7 +371,8 @@
     56
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-8-shift-1",
@@ -381,7 +397,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-8-shift-2",
@@ -406,7 +423,8 @@
     35
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-9-shift-1",
@@ -432,7 +450,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-apr-9-shift-2",
@@ -457,7 +476,8 @@
     58
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-feb-1-shift-1",
@@ -482,7 +502,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-feb-1-shift-2",
@@ -508,7 +529,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-jan-27-shift-1",
@@ -533,7 +555,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-jan-29-shift-1",
@@ -558,7 +581,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-jan-30-shift-1",
@@ -584,7 +608,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-jan-30-shift-2",
@@ -609,7 +634,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-jan-31-shift-1",
@@ -634,7 +660,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2024-2024-jan-31-shift-2",
@@ -660,7 +687,8 @@
     52
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-2-shift-1",
@@ -687,7 +715,8 @@
     32
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-2-shift-2",
@@ -713,7 +742,8 @@
     46
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-3-shift-1",
@@ -738,7 +768,8 @@
     31
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-3-shift-2",
@@ -761,7 +792,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-4-shift-1",
@@ -786,7 +818,8 @@
     31
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-4-shift-2",
@@ -812,7 +845,8 @@
     50
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-7-shift-1",
@@ -838,7 +872,8 @@
     46
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-7-shift-2",
@@ -863,7 +898,8 @@
     46
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-apr-8-shift-2",
@@ -889,7 +925,8 @@
     47
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-jan-22-shift-1",
@@ -915,7 +952,8 @@
     21
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-jan-22-shift-2",
@@ -941,7 +979,8 @@
     46
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-jan-23-shift-1",
@@ -964,7 +1003,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-jan-23-shift-2",
@@ -989,7 +1029,8 @@
     29
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-jan-24-shift-1",
@@ -1015,7 +1056,8 @@
     30
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-jan-24-shift-2",
@@ -1041,7 +1083,8 @@
     30
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-jan-28-shift-1",
@@ -1068,7 +1111,8 @@
     49
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2025-2025-jan-28-shift-2",
@@ -1093,7 +1137,8 @@
     30
    ],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2026-2026-apr-2-shift-2",
@@ -1116,7 +1161,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2026-2026-apr-4-shift-1",
@@ -1139,7 +1185,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2026-2026-apr-4-shift-2",
@@ -1162,7 +1209,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2026-2026-apr-5-shift-1",
@@ -1185,7 +1233,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2026-2026-apr-5-shift-2",
@@ -1208,7 +1257,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2026-2026-apr-6-shift-1",
@@ -1231,7 +1281,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2026-2026-apr-6-shift-2",
@@ -1254,7 +1305,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   },
   {
    "source_id": "jeeprep-main-2026-2026-apr-8-shift-2",
@@ -1277,7 +1329,8 @@
    },
    "rotational_hits": [],
    "verification_status": "indexed-unreviewed",
-   "pdf_sha256": null
+   "pdf_sha256": null,
+   "source_class": "THIRD_PARTY_TRANSCRIPTION"
   }
  ]
 }
