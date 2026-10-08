@@ -815,6 +815,21 @@
    "demotions": [
     "cand-jeeprep-main-2026-2026-apr-4-shift-2-q11"
    ]
+  },
+  {
+   "batch": 52,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 25,
+   "verified": 22,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Optics sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-2-shift-2-q41",
+    "cand-jeeprep-main-2026-2026-apr-4-shift-1-q45",
+    "cand-jeeprep-main-2026-2026-apr-5-shift-2-q40"
+   ]
   }
  ],
  "cumulative": {
@@ -2069,6 +2084,24 @@
    "reason": "area exceeds achievable maximum; inconsistent transcription",
    "date": "2026-10-06",
    "scope": "2026 Co-ordinate Geometry sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-2-shift-2-q41",
+   "reason": "incidence angle absent from the description",
+   "date": "2026-10-06",
+   "scope": "2026 Optics sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-1-q45",
+   "reason": "stem asks for the field expression but the option expressions are absent",
+   "date": "2026-10-06",
+   "scope": "2026 Optics sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q40",
+   "reason": "focal lengths absent; combination underdetermined without options",
+   "date": "2026-10-06",
+   "scope": "2026 Optics sweep"
   }
  ]
 }
