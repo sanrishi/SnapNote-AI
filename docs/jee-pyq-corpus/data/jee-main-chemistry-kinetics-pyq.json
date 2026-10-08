@@ -1114,5 +1114,284 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-che-057",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; order statement set. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 57,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Unit-order logic picks (A,B).",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending.",
+  "content_fingerprint": "edb4d85b06b9a381",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-che-072",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; gas-phase pressure. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 72,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Pressure bookkeeping gives 20.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "72e98d216aadaf98",
+  "difficulty": null,
+  "answer_key": "20",
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-che-063",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; concentration-graph order. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 63,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Graph-order reading matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending.",
+  "content_fingerprint": "76ae8cfb17448de8",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-che-074",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; first-order time. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 74,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Log-ratio scaling gives 7.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "066284c876278a7d",
+  "difficulty": null,
+  "answer_key": "7",
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-che-075",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; 99%-completion time. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 75,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Half-life scaling gives 46.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "306ae59c9be1dacc",
+  "difficulty": null,
+  "answer_key": "46",
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-che-075",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; half-life plot reading. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 75,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Linearity ratio gives 90.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "97582a1bf73a4b67",
+  "difficulty": null,
+  "answer_key": "90",
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-che-074",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; fraction remaining. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 74,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Two half-lives give 25.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "4bafd005b0496ffb",
+  "difficulty": null,
+  "answer_key": "25",
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-che-075",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "Numerical; activation energy. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 75,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Arrhenius inversion gives 232.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "659ae2301f4fd1e2",
+  "difficulty": null,
+  "answer_key": "232",
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-che-057",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Chemistry",
+  "chapter": "Chemical Kinetics",
+  "concept_ids": [
+   "jee-chemistry-chemical-kinetics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; statement evaluation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 57,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Rate-rule plus order logic matches mirror.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/chemistry",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Chemical Kinetics is pending.",
+  "content_fingerprint": "33735f5d3b4f8e17",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-07",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
