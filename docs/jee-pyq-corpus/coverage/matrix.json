@@ -974,6 +974,19 @@
    "exam": "JEE Main",
    "year": 2026,
    "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-059"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
    "shift": "Shift 2 (4 Apr 2026)",
    "chapter": "Atomic Structure",
    "verified_questions": 1,
@@ -1392,6 +1405,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr04-s2-che-059",
     "pyq-jee-main-2026-apr04-s2-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1829,6 +1855,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s1-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-059"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2292,6 +2331,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s2-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-059"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2794,6 +2846,19 @@
    "exam": "JEE Main",
    "year": 2026,
    "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-059"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Atomic Structure",
    "verified_questions": 1,
@@ -3265,6 +3330,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-che-060"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-070"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -3756,6 +3834,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr08-s2-che-060",
     "pyq-jee-main-2026-apr08-s2-che-061"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-059"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -26465,6 +26556,19 @@
    "exam": "JEE Main",
    "year": 2026,
    "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-059"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
    "shift": "Shift 2 (4 Apr 2026)",
    "chapter": "Atomic Structure",
    "verified_questions": 1,
@@ -26883,6 +26987,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr04-s2-che-059",
     "pyq-jee-main-2026-apr04-s2-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -27320,6 +27437,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s1-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-059"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -27783,6 +27913,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s2-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-059"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -28285,6 +28428,19 @@
    "exam": "JEE Main",
    "year": 2026,
    "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-059"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Atomic Structure",
    "verified_questions": 1,
@@ -28756,6 +28912,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-che-060"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-070"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -29250,10 +29419,23 @@
    ],
    "source_status": "parsed",
    "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "p-Block Elements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-059"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
   }
  ],
  "totals": {
-  "verified_records": 3043,
+  "verified_records": 3050,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -29261,9 +29443,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3043,
+  "verified_records": 3050,
   "external_candidates_quarantined": 703,
-  "review_batches": 86,
+  "review_batches": 87,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -29285,7 +29467,7 @@
    "jee-chemistry-organic-compounds-containing-halogens-chapter": 39,
    "jee-chemistry-organic-compounds-containing-nitrogen-chapter": 46,
    "jee-chemistry-organic-compounds-containing-oxygen-chapter": 88,
-   "jee-chemistry-p-block-elements-chapter": 33,
+   "jee-chemistry-p-block-elements-chapter": 40,
    "jee-chemistry-principles-related-to-practical-chemistry-chapter": 28,
    "jee-chemistry-purification-and-characterisation-of-organic-compounds-chapter": 36,
    "jee-chemistry-redox-reactions-and-electrochemistry-chapter": 59,
