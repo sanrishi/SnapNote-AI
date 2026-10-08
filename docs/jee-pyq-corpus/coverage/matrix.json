@@ -35,6 +35,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-mat-001",
+    "pyq-jee-main-2026-apr02-s2-mat-002"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 2,
    "verified_ids": [
@@ -135,6 +149,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-mat-002",
+    "pyq-jee-main-2026-apr04-s1-mat-003"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 3,
    "verified_ids": [
@@ -226,6 +254,21 @@
     "pyq-jee-main-2026-apr04-s2-mat-010",
     "pyq-jee-main-2026-apr04-s2-mat-023",
     "pyq-jee-main-2026-apr04-s2-mat-024"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-mat-002",
+    "pyq-jee-main-2026-apr04-s2-mat-004",
+    "pyq-jee-main-2026-apr04-s2-mat-005"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -336,6 +379,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-mat-001"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 2,
    "verified_ids": [
@@ -415,6 +471,20 @@
     "pyq-jee-main-2026-apr05-s2-mat-012",
     "pyq-jee-main-2026-apr05-s2-mat-013",
     "pyq-jee-main-2026-apr05-s2-mat-022"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-mat-001",
+    "pyq-jee-main-2026-apr05-s2-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -525,6 +595,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-mat-002",
+    "pyq-jee-main-2026-apr06-s1-mat-004"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 1,
    "verified_ids": [
@@ -611,6 +695,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-mat-002",
+    "pyq-jee-main-2026-apr06-s2-mat-003"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 1,
    "verified_ids": [
@@ -688,6 +786,20 @@
     "pyq-jee-main-2026-apr08-s2-mat-011",
     "pyq-jee-main-2026-apr08-s2-mat-020",
     "pyq-jee-main-2026-apr08-s2-mat-024"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-mat-002",
+    "pyq-jee-main-2026-apr08-s2-mat-021"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -22541,6 +22653,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-mat-001",
+    "pyq-jee-main-2026-apr02-s2-mat-002"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 2,
    "verified_ids": [
@@ -22641,6 +22767,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-mat-002",
+    "pyq-jee-main-2026-apr04-s1-mat-003"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 3,
    "verified_ids": [
@@ -22732,6 +22872,21 @@
     "pyq-jee-main-2026-apr04-s2-mat-010",
     "pyq-jee-main-2026-apr04-s2-mat-023",
     "pyq-jee-main-2026-apr04-s2-mat-024"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-mat-002",
+    "pyq-jee-main-2026-apr04-s2-mat-004",
+    "pyq-jee-main-2026-apr04-s2-mat-005"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -22842,6 +22997,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-mat-001"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 2,
    "verified_ids": [
@@ -22921,6 +23089,20 @@
     "pyq-jee-main-2026-apr05-s2-mat-012",
     "pyq-jee-main-2026-apr05-s2-mat-013",
     "pyq-jee-main-2026-apr05-s2-mat-022"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-mat-001",
+    "pyq-jee-main-2026-apr05-s2-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -23031,6 +23213,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-mat-002",
+    "pyq-jee-main-2026-apr06-s1-mat-004"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 1,
    "verified_ids": [
@@ -23108,6 +23304,20 @@
     "pyq-jee-main-2026-apr06-s2-mat-011",
     "pyq-jee-main-2026-apr06-s2-mat-012",
     "pyq-jee-main-2026-apr06-s2-mat-023"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-mat-002",
+    "pyq-jee-main-2026-apr06-s2-mat-003"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -23203,6 +23413,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-mat-002",
+    "pyq-jee-main-2026-apr08-s2-mat-021"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
    "chapter": "Limit, Continuity and Differentiability",
    "verified_questions": 2,
    "verified_ids": [
@@ -23283,7 +23507,7 @@
   }
  ],
  "totals": {
-  "verified_records": 2710,
+  "verified_records": 2726,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -23291,9 +23515,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 2710,
+  "verified_records": 2726,
   "external_candidates_quarantined": 703,
-  "review_batches": 56,
+  "review_batches": 57,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -23324,7 +23548,7 @@
    "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter": 96,
    "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 38,
    "jee-mathematics-co-ordinate-geometry-chapter": 160,
-   "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 64,
+   "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 80,
    "jee-mathematics-diffrential-equations-chapter": 54,
    "jee-mathematics-integral-calculas-chapter": 97,
    "jee-mathematics-limit-continuity-and-differentiability-chapter": 109,
