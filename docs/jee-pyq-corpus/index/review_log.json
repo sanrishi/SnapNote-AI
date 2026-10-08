@@ -1351,6 +1351,17 @@
    "ambiguous": 0,
    "scope": "2026 Kinematics sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 98,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 6,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 KTG sweep (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
