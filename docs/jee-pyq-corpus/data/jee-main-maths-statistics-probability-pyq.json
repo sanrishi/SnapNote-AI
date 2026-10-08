@@ -1920,5 +1920,501 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-mat-008",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; scoring-throw probability. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Score enumeration gives 43/64; total 107.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "c9dd7a156f85c206",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr02-s2-mat-009",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (2 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; deletion mean-variance recovery. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Deletion solve gives n = 7.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-2-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 2 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "4efab3861f32762f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-mat-010",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; median-MD parameter recovery. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 10,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Median plus MD pin a = 65.5; 2a = 131.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "dbb816d9c23536e3",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s1-mat-021",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "Numerical; overlapping binomial windows. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 21,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Overlap census gives 96p = 9.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "b0c37d7205e44fa8",
+  "difficulty": null,
+  "answer_key": "9",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-mat-008",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; shifted-sum variance. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Shifted sums give SD 3.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "e100873dc7ee2f12",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr04-s2-mat-021",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (4 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "Numerical; date AP-subset probability. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 21,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "AP triples give 45/899; total 944.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-4-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 4 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending. Answer basis: Mirror-claimed official final answer, independently recomputed.",
+  "content_fingerprint": "48ec2c8ab623c323",
+  "difficulty": null,
+  "answer_key": "944",
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-mat-007",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; consecutive-letter Bayes. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 7,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Pair ratios give 10/17.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "349856b113124684",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s1-mat-008",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; frequency mean deviation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Weighted deviations give 44/13.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "64b264004b20dcd9",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-mat-008",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; total win probability. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Total law gives 0.76.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "74d99937529b52d2",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr05-s2-mat-010",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (5 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; weighted median recovery. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 10,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Binomial weights force median 56.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-5-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 5 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "1f208432beabf5ec",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-mat-009",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; shifted-sum moments. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Shifted sums give ratio 3.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "78d63e649b7a4872",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s1-mat-010",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 1 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; biased-coin mixture. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 10,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Mixture equation gives N = 7.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-1/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "40944195a63b501d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-mat-008",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; root transform equation. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 8,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Sum-product recovery gives x²-41x+420.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "c72f1d6d3e6785b8",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr06-s2-mat-009",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (6 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; mixed-pair probability. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 9,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Sequential pairing gives 16/231.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-6-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 6 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "903c3ff51b20823d",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-mat-006",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; transport-mode Bayes. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 6,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Bayes gives 12/37.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "cabd08530c9734b7",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2026-apr08-s2-mat-007",
+  "exam": "JEE Main",
+  "year": 2026,
+  "session": "April 2026",
+  "shift": "Shift 2 (8 Apr 2026)",
+  "subject": "Mathematics",
+  "chapter": "Statistics and Probability",
+  "concept_ids": [
+   "jee-mathematics-statistics-and-probability-chapter"
+  ],
+  "concept_mapping_note": "MCQ; pooled variance. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 7,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2026",
+  "question_summary": "Pooled moments give 6.04.",
+  "source_url": "https://jeeprep.app/pyq/2026-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2026, B Tech 8 Apr 2026 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answers independently recomputed and matched. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Statistics and Probability is pending.",
+  "content_fingerprint": "2f45b395322019a1",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-06",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
