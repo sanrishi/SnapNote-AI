@@ -99,6 +99,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-che-058",
+    "pyq-jee-main-2026-apr02-s2-che-059"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Co-ordinate Geometry",
    "verified_questions": 4,
    "verified_ids": [
@@ -542,6 +556,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr04-s1-che-054"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1001,6 +1028,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-che-057"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
    "chapter": "Co-ordinate Geometry",
    "verified_questions": 3,
    "verified_ids": [
@@ -1392,6 +1432,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s1-che-074"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -1815,6 +1868,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s2-che-054"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2255,6 +2321,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s1-che-055",
     "pyq-jee-main-2026-apr06-s1-che-075"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-071"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -2729,6 +2808,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-058"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Co-ordinate Geometry",
    "verified_questions": 4,
    "verified_ids": [
@@ -3171,6 +3263,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr08-s2-che-074"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -25392,6 +25497,20 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-che-058",
+    "pyq-jee-main-2026-apr02-s2-che-059"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Co-ordinate Geometry",
    "verified_questions": 4,
    "verified_ids": [
@@ -25835,6 +25954,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr04-s1-che-054"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -26294,6 +26426,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-che-057"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
    "chapter": "Co-ordinate Geometry",
    "verified_questions": 3,
    "verified_ids": [
@@ -26685,6 +26830,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s1-che-074"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -27108,6 +27266,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s2-che-054"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-058"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -27548,6 +27719,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s1-che-055",
     "pyq-jee-main-2026-apr06-s1-che-075"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-071"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -28022,6 +28206,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Co-ordinate Geometry",
    "verified_questions": 4,
    "verified_ids": [
@@ -28473,6 +28670,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
    "chapter": "Co-ordinate Geometry",
    "verified_questions": 4,
    "verified_ids": [
@@ -28857,7 +29067,7 @@
   }
  ],
  "totals": {
-  "verified_records": 3025,
+  "verified_records": 3034,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -28865,9 +29075,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3025,
+  "verified_records": 3034,
   "external_candidates_quarantined": 703,
-  "review_batches": 84,
+  "review_batches": 85,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -28882,7 +29092,7 @@
    "jee-chemistry-chemical-bonding-and-molecular-structure-chapter": 62,
    "jee-chemistry-chemical-kinetics-chapter": 45,
    "jee-chemistry-chemical-thermodynamics-chapter": 47,
-   "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter": 33,
+   "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter": 42,
    "jee-chemistry-coordination-compounds-chapter": 68,
    "jee-chemistry-d-and-f-block-elements-chapter": 65,
    "jee-chemistry-equilibrium-chapter": 46,
