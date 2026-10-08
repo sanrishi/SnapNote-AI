@@ -961,6 +961,19 @@
    "ambiguous": 0,
    "scope": "2026 d-block sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 64,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 12,
+   "verified": 11,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Nitrogen sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-4-shift-2-q67"
+   ]
   }
  ],
  "cumulative": {
@@ -2275,6 +2288,12 @@
    "reason": "characteristic cubic has no clean root; unclosable without options",
    "date": "2026-10-06",
    "scope": "2026 Matrices sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q67",
+   "reason": "corrupted stem truncated (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Nitrogen sweep"
   }
  ]
 }
