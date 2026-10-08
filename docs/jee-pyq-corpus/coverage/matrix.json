@@ -375,6 +375,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -868,6 +881,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-073"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -1309,6 +1335,19 @@
     "pyq-jee-main-2026-apr04-s2-phy-031",
     "pyq-jee-main-2026-apr04-s2-phy-032",
     "pyq-jee-main-2026-apr04-s2-phy-034"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-che-075"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -2243,6 +2282,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 2,
    "verified_ids": [
@@ -2761,6 +2813,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-063"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -3259,6 +3324,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-phy-033",
     "pyq-jee-main-2026-apr06-s2-phy-034"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-062"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -3776,6 +3854,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr08-s2-phy-033",
     "pyq-jee-main-2026-apr08-s2-phy-034"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-062"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -26049,6 +26140,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (2 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr02-s2-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (2 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -26542,6 +26646,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-073"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -26983,6 +27100,19 @@
     "pyq-jee-main-2026-apr04-s2-phy-031",
     "pyq-jee-main-2026-apr04-s2-phy-032",
     "pyq-jee-main-2026-apr04-s2-phy-034"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (4 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s2-che-075"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -27917,6 +28047,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (5 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s2-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (5 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 2,
    "verified_ids": [
@@ -28435,6 +28578,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (6 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s1-che-063"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (6 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -28933,6 +29089,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-phy-033",
     "pyq-jee-main-2026-apr06-s2-phy-034"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-che-062"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -29459,6 +29628,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (8 Apr 2026)",
+   "chapter": "Purification and Characterisation of Organic Compounds",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr08-s2-che-062"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (8 Apr 2026)",
    "chapter": "Redox Reactions and Electrochemistry",
    "verified_questions": 1,
    "verified_ids": [
@@ -29619,7 +29801,7 @@
   }
  ],
  "totals": {
-  "verified_records": 3058,
+  "verified_records": 3065,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -29627,9 +29809,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3058,
+  "verified_records": 3065,
   "external_candidates_quarantined": 703,
-  "review_batches": 88,
+  "review_batches": 89,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -29653,7 +29835,7 @@
    "jee-chemistry-organic-compounds-containing-oxygen-chapter": 88,
    "jee-chemistry-p-block-elements-chapter": 40,
    "jee-chemistry-principles-related-to-practical-chemistry-chapter": 28,
-   "jee-chemistry-purification-and-characterisation-of-organic-compounds-chapter": 36,
+   "jee-chemistry-purification-and-characterisation-of-organic-compounds-chapter": 43,
    "jee-chemistry-redox-reactions-and-electrochemistry-chapter": 59,
    "jee-chemistry-solutions-chapter": 38,
    "jee-chemistry-some-basic-concepts-in-chemistry-chapter": 33,
