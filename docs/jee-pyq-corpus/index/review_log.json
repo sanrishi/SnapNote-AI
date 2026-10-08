@@ -868,6 +868,19 @@
    "ambiguous": 0,
    "scope": "2026 Stats sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 56,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 16,
+   "verified": 15,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 LCD sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-6-shift-2-q16"
+   ]
   }
  ],
  "cumulative": {
@@ -2164,6 +2177,12 @@
    "reason": "retrosynthesis underdetermined without option structures",
    "date": "2026-10-06",
    "scope": "2026 GOC sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-6-shift-2-q16",
+   "reason": "parameter set open at both ends but stated half-closed; inconsistent",
+   "date": "2026-10-06",
+   "scope": "2026 LCD sweep"
   }
  ]
 }
