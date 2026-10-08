@@ -748,6 +748,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-057"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -1994,8 +2007,9 @@
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Chemical Kinetics",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-057",
     "pyq-jee-main-2026-apr05-s1-che-075"
    ],
    "source_status": "parsed",
@@ -2103,8 +2117,9 @@
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-phy-044",
     "pyq-jee-main-2026-apr05-s1-phy-050"
    ],
    "source_status": "parsed",
@@ -2142,8 +2157,9 @@
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Equilibrium",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-055",
     "pyq-jee-main-2026-apr05-s1-che-056"
    ],
    "source_status": "parsed",
@@ -2240,6 +2256,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s1-mat-017",
     "pyq-jee-main-2026-apr05-s1-mat-019"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Magnetic Effects of Current and Magnetism",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-phy-049"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -4158,6 +4187,19 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2026-apr06-s2-mat-025"
+   ],
+   "source_status": "discovered",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Magnetic Effects of Current and Magnetism",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-phy-038"
    ],
    "source_status": "discovered",
    "status": "partial"
@@ -27627,6 +27669,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 1 (4 Apr 2026)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr04-s1-che-057"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (4 Apr 2026)",
    "chapter": "Chemical Thermodynamics",
    "verified_questions": 1,
    "verified_ids": [
@@ -28873,8 +28928,9 @@
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Chemical Kinetics",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-057",
     "pyq-jee-main-2026-apr05-s1-che-075"
    ],
    "source_status": "parsed",
@@ -28982,8 +29038,9 @@
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Electromagnetic Induction and Alternating Currents",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-phy-044",
     "pyq-jee-main-2026-apr05-s1-phy-050"
    ],
    "source_status": "parsed",
@@ -29021,8 +29078,9 @@
    "session": "April 2026",
    "shift": "Shift 1 (5 Apr 2026)",
    "chapter": "Equilibrium",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-che-055",
     "pyq-jee-main-2026-apr05-s1-che-056"
    ],
    "source_status": "parsed",
@@ -29119,6 +29177,19 @@
    "verified_ids": [
     "pyq-jee-main-2026-apr05-s1-mat-017",
     "pyq-jee-main-2026-apr05-s1-mat-019"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 1 (5 Apr 2026)",
+   "chapter": "Magnetic Effects of Current and Magnetism",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr05-s1-phy-049"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -31046,6 +31117,19 @@
    "year": 2026,
    "session": "April 2026",
    "shift": "Shift 2 (6 Apr 2026)",
+   "chapter": "Magnetic Effects of Current and Magnetism",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2026-apr06-s2-phy-038"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2026,
+   "session": "April 2026",
+   "shift": "Shift 2 (6 Apr 2026)",
    "chapter": "Matrices and Determinants",
    "verified_questions": 2,
    "verified_ids": [
@@ -32029,7 +32113,7 @@
   }
  ],
  "totals": {
-  "verified_records": 3159,
+  "verified_records": 3165,
   "sources_parsed": 50,
   "sources_discovered": 3
  },
@@ -32037,9 +32121,9 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3159,
+  "verified_records": 3165,
   "external_candidates_quarantined": 703,
-  "review_batches": 103,
+  "review_batches": 104,
   "queue_cumulative": {
    "reviewed": 50,
    "verified": 49,
@@ -32052,12 +32136,12 @@
    "jee-chemistry-atomic-structure-chapter": 40,
    "jee-chemistry-biomolecules-chapter": 37,
    "jee-chemistry-chemical-bonding-and-molecular-structure-chapter": 62,
-   "jee-chemistry-chemical-kinetics-chapter": 45,
+   "jee-chemistry-chemical-kinetics-chapter": 47,
    "jee-chemistry-chemical-thermodynamics-chapter": 47,
    "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter": 42,
    "jee-chemistry-coordination-compounds-chapter": 68,
    "jee-chemistry-d-and-f-block-elements-chapter": 65,
-   "jee-chemistry-equilibrium-chapter": 46,
+   "jee-chemistry-equilibrium-chapter": 47,
    "jee-chemistry-organic-compounds-containing-halogens-chapter": 47,
    "jee-chemistry-organic-compounds-containing-nitrogen-chapter": 46,
    "jee-chemistry-organic-compounds-containing-oxygen-chapter": 88,
@@ -32085,7 +32169,7 @@
    "jee-physics-atoms-and-nuclei-chapter": 62,
    "jee-physics-current-electricity-chapter": 54,
    "jee-physics-dual-nature-of-matter-and-radiation-chapter": 35,
-   "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 62,
+   "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 63,
    "jee-physics-electromagnetic-waves-chapter": 34,
    "jee-physics-electronic-devices-chapter": 43,
    "jee-physics-electrostatics-chapter": 81,
@@ -32094,7 +32178,7 @@
    "jee-physics-kinematics-chapter": 54,
    "jee-physics-kinetic-theory-of-gases-chapter": 33,
    "jee-physics-laws-of-motion-chapter": 47,
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 66,
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 68,
    "jee-physics-optics-chapter": 102,
    "jee-physics-oscillations-and-waves-chapter": 48,
    "jee-physics-properties-of-solids-and-liquids-chapter": 89,

@@ -1417,6 +1417,17 @@
    "ambiguous": 0,
    "scope": "2026 Practical sweep (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 104,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 6,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 NSR mop-up (Apr 2026)",
+   "demotions": []
   }
  ],
  "cumulative": {
@@ -2785,6 +2796,50 @@
    "reason": "stem missing its condition on A; unverifiable",
    "date": "2026-10-07",
    "scope": "2026 Vector sweep"
+  }
+ ],
+ "duplicate_skips": [
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-2-shift-2-q28",
+   "duplicate_of": "pyq-jee-main-2026-apr02-s2-phy-028",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-2-shift-2-q50",
+   "duplicate_of": "pyq-jee-main-2026-apr02-s2-phy-050",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-1-q30",
+   "duplicate_of": "pyq-jee-main-2026-apr04-s1-phy-030",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q35",
+   "duplicate_of": "pyq-jee-main-2026-apr04-s2-phy-035",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q30",
+   "duplicate_of": "pyq-jee-main-2026-apr05-s2-phy-030",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q31",
+   "duplicate_of": "pyq-jee-main-2026-apr05-s2-phy-031",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-8-shift-2-q32",
+   "duplicate_of": "pyq-jee-main-2026-apr08-s2-phy-032",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
   }
  ]
 }
