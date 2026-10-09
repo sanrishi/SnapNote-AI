@@ -1,0 +1,103 @@
+{
+ "source": "https://www.jeenify.com/jee-main-pyq",
+ "retrieved": "2026-10-09",
+ "papers": {
+  "2016": [
+   "2016/april-03",
+   "2016/april-09"
+  ],
+  "2017": [
+   "2017/april-02",
+   "2017/april-08",
+   "2017/april-09"
+  ],
+  "2018": [
+   "2018/april-08"
+  ],
+  "2019": [
+   "2019/april-08-shift-1",
+   "2019/april-08-shift-2",
+   "2019/april-09-shift-1",
+   "2019/january-09-shift-1",
+   "2019/january-09-shift-2",
+   "2019/january-10-shift-1",
+   "2019/january-10-shift-2",
+   "2019/january-11-shift-1",
+   "2019/january-11-shift-2",
+   "2019/january-12-shift-1",
+   "2019/january-12-shift-2"
+  ],
+  "2020": [
+   "2020/january-07-shift-1",
+   "2020/january-07-shift-2",
+   "2020/january-08-shift-1",
+   "2020/january-08-shift-2",
+   "2020/january-09-shift-1",
+   "2020/january-09-shift-2"
+  ],
+  "2021": [
+   "2021/february-24-shift-1",
+   "2021/february-24-shift-2",
+   "2021/february-25-shift-1",
+   "2021/february-25-shift-2",
+   "2021/february-26-shift-1",
+   "2021/february-26-shift-2"
+  ],
+  "2022": [
+   "2022/june-24-shift-1",
+   "2022/june-24-shift-2"
+  ],
+  "2023": [
+   "2023/january-24-shift-1",
+   "2023/january-24-shift-2",
+   "2023/january-25-shift-1",
+   "2023/january-25-shift-2"
+  ],
+  "2024": [
+   "2024/april-04-shift-1",
+   "2024/april-04-shift-2",
+   "2024/april-05-shift-1",
+   "2024/april-05-shift-2",
+   "2024/april-06-shift-1",
+   "2024/april-06-shift-2",
+   "2024/april-08-shift-1",
+   "2024/april-08-shift-2",
+   "2024/april-09-shift-1",
+   "2024/april-09-shift-2"
+  ],
+  "2025": [
+   "2025/january-22-shift-1",
+   "2025/january-22-shift-2",
+   "2025/january-23-shift-1",
+   "2025/january-23-shift-2",
+   "2025/january-24-shift-1",
+   "2025/january-24-shift-2",
+   "2025/january-28-shift-1",
+   "2025/january-28-shift-2",
+   "2025/january-29-shift-1",
+   "2025/january-29-shift-2"
+  ],
+  "2026": [
+   "2026/april-02-shift-1",
+   "2026/april-02-shift-2",
+   "2026/april-04-shift-1",
+   "2026/april-04-shift-2",
+   "2026/april-05-shift-1",
+   "2026/april-05-shift-2",
+   "2026/april-06-shift-1",
+   "2026/april-06-shift-2",
+   "2026/april-08-shift-2",
+   "2026/january-21-shift-1",
+   "2026/january-21-shift-2",
+   "2026/january-22-shift-1",
+   "2026/january-22-shift-2",
+   "2026/january-23-shift-1",
+   "2026/january-23-shift-2",
+   "2026/january-24-shift-1",
+   "2026/january-24-shift-2",
+   "2026/january-28-shift-1",
+   "2026/january-28-shift-2"
+  ]
+ },
+ "note": "Slug inventory only, no question text. Subject-landing pages excluded."
+}
