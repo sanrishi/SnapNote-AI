@@ -1457,11 +1457,22 @@
     "cand-jeenify-main-2019-jan-10-shift-2-q81",
     "cand-jeenify-main-2019-jan-12-shift-1-q71"
    ]
+  },
+  {
+   "batch": 107,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 12,
+   "verified": 12,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2016-2018 JEEnify optics HC sweep (12/12 verified, all independently solved)",
+   "demotions": []
   }
  ],
  "cumulative": {
-  "reviewed": 94,
-  "verified": 88,
+  "reviewed": 106,
+  "verified": 100,
   "rejected": 1,
   "ambiguous": 0
  },

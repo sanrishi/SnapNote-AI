@@ -783,5 +783,45 @@
   "chapter_id": "jee-mathematics-sequence-and-series-chapter",
   "subject": "Mathematics",
   "via": "jeenify-variant"
+ },
+ "Basic Principles of Organic Chemistry": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Some Basic Principles": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Compounds Containing Nitrogen / Amines": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-nitrogen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Compounds Containing Oxygen / Phenols": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Equilibrium / Ionic Equilibrium": {
+  "chapter_id": "jee-chemistry-equilibrium-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "p-Block Elements (Group 16)": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Differentiation": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Mechanics of Fluids": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
  }
 }

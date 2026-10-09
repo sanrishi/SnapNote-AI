@@ -32619,28 +32619,112 @@
    ],
    "source_status": "parsed",
    "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2016,
+   "session": "April 2016",
+   "shift": "Shift 1 (3 April 2016)",
+   "chapter": "Optics",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2016-apr03-s1-phy-019",
+    "pyq-jee-main-2016-apr03-s1-phy-020",
+    "pyq-jee-main-2016-apr03-s1-phy-028"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2016,
+   "session": "April 2016",
+   "shift": "Shift 1 (9 April 2016)",
+   "chapter": "Optics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2016-apr09-s1-phy-020",
+    "pyq-jee-main-2016-apr09-s1-phy-028"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2017,
+   "session": "April 2017",
+   "shift": "Shift 1 (2 April 2017)",
+   "chapter": "Optics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2017-apr02-s1-phy-022",
+    "pyq-jee-main-2017-apr02-s1-phy-023"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2017,
+   "session": "April 2017",
+   "shift": "Shift 1 (8 April 2017)",
+   "chapter": "Optics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2017-apr08-s1-phy-022",
+    "pyq-jee-main-2017-apr08-s1-phy-023"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2017,
+   "session": "April 2017",
+   "shift": "Shift 1 (9 April 2017)",
+   "chapter": "Optics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2017-apr09-s1-phy-022",
+    "pyq-jee-main-2017-apr09-s1-phy-023"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2018,
+   "session": "April 2018",
+   "shift": "Shift 1 (8 April 2018)",
+   "chapter": "Optics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2018-apr08-s1-phy-023"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
   }
  ],
  "totals": {
-  "verified_records": 3204,
-  "sources_parsed": 91,
+  "verified_records": 3216,
+  "sources_parsed": 97,
   "sources_discovered": 3
  },
  "index_dashboard": {
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3204,
+  "verified_records": 3216,
   "external_candidates_quarantined": 703,
-  "review_batches": 106,
+  "review_batches": 107,
   "queue_cumulative": {
-   "reviewed": 94,
-   "verified": 88,
+   "reviewed": 106,
+   "verified": 100,
    "rejected": 1,
    "ambiguous": 0
   },
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
-  "verification_rate_reviewed": 0.9362,
+  "verification_rate_reviewed": 0.9434,
   "concept_distribution": {
    "jee-chemistry-atomic-structure-chapter": 40,
    "jee-chemistry-biomolecules-chapter": 37,
@@ -32688,7 +32772,7 @@
    "jee-physics-kinetic-theory-of-gases-chapter": 33,
    "jee-physics-laws-of-motion-chapter": 47,
    "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 68,
-   "jee-physics-optics-chapter": 102,
+   "jee-physics-optics-chapter": 114,
    "jee-physics-oscillations-and-waves-chapter": 48,
    "jee-physics-properties-of-solids-and-liquids-chapter": 89,
    "jee-physics-rotational-motion-chapter": 1,

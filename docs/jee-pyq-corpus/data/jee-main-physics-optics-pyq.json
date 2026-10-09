@@ -3160,5 +3160,377 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2018-apr08-s1-phy-023",
+  "exam": "JEE Main",
+  "year": 2018,
+  "session": "April 2018",
+  "shift": "Shift 1 (8 April 2018)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; beta = lambda D/d with lambda = 500 nm, D = 0.5 m, beta = 1 cm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 23,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2018",
+  "question_summary": "YDSE fringe width gives slit separation 25 um.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2018/april-08",
+  "source_document": "NTA JEE Main 2018, B Tech 8 Apr 2018 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 1. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "331102c9e31af894",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2017-apr02-s1-phy-022",
+  "exam": "JEE Main",
+  "year": 2017,
+  "session": "April 2017",
+  "shift": "Shift 1 (2 April 2017)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; diverging-lens virtual image 25 cm left becomes 40 cm object for f = +20 cm lens. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 22,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2017",
+  "question_summary": "Two-lens combo forms real image 40 cm past converging lens.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2017/april-02",
+  "source_document": "NTA JEE Main 2017, B Tech 2 Apr 2017 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 1. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "e6395711f4bfc92f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2017-apr02-s1-phy-023",
+  "exam": "JEE Main",
+  "year": 2017,
+  "session": "April 2017",
+  "shift": "Shift 1 (2 April 2017)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; n1/n2 = 520/650 = 4/5; y = 4 x 650 nm x 1.5 m / 0.5 mm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 23,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2017",
+  "question_summary": "Coincident bright fringes at 7.8 mm (orders 4 and 5).",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2017/april-02",
+  "source_document": "NTA JEE Main 2017, B Tech 2 Apr 2017 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 2. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "2d2f07b1ae4afe94",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2017-apr08-s1-phy-022",
+  "exam": "JEE Main",
+  "year": 2017,
+  "session": "April 2017",
+  "shift": "Shift 1 (8 April 2017)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; r = 90 deg - A so n12 = tan A with n12 = 1/sin thetaC. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 22,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2017",
+  "question_summary": "Orthogonal reflected/refracted rays give A = atan(1/sin thetaC).",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2017/april-08",
+  "source_document": "NTA JEE Main 2017, B Tech 8 Apr 2017 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 4. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "7498342a6033e39f",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2017-apr08-s1-phy-023",
+  "exam": "JEE Main",
+  "year": 2017,
+  "session": "April 2017",
+  "shift": "Shift 1 (8 April 2017)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; first minimum at 1.5 cm; width is twice that. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 23,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2017",
+  "question_summary": "Second/fourth minima at 3/6 cm give central width 3.0 cm.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2017/april-08",
+  "source_document": "NTA JEE Main 2017, B Tech 8 Apr 2017 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 2. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "73a1723e232d561c",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2017-apr09-s1-phy-022",
+  "exam": "JEE Main",
+  "year": 2017,
+  "session": "April 2017",
+  "shift": "Shift 1 (9 April 2017)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; lens-alone image 60 cm out puts mirror ROC 55 cm away. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 22,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2017",
+  "question_summary": "Lens-mirror retrace gives convex-mirror f = 27.5 cm.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2017/april-09",
+  "source_document": "NTA JEE Main 2017, B Tech 9 Apr 2017 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 1. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "3274e8298a2a1ac7",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2017-apr09-s1-phy-023",
+  "exam": "JEE Main",
+  "year": 2017,
+  "session": "April 2017",
+  "shift": "Shift 1 (9 April 2017)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; y3 = 3 x 600 nm x 0.5 m / 0.1 mm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 23,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2017",
+  "question_summary": "Third dark band at 9 mm.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2017/april-09",
+  "source_document": "NTA JEE Main 2017, B Tech 9 Apr 2017 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 2. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "943bfaf9031cc3f8",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2016-apr03-s1-phy-019",
+  "exam": "JEE Main",
+  "year": 2016,
+  "session": "April 2016",
+  "shift": "Shift 1 (3 April 2016)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; angular-magnification standard result. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 19,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2016",
+  "question_summary": "Telescope power 20 makes tree appear 20 times nearer.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2016/april-03",
+  "source_document": "NTA JEE Main 2016, B Tech 3 Apr 2016 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 4. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "f3dcff2278522282",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2016-apr03-s1-phy-020",
+  "exam": "JEE Main",
+  "year": 2016,
+  "session": "April 2016",
+  "shift": "Shift 1 (3 April 2016)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; spot = a + lambda L/a minimized. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2016",
+  "question_summary": "Pinhole optimum a = sqrt(lambda L), spot sqrt(4 lambda L).",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2016/april-03",
+  "source_document": "NTA JEE Main 2016, B Tech 3 Apr 2016 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 3. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "28c15ce5b951fdd3",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2016-apr03-s1-phy-028",
+  "exam": "JEE Main",
+  "year": 2016,
+  "session": "April 2016",
+  "shift": "Shift 1 (3 April 2016)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; A = 74 deg from angle sum; maximum-possible phrasing admits listed 1.5. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 28,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2016",
+  "question_summary": "Prism mu = sin57/sin37 ~ 1.39; closest listed 1.5.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2016/april-03",
+  "source_document": "NTA JEE Main 2016, B Tech 3 Apr 2016 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 1. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "9310dcf6662ba992",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2016-apr09-s1-phy-020",
+  "exam": "JEE Main",
+  "year": 2016,
+  "session": "April 2016",
+  "shift": "Shift 1 (9 April 2016)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; lambda/d0 = 1/60 deg in radians. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 20,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2016",
+  "question_summary": "Fringe-loss distance d0 ~ 2 mm from eye resolution.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2016/april-09",
+  "source_document": "NTA JEE Main 2016, B Tech 9 Apr 2016 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 2. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "1000de9b1d629fd1",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2016-apr09-s1-phy-028",
+  "exam": "JEE Main",
+  "year": 2016,
+  "session": "April 2016",
+  "shift": "Shift 1 (9 April 2016)",
+  "subject": "Physics",
+  "chapter": "Optics",
+  "concept_ids": [
+   "jee-physics-optics-chapter"
+  ],
+  "concept_mapping_note": "MCQ; lens-alone image 39 cm out; mirror ROC 25.4 cm. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 28,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Physics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2016",
+  "question_summary": "Coincidence method gives f1 ~ 7.8 cm, f2 = 12.7 cm.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2016/april-09",
+  "source_document": "NTA JEE Main 2016, B Tech 9 Apr 2016 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 2. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Optics is pending.",
+  "content_fingerprint": "23ed05e93a781933",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
