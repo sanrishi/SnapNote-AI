@@ -20428,6 +20428,19 @@
    "year": 2025,
    "session": "April 2025",
    "shift": "Shift 2 (4 Apr 2025)",
+   "chapter": "Magnetic Effects of Current and Magnetism",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-apr04-s2-phy-049"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "April 2025",
+   "shift": "Shift 2 (4 Apr 2025)",
    "chapter": "Matrices and Determinants",
    "verified_questions": 1,
    "verified_ids": [
@@ -22233,10 +22246,11 @@
    "session": "April 2025",
    "shift": "Shift 2 (8 Apr 2025)",
    "chapter": "Integral Calculus",
-   "verified_questions": 2,
+   "verified_questions": 3,
    "verified_ids": [
     "pyq-jee-main-2025-apr08-s2-mat-018",
-    "pyq-jee-main-2025-apr08-s2-mat-019"
+    "pyq-jee-main-2025-apr08-s2-mat-019",
+    "pyq-jee-main-2025-apr08-s2-mat-025"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -22622,6 +22636,19 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (22 Jan 2025)",
+   "chapter": "Binomial Theorem and Its Simple Applications",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan22-s1-mat-022"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (22 Jan 2025)",
    "chapter": "Co-ordinate Geometry",
    "verified_questions": 4,
    "verified_ids": [
@@ -22722,9 +22749,10 @@
    "session": "January 2025",
    "shift": "Shift 1 (22 Jan 2025)",
    "chapter": "Sets, Relations and Functions",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2025-jan22-s1-mat-001"
+    "pyq-jee-main-2025-jan22-s1-mat-001",
+    "pyq-jee-main-2025-jan22-s1-mat-002"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -25345,9 +25373,10 @@
    "session": "January 2025",
    "shift": "Shift 2 (24 Jan 2025)",
    "chapter": "Integral Calculus",
-   "verified_questions": 1,
+   "verified_questions": 2,
    "verified_ids": [
-    "pyq-jee-main-2025-jan24-s2-mat-019"
+    "pyq-jee-main-2025-jan24-s2-mat-019",
+    "pyq-jee-main-2025-jan24-s2-mat-023"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -32234,20 +32263,6 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (29 January 2025)",
-   "chapter": "Coordination Compounds",
-   "verified_questions": 2,
-   "verified_ids": [
-    "pyq-jee-main-2025-jan29-s1-che-057",
-    "pyq-jee-main-2025-jan29-s1-che-058"
-   ],
-   "source_status": "parsed",
-   "status": "partial"
-  },
-  {
-   "exam": "JEE Main",
-   "year": 2025,
-   "session": "January 2025",
-   "shift": "Shift 1 (29 January 2025)",
    "chapter": "Dual Nature of Matter and Radiation",
    "verified_questions": 1,
    "verified_ids": [
@@ -32462,20 +32477,6 @@
    "exam": "JEE Main",
    "year": 2025,
    "session": "January 2025",
-   "shift": "Shift 1 (29 January 2025)",
-   "chapter": "d- and f-Block Elements",
-   "verified_questions": 2,
-   "verified_ids": [
-    "pyq-jee-main-2025-jan29-s1-che-061",
-    "pyq-jee-main-2025-jan29-s1-che-072"
-   ],
-   "source_status": "parsed",
-   "status": "partial"
-  },
-  {
-   "exam": "JEE Main",
-   "year": 2025,
-   "session": "January 2025",
    "shift": "Shift 2 (29 January 2025)",
    "chapter": "Atomic Structure",
    "verified_questions": 1,
@@ -32547,21 +32548,6 @@
    "verified_questions": 1,
    "verified_ids": [
     "pyq-jee-main-2025-jan29-s2-mat-025"
-   ],
-   "source_status": "parsed",
-   "status": "partial"
-  },
-  {
-   "exam": "JEE Main",
-   "year": 2025,
-   "session": "January 2025",
-   "shift": "Shift 2 (29 January 2025)",
-   "chapter": "Coordination Compounds",
-   "verified_questions": 3,
-   "verified_ids": [
-    "pyq-jee-main-2025-jan29-s2-che-051",
-    "pyq-jee-main-2025-jan29-s2-che-062",
-    "pyq-jee-main-2025-jan29-s2-che-071"
    ],
    "source_status": "parsed",
    "status": "partial"
@@ -33257,7 +33243,7 @@
   }
  ],
  "totals": {
-  "verified_records": 3273,
+  "verified_records": 3271,
   "sources_parsed": 97,
   "sources_discovered": 3
  },
@@ -33265,17 +33251,17 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3273,
+  "verified_records": 3271,
   "external_candidates_quarantined": 703,
-  "review_batches": 108,
+  "review_batches": 109,
   "queue_cumulative": {
-   "reviewed": 174,
-   "verified": 157,
+   "reviewed": 222,
+   "verified": 162,
    "rejected": 1,
    "ambiguous": 0
   },
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
-  "verification_rate_reviewed": 0.9023,
+  "verification_rate_reviewed": 0.7297,
   "concept_distribution": {
    "jee-chemistry-atomic-structure-chapter": 42,
    "jee-chemistry-biomolecules-chapter": 39,
@@ -33283,8 +33269,8 @@
    "jee-chemistry-chemical-kinetics-chapter": 48,
    "jee-chemistry-chemical-thermodynamics-chapter": 47,
    "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter": 45,
-   "jee-chemistry-coordination-compounds-chapter": 73,
-   "jee-chemistry-d-and-f-block-elements-chapter": 67,
+   "jee-chemistry-coordination-compounds-chapter": 68,
+   "jee-chemistry-d-and-f-block-elements-chapter": 65,
    "jee-chemistry-equilibrium-chapter": 48,
    "jee-chemistry-organic-compounds-containing-halogens-chapter": 47,
    "jee-chemistry-organic-compounds-containing-nitrogen-chapter": 46,
@@ -33296,16 +33282,16 @@
    "jee-chemistry-solutions-chapter": 41,
    "jee-chemistry-some-basic-concepts-in-chemistry-chapter": 42,
    "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter": 97,
-   "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 46,
+   "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 47,
    "jee-mathematics-co-ordinate-geometry-chapter": 188,
    "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 80,
    "jee-mathematics-diffrential-equations-chapter": 61,
-   "jee-mathematics-integral-calculas-chapter": 119,
+   "jee-mathematics-integral-calculas-chapter": 121,
    "jee-mathematics-limit-continuity-and-differentiability-chapter": 111,
    "jee-mathematics-matrices-and-determinants-chapter": 87,
    "jee-mathematics-permutations-and-combinations-chapter": 50,
    "jee-mathematics-sequence-and-series-chapter": 73,
-   "jee-mathematics-sets-relations-and-functions-chapter": 68,
+   "jee-mathematics-sets-relations-and-functions-chapter": 69,
    "jee-mathematics-statistics-and-probability-chapter": 78,
    "jee-mathematics-three-dimensional-geometry-chapter": 81,
    "jee-mathematics-trigonometry-chapter": 49,
@@ -33322,7 +33308,7 @@
    "jee-physics-kinematics-chapter": 57,
    "jee-physics-kinetic-theory-of-gases-chapter": 34,
    "jee-physics-laws-of-motion-chapter": 47,
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 70,
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 71,
    "jee-physics-optics-chapter": 115,
    "jee-physics-oscillations-and-waves-chapter": 50,
    "jee-physics-properties-of-solids-and-liquids-chapter": 91,

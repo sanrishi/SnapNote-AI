@@ -1491,11 +1491,65 @@
     "cand-jeenify-main-2025-jan-29-shift-2-q48",
     "cand-jeenify-main-2025-jan-29-shift-1-q41"
    ]
+  },
+  {
+   "batch": 109,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 48,
+   "verified": 5,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2025 JEEPrep HC leftovers (5 verified: binomial/SRF/integral-x2/cyclotron; 37 demoted, 2 multi-chapter duplicate copies; 4 mislabeled writes caught by audit and removed pre-commit)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q52",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q52",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q70",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-2-q71",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q73",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q56",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q58",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q61",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q60",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q62",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q69",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-2-q69",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-2-q69",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q68",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q58",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q54",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-2-q51",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q53",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q53",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q52",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q3",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q54",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q53",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-2-q74",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q24",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q37",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q36",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-1-q38",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q50",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39"
+   ],
+   "duplicates": [
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q2 (thermo queue copy; verified via experimental-queue entry under Sets/Relations)",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22 (kinematics queue copy; verified via bonding-queue entry under Binomial Theorem)"
+   ],
+   "audit_catch": "audit duplicate-id gate caught 4 records mislabeled with wrong paper identities (jan-29 solves written under jeeprep qids colliding with genuine Hinsberg/Tollens/Fittig records); removed before commit; genuine originals untouched"
   }
  ],
  "cumulative": {
-  "reviewed": 174,
-  "verified": 157,
+  "reviewed": 222,
+  "verified": 162,
   "rejected": 1,
   "ambiguous": 0
  },
@@ -2955,6 +3009,228 @@
    "chapter": "Work, Energy and Power",
    "reason": "radical scope ambiguous (sqrt(ngR) vs n sqrt(gR)); options 2 and 4 split exactly on it; not verified",
    "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q52",
+   "chapter": "Atomic Structure",
+   "reason": "stem asks which Bohr statement is incorrect but options absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q52",
+   "chapter": "Atomic Structure",
+   "reason": "stem asks which Bohr postulate disagrees with QM but options absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q70",
+   "chapter": "Biomolecules",
+   "reason": "dipeptide order (Ala-Gly vs Gly-Ala) underdetermined and options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-2-q71",
+   "chapter": "Chemical Kinetics",
+   "reason": "graph readings approximate (k drifts 0.102 to 0.081); first-order fit unverifiable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q73",
+   "chapter": "Chemical Thermodynamics",
+   "reason": "X-Y single-bond energy absent; resonance energy uncomputable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q56",
+   "chapter": "Classification of Elements",
+   "reason": "element list absent from transcription; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q58",
+   "chapter": "Classification of Elements",
+   "reason": "element list absent from transcription; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q61",
+   "chapter": "d- and f-Block Elements",
+   "reason": "ionisation-enthalpy pairs absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q60",
+   "chapter": "d- and f-Block Elements",
+   "reason": "ion sets absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q62",
+   "chapter": "d- and f-Block Elements",
+   "reason": "stem unrecoverable (corrupted PDF page both languages)",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q69",
+   "chapter": "Organic Nitrogen Compounds",
+   "reason": "benzenediazonium option figures unrecoverable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-2-q69",
+   "chapter": "Organic Nitrogen Compounds",
+   "reason": "tribromoaniline sequence options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q69",
+   "chapter": "Organic Nitrogen Compounds",
+   "reason": "reagent-set options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q68",
+   "chapter": "Organic Nitrogen Compounds",
+   "reason": "stem unrecoverable (corrupted PDF pages both languages)",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q58",
+   "chapter": "Practical Chemistry",
+   "reason": "sulphide options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q54",
+   "chapter": "Solutions",
+   "reason": "KH-vs-T options are graphs, unrecoverable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-2-q51",
+   "chapter": "Solutions",
+   "reason": "molarity-plot options are graphs, unrecoverable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q53",
+   "chapter": "Solutions",
+   "reason": "property options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q53",
+   "chapter": "Solutions",
+   "reason": "Kf formula transcription uncertain (missing square/1000); not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q52",
+   "chapter": "Solutions",
+   "reason": "mixture list absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q3",
+   "chapter": "Solutions",
+   "reason": "equation transcription yields non-integer form e^(8/5); integer-format mismatch, likely damaged; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q54",
+   "chapter": "Solutions",
+   "reason": "VP-T figure with options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q53",
+   "chapter": "Solutions",
+   "reason": "osmosis options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51",
+   "chapter": "Some Basic Concepts",
+   "reason": "stem unrecoverable (corrupted PDF pages both languages)",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-2-q74",
+   "chapter": "GOC",
+   "reason": "alkene/alkyne reconstruction underdetermined; sigma count unverifiable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q24",
+   "chapter": "Integral Calculus",
+   "reason": "integral substitution unrecoverable by hand; not independently verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22",
+   "chapter": "Permutations and Combinations",
+   "reason": "stem corrupted in both languages; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1",
+   "chapter": "Sets, Relations and Functions",
+   "reason": "stem missing (corrupted page 1); not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8",
+   "chapter": "Statistics and Probability",
+   "reason": "stem corrupted in both languages; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
+   "chapter": "Three Dimensional Geometry",
+   "reason": "stem truncated at asked expression; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14",
+   "chapter": "Three Dimensional Geometry",
+   "reason": "S1/S2 judgment options absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14",
+   "chapter": "Vector Algebra",
+   "reason": "options absent and thumbnail numeric values uncertain; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q37",
+   "chapter": "Current Electricity",
+   "reason": "resistor-combination options are circuit figures; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q36",
+   "chapter": "Current Electricity",
+   "reason": "circuit figure description too ambiguous to reconstruct; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-1-q38",
+   "chapter": "Electrostatics",
+   "reason": "q2 magnitude absent; K uncomputable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q50",
+   "chapter": "Electrostatics",
+   "reason": "charge-to-loop distance absent; flux uncomputable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39",
+   "chapter": "Magnetism",
+   "reason": "Amperian-loop counting needs figure detail; ambiguous; not verified",
+   "date": "2026-10-09"
   }
  ],
  "duplicate_skips": [
@@ -2999,6 +3275,16 @@
    "duplicate_of": "pyq-jee-main-2026-apr08-s2-phy-032",
    "date": "2026-10-07",
    "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q2-thermo-copy",
+   "reason": "multi-chapter queue copy; identity verified once under Sets/Relations",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22-kinematics-copy",
+   "reason": "multi-chapter queue copy; identity verified once under Binomial Theorem",
+   "date": "2026-10-09"
   }
  ]
 }

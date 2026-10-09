@@ -3687,5 +3687,67 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-apr08-s2-mat-025",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "April 2025",
+  "shift": "Shift 2 (8 Apr 2025)",
+  "subject": "Mathematics",
+  "chapter": "Integral Calculus",
+  "concept_ids": [
+   "jee-mathematics-integral-calculas-chapter"
+  ],
+  "concept_mapping_note": "Numerical; numerical answer independently recomputed and matched. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 25,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Bounded area 27/2; 6A = 81.",
+  "source_url": "https://jeeprep.app/pyq/2025-apr-8-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 8 Apr 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (parabola-line area). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Integral Calculus is pending.",
+  "content_fingerprint": "2a679bfe3112c207",
+  "difficulty": null,
+  "answer_key": "81",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan24-s2-mat-023",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 2 (24 Jan 2025)",
+  "subject": "Mathematics",
+  "chapter": "Integral Calculus",
+  "concept_ids": [
+   "jee-mathematics-integral-calculas-chapter"
+  ],
+  "concept_mapping_note": "Numerical; numerical answer independently recomputed and matched. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 23,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Decomposition gives alpha = 7/2, beta = 25/4.",
+  "source_url": "https://jeeprep.app/pyq/2025-jan-24-shift-2/mathematics",
+  "source_document": "NTA JEE Main 2025, B Tech 24 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEPrep mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (radical-log split). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Integral Calculus is pending.",
+  "content_fingerprint": "7618e9335f5d55d0",
+  "difficulty": null,
+  "answer_key": "16",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "build_transcribed_index.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
