@@ -3377,5 +3377,67 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan29-s1-mat-021",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (29 January 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "Numerical; numerical answer independently recomputed and matched. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 21,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Power-law f gives 16-f prime = 112.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2025/january-29-shift-1",
+  "source_document": "NTA JEE Main 2025, B Tech 29 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (ODE from integral relation). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending.",
+  "content_fingerprint": "3df87916fbbb58ca",
+  "difficulty": null,
+  "answer_key": "112",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan29-s1-mat-023",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (29 January 2025)",
+  "subject": "Mathematics",
+  "chapter": "Limit, Continuity and Differentiability",
+  "concept_ids": [
+   "jee-mathematics-limit-continuity-and-differentiability-chapter"
+  ],
+  "concept_mapping_note": "Numerical; numerical answer independently recomputed and matched. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 23,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Least p with triangular excess is 24.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2025/january-29-shift-1",
+  "source_document": "NTA JEE Main 2025, B Tech 29 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (floor-sum limits). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Limit, Continuity and Differentiability is pending.",
+  "content_fingerprint": "e2499c6dd0249f5d",
+  "difficulty": null,
+  "answer_key": "24",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

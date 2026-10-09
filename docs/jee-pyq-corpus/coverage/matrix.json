@@ -32182,22 +32182,573 @@
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 1 (29 January 2025)",
-   "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-065"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Biomolecules",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-068"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Chemical Bonding and Molecular Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-067"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-070"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Coordination Compounds",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-057",
+    "pyq-jee-main-2025-jan29-s1-che-058"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Dual Nature of Matter and Radiation",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-036"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Electromagnetic Induction and Alternating Currents",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-026",
+    "pyq-jee-main-2025-jan29-s1-phy-032",
+    "pyq-jee-main-2025-jan29-s1-phy-037"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Electromagnetic Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-045"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Electrostatics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-028",
+    "pyq-jee-main-2025-jan29-s1-phy-043"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Kinematics",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-027",
+    "pyq-jee-main-2025-jan29-s1-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Kinetic Theory of Gases",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-047"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Limit, Continuity and Differentiability",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-mat-021",
+    "pyq-jee-main-2025-jan29-s1-mat-023"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Oscillations and Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-030"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Permutations and Combinations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-mat-024"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Properties of Solids and Liquids",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-038",
+    "pyq-jee-main-2025-jan29-s1-phy-049"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Redox Reactions and Electrochemistry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-052"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Sets, Relations and Functions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-mat-011"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Solutions",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-062",
+    "pyq-jee-main-2025-jan29-s1-che-074"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Some Basic Concepts in Chemistry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Thermodynamics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-044"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "Units and Measurements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-phy-029"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 1 (29 January 2025)",
+   "chapter": "d- and f-Block Elements",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s1-che-061",
+    "pyq-jee-main-2025-jan29-s1-che-072"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
    "year": 2025,
    "session": "January 2025",
    "shift": "Shift 2 (29 January 2025)",
-   "chapter": "Rotational Motion",
-   "verified_questions": 0,
-   "verified_ids": [],
+   "chapter": "Atomic Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-065"
+   ],
    "source_status": "parsed",
-   "status": "indexed-unreviewed"
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Biomolecules",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-054"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Chemical Bonding and Molecular Structure",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-075"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Chemical Kinetics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-067"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Classification of Elements and Periodicity in Properties",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-068",
+    "pyq-jee-main-2025-jan29-s2-che-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-mat-025"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Coordination Compounds",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-051",
+    "pyq-jee-main-2025-jan29-s2-che-062",
+    "pyq-jee-main-2025-jan29-s2-che-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Electrostatics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-phy-047"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Equilibrium",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-056"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Gravitation",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-phy-049"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Kinematics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-phy-050"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Magnetic Effects of Current and Magnetism",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-phy-042",
+    "pyq-jee-main-2025-jan29-s2-phy-046"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Optics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-phy-038"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Organic Compounds Containing Oxygen",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-073"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Oscillations and Waves",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-phy-035"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Permutations and Combinations",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-mat-010"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Redox Reactions and Electrochemistry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-060",
+    "pyq-jee-main-2025-jan29-s2-che-061"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Solutions",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-057"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Some Basic Principles of Organic Chemistry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-che-074"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Thermodynamics",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-phy-044"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2025,
+   "session": "January 2025",
+   "shift": "Shift 2 (29 January 2025)",
+   "chapter": "Units and Measurements",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2025-jan29-s2-phy-041"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
   },
   {
    "exam": "JEE Main",
@@ -32706,7 +33257,7 @@
   }
  ],
  "totals": {
-  "verified_records": 3216,
+  "verified_records": 3273,
   "sources_parsed": 97,
   "sources_discovered": 3
  },
@@ -32714,67 +33265,67 @@
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3216,
+  "verified_records": 3273,
   "external_candidates_quarantined": 703,
-  "review_batches": 107,
+  "review_batches": 108,
   "queue_cumulative": {
-   "reviewed": 106,
-   "verified": 100,
+   "reviewed": 174,
+   "verified": 157,
    "rejected": 1,
    "ambiguous": 0
   },
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
-  "verification_rate_reviewed": 0.9434,
+  "verification_rate_reviewed": 0.9023,
   "concept_distribution": {
-   "jee-chemistry-atomic-structure-chapter": 40,
-   "jee-chemistry-biomolecules-chapter": 37,
-   "jee-chemistry-chemical-bonding-and-molecular-structure-chapter": 62,
-   "jee-chemistry-chemical-kinetics-chapter": 47,
+   "jee-chemistry-atomic-structure-chapter": 42,
+   "jee-chemistry-biomolecules-chapter": 39,
+   "jee-chemistry-chemical-bonding-and-molecular-structure-chapter": 64,
+   "jee-chemistry-chemical-kinetics-chapter": 48,
    "jee-chemistry-chemical-thermodynamics-chapter": 47,
-   "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter": 42,
-   "jee-chemistry-coordination-compounds-chapter": 68,
-   "jee-chemistry-d-and-f-block-elements-chapter": 65,
-   "jee-chemistry-equilibrium-chapter": 47,
+   "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter": 45,
+   "jee-chemistry-coordination-compounds-chapter": 73,
+   "jee-chemistry-d-and-f-block-elements-chapter": 67,
+   "jee-chemistry-equilibrium-chapter": 48,
    "jee-chemistry-organic-compounds-containing-halogens-chapter": 47,
    "jee-chemistry-organic-compounds-containing-nitrogen-chapter": 46,
-   "jee-chemistry-organic-compounds-containing-oxygen-chapter": 88,
+   "jee-chemistry-organic-compounds-containing-oxygen-chapter": 89,
    "jee-chemistry-p-block-elements-chapter": 40,
    "jee-chemistry-principles-related-to-practical-chemistry-chapter": 33,
    "jee-chemistry-purification-and-characterisation-of-organic-compounds-chapter": 43,
-   "jee-chemistry-redox-reactions-and-electrochemistry-chapter": 59,
-   "jee-chemistry-solutions-chapter": 38,
-   "jee-chemistry-some-basic-concepts-in-chemistry-chapter": 41,
-   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter": 96,
+   "jee-chemistry-redox-reactions-and-electrochemistry-chapter": 62,
+   "jee-chemistry-solutions-chapter": 41,
+   "jee-chemistry-some-basic-concepts-in-chemistry-chapter": 42,
+   "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter": 97,
    "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 46,
-   "jee-mathematics-co-ordinate-geometry-chapter": 187,
+   "jee-mathematics-co-ordinate-geometry-chapter": 188,
    "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 80,
    "jee-mathematics-diffrential-equations-chapter": 61,
    "jee-mathematics-integral-calculas-chapter": 119,
-   "jee-mathematics-limit-continuity-and-differentiability-chapter": 109,
+   "jee-mathematics-limit-continuity-and-differentiability-chapter": 111,
    "jee-mathematics-matrices-and-determinants-chapter": 87,
-   "jee-mathematics-permutations-and-combinations-chapter": 48,
+   "jee-mathematics-permutations-and-combinations-chapter": 50,
    "jee-mathematics-sequence-and-series-chapter": 73,
-   "jee-mathematics-sets-relations-and-functions-chapter": 67,
+   "jee-mathematics-sets-relations-and-functions-chapter": 68,
    "jee-mathematics-statistics-and-probability-chapter": 78,
    "jee-mathematics-three-dimensional-geometry-chapter": 81,
    "jee-mathematics-trigonometry-chapter": 49,
    "jee-mathematics-vector-algebra-chapter": 61,
    "jee-physics-atoms-and-nuclei-chapter": 62,
    "jee-physics-current-electricity-chapter": 54,
-   "jee-physics-dual-nature-of-matter-and-radiation-chapter": 35,
-   "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 63,
-   "jee-physics-electromagnetic-waves-chapter": 34,
+   "jee-physics-dual-nature-of-matter-and-radiation-chapter": 36,
+   "jee-physics-electromagnetic-induction-and-alternating-currents-chapter": 66,
+   "jee-physics-electromagnetic-waves-chapter": 35,
    "jee-physics-electronic-devices-chapter": 43,
-   "jee-physics-electrostatics-chapter": 81,
+   "jee-physics-electrostatics-chapter": 84,
    "jee-physics-experimental-skills-chapter": 26,
-   "jee-physics-gravitation-chapter": 31,
-   "jee-physics-kinematics-chapter": 54,
-   "jee-physics-kinetic-theory-of-gases-chapter": 33,
+   "jee-physics-gravitation-chapter": 32,
+   "jee-physics-kinematics-chapter": 57,
+   "jee-physics-kinetic-theory-of-gases-chapter": 34,
    "jee-physics-laws-of-motion-chapter": 47,
-   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 68,
-   "jee-physics-optics-chapter": 114,
-   "jee-physics-oscillations-and-waves-chapter": 48,
-   "jee-physics-properties-of-solids-and-liquids-chapter": 89,
+   "jee-physics-magnetic-effects-of-current-and-magnetism-chapter": 70,
+   "jee-physics-optics-chapter": 115,
+   "jee-physics-oscillations-and-waves-chapter": 50,
+   "jee-physics-properties-of-solids-and-liquids-chapter": 91,
    "jee-physics-rotational-motion-chapter": 1,
    "jee-physics-rotational-motion-concept-001": 3,
    "jee-physics-rotational-motion-concept-002": 3,
@@ -32788,8 +33339,8 @@
    "jee-physics-rotational-motion-concept-013": 3,
    "jee-physics-rotational-motion-concept-014": 24,
    "jee-physics-rotational-motion-concept-015": 1,
-   "jee-physics-thermodynamics-chapter": 41,
-   "jee-physics-units-and-measurements-chapter": 56,
+   "jee-physics-thermodynamics-chapter": 43,
+   "jee-physics-units-and-measurements-chapter": 58,
    "jee-physics-work-energy-and-power-chapter": 42
   }
  },

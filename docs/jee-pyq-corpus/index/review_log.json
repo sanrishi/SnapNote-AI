@@ -1468,11 +1468,34 @@
    "ambiguous": 0,
    "scope": "2016-2018 JEEnify optics HC sweep (12/12 verified, all independently solved)",
    "demotions": []
+  },
+  {
+   "batch": 108,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 68,
+   "verified": 57,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2025-jan-29 JEEnify unique-coverage sweep (57 verified across 30 chapters incl CG focal-chord, 11 demoted with proofs)",
+   "demotions": [
+    "cand-jeenify-main-2025-jan-29-shift-1-q63",
+    "cand-jeenify-main-2025-jan-29-shift-1-q54",
+    "cand-jeenify-main-2025-jan-29-shift-1-q51",
+    "cand-jeenify-main-2025-jan-29-shift-2-q24",
+    "cand-jeenify-main-2025-jan-29-shift-1-q10",
+    "cand-jeenify-main-2025-jan-29-shift-2-q21",
+    "cand-jeenify-main-2025-jan-29-shift-1-q14",
+    "cand-jeenify-main-2025-jan-29-shift-1-q46",
+    "cand-jeenify-main-2025-jan-29-shift-1-q31",
+    "cand-jeenify-main-2025-jan-29-shift-2-q48",
+    "cand-jeenify-main-2025-jan-29-shift-1-q41"
+   ]
   }
  ],
  "cumulative": {
-  "reviewed": 106,
-  "verified": 100,
+  "reviewed": 174,
+  "verified": 157,
   "rejected": 1,
   "ambiguous": 0
  },
@@ -2865,6 +2888,72 @@
    "queue_id": "cand-jeenify-main-2019-jan-12-shift-1-q71",
    "chapter": "Co-ordinate Geometry",
    "reason": "solution set is the open interval (7,31) but no listed option matches it (closest [12,21] is a strict subset); option-set mismatch, not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q63",
+   "chapter": "Chemical Thermodynamics",
+   "reason": "heat-transfer process (constant P vs V) unspecified; option 1 (348 K/300 J) and option 4 (378 K/500 J) each valid under a standard reading; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q54",
+   "chapter": "Equilibrium",
+   "reason": "Kp option expressions garbled in transcription; cannot confirm which option matches x = (2Kp^2/p)^(1/3); not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q51",
+   "chapter": "Some Basic Principles of Organic Chemistry",
+   "reason": "final species transcription ambiguous (quaternary N vs amine); nucleophile count 5 vs 6 hinges on it; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-2-q24",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "reason": "modulus/determinant conditions unrecoverable from transcription; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q10",
+   "chapter": "Differential Equations",
+   "reason": "initial-condition value ambiguous in transcription; solution family does not land on any option under either reading; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-2-q21",
+   "chapter": "Integral Calculus",
+   "reason": "integrand transcription garbled (floor-term structure unrecoverable); not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q14",
+   "chapter": "Three Dimensional Geometry",
+   "reason": "lines as transcribed are skew (no intersection); stem inconsistent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q46",
+   "chapter": "Rotational Motion",
+   "reason": "r x F recomputes to 0 with transcribed vectors vs mirror 2; likely force-vector transcription damage; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q31",
+   "chapter": "Units and Measurements",
+   "reason": "velocity-expression transcription ambiguous; no dimensional reading resolves to the listed options; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-2-q48",
+   "chapter": "Units and Measurements",
+   "reason": "Q-expression exponent placement garbled; x = 77 vs 212 hinges on it; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q41",
+   "chapter": "Work, Energy and Power",
+   "reason": "radical scope ambiguous (sqrt(ngR) vs n sqrt(gR)); options 2 and 4 split exactly on it; not verified",
    "date": "2026-10-09"
   }
  ],

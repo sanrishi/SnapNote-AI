@@ -2013,5 +2013,67 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan29-s1-che-061",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (29 January 2025)",
+  "subject": "Chemistry",
+  "chapter": "d- and f-Block Elements",
+  "concept_ids": [
+   "jee-chemistry-d-and-f-block-elements-chapter"
+  ],
+  "concept_mapping_note": "MCQ; MCQ independently solved; solution matches mirror-claimed option 3. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 61,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Mn<Fe, Tc<Ru, Os<Re melting orders.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2025/january-29-shift-1",
+  "source_document": "NTA JEE Main 2025, B Tech 29 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 3. Answer basis: Mirror-claimed official final answer, independently solved. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for d- and f-Block Elements is pending.",
+  "content_fingerprint": "01d5ef91feb723d0",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2025-jan29-s1-che-072",
+  "exam": "JEE Main",
+  "year": 2025,
+  "session": "January 2025",
+  "shift": "Shift 1 (29 January 2025)",
+  "subject": "Chemistry",
+  "chapter": "d- and f-Block Elements",
+  "concept_ids": [
+   "jee-chemistry-d-and-f-block-elements-chapter"
+  ],
+  "concept_mapping_note": "Numerical; numerical answer independently recomputed and matched. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 72,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Chemistry Section B, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2025",
+  "question_summary": "Insoluble fusion product Fe2O3.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2025/january-29-shift-1",
+  "source_document": "NTA JEE Main 2025, B Tech 29 Jan 2025 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (stoichiometry). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for d- and f-Block Elements is pending.",
+  "content_fingerprint": "7a7f340dee1cc6a3",
+  "difficulty": null,
+  "answer_key": "160",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
  }
 ]
