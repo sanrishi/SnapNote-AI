@@ -2323,5 +2323,377 @@
    "parser": "build_transcribed_index.py v1",
    "pdf_sha256": null
   }
+ },
+ {
+  "question_id": "pyq-jee-main-2021-feb24-s1-mat-085",
+  "exam": "JEE Main",
+  "year": 2021,
+  "session": "February 2021",
+  "shift": "Shift 1 (24 February 2021)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "Numerical; sum of squares of entries equals tr(MTM) = 7: one 2 + three 1s (9C1 x 8C3 = 504) or seven 1s (9C7 = 36). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 85,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/0 per the NTA Information Bulletin/FAQ for JEE Main 2021",
+  "question_summary": "Entries {0,1,2} with entry-square sum 7: 504 + 36 matrices.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2021/february-24-shift-1",
+  "source_document": "NTA JEE Main 2021, B Tech 24 Feb 2021 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (entry-square census). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "1bbf5cb54531d2d9",
+  "difficulty": null,
+  "answer_key": "540",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2021-feb24-s2-mat-067",
+  "exam": "JEE Main",
+  "year": 2021,
+  "session": "February 2021",
+  "shift": "Shift 2 (24 February 2021)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; det = 4-k^2 gives (A) true, (B)(C) false; k=2 forces y+2z = -3 vs +3 so (D) true, (E) false. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 67,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2021",
+  "question_summary": "Coefficient determinant 4-k^2: unique iff k != +-2; k=2 inconsistent.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2021/february-24-shift-2",
+  "source_document": "NTA JEE Main 2021, B Tech 24 Feb 2021 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 3. Answer basis: Mirror-claimed official final answer, independently solved. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "30c035fbe48502c8",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2021-feb24-s2-mat-068",
+  "exam": "JEE Main",
+  "year": 2021,
+  "session": "February 2021",
+  "shift": "Shift 2 (24 February 2021)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; (A2B2-B2A2) is skew-symmetric (A symmetric, B skew) hence singular homogeneous system. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 68,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2021",
+  "question_summary": "Skew-symmetric 3x3 coefficient matrix forces infinitely many solutions.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2021/february-24-shift-2",
+  "source_document": "NTA JEE Main 2021, B Tech 24 Feb 2021 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 2. Answer basis: Mirror-claimed official final answer, independently solved. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "d83b60a8052c15dc",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2021-feb25-s1-mat-085",
+  "exam": "JEE Main",
+  "year": 2021,
+  "session": "February 2021",
+  "shift": "Shift 1 (25 February 2021)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "Numerical; A^2 = I gives x+y+z = 1 and x^2+y^2+z^2 = 1, so det A = +1 and x^3+y^3+z^3 = 3xyz + 1 = 7. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 85,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/0 per the NTA Information Bulletin/FAQ for JEE Main 2021",
+  "question_summary": "Symmetric circulant with A^2 = I gives x^3+y^3+z^3 = 7.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2021/february-25-shift-1",
+  "source_document": "NTA JEE Main 2021, B Tech 25 Feb 2021 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (eigenvalue/determinant constraints). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "e8dae1354b04e9e9",
+  "difficulty": null,
+  "answer_key": "7",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2021-feb25-s1-mat-086",
+  "exam": "JEE Main",
+  "year": 2021,
+  "session": "February 2021",
+  "shift": "Shift 1 (25 February 2021)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "Numerical; D vanishes identically; Dx = 0 gives 42-2k = 0 and Dz = 0 gives k-21 = 0; rank check confirms dependence. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 86,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/0 per the NTA Information Bulletin/FAQ for JEE Main 2021",
+  "question_summary": "Infinite solutions force Dx = Dz = 0, both giving k = 21.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2021/february-25-shift-1",
+  "source_document": "NTA JEE Main 2021, B Tech 25 Feb 2021 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (Cramer numerators + rank check). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "31bffcf5648973c8",
+  "difficulty": null,
+  "answer_key": "21",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2021-feb25-s2-mat-070",
+  "exam": "JEE Main",
+  "year": 2021,
+  "session": "February 2021",
+  "shift": "Shift 2 (25 February 2021)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; coefficient determinant -20 != 0, so options 1/3/4 excluded. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 70,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2021",
+  "question_summary": "Nonzero determinant (-20) gives a unique solution.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2021/february-25-shift-2",
+  "source_document": "NTA JEE Main 2021, B Tech 25 Feb 2021 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 2. Answer basis: Mirror-claimed official final answer, independently solved. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "177baaea834d6ff3",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2021-feb26-s2-mat-068",
+  "exam": "JEE Main",
+  "year": 2021,
+  "session": "February 2021",
+  "shift": "Shift 2 (26 February 2021)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; determinant 0; row reduction gives consistency condition c-a = -2(b-2a). Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 68,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2021",
+  "question_summary": "Singular system; infinite solutions exactly when 5a = 2b + c.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2021/february-26-shift-2",
+  "source_document": "NTA JEE Main 2021, B Tech 26 Feb 2021 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 3. Answer basis: Mirror-claimed official final answer, independently solved. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "4b23b1bf187dd8ce",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2021-feb26-s2-mat-087",
+  "exam": "JEE Main",
+  "year": 2021,
+  "session": "February 2021",
+  "shift": "Shift 2 (26 February 2021)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "Numerical; 2x2 block forces alpha+beta = 0; scalar block 2^20 + alpha 2^19 + 2 beta = 4 gives alpha = -2. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 87,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section B, +4/0 per the NTA Information Bulletin/FAQ for JEE Main 2021",
+  "question_summary": "Block-diagonal powers give alpha = -2, beta = 2.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2021/february-26-shift-2",
+  "source_document": "NTA JEE Main 2021, B Tech 26 Feb 2021 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (block power closed form). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "8eeaacee667a0f81",
+  "difficulty": null,
+  "answer_key": "4",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2020-jan07-s2-mat-071",
+  "exam": "JEE Main",
+  "year": 2020,
+  "session": "January 2020",
+  "shift": "Shift 2 (7 January 2020)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "Numerical; eliminating gives 14 + (lambda-1) z = mu for all z. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 71,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2020",
+  "question_summary": "Parametric plane system forces lambda = 1, mu = 14.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2020/january-07-shift-2",
+  "source_document": "NTA JEE Main 2020, B Tech 7 Jan 2020 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (elimination). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "b2e378e8349b49ef",
+  "difficulty": null,
+  "answer_key": "13",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2020-jan08-s1-mat-051",
+  "exam": "JEE Main",
+  "year": 2020,
+  "session": "January 2020",
+  "shift": "Shift 1 (8 January 2020)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; elimination gives y+2z = (3-mu)/2 = 1-delta/4. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 51,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2020",
+  "question_summary": "Consistency needs delta = 2 mu - 2; only (4,3) violates it.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2020/january-08-shift-1",
+  "source_document": "NTA JEE Main 2020, B Tech 8 Jan 2020 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 4. Answer basis: Mirror-claimed official final answer, independently solved. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "4903e2c71d75c4c6",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2020-jan08-s1-mat-075",
+  "exam": "JEE Main",
+  "year": 2020,
+  "session": "January 2020",
+  "shift": "Shift 1 (8 January 2020)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "Numerical; tr(AAT) equals sum of squares of all entries, so exactly three nonzero entries. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "Numerical",
+  "paper_question_number": 75,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2020",
+  "question_summary": "Entries {-1,0,1} with entry-square sum 3: 9C3 x 2^3 matrices.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2020/january-08-shift-1",
+  "source_document": "NTA JEE Main 2020, B Tech 8 Jan 2020 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; numerical answer independently recomputed and matched. Answer basis: Mirror-claimed official final answer, independently recomputed (entry-square census). Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "4b80618f8a8c10a8",
+  "difficulty": null,
+  "answer_key": "672",
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
+ },
+ {
+  "question_id": "pyq-jee-main-2020-jan09-s2-mat-061",
+  "exam": "JEE Main",
+  "year": 2020,
+  "session": "January 2020",
+  "shift": "Shift 2 (9 January 2020)",
+  "subject": "Mathematics",
+  "chapter": "Matrices and Determinants",
+  "concept_ids": [
+   "jee-mathematics-matrices-and-determinants-chapter"
+  ],
+  "concept_mapping_note": "MCQ; determinant 0; row sums give x = -y and y = -2z. Chapter-level mapping; sub-concept taxonomy pending.",
+  "question_type": "MCQ",
+  "paper_question_number": 61,
+  "nta_question_id": null,
+  "marks": 4,
+  "marks_basis": "Mathematics Section A, +4/-1 per the NTA Information Bulletin/FAQ for JEE Main 2020",
+  "question_summary": "Singular homogeneous system reduces to x = 2z.",
+  "source_url": "https://www.jeenify.com/jee-main-pyq/2020/january-09-shift-2",
+  "source_document": "NTA JEE Main 2020, B Tech 9 Jan 2020 (third-party transcription of the official paper; direct NTA PDF login-walled)",
+  "verification_status": "verified",
+  "verification_method": "Human visual read of the third-party transcription (JEEnify mirror of the official NTA paper); identity (year/session/shift/number) confirmed from page metadata; marking confirmed from the NTA Information Bulletin/FAQ; MCQ independently solved; solution matches mirror-claimed option 2. Answer basis: Mirror-claimed official final answer, independently solved. Source is labeled transcription, never represented as an NTA PDF. Concept mapping is chapter-level; sub-concept taxonomy for Matrices and Determinants is pending.",
+  "content_fingerprint": "340c5848a118d5e4",
+  "difficulty": null,
+  "answer_key": null,
+  "provenance": {
+   "retrieved_at": "2026-10-09",
+   "parser": "parse_jeenify.py v1",
+   "pdf_sha256": null
+  }
  }
 ]

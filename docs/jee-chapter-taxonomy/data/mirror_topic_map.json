@@ -260,9 +260,9 @@
   "via": "special-case"
  },
  "Thermodynamics": {
-  "chapter_id": "jee-physics-thermodynamics-chapter",
-  "subject": "Physics",
-  "via": "exact-unit-match"
+  "chapter_id": "jee-chemistry-chemical-thermodynamics-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
  },
  "Three Dimensional Geometry": {
   "chapter_id": "jee-mathematics-three-dimensional-geometry-chapter",
@@ -467,6 +467,321 @@
  "Chemical Equilibrium": {
   "chapter_id": "jee-chemistry-equilibrium-chapter",
   "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Magnetic Effects of Current": {
+  "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Magnetism and Matter": {
+  "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Moving charges and magnetism": {
+  "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Alternating Current": {
+  "chapter_id": "jee-physics-electromagnetic-induction-and-alternating-currents-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Capacitors": {
+  "chapter_id": "jee-physics-electrostatics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Nuclei": {
+  "chapter_id": "jee-physics-atoms-and-nuclei-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Atoms": {
+  "chapter_id": "jee-physics-atoms-and-nuclei-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "System of Particles and Rotational Motion": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Rotational motion": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Center of mass": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Angular Momentum": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Collision": {
+  "chapter_id": "jee-physics-work-energy-and-power-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Motion in a Straight Line": {
+  "chapter_id": "jee-physics-kinematics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Projectile Motion": {
+  "chapter_id": "jee-physics-kinematics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Mechanical Properties of Solids": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Properties of Solids": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Kinetic Theory": {
+  "chapter_id": "jee-physics-kinetic-theory-of-gases-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Kinetic theory of gases": {
+  "chapter_id": "jee-physics-kinetic-theory-of-gases-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Current electricity": {
+  "chapter_id": "jee-physics-current-electricity-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Ray optics": {
+  "chapter_id": "jee-physics-optics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Optics - Lens": {
+  "chapter_id": "jee-physics-optics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Dual nature of matter": {
+  "chapter_id": "jee-physics-dual-nature-of-matter-and-radiation-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Heat and Thermodynamics": {
+  "chapter_id": "jee-physics-thermodynamics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Simple Harmonic Motion": {
+  "chapter_id": "jee-physics-oscillations-and-waves-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Chemical Bonding": {
+  "chapter_id": "jee-chemistry-chemical-bonding-and-molecular-structure-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Redox Reactions": {
+  "chapter_id": "jee-chemistry-redox-reactions-and-electrochemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Structure of Atom": {
+  "chapter_id": "jee-chemistry-atomic-structure-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Mole Concept": {
+  "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Some Basic Concepts of Chemistry": {
+  "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Some Basic Concepts of Chemistry / Stoichiometry": {
+  "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Ionic Equilibrium": {
+  "chapter_id": "jee-chemistry-equilibrium-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Chemical and Ionic Equilibrium": {
+  "chapter_id": "jee-chemistry-equilibrium-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Physical Chemistry - Chemical Kinetics": {
+  "chapter_id": "jee-chemistry-chemical-kinetics-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Coordination Chemistry": {
+  "chapter_id": "jee-chemistry-coordination-compounds-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Aldehydes Ketones and Carboxylic Acids": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Aldehydes, Ketones and Carboxylic Acids": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Carbonyl Compounds (Aldehydes, Ketones)": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Alcohols, Phenols and Ethers; Aldehydes and Ketones": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Alcohols, Phenols and Ethers": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Some Basic Principles and Techniques": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry — Some Basic Principles and Techniques": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry — Some Basic Principles": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Basic Principles": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Reaction Mechanism": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Periodic Table and Properties": {
+  "chapter_id": "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Periodic Properties": {
+  "chapter_id": "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "The p-Block Elements": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "p-Block Elements (Group 13 and 14)": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "p-Block Elements (Group 15)": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "d and f Block Elements": {
+  "chapter_id": "jee-chemistry-d-and-f-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Qualitative Analysis": {
+  "chapter_id": "jee-chemistry-principles-related-to-practical-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Relations and Functions": {
+  "chapter_id": "jee-mathematics-sets-relations-and-functions-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Functions": {
+  "chapter_id": "jee-mathematics-sets-relations-and-functions-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Limits": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Limits and Continuity": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Continuity and Differentiability": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Definite Integration": {
+  "chapter_id": "jee-mathematics-integral-calculas-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Limits and Integration": {
+  "chapter_id": "jee-mathematics-integral-calculas-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Application of Integrals": {
+  "chapter_id": "jee-mathematics-integral-calculas-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "3D Geometry": {
+  "chapter_id": "jee-mathematics-three-dimensional-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Conic Sections - Parabola": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Matrices": {
+  "chapter_id": "jee-mathematics-matrices-and-determinants-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Arithmetic Progression": {
+  "chapter_id": "jee-mathematics-sequence-and-series-chapter",
+  "subject": "Mathematics",
   "via": "jeenify-variant"
  }
 }

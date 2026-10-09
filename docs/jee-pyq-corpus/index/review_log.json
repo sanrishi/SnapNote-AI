@@ -1428,11 +1428,25 @@
    "ambiguous": 0,
    "scope": "2026 NSR mop-up (Apr 2026)",
    "demotions": []
+  },
+  {
+   "batch": 105,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 14,
+   "verified": 12,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2021/2020 JEEnify matrices HC sweep (12 verified, 2 demoted on recompute mismatch)",
+   "demotions": [
+    "cand-jeenify-main-2021-feb-24-shift-1-q84",
+    "cand-jeenify-main-2020-jan-07-shift-1-q62"
+   ]
   }
  ],
  "cumulative": {
-  "reviewed": 50,
-  "verified": 49,
+  "reviewed": 64,
+  "verified": 61,
   "rejected": 1,
   "ambiguous": 0
  },
@@ -1510,7 +1524,7 @@
   {
    "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q27",
    "chapter": "Co-ordinate Geometry",
-   "reason": "b^2 form mismatch: 3√3 vs (l/m)(1+√n)",
+   "reason": "b^2 form mismatch: 3\u221a3 vs (l/m)(1+\u221an)",
    "date": "2026-10-06"
   },
   {
@@ -2151,7 +2165,7 @@
   },
   {
    "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q5",
-   "reason": "alpha underdetermined among ±4, ±5 without options",
+   "reason": "alpha underdetermined among \u00b14, \u00b15 without options",
    "date": "2026-10-06",
    "scope": "Matrices NEEDS_REVIEW recovery"
   },
@@ -2163,7 +2177,7 @@
   },
   {
    "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q41",
-   "reason": "image tilt ~1° with option form unknown; 'ahead' interpretation sensitive",
+   "reason": "image tilt ~1\u00b0 with option form unknown; 'ahead' interpretation sensitive",
    "date": "2026-10-06",
    "scope": "Optics NEEDS_REVIEW recovery"
   },
@@ -2796,6 +2810,18 @@
    "reason": "stem missing its condition on A; unverifiable",
    "date": "2026-10-07",
    "scope": "2026 Vector sweep"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2021-feb-24-shift-1-q84",
+   "chapter": "Matrices and Determinants",
+   "reason": "independent recompute gives |P| = -3/2, k = -3, alpha^2+k^2 = 7033/576 (~12.2) vs mirror 17; likely matrix-entry transcription damage; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2020-jan-07-shift-1-q62",
+   "chapter": "Matrices and Determinants",
+   "reason": "determinant proof contradicts mirror: |det A| = 1/(3sqrt3) != 1 so A^28 != I and A^31 != A^3 as stated; not verified",
+   "date": "2026-10-09"
   }
  ],
  "duplicate_skips": [

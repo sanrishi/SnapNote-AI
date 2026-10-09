@@ -32308,28 +32308,180 @@
    "verified_ids": [],
    "source_status": "parsed",
    "status": "indexed-unreviewed"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2020,
+   "session": "January 2020",
+   "shift": "Shift 1 (7 January 2020)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 0,
+   "verified_ids": [],
+   "source_status": "parsed",
+   "status": "indexed-unreviewed"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2020,
+   "session": "January 2020",
+   "shift": "Shift 2 (7 January 2020)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2020-jan07-s2-mat-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2020,
+   "session": "January 2020",
+   "shift": "Shift 1 (8 January 2020)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2020-jan08-s1-mat-051",
+    "pyq-jee-main-2020-jan08-s1-mat-075"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2020,
+   "session": "January 2020",
+   "shift": "Shift 2 (8 January 2020)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 0,
+   "verified_ids": [],
+   "source_status": "parsed",
+   "status": "indexed-unreviewed"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2020,
+   "session": "January 2020",
+   "shift": "Shift 1 (9 January 2020)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 0,
+   "verified_ids": [],
+   "source_status": "parsed",
+   "status": "indexed-unreviewed"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2020,
+   "session": "January 2020",
+   "shift": "Shift 2 (9 January 2020)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2020-jan09-s2-mat-061"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2021,
+   "session": "February 2021",
+   "shift": "Shift 1 (24 February 2021)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2021-feb24-s1-mat-085"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2021,
+   "session": "February 2021",
+   "shift": "Shift 2 (24 February 2021)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2021-feb24-s2-mat-067",
+    "pyq-jee-main-2021-feb24-s2-mat-068"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2021,
+   "session": "February 2021",
+   "shift": "Shift 1 (25 February 2021)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2021-feb25-s1-mat-085",
+    "pyq-jee-main-2021-feb25-s1-mat-086"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2021,
+   "session": "February 2021",
+   "shift": "Shift 2 (25 February 2021)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2021-feb25-s2-mat-070"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2021,
+   "session": "February 2021",
+   "shift": "Shift 1 (26 February 2021)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 0,
+   "verified_ids": [],
+   "source_status": "parsed",
+   "status": "indexed-unreviewed"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2021,
+   "session": "February 2021",
+   "shift": "Shift 2 (26 February 2021)",
+   "chapter": "Matrices and Determinants",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2021-feb26-s2-mat-068",
+    "pyq-jee-main-2021-feb26-s2-mat-087"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
   }
  ],
  "totals": {
-  "verified_records": 3165,
-  "sources_parsed": 68,
+  "verified_records": 3177,
+  "sources_parsed": 80,
   "sources_discovered": 3
  },
  "index_dashboard": {
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3165,
+  "verified_records": 3177,
   "external_candidates_quarantined": 703,
-  "review_batches": 104,
+  "review_batches": 105,
   "queue_cumulative": {
-   "reviewed": 50,
-   "verified": 49,
+   "reviewed": 64,
+   "verified": 61,
    "rejected": 1,
    "ambiguous": 0
   },
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
-  "verification_rate_reviewed": 0.98,
+  "verification_rate_reviewed": 0.9531,
   "concept_distribution": {
    "jee-chemistry-atomic-structure-chapter": 40,
    "jee-chemistry-biomolecules-chapter": 37,
@@ -32356,7 +32508,7 @@
    "jee-mathematics-diffrential-equations-chapter": 61,
    "jee-mathematics-integral-calculas-chapter": 119,
    "jee-mathematics-limit-continuity-and-differentiability-chapter": 109,
-   "jee-mathematics-matrices-and-determinants-chapter": 75,
+   "jee-mathematics-matrices-and-determinants-chapter": 87,
    "jee-mathematics-permutations-and-combinations-chapter": 48,
    "jee-mathematics-sequence-and-series-chapter": 73,
    "jee-mathematics-sets-relations-and-functions-chapter": 67,
