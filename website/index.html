@@ -1454,6 +1454,16 @@
       revisionCards.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
+    function renderExplainFailed(msg) {
+      const cards = notesCards.querySelectorAll(".explain-card");
+      const card = cards.length ? cards[cards.length - 1] : null;
+      if (!card) { showError(msg); return; }
+      const head = `<h3><span class="bar"></span>✨ Explain Visually</h3><p class="explain-tagline">See the idea, not just the formula.</p>`;
+      card.innerHTML = `${head}<p class="muted">⚠️ ${esc(msg)} Your study notes above are unaffected.</p><button class="explain-btn" id="explain-btn"><span>↻ Try Again</span><em>Free — uses your existing diagram, no extra credits</em></button>`;
+      const retry = document.getElementById("explain-btn");
+      if (retry) retry.addEventListener("click", handleExplainVisual);
+    }
+
     async function handleExplainVisual() {
       if (!currentBlob || !currentDiagramId) return;
       const deviceId = getDeviceId();
@@ -1492,8 +1502,7 @@
         if (resp.status === 502) {
           const err = await resp.json().catch(() => ({}));
           hideProcessing();
-          showError(err.error || "Visual explanation unavailable for this material. Your study notes above still cover it.");
-          if (btn) { btn.disabled = false; btn.innerHTML = '<span>✨ Explain Visually</span><em>Free — bundled with your diagram</em>'; }
+          renderExplainFailed(err.error || "Visual explanation unavailable for this material.");
           return;
         }
         if (!resp.ok) {
@@ -1520,10 +1529,9 @@
         resultPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
       } catch (err) {
         hideProcessing();
-        showError((err.name === "AbortError" || err.message === "This operation was aborted")
-          ? "The visual took too long this time. Try again in a minute."
-          : (err.message || "Could not create the visual. Try again."));
-        if (btn) btn.innerHTML = '<span>✨ Explain Visually</span><em>Free — bundled with your diagram</em>';
+        renderExplainFailed((err.name === "AbortError" || err.message === "This operation was aborted")
+          ? "The visual took too long this time."
+          : (err.message || "Could not create the visual."));
       } finally {
         clearTimeout(timer);
       }
@@ -1658,7 +1666,9 @@
       }
 
       if (notes.key_formulas && notes.key_formulas.length) {
-        const formulas = notes.key_formulas.map((f) => {
+        const shown = notes.key_formulas.slice(0, 2);
+        const extraCount = notes.key_formulas.length - shown.length;
+        const formulas = shown.map((f) => {
           let html = `<div class="formula">${esc(f.formula)}`;
           if (f.explanation) html += `<div class="f-explain">${esc(f.explanation)}</div>`;
           if (f.uncertain_symbols && f.uncertain_symbols.length) {
@@ -1670,7 +1680,7 @@
           if (f.confidence === "possible_extraction_issue") html += '<div class="uncertain-symbols">Possible extraction issue: the mathematical symbols are ambiguous. See Verify Before Studying below.</div>';
           return html + `</div>`;
         }).join("");
-        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="bar"></span>📦 Key Formulas</h3>${formulas}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="bar"></span>📦 Key Formulas</h3>${formulas}${extraCount > 0 ? `<p class="muted">+${extraCount} more formula${extraCount > 1 ? "s" : ""} in the extracted text below.</p>` : ""}</div>`);
       }
 
       if (notes.understand_it && notes.understand_it.length) {
@@ -1713,8 +1723,13 @@
       const visualDlBtn = document.getElementById("visual-download-btn");
       if (visualDlBtn) visualDlBtn.addEventListener("click", downloadVisual);
       if (result.type === "diagram" && notes && notes.topic) {
-        const terms = (notes.key_formulas || []).map((f) => f.formula).filter(Boolean);
-        loadJeeContext(notes.topic.title || "", terms);
+        if (result.jee && (result.jee.match_status === "matched" || result.jee.match_status === "ambiguous")) {
+          const jd = document.getElementById("jee-context-body");
+          if (jd) jd.innerHTML = jeeContextHtml(result.jee);
+        } else {
+          const terms = (notes.key_formulas || []).map((f) => f.explanation).filter(Boolean);
+          loadJeeContext(notes.topic.title || "", terms);
+        }
       }
 
       // Guaranteed explanatory image: auto-generate on every diagram upload so
@@ -1741,8 +1756,13 @@
     }
 
     function jeeContextHtml(ctx) {
-      if (!ctx || ctx.match_status !== "matched" || !ctx.concept_id) {
+      if (!ctx || (ctx.match_status !== "matched" && ctx.match_status !== "ambiguous")) {
         return `<p class="muted">JEE mapping not yet verified for this concept.</p>`;
+      }
+      if (ctx.match_status === "ambiguous") {
+        const cands = (ctx.candidates || []).map((c) => `<li>${esc(c.name)}</li>`).join("");
+        const ev = (ctx.evidence || []).map((e) => `<p class="muted">${esc(e)}</p>`).join("");
+        return `<p>This lecture could match more than one JEE concept:</p><ul>${cands}</ul>${ev}<p class="muted">Pick the closest one — showing a guess here would be worse than showing options.</p>`;
       }
       const crumb = [ctx.subject, ctx.chapter, ctx.canonical_name].filter(Boolean)
         .map((s) => esc(s)).join(" → ");
@@ -1763,12 +1783,27 @@
       if (ctx.pyqs && ctx.pyqs.length) {
         const rows = ctx.pyqs.map((q) => {
           const label = `${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number} (${esc(q.question_type)}${q.marks != null ? `, ${q.marks} marks` : ""})`;
-          const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">official paper</a>` : "";
-          return `<div class="formula">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">Source:${link}</div></div>`;
+          const answer = q.answer_status === "confirmed" && q.answer_key != null
+            ? `Answer: ${esc(q.answer_key)}`
+            : "Answer unconfirmed";
+          const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
+          const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">[${prov}]</a>` : ` [${prov}]`;
+          return `<div class="formula">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">${answer} · Source:${link}</div></div>`;
         }).join("");
         html += `<p><strong>Verified PYQs (${ctx.pyq_count})</strong></p>${rows}`;
+        if (ctx.pyqs_truncated) {
+          html += `<p class="muted">Showing ${ctx.pyqs.length} of ${ctx.pyq_count} verified PYQs.</p>`;
+        }
       } else {
         html += `<p class="muted">No verified PYQs recorded for this concept yet.</p>`;
+      }
+      if (ctx.patterns && ctx.patterns.length) {
+        for (const p of ctx.patterns) {
+          html += `<p><strong>Pattern: ${esc(p.name)}</strong> (${esc(p.sub_concept)})<br><span class="muted">${esc(p.method)}</span><br><span class="muted">Examples: ${esc((p.question_ids || []).join(", "))}</span><br><span class="muted">${esc(p.coverage_note)}</span></p>`;
+        }
+      }
+      if (ctx.coverage_note) {
+        html += `<p class="muted">${esc(ctx.coverage_note)}</p>`;
       }
       return html;
     }

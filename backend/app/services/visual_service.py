@@ -119,8 +119,13 @@ def _legibility_pass(png: bytes) -> bool:
 
 async def _render_once(prompt: str) -> bytes | None:
     """One Pollinations image call via GET (POST on the anonymous tier returns a
-    fixed cached image regardless of prompt, so we must use GET). Returns PNG/JPEG
-    bytes or None."""
+    fixed cached image regardless of prompt, so we must use GET). Returns raw
+    response bytes or None.
+
+    The payload format is NOT trusted here: Pollinations may serve PNG, JPEG,
+    or WebP depending on the model/headers. The caller must normalize via
+    _normalize_to_png before the bytes touch any gate or storage path.
+    """
     import urllib.parse
 
     url = _POLLINATIONS_BASE + urllib.parse.quote(prompt)
@@ -139,10 +144,46 @@ async def _render_once(prompt: str) -> bytes | None:
         if resp.status_code != 200:
             logger.warning("Pollinations returned %s: %s", resp.status_code, resp.text[:200])
             return None
+        content_type = resp.headers.get("content-type", "unknown")
+        logger.info("Pollinations render: HTTP 200, content-type=%s, bytes=%d", content_type, len(resp.content))
         return resp.content
     except Exception as e:
         logger.warning("Pollinations call failed: %s", str(e)[:200])
         return None
+
+
+def _normalize_to_png(raw: bytes | None) -> bytes | None:
+    """Decode provider bytes and re-encode as PNG.
+
+    The storage backends accept PNG, JPEG, and GIF only, and the R2 object
+    key derives its extension from magic bytes. Normalizing here guarantees
+    the uploaded bytes and the declared content type always agree, no matter
+    what raster format the image model served (JPEG, WebP, ...). Returns None
+    for undecodable payloads so the caller reports an honest failure instead
+    of uploading a corrupt object.
+    """
+    if not raw or len(raw) < 500:
+        return None
+    if raw[:8] == b"\x89PNG\r\n\x1a\n":
+        return raw  # already the storage-safe format; byte-identical passthrough
+    try:
+        img = Image.open(io.BytesIO(raw))
+        img.load()
+        if img.mode in ("RGBA", "LA", "PA"):
+            canvas = Image.new("RGB", img.size, (255, 255, 255))
+            canvas.paste(img, mask=img.split()[-1])
+            img = canvas
+        elif img.mode != "RGB":
+            img = img.convert("RGB")
+        out = io.BytesIO()
+        img.save(out, format="PNG")
+        png = out.getvalue()
+    except Exception as e:
+        logger.warning("Visual normalize: decode/re-encode failed: %s", e)
+        return None
+    if len(png) < 500:
+        return None
+    return png
 
 
 async def _render_generative(spec: VisualSpec) -> bytes | None:
@@ -159,7 +200,8 @@ async def _render_generative(spec: VisualSpec) -> bytes | None:
         _build_render_prompt(spec, retry=True),
     ]
     for attempt, prompt in enumerate(attempts, start=1):
-        png = await _render_once(prompt)
+        raw = await _render_once(prompt)
+        png = _normalize_to_png(raw)
         if png is not None and _quality_pass(png):
             if spec.text_required and not await asyncio.to_thread(_legibility_pass, png):
                 logger.info("Visual rejected by OCR legibility gate on attempt %d; one hidden retry", attempt)

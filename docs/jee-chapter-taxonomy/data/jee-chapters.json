@@ -168,7 +168,13 @@
   "syllabus_unit": "Rotational Motion",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "rotation",
+   "rotational",
+   "rotational motion",
+   "rigid body motion"
+  ]
  },
  {
   "chapter_id": "jee-physics-gravitation-chapter",

@@ -219,26 +219,53 @@ def _score_concept(concept: dict, terms: list[str]) -> tuple[int, list[str]]:
 def resolve_concept(topic_title: str, key_terms: list[str]) -> tuple[dict | None, str, list[str], list[dict]]:
     """Resolve candidate terms to one canonical concept.
 
-    Returns (concept | None, match_status, evidence, tied_candidates).
+    Sub-concept level decides first with the existing fixed scoring: a
+    single winner matches, a tie is ambiguous, no hits fall through to the
+    chapter level. Chapter fallback needs a clear single winner scoring 2+
+    (two independent term hits), otherwise ties stay ambiguous and silence
+    stays unresolved. Returns (concept | None, match_status, evidence, tied).
     """
     terms = [topic_title, *key_terms]
+    concepts = _concepts()
+    sub_level = [c for c in concepts if c.get("level") != "chapter"]
+    chapters = [c for c in concepts if c.get("level") == "chapter"]
+
     scored = []
-    for concept in _concepts():
+    for concept in sub_level:
         score, evidence = _score_concept(concept, terms)
         if score > 0:
             scored.append((score, concept, evidence))
-    if not scored:
-        return None, "unresolved", [], []
-    scored.sort(key=lambda item: item[0], reverse=True)
-    top_score = scored[0][0]
-    tied = [item for item in scored if item[0] == top_score]
-    if len(tied) > 1:
-        candidates = [
-            {"concept_id": c["concept_id"], "name": c["display_name"]} for _, c, _ in tied
-        ]
-        return None, "ambiguous", [f"tie between {len(tied)} concepts; refusing to guess"], candidates
-    _, concept, evidence = tied[0]
-    return concept, "matched", evidence, []
+    if scored:
+        scored.sort(key=lambda item: item[0], reverse=True)
+        top_score = scored[0][0]
+        tied = [item for item in scored if item[0] == top_score]
+        if len(tied) > 1:
+            candidates = [
+                {"concept_id": c["concept_id"], "name": c["display_name"]} for _, c, _ in tied
+            ]
+            return None, "ambiguous", [f"tie between {len(tied)} concepts; refusing to guess"], candidates
+        _, concept, evidence = tied[0]
+        return concept, "matched", evidence, []
+
+    chapter_scored = []
+    for concept in chapters:
+        score, evidence = _score_concept(concept, terms)
+        if score > 0:
+            chapter_scored.append((score, concept, evidence))
+    if chapter_scored:
+        chapter_scored.sort(key=lambda item: item[0], reverse=True)
+        top_score = chapter_scored[0][0]
+        tied = [item for item in chapter_scored if item[0] == top_score]
+        if len(tied) > 1:
+            candidates = [
+                {"concept_id": c["concept_id"], "name": c["display_name"]} for _, c, _ in tied
+            ]
+            return None, "ambiguous", [f"tie between {len(tied)} chapters; refusing to guess"], candidates
+        if top_score >= 2:
+            _, concept, evidence = tied[0]
+            evidence = [*evidence, "chapter-level match: finer mapping unsupported by the given terms"]
+            return concept, "matched", evidence, []
+    return None, "unresolved", [], []
 
 
 def _ref(concept_id: str, concepts_by_id: dict) -> JEEConceptRef | None:
