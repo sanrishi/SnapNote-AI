@@ -1442,11 +1442,26 @@
     "cand-jeenify-main-2021-feb-24-shift-1-q84",
     "cand-jeenify-main-2020-jan-07-shift-1-q62"
    ]
+  },
+  {
+   "batch": 106,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 30,
+   "verified": 27,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2019 JEEnify co-ordinate-geometry HC sweep (27 verified, 3 demoted: ambiguous options, wrong-chapter calculus item, option-set mismatch)",
+   "demotions": [
+    "cand-jeenify-main-2019-jan-10-shift-2-q70",
+    "cand-jeenify-main-2019-jan-10-shift-2-q81",
+    "cand-jeenify-main-2019-jan-12-shift-1-q71"
+   ]
   }
  ],
  "cumulative": {
-  "reviewed": 64,
-  "verified": 61,
+  "reviewed": 94,
+  "verified": 88,
   "rejected": 1,
   "ambiguous": 0
  },
@@ -2821,6 +2836,24 @@
    "queue_id": "cand-jeenify-main-2020-jan-07-shift-1-q62",
    "chapter": "Matrices and Determinants",
    "reason": "determinant proof contradicts mirror: |det A| = 1/(3sqrt3) != 1 so A^28 != I and A^31 != A^3 as stated; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2019-jan-10-shift-2-q70",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "options 2 and 4 state the identical hyperbola claim and option 3 (ellipse case) is also correct; triple-ambiguous single-correct item; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2019-jan-10-shift-2-q81",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "stem is differential calculus (tangent to y = x e^x^2), mis-mapped to Co-ordinate Geometry; belongs to LCD/AOD chapter, not verified here",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2019-jan-12-shift-1-q71",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "solution set is the open interval (7,31) but no listed option matches it (closest [12,21] is a strict subset); option-set mismatch, not verified",
    "date": "2026-10-09"
   }
  ],

@@ -1,18 +1,19 @@
 {
  "index": {
-  "total_records": 2413,
+  "total_records": 3398,
   "by_year": {
    "2023": 355,
    "2026": 746,
    "2025": 150,
    "2022": 179,
    "2021": 540,
-   "2020": 443
+   "2020": 443,
+   "2019": 985
   },
   "by_subject": {
-   "Physics": 802,
-   "Chemistry": 806,
-   "Mathematics": 805
+   "Physics": 1132,
+   "Chemistry": 1132,
+   "Mathematics": 1134
   },
   "by_source": {
    "jeenify-main-2023-jan-24-shift-1": 88,
@@ -44,9 +45,31 @@
    "jeenify-main-2020-jan-08-shift-1": 74,
    "jeenify-main-2020-jan-08-shift-2": 75,
    "jeenify-main-2020-jan-09-shift-1": 75,
-   "jeenify-main-2020-jan-09-shift-2": 71
+   "jeenify-main-2020-jan-09-shift-2": 71,
+   "jeenify-main-2019-jan-09-shift-1": 88,
+   "jeenify-main-2019-jan-09-shift-2": 90,
+   "jeenify-main-2019-jan-10-shift-1": 89,
+   "jeenify-main-2019-jan-10-shift-2": 90,
+   "jeenify-main-2019-jan-11-shift-1": 90,
+   "jeenify-main-2019-jan-11-shift-2": 90,
+   "jeenify-main-2019-jan-12-shift-1": 90,
+   "jeenify-main-2019-jan-12-shift-2": 90,
+   "jeenify-main-2019-apr-08-shift-1": 90,
+   "jeenify-main-2019-apr-08-shift-2": 89,
+   "jeenify-main-2019-apr-09-shift-1": 89
   },
   "source_ids": [
+   "jeenify-main-2019-apr-08-shift-1",
+   "jeenify-main-2019-apr-08-shift-2",
+   "jeenify-main-2019-apr-09-shift-1",
+   "jeenify-main-2019-jan-09-shift-1",
+   "jeenify-main-2019-jan-09-shift-2",
+   "jeenify-main-2019-jan-10-shift-1",
+   "jeenify-main-2019-jan-10-shift-2",
+   "jeenify-main-2019-jan-11-shift-1",
+   "jeenify-main-2019-jan-11-shift-2",
+   "jeenify-main-2019-jan-12-shift-1",
+   "jeenify-main-2019-jan-12-shift-2",
    "jeenify-main-2020-jan-07-shift-1",
    "jeenify-main-2020-jan-07-shift-2",
    "jeenify-main-2020-jan-08-shift-1",

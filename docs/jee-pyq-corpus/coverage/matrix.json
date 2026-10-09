@@ -32460,28 +32460,187 @@
    ],
    "source_status": "parsed",
    "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "April 2019",
+   "shift": "Shift 1 (8 April 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2019-apr08-s1-mat-068",
+    "pyq-jee-main-2019-apr08-s1-mat-070"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "April 2019",
+   "shift": "Shift 2 (8 April 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2019-apr08-s2-mat-069",
+    "pyq-jee-main-2019-apr08-s2-mat-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "April 2019",
+   "shift": "Shift 1 (9 April 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2019-apr09-s1-mat-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "January 2019",
+   "shift": "Shift 1 (9 January 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 5,
+   "verified_ids": [
+    "pyq-jee-main-2019-jan09-s1-mat-068",
+    "pyq-jee-main-2019-jan09-s1-mat-069",
+    "pyq-jee-main-2019-jan09-s1-mat-070",
+    "pyq-jee-main-2019-jan09-s1-mat-071",
+    "pyq-jee-main-2019-jan09-s1-mat-072"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "January 2019",
+   "shift": "Shift 2 (9 January 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2019-jan09-s2-mat-070",
+    "pyq-jee-main-2019-jan09-s2-mat-071"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "January 2019",
+   "shift": "Shift 1 (10 January 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 4,
+   "verified_ids": [
+    "pyq-jee-main-2019-jan10-s1-mat-069",
+    "pyq-jee-main-2019-jan10-s1-mat-070",
+    "pyq-jee-main-2019-jan10-s1-mat-071",
+    "pyq-jee-main-2019-jan10-s1-mat-072"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "January 2019",
+   "shift": "Shift 2 (10 January 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2019-jan10-s2-mat-066",
+    "pyq-jee-main-2019-jan10-s2-mat-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "January 2019",
+   "shift": "Shift 1 (11 January 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 2,
+   "verified_ids": [
+    "pyq-jee-main-2019-jan11-s1-mat-072",
+    "pyq-jee-main-2019-jan11-s1-mat-073"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "January 2019",
+   "shift": "Shift 2 (11 January 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2019-jan11-s2-mat-066",
+    "pyq-jee-main-2019-jan11-s2-mat-067",
+    "pyq-jee-main-2019-jan11-s2-mat-069"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "January 2019",
+   "shift": "Shift 1 (12 January 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 1,
+   "verified_ids": [
+    "pyq-jee-main-2019-jan12-s1-mat-073"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2019,
+   "session": "January 2019",
+   "shift": "Shift 2 (12 January 2019)",
+   "chapter": "Co-ordinate Geometry",
+   "verified_questions": 3,
+   "verified_ids": [
+    "pyq-jee-main-2019-jan12-s2-mat-068",
+    "pyq-jee-main-2019-jan12-s2-mat-069",
+    "pyq-jee-main-2019-jan12-s2-mat-070"
+   ],
+   "source_status": "parsed",
+   "status": "partial"
   }
  ],
  "totals": {
-  "verified_records": 3177,
-  "sources_parsed": 80,
+  "verified_records": 3204,
+  "sources_parsed": 91,
   "sources_discovered": 3
  },
  "index_dashboard": {
   "official_papers_indexed": 35,
   "official_questions_indexed": 2829,
   "source_linked_queue": 50,
-  "verified_records": 3177,
+  "verified_records": 3204,
   "external_candidates_quarantined": 703,
-  "review_batches": 105,
+  "review_batches": 106,
   "queue_cumulative": {
-   "reviewed": 64,
-   "verified": 61,
+   "reviewed": 94,
+   "verified": 88,
    "rejected": 1,
    "ambiguous": 0
   },
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
-  "verification_rate_reviewed": 0.9531,
+  "verification_rate_reviewed": 0.9362,
   "concept_distribution": {
    "jee-chemistry-atomic-structure-chapter": 40,
    "jee-chemistry-biomolecules-chapter": 37,
@@ -32503,7 +32662,7 @@
    "jee-chemistry-some-basic-concepts-in-chemistry-chapter": 41,
    "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter": 96,
    "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter": 46,
-   "jee-mathematics-co-ordinate-geometry-chapter": 160,
+   "jee-mathematics-co-ordinate-geometry-chapter": 187,
    "jee-mathematics-complex-numbers-and-quadratic-equations-chapter": 80,
    "jee-mathematics-diffrential-equations-chapter": 61,
    "jee-mathematics-integral-calculas-chapter": 119,
