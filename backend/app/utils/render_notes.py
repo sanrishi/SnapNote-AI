@@ -1,4 +1,4 @@
-from app.models.schemas import StudyNotes
+from app.models.schemas import JEEConceptContext, StudyNotes
 from app.utils.svg_safe import sanitize_svg, svg_data_uri
 
 
@@ -88,3 +88,49 @@ def render_study_notes(notes: StudyNotes) -> str:
         lines.append(notes.analogy)
 
     return "\n".join(lines).strip()
+
+
+def render_jee_section(ctx: JEEConceptContext | None) -> str:
+    """Render the student-facing JEE Context markdown section.
+
+    Only matched or ambiguous concepts render anything — unresolved input
+    adds no JEE content, so generic screenshots stay JEE-free.
+    """
+    if ctx is None or ctx.match_status not in ("matched", "ambiguous"):
+        return ""
+    lines: list[str] = ["\n## 🎓 JEE Context"]
+    if ctx.match_status == "ambiguous":
+        lines.append("This looks like it could be more than one JEE concept:")
+        for cand in ctx.candidates:
+            lines.append(f"- {cand.name}")
+        for item in ctx.evidence:
+            lines.append(f"*{item}*")
+        return "\n".join(lines)
+    lines.append(f"**{ctx.canonical_name}** ({ctx.subject} · {ctx.chapter})")
+    if ctx.syllabus is not None:
+        lines.append(f"Syllabus: {ctx.syllabus.subtopic}")
+    for item in ctx.evidence:
+        lines.append(f"*{item}*")
+    if ctx.pyqs:
+        lines.append(f"\nVerified PYQs ({ctx.pyq_count}):")
+        for pyq in ctx.pyqs:
+            label = f"{pyq.exam} {pyq.year}"
+            if pyq.session:
+                label += f" {pyq.session}"
+            if pyq.shift:
+                label += f" {pyq.shift}"
+            answer = pyq.answer_key if pyq.answer_status == "confirmed" else "answer unconfirmed"
+            provenance = "official NTA paper" if pyq.source_class == "OFFICIAL" else "third-party transcription"
+            lines.append(
+                f"- {label}, Q{pyq.paper_question_number} ({pyq.question_type}): "
+                f"{pyq.question_summary or 'see source'} — {answer} [{provenance}]({pyq.source_url})"
+            )
+        if ctx.pyqs_truncated:
+            lines.append(f"*Showing {len(ctx.pyqs)} of {ctx.pyq_count} verified PYQs.*")
+    for pattern in ctx.patterns:
+        lines.append(f"\n**Pattern: {pattern.name}** ({pattern.sub_concept})")
+        lines.append(pattern.method)
+        lines.append(f"Examples: {', '.join(pattern.question_ids)}")
+        lines.append(f"*{pattern.coverage_note}*")
+    lines.append(f"\n*{ctx.coverage_note}*")
+    return "\n".join(lines)

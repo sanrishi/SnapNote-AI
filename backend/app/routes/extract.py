@@ -8,10 +8,12 @@ from app.config import settings
 from app.models.schemas import (
     ExtractionResponse,
     ExtractionType,
+    JEEConceptContext,
     RevisionResponse,
     StudyNotes,
     VisualExplanationResponse,
 )
+from app.services.jee_service import map_concept_to_jee
 from app.services.preprocessor import preprocess, enhance_for_vision
 from app.services.ocr_service import (
     read_raw,
@@ -31,7 +33,7 @@ from app.services.visual_service import generate_visual
 from app.utils.visual_lesson import render_v3_visual, should_use_v3, v3_store_mode
 from app.services.storage_service import upload_image
 from app.utils.grounding import ground_visual_context
-from app.utils.render_notes import render_study_notes
+from app.utils.render_notes import render_study_notes, render_jee_section
 from app.utils.tags import parse_context, generate_tags
 from app.utils.validation import validate_image_size
 from app.exceptions import AuthError, InvalidInputError, CreditLimitError, UpstreamError
@@ -88,6 +90,23 @@ def _use_credits_effective(effective_id: str, is_user: bool, amount: int) -> int
     if is_user:
         return use_user_credits(effective_id, amount)
     return use_credits(effective_id, amount)
+
+
+def _jee_for_notes(study_notes: StudyNotes) -> tuple[JEEConceptContext | None, str]:
+    """Free deterministic JEE context for extracted study notes.
+
+    Returns (context | None, markdown_section). No credits, no LLM calls.
+    Unresolved input yields (None, "") so generic screenshots stay JEE-free.
+    """
+    key_terms = [f.explanation for f in study_notes.key_formulas if f.explanation]
+    try:
+        ctx = map_concept_to_jee(study_notes.topic.title, key_terms)
+    except Exception:
+        logger.warning("JEE mapping failed; continuing without JEE context")
+        return None, ""
+    if ctx.match_status not in ("matched", "ambiguous"):
+        return None, ""
+    return ctx, render_jee_section(ctx)
 
 
 @router.post("/text", response_model=ExtractionResponse)
@@ -210,6 +229,10 @@ async def extract_diagram_route(
     diagram_id = uuid.uuid4().hex
     record_diagram_grant(effective_id, diagram_id, study_notes.model_dump_json(exclude={"diagram_spec", "diagram"}))
 
+    jee_ctx, jee_section = _jee_for_notes(study_notes)
+    if jee_section:
+        markdown = f"{markdown}\n{jee_section}"
+
     return ExtractionResponse(
         type=ExtractionType.DIAGRAM,
         markdown=markdown,
@@ -218,6 +241,7 @@ async def extract_diagram_route(
         creditsUsed=settings.DIAGRAM_CREDIT_COST,
         studyNotes=study_notes,
         diagramId=diagram_id,
+        jee=jee_ctx,
     )
 
 
@@ -262,9 +286,12 @@ async def extract_revision_route(
 
     _use_credits_effective(effective_id, is_user, settings.REVISION_CREDIT_COST)
 
+    jee_ctx, _ = _jee_for_notes(study_notes)
+
     return RevisionResponse(
         study_notes=study_notes,
         creditsUsed=settings.REVISION_CREDIT_COST,
+        jee=jee_ctx,
     )
 
 

@@ -1683,6 +1683,7 @@
 
       if (result.type === "diagram") {
         cards.push(`<div class="note-card explain-card" style="animation-delay:200ms">${explainSectionHtml()}</div>`);
+        cards.push(`<div class="note-card jee-card" style="animation-delay:220ms"><h3><span class="bar"></span>🗺️ JEE Context</h3><div id="jee-context-body"><p class="muted">Locating this concept in the JEE syllabus…</p></div></div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
@@ -1711,12 +1712,65 @@
       if (explainBtn) explainBtn.addEventListener("click", handleExplainVisual);
       const visualDlBtn = document.getElementById("visual-download-btn");
       if (visualDlBtn) visualDlBtn.addEventListener("click", downloadVisual);
+      if (result.type === "diagram" && notes && notes.topic) {
+        const terms = (notes.key_formulas || []).map((f) => f.formula).filter(Boolean);
+        loadJeeContext(notes.topic.title || "", terms);
+      }
 
       // Guaranteed explanatory image: auto-generate on every diagram upload so
       // the student always gets a labeled visual, not a silent empty state.
       if (canExplain && !currentVisualSvg && !currentVisualUrl && !fromHistory) {
         setTimeout(() => handleExplainVisual(), 400);
       }
+    }
+
+    async function loadJeeContext(topicTitle, keyTerms) {
+      const body = document.getElementById("jee-context-body");
+      if (!body) return;
+      try {
+        const resp = await fetch(`${BASE}/api/jee/map`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ topic_title: topicTitle, key_terms: keyTerms }),
+        });
+        if (!resp.ok) throw new Error(`JEE lookup failed (${resp.status})`);
+        body.innerHTML = jeeContextHtml(await resp.json());
+      } catch (err) {
+        body.innerHTML = `<p class="muted">JEE mapping unavailable right now.</p>`;
+      }
+    }
+
+    function jeeContextHtml(ctx) {
+      if (!ctx || ctx.match_status !== "matched" || !ctx.concept_id) {
+        return `<p class="muted">JEE mapping not yet verified for this concept.</p>`;
+      }
+      const crumb = [ctx.subject, ctx.chapter, ctx.canonical_name].filter(Boolean)
+        .map((s) => esc(s)).join(" → ");
+      let html = `<p><strong>${crumb}</strong></p>`;
+      if (ctx.syllabus && ctx.syllabus.subtopic) {
+        const src = ctx.syllabus.source_url
+          ? ` (<a href="${esc(ctx.syllabus.source_url)}" target="_blank" rel="noopener">NTA syllabus</a>)`
+          : "";
+        html += `<p class="muted">In the official JEE syllabus (${esc(ctx.chapter)}) — ${esc(ctx.syllabus.subtopic)}${src}.</p>`;
+      }
+      const names = (list) => (list || []).map((c) => esc(c.name)).filter(Boolean);
+      if (ctx.prerequisites && ctx.prerequisites.length) {
+        html += `<p class="muted">Needs first: ${names(ctx.prerequisites).join(" · ")}</p>`;
+      }
+      if (ctx.related && ctx.related.length) {
+        html += `<p class="muted">Related: ${names(ctx.related).join(" · ")}</p>`;
+      }
+      if (ctx.pyqs && ctx.pyqs.length) {
+        const rows = ctx.pyqs.map((q) => {
+          const label = `${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number} (${esc(q.question_type)}${q.marks != null ? `, ${q.marks} marks` : ""})`;
+          const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">official paper</a>` : "";
+          return `<div class="formula">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">Source:${link}</div></div>`;
+        }).join("");
+        html += `<p><strong>Verified PYQs (${ctx.pyq_count})</strong></p>${rows}`;
+      } else {
+        html += `<p class="muted">No verified PYQs recorded for this concept yet.</p>`;
+      }
+      return html;
     }
 
     function downloadVisual() {

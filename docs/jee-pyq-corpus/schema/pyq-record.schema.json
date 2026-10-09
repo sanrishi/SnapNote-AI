@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Verified JEE PYQ metadata record",
+  "description": "Metadata + provenance for one officially published JEE question. Never stores question text or images. Every exam-history fact must be traceable to the official paper.",
+  "type": "object",
+  "required": [
+    "question_id",
+    "exam",
+    "year",
+    "subject",
+    "chapter",
+    "concept_ids",
+    "question_type",
+    "paper_question_number",
+    "nta_question_id",
+    "source_url",
+    "source_document",
+    "verification_status",
+    "verification_method"
+  ],
+  "properties": {
+    "question_id": {
+      "type": "string",
+      "description": "Stable SnapNote record ID. Never changes after issuance.",
+      "pattern": "^pyq-jee-(main|advanced)-[0-9]{4}-[a-z0-9-]+$"
+    },
+    "exam": { "enum": ["JEE Main", "JEE Advanced"] },
+    "year": { "type": "integer", "minimum": 2000, "maximum": 2030 },
+    "session": {
+      "type": ["string", "null"],
+      "description": "Main session label exactly as published (e.g. 'April 2026'). Null when not applicable."
+    },
+    "shift": {
+      "type": ["string", "null"],
+      "description": "Shift label exactly as published (e.g. 'Shift 1 (2 Apr 2026)'). Null when unverifiable."
+    },
+    "subject": { "type": "string" },
+    "chapter": { "type": "string" },
+    "concept_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Canonical taxonomy concept IDs, primary concept first. Every ID must exist in the taxonomy."
+    },
+    "concept_mapping_note": {
+      "type": ["string", "null"],
+      "description": "One line explaining what the question tests (human-verified reading, not exam data)."
+    },
+    "question_type": { "enum": ["MCQ", "Numerical"] },
+    "paper_question_number": { "type": "integer", "minimum": 1 },
+    "nta_question_id": {
+      "type": ["string", "null"],
+      "description": "NTA's own Question Id from the official paper. Null for Advanced papers that lack one."
+    },
+    "marks": {
+      "type": ["integer", "null"],
+      "description": "Marks only when derivable from the official paper (section_marks / section_questions). NEVER inferred."
+    },
+    "marks_basis": {
+      "type": ["string", "null"],
+      "description": "Exact arithmetic/provenance for marks, or null when marks is null."
+    },
+    "difficulty": {
+      "type": ["string", "null"],
+      "description": "Only when independently verified against an official source. NEVER inferred. Null means unknown."
+    },
+    "answer_key": {
+      "type": ["string", "null"],
+      "description": "Official answer reference (e.g. NTA option ID) only when read from the official answer key. Null otherwise."
+    },
+    "content_fingerprint": {
+      "type": ["string", "null"],
+      "description": "Stable deduplication hash (sha256 of question_id + source_url). Detects accidental re-ingestion."
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Ingestion lineage for this record.",
+      "properties": {
+        "retrieved_at": { "type": "string" },
+        "parser": { "type": "string" },
+        "pdf_sha256": { "type": ["string", "null"] }
+      }
+    },
+    "question_summary": {
+      "type": ["string", "null"],
+      "description": "Neutral one-line description of what the question asks (verified reading). No answers, no difficulty claims."
+    },
+    "source_url": { "type": "string", "format": "uri" },
+    "source_document": { "type": "string" },
+    "verification_status": { "enum": ["verified", "needs-review"] },
+    "verification_method": {
+      "type": "string",
+      "description": "How a human verified this record (e.g. 'visually read from official NTA paper PDF')."
+    }
+  },
+  "additionalProperties": false
+}

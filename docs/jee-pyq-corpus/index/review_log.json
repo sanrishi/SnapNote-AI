@@ -1,0 +1,3369 @@
+{
+ "batches": [
+  {
+   "ambiguous": 0,
+   "batch": 1,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "rejected": 0,
+   "reviewed": 12,
+   "scope": "first 12 A candidates (2024 shifts)",
+   "verified": 12
+  },
+  {
+   "ambiguous": 0,
+   "batch": 2,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "rejected": 2,
+   "rejections": [
+    {
+     "queue_id": "verify-jeeprep-main-2024-2024-jan31-s2-q52",
+     "reason": "mirror-claimed answer 53 contradicts independent recomputation 61; answer uncorroborated, record stays out"
+    },
+    {
+     "queue_id": "verify-jeeprep-main-2025-2025-jan23-s2-q29",
+     "reason": "transcribed stem lacks numeric M/R values needed for power; returned to NEEDS_SOURCE_REVIEW"
+    }
+   ],
+   "reviewed": 24,
+   "scope": "remaining 24 A candidates (2024 Jan + 2025 shifts)",
+   "verified": 22
+  },
+  {
+   "batch": 3,
+   "classes": "B_NEEDS_SOURCE_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 14,
+   "verified": 14,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "all 14 B candidates (weak-signal, option-truncated, tag disagreements)",
+   "note": "jan28-s1-q49 looked contradictory (disc MI 2.5x ring MI) but the ratio is given data implying different radii; recomputation confirmed n = 4."
+  },
+  {
+   "batch": "2-recovery",
+   "classes": "demoted-A",
+   "date": "2026-10-06",
+   "reviewed": 1,
+   "verified": 1,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "jan23-s2-q29 symbolic disc-power question",
+   "note": "Options recovered from the same mirror article HTML (A 8MR^2 / B 60MR^2 / C 72MR^2 / D 108MR^2); letter B matches independent recomputation; cross-checked against an independent coaching mirror with identical options."
+  },
+  {
+   "batch": 5,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 48,
+   "verified": 46,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Three Dimensional Geometry HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14"
+   ]
+  },
+  {
+   "batch": 6,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 47,
+   "verified": 42,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "d- and f-Block Elements HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q86",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q61",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q60",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q62"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q10": "misqueued Mathematics coordinate-geometry item; already verified as pyq-jee-main-2025-jan22-s1-mat-010 in the coordinate-geometry shard"
+   }
+  },
+  {
+   "batch": 7,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 42,
+   "verified": 40,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Sets, Relations and Functions HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q1",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1"
+   ]
+  },
+  {
+   "batch": 8,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 42,
+   "verified": 37,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Organic Compounds Containing Halogens HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-8-shift-1-q77",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q74",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q73",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q88"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q17": "misqueued Mathematics differential-equations item; already verified as pyq-jee-main-2025-jan22-s1-mat-017 in the LCD shard"
+   }
+  },
+  {
+   "batch": 9,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 41,
+   "verified": 39,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Complex Numbers and Quadratic Equations HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q3",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q24"
+   ]
+  },
+  {
+   "batch": 10,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 40,
+   "verified": 39,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Vector Algebra HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14"
+   ]
+  },
+  {
+   "batch": 11,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 40,
+   "verified": 33,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Organic Compounds Containing Nitrogen HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q80",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q69",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-2-q69",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-2-q69",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q68"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q18": "misqueued Mathematics integration item; already verified as pyq-jee-main-2025-jan22-s1-mat-018 in the integral-calculus shard",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q25": "misqueued Mathematics integration item; already verified as pyq-jee-main-2025-jan22-s1-mat-025 in the integral-calculus shard"
+   }
+  },
+  {
+   "batch": 12,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 39,
+   "verified": 38,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Sequence and Series HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q16"
+   ]
+  },
+  {
+   "batch": 13,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 39,
+   "verified": 28,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Solutions HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q63",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q81",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q62",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q54",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-2-q51",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q53",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q53",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q52",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q3",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q54",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q53"
+   ]
+  },
+  {
+   "batch": 14,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 38,
+   "verified": 37,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Statistics and Probability HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8"
+   ]
+  },
+  {
+   "batch": 15,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 35,
+   "verified": 34,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Differential Equations HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q12"
+   ]
+  },
+  {
+   "batch": 16,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 35,
+   "verified": 33,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "p-Block Elements HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68"
+   ]
+  },
+  {
+   "batch": 17,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 35,
+   "verified": 33,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Purification and Characterisation HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q73"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q24": "misqueued Mathematics 3D-lines item; already verified with answer 216 in the three-dimensional-geometry shard"
+   }
+  },
+  {
+   "batch": 18,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 34,
+   "verified": 33,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Some Basic Concepts HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51"
+   ]
+  },
+  {
+   "batch": 19,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 37,
+   "verified": 31,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Periodicity HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q56",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q58",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q60"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q9": "misqueued Mathematics probability item; already verified as m+n = 14 in the statistics-probability shard"
+   }
+  },
+  {
+   "batch": 20,
+   "classes": "REASSIGNMENT",
+   "date": "2026-10-06",
+   "reviewed": 5,
+   "verified": 0,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Move 5 periodicity-content records from p-block shard to periodicity shard (queue contamination fix)",
+   "moved": [
+    "pyq-jee-main-2025-apr07-s2-che-060",
+    "pyq-jee-main-2025-apr08-s2-che-057",
+    "pyq-jee-main-2025-jan22-s2-che-060",
+    "pyq-jee-main-2025-jan23-s2-che-060",
+    "pyq-jee-main-2025-jan28-s2-che-074"
+   ]
+  },
+  {
+   "batch": 21,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 37,
+   "verified": 25,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Current Electricity leftover HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q41",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q56",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q43",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-1-q41",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q41",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q56",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q56",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q37",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q36",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q14"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q11": "misqueued Mathematics circle item; already verified in the coordinate-geometry shard",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q13": "misqueued Mathematics hyperbola item; already verified in the coordinate-geometry shard"
+   }
+  },
+  {
+   "batch": 22,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 29,
+   "verified": 28,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Permutations and Combinations HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22"
+   ]
+  },
+  {
+   "batch": 23,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 30,
+   "verified": 27,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Atomic Structure HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q52",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q52"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q1": "misqueued Mathematics fraction item; already verified in the sets-relations-functions shard"
+   }
+  },
+  {
+   "batch": 24,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 29,
+   "verified": 26,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Practical Chemistry HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q72",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-1-q87",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q58"
+   ]
+  },
+  {
+   "batch": 25,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 28,
+   "verified": 28,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Binomial Theorem HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 26,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 26,
+   "verified": 24,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Biomolecules HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q80",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q70"
+   ]
+  },
+  {
+   "batch": 27,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 23,
+   "verified": 23,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Trigonometry HC sweep (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 28,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 27,
+   "verified": 11,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Scattered leftover HC sweep (electrostatics/magnetism/WEP/optics/experimental/rotational/kinematics/thermo)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-7-shift-1-q38",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q50",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q57",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q49",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q47",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q59",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q40",
+    "cand-jeeprep-main-2024-2024-apr-8-shift-2-q50",
+    "cand-jeeprep-main-2024-2024-apr-8-shift-1-q83",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q83",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q73",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q2",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22"
+   ],
+   "duplicate_skips": {
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q12": "misqueued Mathematics parabola item; already verified in the coordinate-geometry shard"
+   }
+  },
+  {
+   "batch": 29,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 41,
+   "verified": 39,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Co-ordinate Geometry NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q13",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q16"
+   ]
+  },
+  {
+   "batch": 30,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 25,
+   "verified": 20,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "LCD NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q7",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q6",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q8",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q9",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q7"
+   ]
+  },
+  {
+   "batch": 31,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 25,
+   "verified": 25,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Integral NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 32,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 24,
+   "verified": 24,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Stats NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 33,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 23,
+   "verified": 18,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Complex NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q4",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q3",
+    "cand-jeeprep-main-2024-2024-apr-8-shift-1-q6",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q3",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q3"
+   ],
+   "duplicate_skips": {}
+  },
+  {
+   "batch": 34,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 22,
+   "verified": 17,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "SRF NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-5-shift-2-q2",
+    "cand-jeeprep-main-2024-2024-apr-8-shift-2-q2",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q2",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q2",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q1"
+   ]
+  },
+  {
+   "batch": 35,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 20,
+   "verified": 20,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "3D NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 36,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 18,
+   "verified": 18,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Sequence NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 37,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 18,
+   "verified": 18,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "DE NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 38,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 15,
+   "verified": 13,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Matrices NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q5",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q4"
+   ]
+  },
+  {
+   "batch": 39,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 14,
+   "verified": 14,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Vector NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 40,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 13,
+   "verified": 13,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Trig NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 41,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 10,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Optics NEEDS_REVIEW recovery (2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q41"
+   ]
+  },
+  {
+   "batch": 42,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 6,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Atoms NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 43,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 6,
+   "verified": 4,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Equilibrium NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q56",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q55"
+   ]
+  },
+  {
+   "batch": 44,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 6,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "d-block NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 45,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 5,
+   "verified": 5,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Coordination NEEDS_REVIEW recovery (2024 Apr + 2025 Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 46,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 5,
+   "verified": 3,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Kinematics NEEDS_REVIEW recovery (2024 Jan + 2025 Jan/Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q32",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q29"
+   ]
+  },
+  {
+   "batch": 47,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "P&C NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Jan/Apr)",
+   "demotions": []
+  },
+  {
+   "batch": 48,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 7,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Binomial NEEDS_REVIEW recovery (2024 Jan/Apr + 2025 Apr)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q5"
+   ]
+  },
+  {
+   "batch": 49,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-06",
+   "reviewed": 75,
+   "verified": 66,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "Bulk scattered NEEDS_REVIEW recovery (29 chapters, 2024-2025)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-8-shift-1-q80",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q57",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q54",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q65",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q64",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q55",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q73",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q36",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-1-q29"
+   ]
+  },
+  {
+   "batch": 50,
+   "classes": "C_CORRUPTED",
+   "date": "2026-10-06",
+   "reviewed": 147,
+   "verified": 76,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "CORRUPTED triage (all 2024-2025 chapters)",
+   "demotions": [
+    "cand-jeeprep-main-2024-2024-apr-4-shift-1-q62",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q67",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q64",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q70",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q61",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q66",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q62",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q63",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q70",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q52",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q62",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-1-q75",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q75",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q75",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q74",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q73",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q74",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q71",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q73",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q65",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-2-q65",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-2-q66",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q64",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q65",
+    "cand-jeeprep-main-2024-2024-jan-29-shift-1-q65",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q59",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-1-q80",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-1-q80",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-2-q80",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q70",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q70",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q59",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q58",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q4",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-2-q76",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q73",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q74",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q77",
+    "cand-jeeprep-main-2024-2024-apr-8-shift-2-q78",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q79",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q72",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q76",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q61",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-2-q63",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q52",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q71",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-1-q67",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q80",
+    "cand-jeeprep-main-2024-2024-apr-9-shift-1-q70",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-2-q72",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-1-q64",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-2-q65",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q56",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-2-q56",
+    "cand-jeeprep-main-2024-2024-jan-31-shift-1-q62",
+    "cand-jeeprep-main-2024-2024-apr-4-shift-2-q61",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q5",
+    "cand-jeeprep-main-2024-2024-apr-6-shift-1-q2",
+    "cand-jeeprep-main-2024-2024-jan-30-shift-2-q30",
+    "cand-jeeprep-main-2024-2024-apr-5-shift-2-q47",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q44",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q48",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q50",
+    "cand-jeeprep-main-2024-2024-jan-27-shift-1-q49",
+    "cand-jeeprep-main-2024-2024-feb-1-shift-1-q37",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q31",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q33"
+   ]
+  },
+  {
+   "batch": 51,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 31,
+   "verified": 30,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Co-ordinate Geometry sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-4-shift-2-q11"
+   ]
+  },
+  {
+   "batch": 52,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 25,
+   "verified": 22,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Optics sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-2-shift-2-q41",
+    "cand-jeeprep-main-2026-2026-apr-4-shift-1-q45",
+    "cand-jeeprep-main-2026-2026-apr-5-shift-2-q40"
+   ]
+  },
+  {
+   "batch": 53,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 20,
+   "verified": 20,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Solids sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 54,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 19,
+   "verified": 15,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 GOC sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-4-shift-1-q64",
+    "cand-jeeprep-main-2026-2026-apr-4-shift-2-q65",
+    "cand-jeeprep-main-2026-2026-apr-8-shift-2-q63",
+    "cand-jeeprep-main-2026-2026-apr-5-shift-1-q64"
+   ]
+  },
+  {
+   "batch": 55,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 16,
+   "verified": 16,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Stats sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 56,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 16,
+   "verified": 15,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 LCD sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-6-shift-2-q16"
+   ]
+  },
+  {
+   "batch": 57,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 16,
+   "verified": 16,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Complex sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 58,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 15,
+   "verified": 15,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 3D sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 59,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 15,
+   "verified": 13,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Matrices sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-1-q3",
+    "cand-jeeprep-main-2026-2026-apr-4-shift-2-q6"
+   ]
+  },
+  {
+   "batch": 60,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-06",
+   "reviewed": 14,
+   "verified": 14,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Sequence sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 61,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 14,
+   "verified": 14,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Oxygen sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 62,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 13,
+   "verified": 13,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Equilibrium sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 63,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 13,
+   "verified": 13,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 d-block sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 64,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 12,
+   "verified": 11,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Nitrogen sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-4-shift-2-q67"
+   ]
+  },
+  {
+   "batch": 65,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 12,
+   "verified": 12,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Coordination sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 66,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 12,
+   "verified": 12,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Electrostatics sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 67,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 11,
+   "verified": 11,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 EMI sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 68,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 12,
+   "verified": 10,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Biomolecules sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-2-q68",
+    "cand-jeeprep-main-2026-2026-apr-8-shift-2-q69"
+   ]
+  },
+  {
+   "batch": 69,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Kinetics sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 70,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Magnetism sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 71,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 11,
+   "verified": 11,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Current Electricity sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 72,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 11,
+   "verified": 11,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Atomic Structure sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 73,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 10,
+   "verified": 10,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Units sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 74,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 4,
+   "verified": 4,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Rotational sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 75,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 22,
+   "verified": 22,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Integral sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 76,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Thermodynamics sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 77,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 10,
+   "verified": 10,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Atoms sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 78,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 10,
+   "verified": 10,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Electronic Devices sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 79,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 10,
+   "verified": 10,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Laws of Motion sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 80,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 10,
+   "verified": 10,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Trigonometry sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 81,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 10,
+   "verified": 10,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 P&C sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 82,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 10,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Chemical Thermodynamics sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-2-q55"
+   ]
+  },
+  {
+   "batch": 83,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Solutions sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 84,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Bonding sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 85,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Periodicity sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 86,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 9,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Redox sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 87,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 7,
+   "verified": 7,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 p-block sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 88,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Halogens sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 89,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 7,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Purification sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-1-q72"
+   ]
+  },
+  {
+   "batch": 90,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Mole Concept sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 91,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 7,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 DE sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-5-shift-1-q25",
+    "cand-jeeprep-main-2026-2026-apr-5-shift-2-q25"
+   ]
+  },
+  {
+   "batch": 92,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 SRF sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-6-shift-2-q1"
+   ]
+  },
+  {
+   "batch": 93,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 9,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Vector sweep (Apr 2026)",
+   "demotions": [
+    "cand-jeeprep-main-2026-2026-apr-4-shift-2-q15"
+   ]
+  },
+  {
+   "batch": 94,
+   "classes": "A_HIGH_CONFIDENCE+C_CORRUPTED",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Binomial sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 95,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 7,
+   "verified": 7,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Dual Nature sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 96,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 7,
+   "verified": 7,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 EM Waves sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 97,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 8,
+   "verified": 8,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Kinematics sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 98,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 6,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 KTG sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 99,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 7,
+   "verified": 7,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Work-Energy sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 100,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 7,
+   "verified": 7,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Oscillations-Waves sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 101,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 4,
+   "verified": 4,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Gravitation sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 102,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-07",
+   "reviewed": 4,
+   "verified": 4,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Experimental sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 103,
+   "classes": "A_HIGH_CONFIDENCE+B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 5,
+   "verified": 5,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 Practical sweep (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 104,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-07",
+   "reviewed": 6,
+   "verified": 6,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2026 NSR mop-up (Apr 2026)",
+   "demotions": []
+  },
+  {
+   "batch": 105,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 14,
+   "verified": 12,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2021/2020 JEEnify matrices HC sweep (12 verified, 2 demoted on recompute mismatch)",
+   "demotions": [
+    "cand-jeenify-main-2021-feb-24-shift-1-q84",
+    "cand-jeenify-main-2020-jan-07-shift-1-q62"
+   ]
+  },
+  {
+   "batch": 106,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 30,
+   "verified": 27,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2019 JEEnify co-ordinate-geometry HC sweep (27 verified, 3 demoted: ambiguous options, wrong-chapter calculus item, option-set mismatch)",
+   "demotions": [
+    "cand-jeenify-main-2019-jan-10-shift-2-q70",
+    "cand-jeenify-main-2019-jan-10-shift-2-q81",
+    "cand-jeenify-main-2019-jan-12-shift-1-q71"
+   ]
+  },
+  {
+   "batch": 107,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 12,
+   "verified": 12,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2016-2018 JEEnify optics HC sweep (12/12 verified, all independently solved)",
+   "demotions": []
+  },
+  {
+   "batch": 108,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 68,
+   "verified": 57,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2025-jan-29 JEEnify unique-coverage sweep (57 verified across 30 chapters incl CG focal-chord, 11 demoted with proofs)",
+   "demotions": [
+    "cand-jeenify-main-2025-jan-29-shift-1-q63",
+    "cand-jeenify-main-2025-jan-29-shift-1-q54",
+    "cand-jeenify-main-2025-jan-29-shift-1-q51",
+    "cand-jeenify-main-2025-jan-29-shift-2-q24",
+    "cand-jeenify-main-2025-jan-29-shift-1-q10",
+    "cand-jeenify-main-2025-jan-29-shift-2-q21",
+    "cand-jeenify-main-2025-jan-29-shift-1-q14",
+    "cand-jeenify-main-2025-jan-29-shift-1-q46",
+    "cand-jeenify-main-2025-jan-29-shift-1-q31",
+    "cand-jeenify-main-2025-jan-29-shift-2-q48",
+    "cand-jeenify-main-2025-jan-29-shift-1-q41"
+   ]
+  },
+  {
+   "batch": 109,
+   "classes": "A_HIGH_CONFIDENCE",
+   "date": "2026-10-09",
+   "reviewed": 48,
+   "verified": 5,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2025 JEEPrep HC leftovers (5 verified: binomial/SRF/integral-x2/cyclotron; 37 demoted, 2 multi-chapter duplicate copies; 4 mislabeled writes caught by audit and removed pre-commit)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q52",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q52",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q70",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-2-q71",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q73",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q56",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q58",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q61",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q60",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q62",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q69",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-2-q69",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-2-q69",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q68",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q58",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q54",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-2-q51",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q53",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q53",
+    "cand-jeeprep-main-2025-2025-apr-8-shift-2-q52",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q3",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q54",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q53",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-2-q74",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-2-q24",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8",
+    "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-2-q37",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q36",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-1-q38",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q50",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39"
+   ],
+   "duplicates": [
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q2 (thermo queue copy; verified via experimental-queue entry under Sets/Relations)",
+    "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22 (kinematics queue copy; verified via bonding-queue entry under Binomial Theorem)"
+   ],
+   "audit_catch": "audit duplicate-id gate caught 4 records mislabeled with wrong paper identities (jan-29 solves written under jeeprep qids colliding with genuine Hinsberg/Tollens/Fittig records); removed before commit; genuine originals untouched"
+  },
+  {
+   "batch": 110,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-09",
+   "reviewed": 19,
+   "verified": 0,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2025 CG NSR recovery sweep (19 reviewed: 0 new records - all 10 solvable already verified; 9 demoted; 10 duplicate corroborations with 10 answer backfills; 3 mislabeled shift writes caught by registry test and removed pre-commit)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q11",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-2-q10",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-1-q10",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-1-q11",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-1-q10",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q12",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q11",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q10",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q12"
+   ],
+   "duplicates": [
+    "7 earlier-sweep identities corroborated + 3 shift-2 identities corroborated; 10 answer_keys backfilled with recomputation notes"
+   ],
+   "audit_catch": "registry-consistency test caught 3 records labeled shift-1 for shift-2 questions (already verified); removed before commit; answers backfilled into genuine records"
+  }
+ ],
+ "cumulative": {
+  "reviewed": 241,
+  "verified": 162,
+  "rejected": 1,
+  "ambiguous": 0
+ },
+ "method": "Human visual read of stem + identity + mirror-claimed answer; numerical answers independently recomputed; MCQs keep answer_key null (options not independently confirmable).",
+ "note": "12/12 verified in batch 1; 22/24 in batch 2. Never claim 100% on unreviewed candidates.",
+ "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
+ "recall_sweep": {
+  "date": "2026-10-06",
+  "method": "taxonomy rotational patterns over all 929 indexed 2024-2025 Physics stems, excluding the 50 queued",
+  "extra_keyword_hits": 22,
+  "verdict": "no expansion",
+  "reason": "all 22 hits belong to other chapters (EMI motional emf, Bohr angular momentum, torque dimensions, gravitation orbits, magnetic/electric dipoles, circular-motion friction). Boundary cases (rotating table/coin/string-ball) are circular dynamics under Laws of Motion, not rigid-body rotation; forcing them in would corrupt chapter boundaries."
+ },
+ "demotions": [
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q34",
+   "chapter": "Laws of Motion",
+   "reason": "movable-pulley rigging ambiguous from the figure description; constraint relations unresolvable; NEEDS_SOURCE_REVIEW",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan22-s2-q30",
+   "chapter": "Work, Energy and Power",
+   "reason": "C-side angular placement ambiguous from the figure description; KE ratio unresolvable",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan23-s1-q47",
+   "chapter": "Work, Energy and Power",
+   "reason": "plane constraint x+y=10 contradicts endpoints (0,0)-(4,2); straight-path recomputation ~35 vs mirror 152",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q50",
+   "chapter": "Experimental Skills",
+   "reason": "least-count relation inconsistent as transcribed (half-integer coincidence count)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q24",
+   "chapter": "Integral Calculus",
+   "reason": "(alpha,beta,gamma) form unresolvable after exhaustive substitution attempts",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q25",
+   "chapter": "Integral Calculus",
+   "reason": "recomputation gives 6A = 81 vs mirror 15",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q23",
+   "chapter": "Integral Calculus",
+   "reason": "recomputation gives alpha + 2 beta = 14 vs mirror 16",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-2-q71",
+   "chapter": "Chemical Kinetics",
+   "reason": "graph-reading rate constant unconfirmable from approximate figure values (range spans mirror answer)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q27",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "matrix-equation locus ambiguity",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q26",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "QR-slope family underdetermined as transcribed",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q27",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "b^2 form mismatch: 3\u221a3 vs (l/m)(1+\u221an)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q27",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "hyperbola data inconsistent: directrix vs LR vs tangent",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-2-q11",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "foci-distance phrasing underdetermined as transcribed",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q12",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "A/B pair ambiguous among 4 intersections",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q27",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "LR-angle form mismatch (see review notes)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q89",
+   "chapter": "GOC",
+   "reason": "effect-triple count 5 vs mirror 4 (structure detail in figure may change it)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q88",
+   "chapter": "GOC",
+   "reason": "monochlorination count 5 vs mirror 6 (methyl-equivalence judgment)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q90",
+   "chapter": "GOC",
+   "reason": "regio/stereo count 2 vs 4 (minor regio product unconfirmed)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-2-q74",
+   "chapter": "GOC",
+   "reason": "X structure unresolvable from description; sigma count unconfirmable",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q89",
+   "chapter": "GOC",
+   "reason": "nitrobenzoic pi-count 6 vs mirror 5 (NO2 convention ambiguity)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q89",
+   "chapter": "Oxygen Compounds",
+   "reason": "OH count 1 vs mirror 0 (Grignard acid-base: product retains phenolic OH)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-2-q10",
+   "chapter": "LCD",
+   "reason": "floor-discontinuity count not re-derived to standard; re-queued",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q85",
+   "chapter": "Redox",
+   "reason": "logK rounding 338 vs 339 (borderline)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q86",
+   "chapter": "Redox",
+   "reason": "recomputation gives 8 H+ vs mirror 4",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q81",
+   "chapter": "Chemical Bonding",
+   "reason": "fractional-charge form unresolvable (1.2e-10 vs x1e-1 form)",
+   "date": "2026-10-06"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
+   "reason": "transcribed stem ends at 'then :' with the asked m/n expression and options missing; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Three Dimensional Geometry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14",
+   "reason": "transcribed stem ends at 'among the statements (S1) and (S2),' with the asked judgment and options missing; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Three Dimensional Geometry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q86",
+   "reason": "recompute gives V(IV) d1 mu sqrt(3) ~ 2 for amphoteric V2O4, contradicting mirror-claimed 0; possible official-key controversy, stays out",
+   "date": "2026-10-06",
+   "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q61",
+   "reason": "stem asks for the incorrect ionisation-enthalpy pair but the option pairs are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q60",
+   "reason": "stem asks for the same-colour ion set but the option sets are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q62",
+   "reason": "stem unrecoverable (queue-flagged corrupted PDF page in both languages); mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "d- and f-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q1",
+   "reason": "stem ends at 'among the statements (S1) and (S2)' with the asked judgment and options missing; underlying facts verified (count 16 not 18; S2 characterization holds) but option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "Sets, Relations and Functions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1",
+   "reason": "stem missing (queue-flagged corrupted page-1 PDF in both languages); mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Sets, Relations and Functions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q77",
+   "reason": "stem asks for the fastest-SN2 compound but the option compounds are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q74",
+   "reason": "multi-step figure chain (bicyclobutane, Grignard-deuteration, CoF2) not closable from the text description alone; B/C identities unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q73",
+   "reason": "stem asks for the correct statement but the option statements are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q88",
+   "reason": "enantiomer-level recompute gives 6 optically active isomers versus mirror-claimed 3 (pairs-counting convention ambiguous); stays out",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Halogens HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q3",
+   "reason": "mirror carries no claimed answer; recomputed minimum 3/2 is uncorroborated by any official key",
+   "date": "2026-10-06",
+   "scope": "Complex Numbers and Quadratic Equations HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q24",
+   "reason": "recompute gives 56/3 for 12(a^2+b^2) versus mirror-claimed 36; range-model mismatch, needs source review",
+   "date": "2026-10-06",
+   "scope": "Complex Numbers and Quadratic Equations HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14",
+   "reason": "queue item self-flags destroyed stem images with unreliable recovered numerics; needs another copy of the paper",
+   "date": "2026-10-06",
+   "scope": "Vector Algebra HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q80",
+   "reason": "stem asks for the excluded arenium ion but the option structures are absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q69",
+   "reason": "stem asks for the incorrect diazonium conversion but the option conversions are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-2-q69",
+   "reason": "stem asks for the tribromoaniline sequence but the option sequences are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q69",
+   "reason": "stem asks for the ortho-bromoaniline reagent set but the option sets are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q68",
+   "reason": "stem unrecoverable (queue-flagged corrupted pages in both languages); mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Organic Compounds Containing Nitrogen HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q16",
+   "reason": "stem ends at 'then :' with the asked relation and options missing; underlying P/Q sums verified but option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "Sequence and Series HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q63",
+   "reason": "stem asks for the osmosis outcome but the option descriptions are absent; flow direction X-to-Y verified but option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q81",
+   "reason": "recompute gives 164 x 10^-3 m versus mirror-claimed 81; factor-two mismatch, needs source review",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q62",
+   "reason": "stem asks what negative-deviation solutions 'will have' but the option list is absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q54",
+   "reason": "stem asks for the correct KH-vs-T graph but the option graphs are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-2-q51",
+   "reason": "stem asks for the best molarity-vs-T plot but the option plots are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q53",
+   "reason": "stem asks which properties change but the option list is absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q53",
+   "reason": "Kf formula omits the 1000 factor as stated, creating a correctness ambiguity; plus option mapping unseen",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q52",
+   "reason": "stem asks for the non-minimum-boiling mixture but the option mixtures are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q3",
+   "reason": "misqueued Mathematics exponential-equation item; solved product e^8/5 consistent with mirror D but held for proper chapter assignment",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q54",
+   "reason": "stem asks for the correct delta-Tf plot but the option graphs are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q53",
+   "reason": "mirror carries no claimed answer and the option outcomes are absent; hypertonic-shrink analysis uncorroborated",
+   "date": "2026-10-06",
+   "scope": "Solutions HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8",
+   "reason": "stem truncated mid-sentence with the event description lost in both languages; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Statistics and Probability HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q12",
+   "reason": "transcribed conditions admit no non-zero alpha and mirror carries no claimed answer; likely dropped item",
+   "date": "2026-10-06",
+   "scope": "Differential Equations HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
+   "reason": "stem asks which product is not formed but the option products are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "p-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68",
+   "reason": "IE1 option order contradicts standard data (B highest, not Tl); matching unclosable; needs source review",
+   "date": "2026-10-06",
+   "scope": "p-Block Elements HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q73",
+   "reason": "stem asks for the correct chromatography statement but the option statements are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Purification and Characterisation HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51",
+   "reason": "queue references an item with no index record; no source to verify against",
+   "date": "2026-10-06",
+   "scope": "Some Basic Concepts HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q79",
+   "reason": "stem asks which product is not formed but the option products are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q68",
+   "reason": "IE1 option order contradicts standard data (B highest, not Tl); matching unclosable; needs source review",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q56",
+   "reason": "stem asks for the lowest-IE1 element but the option elements are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q58",
+   "reason": "stem asks for the odd-period element but the option elements are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q60",
+   "reason": "statement D (equal EN of C in CH4 and CCl4) is genuinely ambiguous and the option set is absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Periodicity HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q41",
+   "reason": "resistor-network topology not recoverable from the figure description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q56",
+   "reason": "diamond-circuit branch topology not recoverable from the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q43",
+   "reason": "multi-bridge network topology not recoverable from the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-1-q41",
+   "reason": "voltmeter loop topology and tap points not recoverable; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q41",
+   "reason": "capacitor-bridge arm topology not recoverable; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q56",
+   "reason": "branch-resistor topology garbled in the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q56",
+   "reason": "square-network topology vague in the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q37",
+   "reason": "options are circuit figures absent from the transcription; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q36",
+   "reason": "wire-bridge topology garbled in the description; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q14",
+   "reason": "misqueued Mathematics inverse-trig item and chapter orphan; solved 22 pi^2 consistent with mirror B but held for proper chapter assignment",
+   "date": "2026-10-06",
+   "scope": "Current Electricity leftover HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22",
+   "reason": "stem truncated with the counted objects lost in both languages; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Permutations and Combinations HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q52",
+   "reason": "stem asks for the incorrect Bohr statement but the option statements are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Atomic Structure HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q52",
+   "reason": "stem asks for the non-QM postulate but the option postulates are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Atomic Structure HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q72",
+   "reason": "greenish-yellow gas fixes chloride but the option salts are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Practical Chemistry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-1-q87",
+   "reason": "green-bead salt ambiguous among listed metals (moment 6 fits Mn2+ or Fe3+); option identity unverifiable",
+   "date": "2026-10-06",
+   "scope": "Practical Chemistry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q58",
+   "reason": "yellow-ammonium-sulphide inclusion genuinely uncertain; option set unverifiable against official key",
+   "date": "2026-10-06",
+   "scope": "Practical Chemistry HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q80",
+   "reason": "stem asks for the incorrect DNA base structure but the option structures are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Biomolecules HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q70",
+   "reason": "dipeptide order (Ala-Gly vs Gly-Ala) underdetermined without options; components identified but mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "Biomolecules HIGH_CONFIDENCE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-1-q38",
+   "reason": "charge magnitudes absent from the description; K underdetermined",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q50",
+   "reason": "shaded sub-region areas not recoverable from the description",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q57",
+   "reason": "recompute gives B0 = -5 versus mirror-claimed 5; sign contradiction",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q49",
+   "reason": "recompute gives period 0.01 s versus mirror-claimed 0",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39",
+   "reason": "Amperian enclosed-current reading ambiguous from the description",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q47",
+   "reason": "endpoints off the stated plane and recompute 35 versus mirror 152",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q59",
+   "reason": "recompute gives 0.2 mm versus mirror-claimed 0",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q40",
+   "reason": "concave/convex underdetermined without options",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-2-q50",
+   "reason": "vernier equation has no integer solution as transcribed",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q83",
+   "reason": "recompute gives 52.5 versus mirror-claimed 55",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q83",
+   "reason": "Hess recompute gives 82 versus mirror-claimed 164",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q73",
+   "reason": "single-bond energy missing; resonance structures ambiguous",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q2",
+   "reason": "misqueued Mathematics equivalence-relation orphan (solved 5, mirror B); held for chapter assignment",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22",
+   "reason": "misqueued Mathematics binomial orphan (solved 2035, mirror matches); held for chapter assignment",
+   "date": "2026-10-06",
+   "scope": "Scattered Physics/Chemistry leftover sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q13",
+   "reason": "parallel-chord distance non-unique (two sides); mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Co-ordinate Geometry NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q16",
+   "reason": "transcribed point fails the hyperbola equation; likely transcription error",
+   "date": "2026-10-06",
+   "scope": "Co-ordinate Geometry NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q7",
+   "reason": "mirror carries no claimed answer; recomputed 42 uncorroborated",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q6",
+   "reason": "mirror carries no claimed answer and limit diverges; transcription suspect",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q8",
+   "reason": "stem ends at 'then' with the ask and options missing",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q9",
+   "reason": "stem ends at 'then' with the ask and options missing",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q7",
+   "reason": "stem ends at 'then' with the ask and options missing",
+   "date": "2026-10-06",
+   "scope": "LCD NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q4",
+   "reason": "infimum 2 not attained (strict distinctness); no minimum exists",
+   "date": "2026-10-06",
+   "scope": "Complex NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q3",
+   "reason": "stem ends before the conclusion; ask and options missing",
+   "date": "2026-10-06",
+   "scope": "Complex NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q6",
+   "reason": "N-convention ambiguity changes count 12 vs 13",
+   "date": "2026-10-06",
+   "scope": "Complex NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q3",
+   "reason": "power-sum expression does not resolve cleanly; likely transcription error",
+   "date": "2026-10-06",
+   "scope": "Complex NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q3",
+   "reason": "stem ends before the ask; options missing",
+   "date": "2026-10-06",
+   "scope": "Complex NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-2-q2",
+   "reason": "stem ends before the asked property; option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "SRF NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-2-q2",
+   "reason": "stem ends before the asked property; option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "SRF NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q2",
+   "reason": "stem ends before the conclusion; option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "SRF NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q2",
+   "reason": "stem ends before the label; option mapping unverifiable",
+   "date": "2026-10-06",
+   "scope": "SRF NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q1",
+   "reason": "no clean pairing found; sum not closable",
+   "date": "2026-10-06",
+   "scope": "SRF NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q5",
+   "reason": "alpha underdetermined among \u00b14, \u00b15 without options",
+   "date": "2026-10-06",
+   "scope": "Matrices NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q4",
+   "reason": "determinant depends on free parameter p; underdetermined",
+   "date": "2026-10-06",
+   "scope": "Matrices NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q41",
+   "reason": "image tilt ~1\u00b0 with option form unknown; 'ahead' interpretation sensitive",
+   "date": "2026-10-06",
+   "scope": "Optics NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q56",
+   "reason": "stem asks for the precipitating combination but the option combinations are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Equilibrium NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q55",
+   "reason": "stem asks for the affected species but the option species are absent; mirror option letter unverifiable",
+   "date": "2026-10-06",
+   "scope": "Equilibrium NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q32",
+   "reason": "stem ends before the asked quantity; options unknown",
+   "date": "2026-10-06",
+   "scope": "Kinematics NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q29",
+   "reason": "stem asks for the graph presentation but option graphs are absent",
+   "date": "2026-10-06",
+   "scope": "Kinematics NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q5",
+   "reason": "consecutive-coefficient premises inconsistent; no mirror answer",
+   "date": "2026-10-06",
+   "scope": "Binomial NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-1-q80",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q57",
+   "reason": "initial pressure absent and option values unseen",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q54",
+   "reason": "stem asks for the expression but the option expressions are absent",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q65",
+   "reason": "retrosynthesis underdetermined without option structures",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q64",
+   "reason": "stem asks for the top solution but the option solutions are absent",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q55",
+   "reason": "stem asks for the relation but the option relations are absent",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q73",
+   "reason": "compound unspecified in the transcription",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q36",
+   "reason": "side-length reference underdetermined as transcribed",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-1-q29",
+   "reason": "two equations with three unknowns; underdetermined",
+   "date": "2026-10-06",
+   "scope": "Bulk scattered NEEDS_REVIEW recovery"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q62",
+   "reason": "stem asks for the max-dipole molecule but the option molecules are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q70",
+   "reason": "stem asks for the ligand order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q67",
+   "reason": "stem asks for the IE order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-1-q70",
+   "reason": "stem asks for the ligand order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q64",
+   "reason": "stem asks for the non-semiconductor but the option materials are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q70",
+   "reason": "stem asks for the IUPAC name but the option names are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-1-q70",
+   "reason": "stem asks for the homoleptic complex but the option complexes are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q61",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q66",
+   "reason": "stem asks for the strongest agent but the option agents are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q62",
+   "reason": "stem asks for the incorrect item but the option items are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q63",
+   "reason": "stem asks for the shape but the option shapes are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q70",
+   "reason": "stem asks for the correct property but the content is absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q52",
+   "reason": "stem asks for the correct statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q62",
+   "reason": "stem asks for the complex but the option complexes are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q75",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q75",
+   "reason": "stem asks for the group but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q75",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q74",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q73",
+   "reason": "stem asks for the group but the option groups are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q74",
+   "reason": "stem asks for the set but the option sets are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q70",
+   "reason": "stem asks for the structure but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q71",
+   "reason": "stem asks for the species but the option species are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q73",
+   "reason": "stem asks for the order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q65",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-2-q65",
+   "reason": "stem asks for the cation but the option cations are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-2-q66",
+   "reason": "stem asks for the alkane but the option alkanes are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q64",
+   "reason": "stem asks for the cation but the option cations are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q65",
+   "reason": "stem asks for the element but the option elements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-29-shift-1-q65",
+   "reason": "stem asks for the incorrect pair but the option pairs are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q59",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-1-q80",
+   "reason": "stem asks for the structure but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-1-q80",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-2-q80",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q70",
+   "reason": "stem asks for the correct statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q70",
+   "reason": "stem asks for the structure but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q59",
+   "reason": "stem asks for the incorrect trend but the option trends are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q58",
+   "reason": "stem asks for the incorrect order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q4",
+   "reason": "stem admits multiple p+q values without options",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-2-q76",
+   "reason": "stem asks for the reaction but the option reactions are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q73",
+   "reason": "stem asks for the example but the option examples are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q74",
+   "reason": "stem asks for the structure but the option structures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q77",
+   "reason": "stem asks for the strongest base but the option bases are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-8-shift-2-q78",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q79",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q72",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q76",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q61",
+   "reason": "stem asks for the molecule but the option molecules are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-2-q63",
+   "reason": "stem asks for the entity but the option entities are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q52",
+   "reason": "stem asks for the molecules but the option molecules are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q71",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-1-q67",
+   "reason": "stem asks for the ions but the option ions are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q80",
+   "reason": "stem asks for the compound but the option compounds are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-9-shift-1-q70",
+   "reason": "stem asks for the basis but the option bases are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-2-q72",
+   "reason": "stem asks for the set but option element-set mapping is ambiguous",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-1-q64",
+   "reason": "stem asks for the reaction but the option reactions are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-2-q65",
+   "reason": "stem asks for the method but the option methods are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q56",
+   "reason": "stem asks for the order but the option orders are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-2-q56",
+   "reason": "stem asks for the species but the option species are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-31-shift-1-q62",
+   "reason": "stem asks for the mixture but the option mixtures are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-4-shift-2-q61",
+   "reason": "stem asks for the incorrect statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q5",
+   "reason": "stem ends before the consequent; options missing",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-6-shift-1-q2",
+   "reason": "stem ends before the asked property; options missing",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-30-shift-2-q30",
+   "reason": "recompute gives 320/11 versus mirror-claimed 29",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-apr-5-shift-2-q47",
+   "reason": "stem asks for the phenomenon but the option phenomena are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q44",
+   "reason": "stem asks for the phenomenon but the option phenomena are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q48",
+   "reason": "stem asks for the circuit but the option circuits are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q50",
+   "reason": "stem truncated mid-sentence with no mirror answer",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-jan-27-shift-1-q49",
+   "reason": "stem asks for the quantity but the option quantities are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2024-2024-feb-1-shift-1-q37",
+   "reason": "mirror carries no claimed answer; uncorroborated",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q31",
+   "reason": "stem asks for the true statement but the option statements are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q33",
+   "reason": "stem asks for the relation but the option relations are absent",
+   "date": "2026-10-06",
+   "scope": "CORRUPTED triage"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q11",
+   "reason": "area exceeds achievable maximum; inconsistent transcription",
+   "date": "2026-10-06",
+   "scope": "2026 Co-ordinate Geometry sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-2-shift-2-q41",
+   "reason": "incidence angle absent from the description",
+   "date": "2026-10-06",
+   "scope": "2026 Optics sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-1-q45",
+   "reason": "stem asks for the field expression but the option expressions are absent",
+   "date": "2026-10-06",
+   "scope": "2026 Optics sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q40",
+   "reason": "focal lengths absent; combination underdetermined without options",
+   "date": "2026-10-06",
+   "scope": "2026 Optics sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-1-q64",
+   "reason": "alkene reconstruction underdetermined without option structures",
+   "date": "2026-10-06",
+   "scope": "2026 GOC sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q65",
+   "reason": "description garbled; question unrecoverable",
+   "date": "2026-10-06",
+   "scope": "2026 GOC sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-8-shift-2-q63",
+   "reason": "stem asks for the exception but the option reactions are absent",
+   "date": "2026-10-06",
+   "scope": "2026 GOC sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-1-q64",
+   "reason": "retrosynthesis underdetermined without option structures",
+   "date": "2026-10-06",
+   "scope": "2026 GOC sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-6-shift-2-q16",
+   "reason": "parameter set open at both ends but stated half-closed; inconsistent",
+   "date": "2026-10-06",
+   "scope": "2026 LCD sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-1-q3",
+   "reason": "given data inconsistent; no such matrix exists",
+   "date": "2026-10-06",
+   "scope": "2026 Matrices sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q6",
+   "reason": "characteristic cubic has no clean root; unclosable without options",
+   "date": "2026-10-06",
+   "scope": "2026 Matrices sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q67",
+   "reason": "corrupted stem truncated (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Nitrogen sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q68",
+   "reason": "corrupted stem (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Biomolecules sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-8-shift-2-q69",
+   "reason": "corrupted stem (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Biomolecules sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q55",
+   "reason": "corrupted stem (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Chemical Thermodynamics sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-1-q72",
+   "reason": "recompute 42 (41.56) vs mirror 41; mismatch, left unverified",
+   "date": "2026-10-07",
+   "scope": "2026 Purification sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-1-q25",
+   "reason": "solution domain x<=e excludes e^12; inconsistent",
+   "date": "2026-10-07",
+   "scope": "2026 DE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q25",
+   "reason": "IF integral non-elementary; likely transcription issue",
+   "date": "2026-10-07",
+   "scope": "2026 DE sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-6-shift-2-q1",
+   "reason": "corrupted stem (options missing); unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 SRF sweep"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q15",
+   "reason": "stem missing its condition on A; unverifiable",
+   "date": "2026-10-07",
+   "scope": "2026 Vector sweep"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2021-feb-24-shift-1-q84",
+   "chapter": "Matrices and Determinants",
+   "reason": "independent recompute gives |P| = -3/2, k = -3, alpha^2+k^2 = 7033/576 (~12.2) vs mirror 17; likely matrix-entry transcription damage; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2020-jan-07-shift-1-q62",
+   "chapter": "Matrices and Determinants",
+   "reason": "determinant proof contradicts mirror: |det A| = 1/(3sqrt3) != 1 so A^28 != I and A^31 != A^3 as stated; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2019-jan-10-shift-2-q70",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "options 2 and 4 state the identical hyperbola claim and option 3 (ellipse case) is also correct; triple-ambiguous single-correct item; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2019-jan-10-shift-2-q81",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "stem is differential calculus (tangent to y = x e^x^2), mis-mapped to Co-ordinate Geometry; belongs to LCD/AOD chapter, not verified here",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2019-jan-12-shift-1-q71",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "solution set is the open interval (7,31) but no listed option matches it (closest [12,21] is a strict subset); option-set mismatch, not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q63",
+   "chapter": "Chemical Thermodynamics",
+   "reason": "heat-transfer process (constant P vs V) unspecified; option 1 (348 K/300 J) and option 4 (378 K/500 J) each valid under a standard reading; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q54",
+   "chapter": "Equilibrium",
+   "reason": "Kp option expressions garbled in transcription; cannot confirm which option matches x = (2Kp^2/p)^(1/3); not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q51",
+   "chapter": "Some Basic Principles of Organic Chemistry",
+   "reason": "final species transcription ambiguous (quaternary N vs amine); nucleophile count 5 vs 6 hinges on it; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-2-q24",
+   "chapter": "Complex Numbers and Quadratic Equations",
+   "reason": "modulus/determinant conditions unrecoverable from transcription; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q10",
+   "chapter": "Differential Equations",
+   "reason": "initial-condition value ambiguous in transcription; solution family does not land on any option under either reading; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-2-q21",
+   "chapter": "Integral Calculus",
+   "reason": "integrand transcription garbled (floor-term structure unrecoverable); not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q14",
+   "chapter": "Three Dimensional Geometry",
+   "reason": "lines as transcribed are skew (no intersection); stem inconsistent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q46",
+   "chapter": "Rotational Motion",
+   "reason": "r x F recomputes to 0 with transcribed vectors vs mirror 2; likely force-vector transcription damage; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q31",
+   "chapter": "Units and Measurements",
+   "reason": "velocity-expression transcription ambiguous; no dimensional reading resolves to the listed options; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-2-q48",
+   "chapter": "Units and Measurements",
+   "reason": "Q-expression exponent placement garbled; x = 77 vs 212 hinges on it; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeenify-main-2025-jan-29-shift-1-q41",
+   "chapter": "Work, Energy and Power",
+   "reason": "radical scope ambiguous (sqrt(ngR) vs n sqrt(gR)); options 2 and 4 split exactly on it; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q52",
+   "chapter": "Atomic Structure",
+   "reason": "stem asks which Bohr statement is incorrect but options absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q52",
+   "chapter": "Atomic Structure",
+   "reason": "stem asks which Bohr postulate disagrees with QM but options absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q70",
+   "chapter": "Biomolecules",
+   "reason": "dipeptide order (Ala-Gly vs Gly-Ala) underdetermined and options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-2-q71",
+   "chapter": "Chemical Kinetics",
+   "reason": "graph readings approximate (k drifts 0.102 to 0.081); first-order fit unverifiable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q73",
+   "chapter": "Chemical Thermodynamics",
+   "reason": "X-Y single-bond energy absent; resonance energy uncomputable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q56",
+   "chapter": "Classification of Elements",
+   "reason": "element list absent from transcription; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q58",
+   "chapter": "Classification of Elements",
+   "reason": "element list absent from transcription; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q61",
+   "chapter": "d- and f-Block Elements",
+   "reason": "ionisation-enthalpy pairs absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q60",
+   "chapter": "d- and f-Block Elements",
+   "reason": "ion sets absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q62",
+   "chapter": "d- and f-Block Elements",
+   "reason": "stem unrecoverable (corrupted PDF page both languages)",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q69",
+   "chapter": "Organic Nitrogen Compounds",
+   "reason": "benzenediazonium option figures unrecoverable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-2-q69",
+   "chapter": "Organic Nitrogen Compounds",
+   "reason": "tribromoaniline sequence options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q69",
+   "chapter": "Organic Nitrogen Compounds",
+   "reason": "reagent-set options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q68",
+   "chapter": "Organic Nitrogen Compounds",
+   "reason": "stem unrecoverable (corrupted PDF pages both languages)",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q58",
+   "chapter": "Practical Chemistry",
+   "reason": "sulphide options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q54",
+   "chapter": "Solutions",
+   "reason": "KH-vs-T options are graphs, unrecoverable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-2-q51",
+   "chapter": "Solutions",
+   "reason": "molarity-plot options are graphs, unrecoverable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q53",
+   "chapter": "Solutions",
+   "reason": "property options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q53",
+   "chapter": "Solutions",
+   "reason": "Kf formula transcription uncertain (missing square/1000); not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-8-shift-2-q52",
+   "chapter": "Solutions",
+   "reason": "mixture list absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q3",
+   "chapter": "Solutions",
+   "reason": "equation transcription yields non-integer form e^(8/5); integer-format mismatch, likely damaged; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q54",
+   "chapter": "Solutions",
+   "reason": "VP-T figure with options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q53",
+   "chapter": "Solutions",
+   "reason": "osmosis options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q51",
+   "chapter": "Some Basic Concepts",
+   "reason": "stem unrecoverable (corrupted PDF pages both languages)",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-2-q74",
+   "chapter": "GOC",
+   "reason": "alkene/alkyne reconstruction underdetermined; sigma count unverifiable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-2-q24",
+   "chapter": "Integral Calculus",
+   "reason": "integral substitution unrecoverable by hand; not independently verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q22",
+   "chapter": "Permutations and Combinations",
+   "reason": "stem corrupted in both languages; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q1",
+   "chapter": "Sets, Relations and Functions",
+   "reason": "stem missing (corrupted page 1); not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-2-q8",
+   "chapter": "Statistics and Probability",
+   "reason": "stem corrupted in both languages; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-2-shift-1-q13",
+   "chapter": "Three Dimensional Geometry",
+   "reason": "stem truncated at asked expression; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q14",
+   "chapter": "Three Dimensional Geometry",
+   "reason": "S1/S2 judgment options absent; mirror option letter unverifiable",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q14",
+   "chapter": "Vector Algebra",
+   "reason": "options absent and thumbnail numeric values uncertain; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-2-q37",
+   "chapter": "Current Electricity",
+   "reason": "resistor-combination options are circuit figures; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q36",
+   "chapter": "Current Electricity",
+   "reason": "circuit figure description too ambiguous to reconstruct; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-1-q38",
+   "chapter": "Electrostatics",
+   "reason": "q2 magnitude absent; K uncomputable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q50",
+   "chapter": "Electrostatics",
+   "reason": "charge-to-loop distance absent; flux uncomputable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39",
+   "chapter": "Magnetism",
+   "reason": "Amperian-loop counting needs figure detail; ambiguous; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q11",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "solved r = 7sqrt2/8 but expected numeric form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-2-q10",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "solved d^2 = 49/2 but expected form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-1-q10",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "distance sqrt2 exact but expected decimal form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-1-q11",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "latus rectum 18/5 exact but expected form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-1-q10",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "ordinate sum 3/2 exact but expected form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q12",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "angle derived but options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q11",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "two-ellipse premise inconsistent; likely transcription damage; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q10",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "vertex labeling insufficient; reconstruction non-clean; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q12",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "options absent for the ordered pair; not verified",
+   "date": "2026-10-09"
+  }
+ ],
+ "duplicate_skips": [
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-2-shift-2-q28",
+   "duplicate_of": "pyq-jee-main-2026-apr02-s2-phy-028",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-2-shift-2-q50",
+   "duplicate_of": "pyq-jee-main-2026-apr02-s2-phy-050",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-1-q30",
+   "duplicate_of": "pyq-jee-main-2026-apr04-s1-phy-030",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-4-shift-2-q35",
+   "duplicate_of": "pyq-jee-main-2026-apr04-s2-phy-035",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q30",
+   "duplicate_of": "pyq-jee-main-2026-apr05-s2-phy-030",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-5-shift-2-q31",
+   "duplicate_of": "pyq-jee-main-2026-apr05-s2-phy-031",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2026-2026-apr-8-shift-2-q32",
+   "duplicate_of": "pyq-jee-main-2026-apr08-s2-phy-032",
+   "date": "2026-10-07",
+   "scope": "2026 mop-up (identity already verified)"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q2-thermo-copy",
+   "reason": "multi-chapter queue copy; identity verified once under Sets/Relations",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22-kinematics-copy",
+   "reason": "multi-chapter queue copy; identity verified once under Binomial Theorem",
+   "date": "2026-10-09"
+  }
+ ]
+}

@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import settings
-from app.routes import auth, extract, payments
+from app.routes import auth, extract, jee, payments
 from app.exceptions import SnapNoteError
 from app.utils.visual_lesson import typst_status
 
@@ -39,6 +39,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(extract.router, prefix="/api/extract", tags=["extract"])
 app.include_router(payments.router, prefix="/api/payments", tags=["payments"])
+app.include_router(jee.router, prefix="/api/jee", tags=["jee"])
 
 
 @app.exception_handler(HTTPException)

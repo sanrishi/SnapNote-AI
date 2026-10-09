@@ -62,6 +62,80 @@ class DiagramSpec(BaseModel):
     uncertain: list[str] = []
 
 
+class JEEPyQRef(BaseModel):
+    """One verified PYQ record, exactly as stored. No computed statistics."""
+
+    question_id: str = ""
+    exam: str = ""
+    year: int = 0
+    session: Optional[str] = None
+    shift: Optional[str] = None
+    paper_question_number: int = 0
+    question_type: str = ""
+    marks: Optional[int] = None
+    question_summary: Optional[str] = None
+    source_url: str = ""
+    source_document: str = ""
+    source_class: str = "THIRD_PARTY_TRANSCRIPTION"
+    answer_key: Optional[str] = None
+    answer_status: str = "unconfirmed"  # "confirmed" | "unconfirmed"
+
+
+class JEEConceptRef(BaseModel):
+    concept_id: str = ""
+    name: str = ""
+
+
+class JEEPatternRef(BaseModel):
+    """One evidence-backed question pattern. Every pattern references only
+    verified question IDs that exist in the corpus; the UI must show the
+    coverage note instead of implying exhaustive discovery."""
+
+    pattern_id: str = ""
+    name: str = ""
+    sub_concept: str = ""
+    method: str = ""
+    question_ids: list[str] = []
+    coverage_note: str = ""
+
+
+class JEESyllabusRef(BaseModel):
+    node_id: str = ""
+    subtopic: str = ""
+    source_url: str = ""
+
+
+class JEEConceptContext(BaseModel):
+    """Student-facing JEE context for one lecture concept.
+
+    Every factual field traces to the stored syllabus/taxonomy/PYQ corpora.
+    match_status is 'unresolved' (nothing matched) or 'ambiguous' (tie)
+    instead of a forced guess — the UI must say less, not invent more.
+    """
+
+    concept_id: Optional[str] = None
+    canonical_name: Optional[str] = None
+    subject: str = ""
+    chapter: str = ""
+    subtopic: Optional[str] = None
+    syllabus: Optional[JEESyllabusRef] = None
+    match_status: str = "unresolved"  # "matched" | "ambiguous" | "unresolved"
+    evidence: list[str] = []
+    candidates: list[JEEConceptRef] = []  # tied concepts when ambiguous
+    prerequisites: list[JEEConceptRef] = []
+    related: list[JEEConceptRef] = []
+    pyqs: list[JEEPyQRef] = []
+    pyq_count: int = 0
+    pyqs_truncated: bool = False
+    patterns: list[JEEPatternRef] = []
+    coverage_note: str = ""
+
+
+class JEEMapRequest(BaseModel):
+    topic_title: str = ""
+    key_terms: list[str] = []
+
+
 class StudyNotes(BaseModel):
     topic: TopicInfo = TopicInfo()
     what_you_should_remember: str = ""
@@ -85,6 +159,7 @@ class ExtractionResponse(BaseModel):
     creditsUsed: int
     studyNotes: Optional[StudyNotes] = None
     diagramId: Optional[str] = None
+    jee: Optional[JEEConceptContext] = None
 
 
 class ExtractionContext(BaseModel):
@@ -126,6 +201,7 @@ class DeviceAuthResponse(BaseModel):
 class RevisionResponse(BaseModel):
     study_notes: StudyNotes
     creditsUsed: int
+    jee: Optional[JEEConceptContext] = None
 
 
 class DiagramResult(BaseModel):

@@ -12,3 +12,7 @@ dist/
 *.log
 .DS_Store
 *.db
+docs/jee-pyq-corpus/index/official_index.json
+docs/jee-pyq-corpus/index/pages/
+docs/jee-pyq-corpus/index/*.local.json
+docs/jee-pyq-corpus/.cache/

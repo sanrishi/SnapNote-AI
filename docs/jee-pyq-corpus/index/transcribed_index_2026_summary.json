@@ -1,0 +1,35 @@
+{
+ "index": {
+  "total_records": 600,
+  "by_year": {
+   "2026": 600
+  },
+  "by_subject": {
+   "Physics": 200,
+   "Chemistry": 200,
+   "Mathematics": 200
+  },
+  "by_shift_count": 8,
+  "shifts": [
+   "2026 | April 2026 | Shift 1 (4 Apr 2026)",
+   "2026 | April 2026 | Shift 1 (5 Apr 2026)",
+   "2026 | April 2026 | Shift 1 (6 Apr 2026)",
+   "2026 | April 2026 | Shift 2 (2 Apr 2026)",
+   "2026 | April 2026 | Shift 2 (4 Apr 2026)",
+   "2026 | April 2026 | Shift 2 (5 Apr 2026)",
+   "2026 | April 2026 | Shift 2 (6 Apr 2026)",
+   "2026 | April 2026 | Shift 2 (8 Apr 2026)"
+  ],
+  "source_ids": [
+   "jeeprep-main-2026-2026-apr-2-shift-2",
+   "jeeprep-main-2026-2026-apr-4-shift-1",
+   "jeeprep-main-2026-2026-apr-4-shift-2",
+   "jeeprep-main-2026-2026-apr-5-shift-1",
+   "jeeprep-main-2026-2026-apr-5-shift-2",
+   "jeeprep-main-2026-2026-apr-6-shift-1",
+   "jeeprep-main-2026-2026-apr-6-shift-2",
+   "jeeprep-main-2026-2026-apr-8-shift-2"
+  ]
+ },
+ "failures": []
+}

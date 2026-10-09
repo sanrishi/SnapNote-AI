@@ -60,6 +60,7 @@ function handleResult(result, mode) {
       markdown: result.markdown,
       imageUrl: result.imageUrl,
       tags: result.tags,
+      jee: result.jee || null,
       timestamp: Date.now(),
     },
   });

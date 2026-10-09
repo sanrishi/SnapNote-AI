@@ -1,0 +1,827 @@
+{
+ "Atomic Structure": {
+  "chapter_id": "jee-chemistry-atomic-structure-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Atoms and Nuclei": {
+  "chapter_id": "jee-physics-atoms-and-nuclei-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Binomial Theorem": {
+  "chapter_id": "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Biomolecules": {
+  "chapter_id": "jee-chemistry-biomolecules-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Chemical Bonding and Molecular Structure": {
+  "chapter_id": "jee-chemistry-chemical-bonding-and-molecular-structure-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Chemical Kinetics": {
+  "chapter_id": "jee-chemistry-chemical-kinetics-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Chemical Thermodynamics": {
+  "chapter_id": "jee-chemistry-chemical-thermodynamics-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Circles": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Classification of Elements and Periodicity": {
+  "chapter_id": "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter",
+  "subject": "Chemistry",
+  "via": "special-case"
+ },
+ "Complex Numbers": {
+  "chapter_id": "jee-mathematics-complex-numbers-and-quadratic-equations-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Conic Sections": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Coordination Compounds": {
+  "chapter_id": "jee-chemistry-coordination-compounds-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Current Electricity": {
+  "chapter_id": "jee-physics-current-electricity-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Differential Equations": {
+  "chapter_id": "jee-mathematics-diffrential-equations-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Differentiation and Applications of Derivatives": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Dual Nature of Matter and Radiation": {
+  "chapter_id": "jee-physics-dual-nature-of-matter-and-radiation-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Electromagnetic Induction and Alternating Currents": {
+  "chapter_id": "jee-physics-electromagnetic-induction-and-alternating-currents-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Electromagnetic Waves": {
+  "chapter_id": "jee-physics-electromagnetic-waves-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Electronic Devices": {
+  "chapter_id": "jee-physics-electronic-devices-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Electrostatics": {
+  "chapter_id": "jee-physics-electrostatics-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Equilibrium": {
+  "chapter_id": "jee-chemistry-equilibrium-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Experimental Skills": {
+  "chapter_id": "jee-physics-experimental-skills-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Gravitation": {
+  "chapter_id": "jee-physics-gravitation-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Hydrocarbons": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "special-case"
+ },
+ "Integral Calculus": {
+  "chapter_id": "jee-mathematics-integral-calculas-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Inverse Trigonometric Functions": {
+  "chapter_id": "jee-mathematics-trigonometry-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Kinematics": {
+  "chapter_id": "jee-physics-kinematics-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Kinetic Theory of Gases": {
+  "chapter_id": "jee-physics-kinetic-theory-of-gases-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Laws of Motion": {
+  "chapter_id": "jee-physics-laws-of-motion-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Limits, Continuity and Differentiability": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Magnetic Effects of Current and Magnetism": {
+  "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Matrices and Determinants": {
+  "chapter_id": "jee-mathematics-matrices-and-determinants-chapter",
+  "subject": "Mathematics",
+  "via": "exact-unit-match"
+ },
+ "Organic Compounds Containing Halogens": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-halogens-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Organic Compounds Containing Nitrogen": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-nitrogen-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Organic Compounds Containing Oxygen": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Oscillations": {
+  "chapter_id": "jee-physics-oscillations-and-waves-chapter",
+  "subject": "Physics",
+  "via": "special-case"
+ },
+ "Permutations and Combinations": {
+  "chapter_id": "jee-mathematics-permutations-and-combinations-chapter",
+  "subject": "Mathematics",
+  "via": "exact-unit-match"
+ },
+ "Principles Related to Practical Chemistry": {
+  "chapter_id": "jee-chemistry-principles-related-to-practical-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Probability": {
+  "chapter_id": "jee-mathematics-statistics-and-probability-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Properties of Solids and Liquids": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Purification and Characterisation of Organic Compounds": {
+  "chapter_id": "jee-chemistry-purification-and-characterisation-of-organic-compounds-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Quadratic Equations": {
+  "chapter_id": "jee-mathematics-complex-numbers-and-quadratic-equations-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Ray Optics": {
+  "chapter_id": "jee-physics-optics-chapter",
+  "subject": "Physics",
+  "via": "special-case"
+ },
+ "Redox Reactions and Electrochemistry": {
+  "chapter_id": "jee-chemistry-redox-reactions-and-electrochemistry-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Rotational Motion": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Sequences and Series": {
+  "chapter_id": "jee-mathematics-sequence-and-series-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Sets, Relations and Functions": {
+  "chapter_id": "jee-mathematics-sets-relations-and-functions-chapter",
+  "subject": "Mathematics",
+  "via": "exact-unit-match"
+ },
+ "Solutions": {
+  "chapter_id": "jee-chemistry-solutions-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Some Basic Concepts in Chemistry": {
+  "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Some Basic Principles of Organic Chemistry": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Statistics": {
+  "chapter_id": "jee-mathematics-statistics-and-probability-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Straight Lines": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Thermodynamics": {
+  "chapter_id": "jee-chemistry-chemical-thermodynamics-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Three Dimensional Geometry": {
+  "chapter_id": "jee-mathematics-three-dimensional-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "exact-unit-match"
+ },
+ "Trigonometric Ratios and Equations": {
+  "chapter_id": "jee-mathematics-trigonometry-chapter",
+  "subject": "Mathematics",
+  "via": "special-case"
+ },
+ "Units and Measurements": {
+  "chapter_id": "jee-physics-units-and-measurements-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "Vector Algebra": {
+  "chapter_id": "jee-mathematics-vector-algebra-chapter",
+  "subject": "Mathematics",
+  "via": "exact-unit-match"
+ },
+ "Wave Optics": {
+  "chapter_id": "jee-physics-optics-chapter",
+  "subject": "Physics",
+  "via": "special-case"
+ },
+ "Waves": {
+  "chapter_id": "jee-physics-oscillations-and-waves-chapter",
+  "subject": "Physics",
+  "via": "special-case"
+ },
+ "Work, Energy and Power": {
+  "chapter_id": "jee-physics-work-energy-and-power-chapter",
+  "subject": "Physics",
+  "via": "exact-unit-match"
+ },
+ "d- and f-Block Elements": {
+  "chapter_id": "jee-chemistry-d-and-f-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "p-Block Elements": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "exact-unit-match"
+ },
+ "Vectors": {
+  "chapter_id": "jee-mathematics-vector-algebra-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Determinants": {
+  "chapter_id": "jee-mathematics-matrices-and-determinants-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Coordinate Geometry": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Sequence and Series": {
+  "chapter_id": "jee-mathematics-sequence-and-series-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Complex Numbers and Quadratic Equations": {
+  "chapter_id": "jee-mathematics-complex-numbers-and-quadratic-equations-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Binomial Theorem and its Simple Applications": {
+  "chapter_id": "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Motion in a Plane": {
+  "chapter_id": "jee-physics-kinematics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Physics and Measurement": {
+  "chapter_id": "jee-physics-units-and-measurements-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Electronic Devices and Communication": {
+  "chapter_id": "jee-physics-electronic-devices-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Oscillations and Waves": {
+  "chapter_id": "jee-physics-oscillations-and-waves-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Haloalkanes and Haloarenes": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-halogens-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Alcohols, Phenols and Ethers": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Amines": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-nitrogen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "The d- and f-Block Elements": {
+  "chapter_id": "jee-chemistry-d-and-f-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Co-ordinate Geometry": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Thermal Properties of Matter": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Dual Nature of Radiation and Matter": {
+  "chapter_id": "jee-physics-dual-nature-of-matter-and-radiation-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Semiconductor Electronics": {
+  "chapter_id": "jee-physics-electronic-devices-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Electromagnetic Induction": {
+  "chapter_id": "jee-physics-electromagnetic-induction-and-alternating-currents-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Moving Charges and Magnetism": {
+  "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Mechanical Properties of Fluids": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Electrostatic Potential and Capacitance": {
+  "chapter_id": "jee-physics-electrostatics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Ray Optics and Optical Instruments": {
+  "chapter_id": "jee-physics-optics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Electromagnetic Oscillations": {
+  "chapter_id": "jee-physics-electromagnetic-induction-and-alternating-currents-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Aldehydes, Ketones and Carboxylic Acids": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Classification of Elements and Periodicity in Properties": {
+  "chapter_id": "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Trigonometry": {
+  "chapter_id": "jee-mathematics-trigonometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Statistics and Probability": {
+  "chapter_id": "jee-mathematics-statistics-and-probability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Limit, Continuity and Differentiability": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "d- and f- Block Elements": {
+  "chapter_id": "jee-chemistry-d-and-f-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Electrochemistry": {
+  "chapter_id": "jee-chemistry-redox-reactions-and-electrochemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Chemical Equilibrium": {
+  "chapter_id": "jee-chemistry-equilibrium-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Magnetic Effects of Current": {
+  "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Magnetism and Matter": {
+  "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Moving charges and magnetism": {
+  "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Alternating Current": {
+  "chapter_id": "jee-physics-electromagnetic-induction-and-alternating-currents-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Capacitors": {
+  "chapter_id": "jee-physics-electrostatics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Nuclei": {
+  "chapter_id": "jee-physics-atoms-and-nuclei-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Atoms": {
+  "chapter_id": "jee-physics-atoms-and-nuclei-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "System of Particles and Rotational Motion": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Rotational motion": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Center of mass": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Angular Momentum": {
+  "chapter_id": "jee-physics-rotational-motion-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Collision": {
+  "chapter_id": "jee-physics-work-energy-and-power-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Motion in a Straight Line": {
+  "chapter_id": "jee-physics-kinematics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Projectile Motion": {
+  "chapter_id": "jee-physics-kinematics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Mechanical Properties of Solids": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Properties of Solids": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Kinetic Theory": {
+  "chapter_id": "jee-physics-kinetic-theory-of-gases-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Kinetic theory of gases": {
+  "chapter_id": "jee-physics-kinetic-theory-of-gases-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Current electricity": {
+  "chapter_id": "jee-physics-current-electricity-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Ray optics": {
+  "chapter_id": "jee-physics-optics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Optics - Lens": {
+  "chapter_id": "jee-physics-optics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Dual nature of matter": {
+  "chapter_id": "jee-physics-dual-nature-of-matter-and-radiation-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Heat and Thermodynamics": {
+  "chapter_id": "jee-physics-thermodynamics-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Simple Harmonic Motion": {
+  "chapter_id": "jee-physics-oscillations-and-waves-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ },
+ "Chemical Bonding": {
+  "chapter_id": "jee-chemistry-chemical-bonding-and-molecular-structure-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Redox Reactions": {
+  "chapter_id": "jee-chemistry-redox-reactions-and-electrochemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Structure of Atom": {
+  "chapter_id": "jee-chemistry-atomic-structure-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Mole Concept": {
+  "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Some Basic Concepts of Chemistry": {
+  "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Some Basic Concepts of Chemistry / Stoichiometry": {
+  "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Ionic Equilibrium": {
+  "chapter_id": "jee-chemistry-equilibrium-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Chemical and Ionic Equilibrium": {
+  "chapter_id": "jee-chemistry-equilibrium-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Physical Chemistry - Chemical Kinetics": {
+  "chapter_id": "jee-chemistry-chemical-kinetics-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Coordination Chemistry": {
+  "chapter_id": "jee-chemistry-coordination-compounds-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Aldehydes Ketones and Carboxylic Acids": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Aldehydes, Ketones and Carboxylic Acids": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Carbonyl Compounds (Aldehydes, Ketones)": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Alcohols, Phenols and Ethers; Aldehydes and Ketones": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Alcohols, Phenols and Ethers": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Some Basic Principles and Techniques": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry — Some Basic Principles and Techniques": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry — Some Basic Principles": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Basic Principles": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Reaction Mechanism": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Periodic Table and Properties": {
+  "chapter_id": "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Periodic Properties": {
+  "chapter_id": "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "The p-Block Elements": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "p-Block Elements (Group 13 and 14)": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "p-Block Elements (Group 15)": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "d and f Block Elements": {
+  "chapter_id": "jee-chemistry-d-and-f-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Qualitative Analysis": {
+  "chapter_id": "jee-chemistry-principles-related-to-practical-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Relations and Functions": {
+  "chapter_id": "jee-mathematics-sets-relations-and-functions-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Functions": {
+  "chapter_id": "jee-mathematics-sets-relations-and-functions-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Limits": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Limits and Continuity": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Continuity and Differentiability": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Definite Integration": {
+  "chapter_id": "jee-mathematics-integral-calculas-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Limits and Integration": {
+  "chapter_id": "jee-mathematics-integral-calculas-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Application of Integrals": {
+  "chapter_id": "jee-mathematics-integral-calculas-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "3D Geometry": {
+  "chapter_id": "jee-mathematics-three-dimensional-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Conic Sections - Parabola": {
+  "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Matrices": {
+  "chapter_id": "jee-mathematics-matrices-and-determinants-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Arithmetic Progression": {
+  "chapter_id": "jee-mathematics-sequence-and-series-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Basic Principles of Organic Chemistry": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Chemistry - Some Basic Principles": {
+  "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Compounds Containing Nitrogen / Amines": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-nitrogen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Organic Compounds Containing Oxygen / Phenols": {
+  "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Equilibrium / Ionic Equilibrium": {
+  "chapter_id": "jee-chemistry-equilibrium-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "p-Block Elements (Group 16)": {
+  "chapter_id": "jee-chemistry-p-block-elements-chapter",
+  "subject": "Chemistry",
+  "via": "jeenify-variant"
+ },
+ "Differentiation": {
+  "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
+  "subject": "Mathematics",
+  "via": "jeenify-variant"
+ },
+ "Mechanics of Fluids": {
+  "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
+  "subject": "Physics",
+  "via": "jeenify-variant"
+ }
+}
