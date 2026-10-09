@@ -426,3 +426,62 @@ def test_visual_route_r2_generated_then_reused(sample_diagram_image, monkeypatch
     assert render_mock.await_count == 1
     remaining, _ = get_credits(device)
     assert remaining == 45
+
+
+# ── visual storage failure: honest 502, notes untouched, free retry ──
+
+def test_visual_route_storage_failure_then_retry(sample_diagram_image, monkeypatch):
+    """Production hotfix regression: when the upload returns no URL, the
+    visual route must answer 502 (never a fake success), charge nothing, and
+    let the same entitlement succeed on retry without a second generation."""
+    from app.utils.credits_store import get_credits, get_visual_entitlement
+
+    device = "visual-fail-device-00000000-0000-000000000003"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    png = _make_png()
+    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=object()))
+    monkeypatch.setattr("app.routes.extract.should_use_v3", lambda spec: False)
+    monkeypatch.setattr("app.routes.extract.generate_visual", AsyncMock(return_value=("png", png)))
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    # Failure first: upload returns no URL.
+    monkeypatch.setattr("app.routes.extract.upload_image", lambda *a, **k: None)
+    resp_fail = asyncio.run(run_visual())
+    assert resp_fail.status_code == 502
+    assert "Could not store" in resp_fail.json()["error"]
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")  # nothing stored, no fake state
+    remaining, _ = get_credits(device)
+    assert remaining == 45  # diagram charged once; failed visual charged nothing
+
+    # Retry with a working upload: succeeds, still free, stored once.
+    monkeypatch.setattr(
+        "app.routes.extract.upload_image",
+        lambda *a, **k: "data:image/png;base64," + base64.b64encode(png).decode("ascii"),
+    )
+    resp_ok = asyncio.run(run_visual())
+    assert resp_ok.status_code == 200
+    assert resp_ok.json()["status"] == "generated"
+    assert get_visual_entitlement(diagram_id)[1] is not None
+    remaining, _ = get_credits(device)
+    assert remaining == 45

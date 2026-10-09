@@ -197,3 +197,46 @@ def test_mapping_touches_no_credits():
         asyncio.run(_map("Torque", ["τ"]))
     finally:
         credits_store.use_credits, credits_store.add_credits = orig_use, orig_add
+
+
+# Production hotfix regression: the rotational-dynamics lecture must resolve
+# to a defensible concept (never silent unresolved, never a one-word fluke).
+def test_rotational_lecture_resolves_with_evidence():
+    body = asyncio.run(_map(
+        "Rotational Dynamics and Angular Speed",
+        ["rigid body", "pure translation", "pure rotation",
+         "combined translation and rotation", "angular speed",
+         "relative velocity between points on a rigid body"],
+    ))
+    assert body["match_status"] in ("matched", "ambiguous")
+    assert body["match_status"] != "unresolved"
+    if body["match_status"] == "matched":
+        assert body["concept_id"] == "jee-physics-rotational-motion-concept-014"
+        assert len(body["evidence"]) >= 2
+        assert body["pyq_count"] >= 1
+        # Every returned PYQ must actually apply to the matched concept.
+        import glob
+        import json as _json
+        import os as _os
+        repo = _os.path.dirname(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))))
+        mapped = set()
+        for path in glob.glob(_os.path.join(repo, "docs", "jee-pyq-corpus", "data", "*-pyq.json")):
+            with open(path, encoding="utf-8") as fh:
+                for record in _json.load(fh):
+                    if body["concept_id"] in record.get("concept_ids", []):
+                        mapped.add(record["question_id"])
+        assert {p["question_id"] for p in body["pyqs"]} <= mapped
+    else:
+        assert len(body["candidates"]) >= 2
+
+
+def test_chapter_fallback_needs_two_hits():
+    from app.services.jee_service import resolve_concept
+    # One stray chapter token is not enough for a chapter-level match.
+    concept, status, _, _ = resolve_concept("Spinning", ["spinning"])
+    assert status == "unresolved" and concept is None
+    # Two independent chapter hits resolve at chapter granularity.
+    concept, status, evidence, _ = resolve_concept("Rotational", ["rotational"])
+    assert status == "matched" and concept is not None
+    assert concept["concept_id"] == "jee-physics-rotational-motion-chapter"
+    assert any("chapter-level" in e for e in evidence)

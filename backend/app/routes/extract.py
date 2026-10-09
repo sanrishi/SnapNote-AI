@@ -396,9 +396,25 @@ async def extract_visual_route(
         )
 
     t_upload = time.perf_counter()
+    try:
+        from app.services.storage_service import _detect_mime
+        logger.info(
+            "Explain Visually uploading (diagram %s): mode=%s bytes=%d mime=%s",
+            diagramId[:8], mode, len(payload), _detect_mime(payload),
+        )
+    except Exception as e:
+        logger.warning(
+            "Explain Visually payload failed format check (diagram %s): %s",
+            diagramId[:8], e,
+        )
+        raise UpstreamError(service="SnapNote AI", detail="Could not store the generated visual. Please try again.")
     visual_url = await asyncio.to_thread(upload_image, payload, {"title": "explain-visually"})
     upload_ms = (time.perf_counter() - t_upload) * 1000
     if not visual_url:
+        logger.warning(
+            "Explain Visually storage upload returned no URL (diagram %s, mode=%s, upload=%.1fms)",
+            diagramId[:8], mode, upload_ms,
+        )
         raise UpstreamError(service="SnapNote AI", detail="Could not store the generated visual. Please try again.")
 
     # A v3-composed PNG is deterministic content (Typst from a validated spec),
