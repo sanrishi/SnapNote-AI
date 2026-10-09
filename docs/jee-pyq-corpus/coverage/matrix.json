@@ -32110,11 +32110,22 @@
    ],
    "source_status": "parsed",
    "status": "partial"
+  },
+  {
+   "exam": "JEE Main",
+   "year": 2023,
+   "session": "January 2023",
+   "shift": "Shift 1 (24 January 2023)",
+   "chapter": "Rotational Motion",
+   "verified_questions": 0,
+   "verified_ids": [],
+   "source_status": "parsed",
+   "status": "in-progress"
   }
  ],
  "totals": {
   "verified_records": 3165,
-  "sources_parsed": 50,
+  "sources_parsed": 51,
   "sources_discovered": 3
  },
  "index_dashboard": {

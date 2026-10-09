@@ -10,11 +10,17 @@ End-to-end flow as built, with the bottleneck each stage hits at 10k+ scale.
    mirror URL, pdf_sha256, parser_status, verification_status
    -> bottleneck at scale: manual per-paper discovery. Needs adapter pattern.
 
-2. EXTRACTION
-   - extract_paper.py: NTA PDF text-structure + OCR stems (2026 direct PDFs)
-   - build_transcribed_index.py: third-party HTML mirror pages (2024-2025)
-   - build_index.py: OCR physics slices -> official_index (local, gitignored)
-   -> bottleneck: one adapter per source class; no shared record schema yet.
+ 2. EXTRACTION
+    - extract_paper.py: NTA PDF text-structure + OCR stems (2026 direct PDFs)
+    - build_transcribed_index.py: third-party HTML mirror pages (2024-2025)
+    - build_index.py: OCR physics slices -> official_index (local, gitignored)
+    - ingestion/parse_jeenify.py + index/build_jeenify_index.py: JEEnify
+      paper pages 2016-2026 (JSON-LD + server-rendered HTML) ->
+      transcribed_index_jeenify.local.json (gitignored) + public summary.
+      Subject identity is position-based (robust to dropped-question gaps);
+      index/build_jeenify_queues.py emits per-chapter .jeenify.local.json
+      queues checked against the full verified corpus.
+    -> bottleneck: one adapter per source class; no shared record schema yet.
 
 3. NORMALIZATION + FINGERPRINT
    discovery/import_candidates.normalize_text (shared by importer, index, join)
