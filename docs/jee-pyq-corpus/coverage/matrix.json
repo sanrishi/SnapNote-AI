@@ -33253,15 +33253,15 @@
   "source_linked_queue": 50,
   "verified_records": 3271,
   "external_candidates_quarantined": 703,
-  "review_batches": 109,
+  "review_batches": 110,
   "queue_cumulative": {
-   "reviewed": 222,
+   "reviewed": 241,
    "verified": 162,
    "rejected": 1,
    "ambiguous": 0
   },
   "queue_state": "fully resolved: 49 verified + 1 rejected (jan31-s2-q52, mirror 53 vs recomputed 61)",
-  "verification_rate_reviewed": 0.7297,
+  "verification_rate_reviewed": 0.6722,
   "concept_distribution": {
    "jee-chemistry-atomic-structure-chapter": 42,
    "jee-chemistry-biomolecules-chapter": 39,

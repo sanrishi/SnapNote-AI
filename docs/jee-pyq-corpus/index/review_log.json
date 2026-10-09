@@ -1545,10 +1545,35 @@
     "cand-jeeprep-main-2025-2025-jan-22-shift-1-q22 (kinematics queue copy; verified via bonding-queue entry under Binomial Theorem)"
    ],
    "audit_catch": "audit duplicate-id gate caught 4 records mislabeled with wrong paper identities (jan-29 solves written under jeeprep qids colliding with genuine Hinsberg/Tollens/Fittig records); removed before commit; genuine originals untouched"
+  },
+  {
+   "batch": 110,
+   "classes": "B_NEEDS_REVIEW",
+   "date": "2026-10-09",
+   "reviewed": 19,
+   "verified": 0,
+   "rejected": 0,
+   "ambiguous": 0,
+   "scope": "2025 CG NSR recovery sweep (19 reviewed: 0 new records - all 10 solvable already verified; 9 demoted; 10 duplicate corroborations with 10 answer backfills; 3 mislabeled shift writes caught by registry test and removed pre-commit)",
+   "demotions": [
+    "cand-jeeprep-main-2025-2025-apr-3-shift-1-q11",
+    "cand-jeeprep-main-2025-2025-apr-3-shift-2-q10",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-1-q10",
+    "cand-jeeprep-main-2025-2025-apr-4-shift-1-q11",
+    "cand-jeeprep-main-2025-2025-apr-7-shift-1-q10",
+    "cand-jeeprep-main-2025-2025-jan-23-shift-1-q12",
+    "cand-jeeprep-main-2025-2025-jan-24-shift-1-q11",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q10",
+    "cand-jeeprep-main-2025-2025-jan-28-shift-1-q12"
+   ],
+   "duplicates": [
+    "7 earlier-sweep identities corroborated + 3 shift-2 identities corroborated; 10 answer_keys backfilled with recomputation notes"
+   ],
+   "audit_catch": "registry-consistency test caught 3 records labeled shift-1 for shift-2 questions (already verified); removed before commit; answers backfilled into genuine records"
   }
  ],
  "cumulative": {
-  "reviewed": 222,
+  "reviewed": 241,
   "verified": 162,
   "rejected": 1,
   "ambiguous": 0
@@ -3230,6 +3255,60 @@
    "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-2-q39",
    "chapter": "Magnetism",
    "reason": "Amperian-loop counting needs figure detail; ambiguous; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-1-q11",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "solved r = 7sqrt2/8 but expected numeric form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-3-shift-2-q10",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "solved d^2 = 49/2 but expected form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-1-q10",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "distance sqrt2 exact but expected decimal form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-4-shift-1-q11",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "latus rectum 18/5 exact but expected form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-apr-7-shift-1-q10",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "ordinate sum 3/2 exact but expected form unconfirmable; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-23-shift-1-q12",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "angle derived but options absent; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-24-shift-1-q11",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "two-ellipse premise inconsistent; likely transcription damage; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q10",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "vertex labeling insufficient; reconstruction non-clean; not verified",
+   "date": "2026-10-09"
+  },
+  {
+   "queue_id": "cand-jeeprep-main-2025-2025-jan-28-shift-1-q12",
+   "chapter": "Co-ordinate Geometry",
+   "reason": "options absent for the ordered pair; not verified",
    "date": "2026-10-09"
   }
  ],

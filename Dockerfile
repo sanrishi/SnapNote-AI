@@ -38,9 +38,13 @@ COPY backend/ .
 
 # JEE corpora (single source of truth stays in docs/): copied read-only so the
 # API can serve syllabus/taxonomy/PYQ lookups without network or database.
-COPY docs/jee-concept-taxonomy/data/jee-physics-rotational-motion-taxonomy.json ./jee-data/taxonomy.json
-COPY docs/jee-syllabus-corpus/data/jee-main-physics-rotational-motion.json ./jee-data/syllabus.json
-COPY docs/jee-pyq-corpus/data/jee-main-physics-rotational-pyq.json ./jee-data/pyq.json
+# Whole data dirs (~6 MB) — the service aggregates every *-pyq.json shard,
+# so shipping only the legacy rotational slice would silently hide chapters.
+COPY docs/jee-pyq-corpus/data/ ./jee-data/
+COPY docs/jee-pyq-corpus/patterns/jee-question-patterns.json ./jee-data/
+COPY docs/jee-concept-taxonomy/data/ ./jee-data/
+COPY docs/jee-chapter-taxonomy/data/ ./jee-data/
+COPY docs/jee-syllabus-corpus/data/ ./jee-data/
 
 EXPOSE 8000
 

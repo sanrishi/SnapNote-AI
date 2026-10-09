@@ -20,11 +20,69 @@ from pathlib import Path
 from app.models.schemas import (
     JEEConceptContext,
     JEEConceptRef,
+    JEEPatternRef,
     JEEPyQRef,
     JEESyllabusRef,
 )
 
 logger = logging.getLogger(__name__)
+
+# Cap the inline PYQ list so one popular chapter cannot bloat the response.
+# pyq_count always reports the full total; pyqs_truncated says more exist.
+MAX_INLINE_PYQS = 25
+
+
+def _source_class(record: dict) -> str:
+    """Provenance class derived from stored evidence, never assumed.
+
+    OFFICIAL only for NTA-hosted documents; everything else stays
+    THIRD_PARTY_TRANSCRIPTION (mirrors are never silently promoted).
+    """
+    url = str(record.get("source_url", ""))
+    document = str(record.get("source_document", ""))
+    if "third-party transcription" in document:
+        return "THIRD_PARTY_TRANSCRIPTION"
+    if "cdnbbsr.s3waas.gov.in" in url or "nta.ac.in" in url:
+        return "OFFICIAL"
+    return "THIRD_PARTY_TRANSCRIPTION"
+
+
+def _patterns_for(chapter_id: str, valid_ids: set[str]) -> list[JEEPatternRef]:
+    """Evidence-backed patterns for one chapter.
+
+    Only patterns whose every referenced question exists in the loaded
+    corpus are published; anything else stays out of the response.
+    """
+    found: list[JEEPatternRef] = []
+    for root in _candidate_roots():
+        path = root / "jee-question-patterns.json"
+        if not path.is_file():
+            continue
+        try:
+            with path.open(encoding="utf-8") as fh:
+                data = json.load(fh)
+        except (OSError, ValueError):
+            logger.warning("JEE patterns file unreadable: %s", path)
+            continue
+        if isinstance(data, list):
+            for pattern in data:
+                if pattern.get("chapter_id") != chapter_id:
+                    continue
+                question_ids = [str(q) for q in pattern.get("question_ids", [])]
+                if not question_ids or any(q not in valid_ids for q in question_ids):
+                    continue
+                found.append(
+                    JEEPatternRef(
+                        pattern_id=str(pattern.get("pattern_id", "")),
+                        name=str(pattern.get("name", "")),
+                        sub_concept=str(pattern.get("sub_concept", "")),
+                        method=str(pattern.get("method", "")),
+                        question_ids=question_ids,
+                        coverage_note=str(pattern.get("coverage_note", "")),
+                    )
+                )
+        break
+    return found
 
 _SLICE_FILES = {
     # Canonical docs/ filenames first, then the flattened Docker image names.
@@ -56,6 +114,7 @@ def _candidate_roots() -> list[Path]:
     roots.append(repo / "docs" / "jee-chapter-taxonomy" / "data")
     roots.append(repo / "docs" / "jee-syllabus-corpus" / "data")
     roots.append(repo / "docs" / "jee-pyq-corpus" / "data")
+    roots.append(repo / "docs" / "jee-pyq-corpus" / "patterns")
     return roots
 
 
@@ -207,6 +266,8 @@ def _pyqs_for(concept_id: str) -> list[JEEPyQRef]:
     refs = []
     for record in _pyq_records():
         if concept_id in record.get("concept_ids", []):
+            answer_key = record.get("answer_key")
+            answer_text = str(answer_key) if answer_key is not None else None
             refs.append(
                 JEEPyQRef(
                     question_id=str(record.get("question_id", "")),
@@ -220,8 +281,13 @@ def _pyqs_for(concept_id: str) -> list[JEEPyQRef]:
                     question_summary=record.get("question_summary"),
                     source_url=str(record.get("source_url", "")),
                     source_document=str(record.get("source_document", "")),
+                    source_class=_source_class(record),
+                    answer_key=answer_text,
+                    answer_status="confirmed" if answer_text is not None else "unconfirmed",
                 )
             )
+    # Newest first; the inline list is capped (pyq_count keeps the total).
+    refs.sort(key=lambda ref: (ref.year, ref.paper_question_number), reverse=True)
     return refs
 
 
@@ -245,6 +311,29 @@ def map_concept_to_jee(topic_title: str, key_terms: list[str]) -> JEEConceptCont
     ]
     pyqs = _pyqs_for(str(concept["concept_id"]))
     syllabus = _syllabus_link(concept)
+    valid_ids = {ref.question_id for ref in pyqs}
+    chapter_id = str(concept.get("chapter_id", "") or concept.get("concept_id", ""))
+    patterns = _patterns_for(chapter_id, valid_ids)
+    truncated = len(pyqs) > MAX_INLINE_PYQS
+    inline_pyqs = pyqs[:MAX_INLINE_PYQS]
+    parts: list[str] = []
+    if syllabus is None:
+        parts.append("no syllabus entry is stored for it")
+    if not pyqs:
+        parts.append(
+            "no verified PYQs are stored for this concept yet — that reflects "
+            "corpus coverage, not proof JEE never tested it"
+        )
+    else:
+        parts.append(f"{len(pyqs)} verified PYQ(s) stored")
+        if patterns:
+            parts.append(
+                f"across {len(patterns)} observed pattern(s); pattern "
+                "discovery is ongoing, not exhaustive"
+            )
+        else:
+            parts.append("question-pattern mapping for this chapter is still incomplete")
+    coverage_note = "Concept matched: " + "; ".join(parts) + "."
     return JEEConceptContext(
         concept_id=str(concept["concept_id"]),
         canonical_name=str(concept.get("display_name", "")),
@@ -256,6 +345,9 @@ def map_concept_to_jee(topic_title: str, key_terms: list[str]) -> JEEConceptCont
         evidence=evidence,
         prerequisites=prerequisites,
         related=related,
-        pyqs=pyqs,
+        pyqs=inline_pyqs,
         pyq_count=len(pyqs),
+        pyqs_truncated=truncated,
+        patterns=patterns,
+        coverage_note=coverage_note,
     )
