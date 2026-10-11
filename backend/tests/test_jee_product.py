@@ -174,6 +174,23 @@ async def test_diagram_route_attaches_jee(sample_diagram_image):
     assert "## 🎓 JEE Context" in body["markdown"]
 
 
+# 10. Practice-UI contract: the map response carries everything the in-app
+# practice panel needs (no extra calls, no fabricated content).
+def test_practice_ui_contract_fields():
+    ctx = map_concept_to_jee("Matrices and Determinants", [])
+    assert ctx.match_status == "matched"
+    checkable = [
+        p for p in ctx.pyqs
+        if p.question_type == "Numerical" and p.answer_status == "confirmed" and p.answer_key
+    ]
+    assert checkable, "practice UI needs at least one checkable numerical"
+    for p in ctx.pyqs:
+        assert p.question_id and p.year and p.question_type
+        assert p.source_class in ("OFFICIAL", "THIRD_PARTY_TRANSCRIPTION")
+        if p.question_type == "MCQ":
+            assert p.answer_key is None and p.answer_status == "unconfirmed"
+
+
 # 9. Route: generic notes attach nothing and change no credits behavior
 @pytest.mark.asyncio
 async def test_diagram_route_generic_no_jee(sample_diagram_image):

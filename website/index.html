@@ -475,6 +475,20 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
     }
+    .jee-toggle, .jee-pbtn, .jee-navbtn, .jee-checkbtn, .jee-backbtn {
+      margin-top: 8px; padding: 8px 14px; border-radius: 10px; cursor: pointer;
+      background: var(--accent-2); color: #fff; border: none; font-weight: 600;
+    }
+    .jee-pbtn, .jee-backbtn { background: transparent; color: var(--accent-2); border: 1px solid var(--accent-2); padding: 5px 10px; font-size: 0.85em; }
+    .jee-filters { display: flex; gap: 8px; align-items: center; margin: 6px 0; flex-wrap: wrap; }
+    .jee-filters select { padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: inherit; }
+    .jee-practice { border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-top: 8px; }
+    .jee-progress { height: 8px; border-radius: 4px; background: var(--border); margin: 8px 0; }
+    .jee-progress > div { height: 100%; border-radius: 4px; background: var(--accent-2); }
+    .jee-answer-input { padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: inherit; width: 140px; }
+    .jee-check-ok { color: #16a34a; font-weight: 700; }
+    .jee-check-bad { color: #dc2626; font-weight: 700; }
+    .jee-pnav { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
   </style>
 </head>
 <body>
@@ -1725,7 +1739,7 @@
       if (result.type === "diagram" && notes && notes.topic) {
         if (result.jee && (result.jee.match_status === "matched" || result.jee.match_status === "ambiguous")) {
           const jd = document.getElementById("jee-context-body");
-          if (jd) { jd.innerHTML = jeeContextHtml(result.jee); wireJeeToggle(jd); }
+          if (jd) renderJeeBody(jd, result.jee);
         } else {
           const terms = (notes.key_formulas || []).map((f) => f.explanation).filter(Boolean);
           loadJeeContext(notes.topic.title || "", terms);
@@ -1749,13 +1763,107 @@
           body: JSON.stringify({ topic_title: topicTitle, key_terms: keyTerms }),
         });
         if (!resp.ok) throw new Error(`JEE lookup failed (${resp.status})`);
-        body.innerHTML = jeeContextHtml(await resp.json());
-        wireJeeToggle(body);
+        renderJeeBody(body, await resp.json());
       } catch (err) {
         body.innerHTML = `<p class="muted">JEE mapping unavailable right now.</p>`;
       }
     }
 
+    const jeeFilter = { year: "all", qtype: "all" };
+    let jeeCtx = null;
+
+    function jeeProgress() {
+      try {
+        return JSON.parse(localStorage.getItem("snapnote-practice-v1") || "{}");
+      } catch (err) { return {}; }
+    }
+    function jeeSaveProgress(p) {
+      try { localStorage.setItem("snapnote-practice-v1", JSON.stringify(p)); } catch (err) {}
+    }
+    function jeeMarkAttempted(qid, correct) {
+      const p = jeeProgress();
+      p[qid] = { a: 1, c: correct == null ? null : (correct ? 1 : 0) };
+      jeeSaveProgress(p);
+    }
+    function jeeFilteredOrder() {
+      if (!jeeCtx || !jeeCtx.pyqs) return [];
+      return jeeCtx.pyqs.filter((q) =>
+        (jeeFilter.year === "all" || String(q.year) === jeeFilter.year) &&
+        (jeeFilter.qtype === "all" || q.question_type === jeeFilter.qtype));
+    }
+    function jeeProgressLine() {
+      if (!jeeCtx || !jeeCtx.pyqs || !jeeCtx.pyqs.length) return "";
+      const p = jeeProgress();
+      const att = jeeCtx.pyqs.filter((q) => p[q.question_id] && p[q.question_id].a).length;
+      const ok = jeeCtx.pyqs.filter((q) => p[q.question_id] && p[q.question_id].c === 1).length;
+      return `Attempted ${att}/${jeeCtx.pyqs.length} · Correct ${ok}`;
+    }
+
+    function renderJeeBody(body, ctx) {
+      jeeCtx = ctx;
+      body.innerHTML = jeeContextHtml(ctx);
+      wireJeeSection(body);
+    }
+
+    function wireJeeSection(scope) {
+      wireJeeToggle(scope);
+      const ySel = scope.querySelector("#jee-filter-year");
+      const tSel = scope.querySelector("#jee-filter-type");
+      if (ySel) ySel.addEventListener("change", () => { jeeFilter.year = ySel.value; renderJeeBody(scope, jeeCtx); });
+      if (tSel) tSel.addEventListener("change", () => { jeeFilter.qtype = tSel.value; renderJeeBody(scope, jeeCtx); });
+      const line = scope.querySelector(".jee-progress-line");
+      if (line && jeeCtx) line.textContent = jeeProgressLine();
+      scope.querySelectorAll(".jee-pbtn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const order = jeeFilteredOrder();
+          let q = null;
+          if (btn.dataset.qidx === "first-visible") q = order[0];
+          else if (jeeCtx) q = jeeCtx.pyqs[Number(btn.dataset.qidx)];
+          if (q) openPractice(scope, q);
+        });
+      });
+    }
+
+    function openPractice(scope, q) {
+      jeeMarkAttempted(q.question_id, null);
+      const order = jeeFilteredOrder();
+      const pos = order.findIndex((x) => x.question_id === q.question_id);
+      const canCheck = q.question_type === "Numerical" && q.answer_status === "confirmed" && q.answer_key != null;
+      const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
+      const meta = `${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number} (${esc(q.question_type)}${q.marks != null ? `, ${q.marks} marks` : ""})`;
+      let attempt = "";
+      if (canCheck) {
+        attempt = `<div><input class="jee-answer-input" id="jee-ans" inputmode="decimal" placeholder="Your answer" aria-label="Your answer"> <button class="jee-checkbtn">Check answer</button> <span id="jee-feedback" class="muted"></span></div>`;
+      } else if (q.question_type === "MCQ") {
+        attempt = `<p class="muted">Options live in the original source — <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>. The stored answer for this question is unconfirmed, so SnapNote will not grade options here.</p>`;
+      } else {
+        attempt = `<p class="muted">No confirmed answer stored — <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>.</p>`;
+      }
+      const prog = jeeProgressLine();
+      scope.innerHTML = `<div class="jee-practice"><button class="jee-backbtn">← Back to PYQ list</button>`
+        + `<p class="muted">Question ${pos + 1} of ${order.length} · ${esc(prog)}</p>`
+        + `<div class="jee-progress"><div style="width:${order.length ? Math.round(100 * order.filter((x) => (jeeProgress()[x.question_id] || {}).a).length / order.length) : 0}%"></div></div>`
+        + `<p><strong>${esc(meta)}</strong></p>`
+        + (q.question_summary ? `<p>${esc(q.question_summary)}</p>` : "")
+        + `<p class="muted">Source: ${prov}</p>` + attempt
+        + `<div class="jee-pnav"><button class="jee-navbtn" data-nav="-1"${pos <= 0 ? " disabled" : ""}>← Previous</button><button class="jee-navbtn" data-nav="1"${pos >= order.length - 1 ? " disabled" : ""}>Next →</button></div></div>`;
+      scope.querySelector(".jee-backbtn").addEventListener("click", () => renderJeeBody(scope, jeeCtx));
+      scope.querySelectorAll(".jee-navbtn").forEach((b) => b.addEventListener("click", () => {
+        const nq = order[pos + Number(b.dataset.nav)];
+        if (nq) openPractice(scope, nq);
+      }));
+      const check = scope.querySelector(".jee-checkbtn");
+      if (check) check.addEventListener("click", () => {
+        const val = scope.querySelector("#jee-ans").value.trim();
+        const fb = scope.querySelector("#jee-feedback");
+        const num = Number(val);
+        if (!val || !isFinite(num)) { fb.textContent = "Enter a number first."; fb.className = "muted"; return; }
+        const ok = num === Number(q.answer_key);
+        jeeMarkAttempted(q.question_id, ok);
+        fb.textContent = ok ? "✓ Correct — matches the independently confirmed key." : "✗ Not matching the confirmed key — review the source solution.";
+        fb.className = ok ? "jee-check-ok" : "jee-check-bad";
+      });
+    }
     function wireJeeToggle(scope) {
       const btn = scope.querySelector(".jee-toggle");
       if (!btn) return;
@@ -1797,20 +1905,32 @@
         html += `<p class="muted">Related: ${names(ctx.related).join(" · ")}</p>`;
       }
       if (ctx.pyqs && ctx.pyqs.length) {
-        const rows = ctx.pyqs.map((q) => {
+        const years = [...new Set(ctx.pyqs.map((q) => q.year))].sort((a, b) => b - a);
+        const yOpts = [`<option value="all">All years</option>`, ...years.map((y) => `<option value="${y}"${jeeFilter.year === String(y) ? " selected" : ""}>${y}</option>`)].join("");
+        const tOpts = `<option value="all">All types</option><option value="MCQ"${jeeFilter.qtype === "MCQ" ? " selected" : ""}>MCQ</option><option value="Numerical"${jeeFilter.qtype === "Numerical" ? " selected" : ""}>Numerical</option>`;
+        const visible = ctx.pyqs.filter((q) =>
+          (jeeFilter.year === "all" || String(q.year) === jeeFilter.year) &&
+          (jeeFilter.qtype === "all" || q.question_type === jeeFilter.qtype));
+        const rows = visible.map((q) => {
+          const qidx = ctx.pyqs.indexOf(q);
           const label = `${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number} (${esc(q.question_type)}${q.marks != null ? `, ${q.marks} marks` : ""})`;
           const answer = q.answer_status === "confirmed" && q.answer_key != null
             ? `Answer: ${esc(q.answer_key)}`
             : "Answer unconfirmed";
           const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
           const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>` : ` [${prov}]`;
-          return `<div class="formula jee-pyq">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">${answer} · Source:${link}</div></div>`;
+          const canPractice = q.question_type === "Numerical" && q.answer_status === "confirmed" && q.answer_key != null;
+          const action = canPractice
+            ? `<button class="jee-pbtn" data-qidx="${qidx}">Practice →</button>`
+            : `<span class="muted">Summary + source below</span>`;
+          return `<div class="formula jee-pyq" data-qidx="${qidx}">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">${answer} · Source:${link}</div><div>${action}</div></div>`;
         }).join("");
-        const previewCount = 5;
-        const needsToggle = ctx.pyqs.length > previewCount;
-        html += `<p><strong>Verified PYQs (${ctx.pyq_count})</strong></p><div class="jee-pyq-list">${rows}</div>`;
-        if (needsToggle) {
-          html += `<button class="jee-toggle" data-expanded="0">Show all ${ctx.pyq_count} PYQs</button>`;
+        const shown = visible.length === ctx.pyqs.length ? "" : ` (filtered to ${visible.length})`;
+        html += `<p><strong>Verified PYQs (${ctx.pyq_count})${shown}</strong> <button class="jee-pbtn" data-qidx="first-visible">Practice all →</button></p>`;
+        html += `<div class="jee-filters"><label>Year <select id="jee-filter-year">${yOpts}</select></label><label>Type <select id="jee-filter-type">${tOpts}</select></label><span class="muted jee-progress-line"></span></div>`;
+        html += `<div class="jee-pyq-list">${rows || `<p class="muted">No questions match this filter.</p>`}</div>`;
+        if (visible.length > 5) {
+          html += `<button class="jee-toggle" data-expanded="0">Show all ${visible.length} PYQs</button>`;
         }
         if (ctx.pyqs_truncated) {
           html += `<p class="muted">Showing ${ctx.pyqs.length} of ${ctx.pyq_count} verified PYQs.</p>`;
