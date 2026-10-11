@@ -299,17 +299,39 @@ class VisualPlot(BaseModel):
 
 class VisualGeneric(BaseModel):
     central_label: str = ""
-    callouts: list[str] = Field(default_factory=list)  # 2-5 short labels around centre
+    callouts: list[str] = Field(default_factory=list)  # 2-5 short labels
+
+
+class ComparisonPanel(BaseModel):
+    """One panel of a side-by-side comparison (2-3 panels per scene).
+
+    Same vocabulary as force_diagram, scoped to the panel: an object drawn
+    at the panel centre, labeled vectors chained by tail references, and
+    rotation arcs around the panel object. Geometry stays code-owned; the
+    spec only names which primitives appear.
+    """
+
+    label: str = ""
+    object: VisualObject = VisualObject()
+    vectors: list[VisualVector] = []
+    arcs: list[VisualArc] = []
+    note: str = ""  # one short caption line under the panel
+
+
+class VisualComparison(BaseModel):
+    panels: list[ComparisonPanel] = []  # 2-3
+    relation: VisualRelation | None = None
 
 
 class VisualScene(BaseModel):
-    scene_kind: Literal["force_diagram", "process_flow", "plot", "generic"] = "force_diagram"
+    scene_kind: Literal["force_diagram", "process_flow", "plot", "generic", "comparison"] = "force_diagram"
     title: str = ""
     caption: str = ""
     force: ForceDiagram | None = None
     flow: ProcessFlow | None = None
     plot: VisualPlot | None = None
     generic: VisualGeneric | None = None
+    comparison: VisualComparison | None = None
 
 
 class CompositionCallout(BaseModel):

@@ -449,7 +449,7 @@ GROUNDING RULES:
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
 3. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
 4. Write labels as short, plain, readable text.
-5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. If none of those fit, use "generic" with central_label (2-4 words) and 2-4 callouts (each a short phrase) — this guarantees every concept gets a labeled diagram. Never leave scene empty if you can make a generic.
+5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. When the lesson explicitly compares 2-3 variants of one idea (e.g. pure translation vs pure rotation vs combined motion), use "comparison" with one panel per variant: each panel has a short label, an object (block for sliding, disk for rolling/spinning), the motion's own velocity vectors, a rotation arc ONLY where the variant actually rotates, and a one-line note. Never use "generic" for a comparison lesson — a central box with formula callouts teaches nothing. If none of those fit, use "generic" with central_label (2-4 words) and 2-4 callouts (each a short phrase) — this guarantees every concept gets a labeled diagram. Never leave scene empty if you can make a generic.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
@@ -459,12 +459,13 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "deterministic": {
     "title": "short title (2-6 words)",
     "scene": {
-      "scene_kind": "force_diagram | process_flow | plot | generic",
+      "scene_kind": "force_diagram | process_flow | plot | generic | comparison",
       "caption": "one teaching sentence about what the diagram means",
       "force": { "object": {...}, "vectors": [...], "angles": [...], "arcs": [...], "relation": {...} },
       "flow": { "nodes": [...], "connectors": [...], "relation": {...} },
       "plot": { "x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true, "curves": [{"label": "y=x²", "expr": "x**2", "x_min": 0, "x_max": 2}] },
-      "generic": { "central_label": "Main idea", "callouts": ["callout 1", "callout 2"] }
+      "generic": { "central_label": "Main idea", "callouts": ["callout 1", "callout 2"] },
+      "comparison": { "panels": [{"label": "Pure translation", "object": {"kind": "block"}, "vectors": [{"label": "v", "angle_deg": 0, "length": 1.0}], "arcs": [], "note": "all points share v"}], "relation": {"expression": "v = ωr", "caption": "rolling link"} }
     },
     "equations": [{"expression": "exact formula in Unicode, no LaTeX, no backslash", "meaning": "one line: what each symbol means and what the relationship represents"}],
     "steps": ["ordered steps, each a short phrase"],

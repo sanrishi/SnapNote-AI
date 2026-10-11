@@ -1725,7 +1725,7 @@
       if (result.type === "diagram" && notes && notes.topic) {
         if (result.jee && (result.jee.match_status === "matched" || result.jee.match_status === "ambiguous")) {
           const jd = document.getElementById("jee-context-body");
-          if (jd) jd.innerHTML = jeeContextHtml(result.jee);
+          if (jd) { jd.innerHTML = jeeContextHtml(result.jee); wireJeeToggle(jd); }
         } else {
           const terms = (notes.key_formulas || []).map((f) => f.explanation).filter(Boolean);
           loadJeeContext(notes.topic.title || "", terms);
@@ -1750,9 +1750,25 @@
         });
         if (!resp.ok) throw new Error(`JEE lookup failed (${resp.status})`);
         body.innerHTML = jeeContextHtml(await resp.json());
+        wireJeeToggle(body);
       } catch (err) {
         body.innerHTML = `<p class="muted">JEE mapping unavailable right now.</p>`;
       }
+    }
+
+    function wireJeeToggle(scope) {
+      const btn = scope.querySelector(".jee-toggle");
+      if (!btn) return;
+      const items = Array.from(scope.querySelectorAll(".jee-pyq"));
+      const total = items.length;
+      const apply = (expanded) => {
+        items.forEach((el, i) => { el.style.display = (expanded || i < 5) ? "" : "none"; });
+        btn.dataset.expanded = expanded ? "1" : "0";
+        btn.textContent = expanded ? "Show fewer" : btn.dataset.label;
+      };
+      btn.dataset.label = btn.textContent;
+      btn.addEventListener("click", () => apply(btn.dataset.expanded !== "1"));
+      apply(false);
     }
 
     function jeeContextHtml(ctx) {
@@ -1787,10 +1803,15 @@
             ? `Answer: ${esc(q.answer_key)}`
             : "Answer unconfirmed";
           const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
-          const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">[${prov}]</a>` : ` [${prov}]`;
-          return `<div class="formula">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">${answer} · Source:${link}</div></div>`;
+          const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>` : ` [${prov}]`;
+          return `<div class="formula jee-pyq">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">${answer} · Source:${link}</div></div>`;
         }).join("");
-        html += `<p><strong>Verified PYQs (${ctx.pyq_count})</strong></p>${rows}`;
+        const previewCount = 5;
+        const needsToggle = ctx.pyqs.length > previewCount;
+        html += `<p><strong>Verified PYQs (${ctx.pyq_count})</strong></p><div class="jee-pyq-list">${rows}</div>`;
+        if (needsToggle) {
+          html += `<button class="jee-toggle" data-expanded="0">Show all ${ctx.pyq_count} PYQs</button>`;
+        }
         if (ctx.pyqs_truncated) {
           html += `<p class="muted">Showing ${ctx.pyqs.length} of ${ctx.pyq_count} verified PYQs.</p>`;
         }

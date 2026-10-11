@@ -582,3 +582,98 @@ def test_build_visual_spec_contradiction_persists_refuses(monkeypatch):
         _run_build(vision_service.build_visual_spec(b"fake", None))
     # Exactly one repair attempt — never an unbounded retry loop.
     assert len(calls) == 2
+
+
+# ── comparison scene: rotational-dynamics regression (production hotfix) ──
+# The lecture teaches pure translation vs pure rotation vs combined motion.
+# A central box with formula callouts is NOT an acceptable visual for it.
+
+def _rotational_comparison_spec():
+    from app.models.schemas import (
+        ComparisonPanel,
+        DeterministicVisual,
+        VisualArc,
+        VisualComparison,
+        VisualObject,
+        VisualRelation,
+        VisualScene,
+        VisualVector,
+    )
+
+    return DeterministicVisual(
+        title="Angular Speed of a Rigid Body",
+        scene=VisualScene(
+            scene_kind="comparison",
+            caption="Translation moves every point together; rotation turns points about an axis; rolling combines both.",
+            comparison=VisualComparison(
+                panels=[
+                    ComparisonPanel(
+                        label="Pure translation",
+                        object=VisualObject(kind="block"),
+                        vectors=[VisualVector(label="v", angle_deg=0, length=1.0)],
+                        arcs=[],
+                        note="all points share v",
+                    ),
+                    ComparisonPanel(
+                        label="Pure rotation",
+                        object=VisualObject(kind="disk"),
+                        vectors=[],
+                        arcs=[VisualArc(label="ω", direction="ccw")],
+                        note="points circle the axis",
+                    ),
+                    ComparisonPanel(
+                        label="Combined motion",
+                        object=VisualObject(kind="disk"),
+                        vectors=[VisualVector(label="v", angle_deg=0, length=1.0)],
+                        arcs=[VisualArc(label="ω", direction="ccw")],
+                        note="rolling: v = ωr",
+                    ),
+                ],
+                relation=VisualRelation(expression="ω = dθ/dt", caption="angular speed"),
+            ),
+        ),
+    )
+
+
+def test_comparison_renders_three_labeled_panels():
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_rotational_comparison_spec())
+    assert svg
+    assert "Pure translation" in svg
+    assert "Pure rotation" in svg
+    assert "Combined motion" in svg
+    # Rotation arcs only where the variant rotates (panels 2-3, not panel 1).
+    assert svg.count("ω") >= 2
+    # Grounded formulas from the notes pass through byte-identical.
+    assert "ω = dθ/dt" in svg
+    assert "Angular Speed of a Rigid Body" in svg
+    assert "<script" not in svg
+
+
+def test_comparison_arrows_are_standalone_polygons():
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_rotational_comparison_spec())
+    # Two velocity arrows (panels 1 and 3) + rotation-arc arrowheads.
+    assert svg.count("<polygon") >= 2
+    assert "<marker" not in svg
+
+
+def test_comparison_is_byte_deterministic():
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    assert render_deterministic_visual(_rotational_comparison_spec()) == \
+        render_deterministic_visual(_rotational_comparison_spec())
+
+
+def test_comparison_needs_two_labeled_panels():
+    from app.models.schemas import ComparisonPanel, VisualComparison, VisualScene
+    from app.utils.visual_renderer import _render_scene
+
+    scene = VisualScene(
+        scene_kind="comparison",
+        comparison=VisualComparison(panels=[ComparisonPanel(label="Only one")]),
+    )
+    svg, _ = _render_scene(scene)
+    assert svg == ""  # honest empty, caller falls back — never a fake diagram
