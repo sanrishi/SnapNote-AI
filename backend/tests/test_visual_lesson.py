@@ -930,3 +930,110 @@ def test_derived_flow_reasoning_drops_bare_word_labels():
     assert "allocates" not in content.reasoning
     assert "e(t)" in content.reasoning
     assert "Feedback (sensor)" in content.reasoning
+
+
+# ── comparison family + generic density gate (production hotfix) ──
+# A central box with two formula chips composed over a full page is the
+# observed sparse-output failure. Comparison scenes must validate, render a
+# real hero, and select; thin generic scenes must refuse honestly.
+
+def _comparison_spec() -> VisualSpec:
+    from app.models.schemas import (
+        ComparisonPanel,
+        DeterministicVisual,
+        VisualArc,
+        VisualComparison,
+        VisualObject,
+        VisualRelation,
+        VisualScene,
+        VisualVector,
+    )
+
+    spec = _torque()
+    spec.deterministic.scene = VisualScene(
+        scene_kind="comparison",
+        title="Angular Speed of a Rigid Body",
+        caption="Translation moves points together; rotation turns them.",
+        comparison=VisualComparison(
+            panels=[
+                ComparisonPanel(
+                    label="Pure translation",
+                    object=VisualObject(kind="block"),
+                    vectors=[VisualVector(label="v", angle_deg=0, length=1.0)],
+                    arcs=[],
+                    note="all points share v",
+                ),
+                ComparisonPanel(
+                    label="Pure rotation",
+                    object=VisualObject(kind="disk"),
+                    vectors=[],
+                    arcs=[VisualArc(label="w", direction="ccw")],
+                    note="points circle the axis",
+                ),
+                ComparisonPanel(
+                    label="Combined motion",
+                    object=VisualObject(kind="disk"),
+                    vectors=[VisualVector(label="v", angle_deg=0, length=1.0)],
+                    arcs=[VisualArc(label="w", direction="ccw")],
+                    note="rolling",
+                ),
+            ],
+            relation=VisualRelation(expression="v = wr", caption="rolling link"),
+        ),
+    )
+    return spec
+
+
+def test_select_family_comparison():
+    assert select_family(_comparison_spec()) == "comparison"
+
+
+def test_validate_accepts_comparison():
+    assert validate_lesson_spec(_comparison_spec()) == []
+
+
+def test_validate_rejects_thin_comparison():
+    spec = _comparison_spec()
+    assert spec.deterministic.scene is not None and spec.deterministic.scene.comparison is not None
+    spec.deterministic.scene.comparison.panels = spec.deterministic.scene.comparison.panels[:1]
+    errors = validate_lesson_spec(spec)
+    assert any("2 labeled panels" in e for e in errors)
+
+
+def test_validate_rejects_empty_comparison_panel():
+    from app.models.schemas import ComparisonPanel
+
+    spec = _comparison_spec()
+    assert spec.deterministic.scene is not None and spec.deterministic.scene.comparison is not None
+    spec.deterministic.scene.comparison.panels[0].vectors = []
+    errors = validate_lesson_spec(spec)
+    assert any("no vectors or arcs" in e for e in errors)
+
+
+def test_hero_geometry_comparison_nonempty():
+    hero = render_hero_geometry(_comparison_spec().deterministic)
+    assert hero.strip()
+    assert "Pure translation" in hero and "Combined motion" in hero
+    assert "<script" not in hero
+
+
+def _generic_spec(callouts):
+    from app.models.schemas import DeterministicVisual, VisualGeneric, VisualScene
+
+    spec = _torque()
+    spec.deterministic.scene = VisualScene(
+        scene_kind="generic",
+        title="Some Lesson",
+        generic=VisualGeneric(central_label="Some Lesson", callouts=list(callouts)),
+    )
+    return spec
+
+
+def test_validate_rejects_thin_generic():
+    # The reported failure shape: central box + two formula chips.
+    errors = validate_lesson_spec(_generic_spec(["chip one", "chip two"]))
+    assert any("at least 3 callouts" in e for e in errors)
+
+
+def test_validate_accepts_dense_generic():
+    assert validate_lesson_spec(_generic_spec(["one", "two", "three"])) == []
