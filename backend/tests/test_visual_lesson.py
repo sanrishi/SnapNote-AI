@@ -1037,3 +1037,14 @@ def test_validate_rejects_thin_generic():
 
 def test_validate_accepts_dense_generic():
     assert validate_lesson_spec(_generic_spec(["one", "two", "three"])) == []
+
+
+# ── tangential-velocity physics rule lives in the spec prompt ──
+
+def test_spec_prompt_requires_tangential_velocity():
+    from app.services import vision_service
+
+    prompt = vision_service.VISUAL_SPEC_PROMPT
+    assert "TANGENTIAL" in prompt
+    assert "never radial" in prompt
+    assert "omit the vector rather than guessing" in prompt
