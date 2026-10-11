@@ -23,11 +23,13 @@ from __future__ import annotations
 import math
 
 from app.models.schemas import (
+    ComparisonPanel,
     DeterministicVisual,
     FlowConnector,
     FlowNode,
     ForceDiagram,
     VisualAngle,
+    VisualComparison,
     VisualCurve,
     VisualGeneric,
     VisualObject,
@@ -229,10 +231,11 @@ def _render_vector(
     v: VisualVector,
     tail: tuple[float, float],
     color: str,
+    length_scale: float = 1.0,
 ) -> str:
     """Draw one vector: line + arrowhead + label at its midpoint."""
     deg = _vector_deg(v)
-    length = BASE_LEN * max(0.4, min(1.6, v.length))
+    length = BASE_LEN * max(0.4, min(1.6, v.length)) * length_scale
     head = _polar(tail[0], tail[1], length, deg)
     mid = _polar(tail[0], tail[1], length * 0.52, deg)
     # Label sits to the left of travel direction (perpendicular offset).
@@ -884,6 +887,74 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
     return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
 
 
+def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]:
+    """Render a side-by-side comparison: 2-3 labeled panels, each with its own
+    object, chained labeled vectors, and rotation arcs around the panel object.
+
+    Column geometry is code-owned; the spec only names primitives. Panels with
+    no label are dropped; fewer than 2 labeled panels render nothing (the
+    caller then falls back to the generic explanatory diagram honestly).
+    Returns (svg, next_y, legend_lines, relation).
+    """
+    comparison: VisualComparison | None = scene.comparison
+    legend: list[str] = []
+    if comparison is None:
+        return "", STAGE_Y + STAGE_H + 24, legend, None
+    panels = [p for p in comparison.panels if p.label.strip()][:3]
+    if len(panels) < 2:
+        return "", STAGE_Y + STAGE_H + 24, legend, None
+
+    parts: list[str] = []
+    n = len(panels)
+    col_w = STAGE_W / n
+    label_y = STAGE_Y + 34
+    obj_y = STAGE_Y + 270
+    note_y = STAGE_Y + 470
+    for i, panel in enumerate(panels):
+        cx = STAGE_X + col_w * (i + 0.5)
+        if i > 0:
+            x_div = STAGE_X + col_w * i
+            parts.append(
+                f'<line x1="{_f(x_div)}" y1="{_f(STAGE_Y + 12)}" x2="{_f(x_div)}" '
+                f'y2="{_f(STAGE_Y + STAGE_H - 12)}" stroke="{STAGE_STROKE}" stroke-width="1.5" '
+                f'stroke-dasharray="5 5"/>'
+            )
+        for j, line in enumerate(_wrap(panel.label.strip(), 22)):
+            if j >= 2:
+                break
+            parts.append(
+                f'<text x="{_f(cx)}" y="{_f(label_y + j * 22)}" font-family="{_FONT}" font-size="17" '
+                f'font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
+            )
+        center = (cx, obj_y)
+        parts.append(_render_object(panel.object, cx, obj_y))
+        heads: dict[str, tuple[float, float]] = {}
+        for v in panel.vectors:
+            if not v.label.strip():
+                continue
+            color = _VECTOR_COLORS.get(v.color, INK)
+            if v.tail.strip() and v.tail.strip() in heads:
+                tail = heads[v.tail.strip()]
+            else:
+                tail = center
+            head = _polar(tail[0], tail[1], BASE_LEN * max(0.4, min(1.6, v.length)) * 0.55, _vector_deg(v))
+            heads[v.label.strip()] = head
+            # _render_vector recomputes the same head from tail; length_scale
+            # keeps arrows inside the panel column.
+            parts.append(_render_vector(v, tail, color, length_scale=0.55))
+        for arc in panel.arcs:
+            parts.append(_rotation_arc(arc, center))
+            if arc.caption.strip():
+                legend.append(f"{arc.label.strip()} — {arc.caption.strip()}")
+        note_lines = _wrap(panel.note.strip(), 26)[:2] if panel.note.strip() else []
+        for k, line in enumerate(note_lines):
+            parts.append(
+                f'<text x="{_f(cx)}" y="{_f(note_y + k * 20)}" font-family="{_FONT}" font-size="14" '
+                f'fill="{MUTED}" text-anchor="middle">{_esc(line)}</text>'
+            )
+    return "".join(parts), STAGE_Y + STAGE_H + 24, legend, comparison.relation
+
+
 def _render_scene(scene: VisualScene) -> tuple[str, int]:
     """Dispatch a VisualScene to its layout. Returns (svg_html, next_y)."""
     parts: list[str] = []
@@ -895,6 +966,8 @@ def _render_scene(scene: VisualScene) -> tuple[str, int]:
         diagram, y_after, legend, relation = _render_flow(scene)
     elif scene.scene_kind == "plot":
         diagram, y_after, legend, relation = _render_plot(scene)
+    elif scene.scene_kind == "comparison":
+        diagram, y_after, legend, relation = _render_comparison(scene)
     elif scene.scene_kind == "generic":
         diagram, y_after, legend, relation = _render_generic(scene, fallback_title="")
     else:
