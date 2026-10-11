@@ -44,6 +44,7 @@ SUPPORTED_FAMILIES: dict[str, str] = {
     "plot": "coordinate",
     "process_flow": "flow",
     "generic": "generic",
+    "comparison": "comparison",
 }
 
 TYMST_TIMEOUT_SECONDS = 25
@@ -173,6 +174,32 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
     elif kind == "generic":
         if scene.generic is None or not (scene.generic.central_label or "").strip():
             errors.append("generic scene needs a central_label")
+        elif len([c for c in (scene.generic.callouts or []) if (c or "").strip()]) < 3:
+            # A central box with 1-2 chips composes into a near-empty page
+            # (observed failure: title box + two formula callouts + blank
+            # space presented as a successful visual). Refuse honestly so the
+            # route reports unavailable instead of shipping sparse output.
+            errors.append("generic scene needs at least 3 callouts to fill a lesson page")
+    elif kind == "comparison":
+        comp = scene.comparison
+        if comp is None:
+            errors.append("comparison has no comparison payload")
+            return errors
+        panels = [p for p in (comp.panels or []) if (p.label or "").strip()][:3]
+        if len(panels) < 2:
+            errors.append("comparison needs at least 2 labeled panels")
+            return errors
+        for p in panels:
+            labeled = [v for v in p.vectors if (v.label or "").strip()]
+            if not labeled and not p.arcs:
+                errors.append(f"comparison panel {p.label!r} has no vectors or arcs")
+            known = {(p.object.label or "").strip(), *(v.label.strip() for v in labeled)}
+            for v in labeled:
+                _finite(v.angle_deg, f"vector {v.label!r} angle_deg", errors)
+                _finite(v.length, f"vector {v.label!r} length", errors)
+                tail = (v.tail or "").strip()
+                if tail and tail not in known:
+                    errors.append(f"vector {v.label!r} tails on unknown {tail!r}")
     comp = det.composition
     if comp is not None:
         errors.extend(_validate_composition(comp))
@@ -203,6 +230,8 @@ def _scene_relation_expression(scene) -> str:
             rel = scene.force.relation
         elif scene.scene_kind == "process_flow" and scene.flow is not None:
             rel = scene.flow.relation
+        elif scene.scene_kind == "comparison" and scene.comparison is not None:
+            rel = scene.comparison.relation
         else:
             return ""
         return (rel.expression if rel is not None else "") or ""
@@ -341,12 +370,29 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
                 reasoning_bits.append(label)
         if flow.relation is not None and (flow.relation.expression or "").strip():
             result_text = flow.relation.expression.strip()
-    else:  # generic
+    elif family == "generic":
         gen = scene.generic
         assert gen is not None
         for c in (gen.callouts or [])[:MAX_CALLOUTS]:
             if c.strip():
                 callouts.append(LessonCallout(heading=c.strip(), body=""))
+    elif family == "comparison":
+        compa = scene.comparison
+        assert compa is not None
+        for p in (compa.panels or [])[:3]:
+            if (p.label or "").strip():
+                callouts.append(LessonCallout(heading=p.label.strip(), body=_clean(p.note)))
+        for p in (compa.panels or [])[:3]:
+            for arc in p.arcs:
+                if (arc.label or "").strip():
+                    reasoning_bits.append(
+                        _clean(arc.caption) or f"{arc.label.strip()} rotation ({arc.direction})")
+        if compa.relation is not None and (compa.relation.expression or "").strip():
+            result_text = compa.relation.expression.strip()
+            if (compa.relation.caption or "").strip():
+                reasoning_bits.append(compa.relation.caption.strip())
+    else:
+        raise LessonValidationError(f"unsupported family for content extraction: {family!r}")
     callouts = callouts[:MAX_CALLOUTS]
     reasoning = "; ".join(b for b in reasoning_bits if b)
     return LessonContent(

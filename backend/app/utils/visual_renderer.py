@@ -1146,6 +1146,8 @@ def render_hero_geometry(spec: DeterministicVisual) -> str:
         diagram, _, _, _ = _render_plot(scene)
     elif scene.scene_kind == "generic":
         diagram, _, _, _ = _render_generic(scene, fallback_title="")
+    elif scene.scene_kind == "comparison":
+        diagram, _, _, _ = _render_comparison(scene)
     else:
         return ""
     if not diagram.strip():
