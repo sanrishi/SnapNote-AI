@@ -313,7 +313,7 @@ def _angle_arc(
     return "".join(parts)
 
 
-def _rotation_arc(arc: VisualArc, around: tuple[float, float]) -> str:
+def _rotation_arc(arc: VisualArc, around: tuple[float, float], label_deg: float | None = None) -> str:
     """Curved rotation arrow around a point (e.g. torque ↻)."""
     r = 30.0
     start = 220.0 if arc.direction == "ccw" else -40.0
@@ -321,7 +321,8 @@ def _rotation_arc(arc: VisualArc, around: tuple[float, float]) -> str:
     pts = _arc_points(around[0], around[1], r, start, start + sweep, steps=28)
     tip = pts[-1]
     tip_deg = start + sweep
-    mid_deg = start + sweep * 0.5
+    # Explicit label angle (collision avoidance) or the arc midpoint.
+    mid_deg = start + sweep * 0.5 if label_deg is None else label_deg
     parts = [
         _polyline(pts, GREEN, width=2.6),
         _arrowhead(tip[0], tip[1], tip_deg, 11),
@@ -808,7 +809,16 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
             points = " ".join(f"{_f(x)},{_f(y)}" for x, y in seg)
             parts.append(f'<polyline points="{points}" fill="none" stroke="{color}" stroke-width="2.2"{dash}/>')
         if curve.label and segs and segs[-1]:
-            label_anchors.append((segs[-1][-1], curve.label, color))
+            anchor = segs[-1][-1]
+            if len(segs[-1]) > 3:
+                first, last = segs[-1][0], segs[-1][-1]
+                if abs(first[0] - last[0]) < 0.5 and abs(first[1] - last[1]) < 0.5:
+                    # Closed loop (e.g. a square): the end anchor coincides
+                    # with the start corner where a vertex label already sits.
+                    # Anchor at the first edge midpoint instead (no vertex).
+                    p0, p1 = segs[-1][0], segs[-1][1]
+                    anchor = ((p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2)
+            label_anchors.append((anchor, curve.label, color))
     # Generic collision-aware curve labels: labels sharing an anchor point
     # (e.g. "square ABCD" and "A(1,1)" ending at the same corner) get
     # deterministic fallback offsets so they never occupy the same box.
@@ -938,6 +948,7 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
         center = (cx, obj_y)
         parts.append(_render_object(panel.object, cx, obj_y))
         heads: dict[str, tuple[float, float]] = {}
+        label_pts: list[tuple[float, float]] = []
         for v in panel.vectors:
             if not v.label.strip():
                 continue
@@ -951,8 +962,21 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
             # _render_vector recomputes the same head from tail; length_scale
             # keeps arrows inside the panel column.
             parts.append(_render_vector(v, tail, color, length_scale=0.55))
+            _vrad = math.radians(_vector_deg(v))
+            _vlen = BASE_LEN * max(0.4, min(1.6, v.length)) * 0.55
+            _vmid = _polar(tail[0], tail[1], _vlen * 0.52, _vector_deg(v))
+            label_pts.append((_vmid[0] + 14 * math.sin(_vrad), _vmid[1] + 14 * math.cos(_vrad)))
         for arc in panel.arcs:
-            parts.append(_rotation_arc(arc, center))
+            arc_deg = None
+            if arc.label.strip() and label_pts:
+                if arc.direction == "ccw":
+                    _default = 220.0 + 240.0 * 0.5
+                else:
+                    _default = -40.0 - 240.0 * 0.5
+                _cand = _polar(center[0], center[1], 54.0, _default)
+                if min(math.hypot(_cand[0] - lx, _cand[1] - ly) for lx, ly in label_pts) < 36:
+                    arc_deg = _default + 180.0
+            parts.append(_rotation_arc(arc, center, label_deg=arc_deg))
             if arc.caption.strip():
                 legend.append(f"{arc.label.strip()} — {arc.caption.strip()}")
         note_lines = _wrap(panel.note.strip(), 26)[:2] if panel.note.strip() else []

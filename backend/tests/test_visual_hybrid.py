@@ -679,6 +679,18 @@ def test_comparison_needs_two_labeled_panels():
     assert svg == ""
 
 
+def test_comparison_arc_label_clears_vector_labels():
+    import re
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_rotational_comparison_spec())
+    # Panel 3 ("Combined motion") has a v arrow to the right: its ω arc
+    # label must flip to the left of the disk centre (panel cx ≈ 634.7).
+    omegas = [float(m.group(1)) for m in re.finditer(r'<text x="([\d.]+)"[^>]*>ω</text>', svg)]
+    assert len(omegas) == 2
+    assert min(omegas) < 600
+
+
 # ── Argand-plane regression (production bug: vertex labels omitted/clipped,
 # D expression mistranscribed, dimensions missing) ──
 
@@ -742,6 +754,19 @@ def test_argand_labels_stay_in_canvas():
     svg = render_deterministic_visual(_argand_square_spec())
     for m in re.finditer(r'<text x="([\d.]+)"', svg):
         assert float(m.group(1)) <= 800, m.group(0)
+
+
+def test_closed_loop_label_clears_vertex_labels():
+    import re
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_argand_square_spec())
+    boxes = {}
+    for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*>([^<]{2,60})</text>', svg):
+        boxes[m.group(3).strip()] = (float(m.group(1)), float(m.group(2)))
+    cx, cy = boxes["C -x - iy"]
+    sq = next(v for k, v in boxes.items() if k.startswith("square ABCD"))
+    assert abs(sq[0] - cx) > 20 or abs(sq[1] - cy) > 20
 
 
 def test_argand_render_is_byte_deterministic():
