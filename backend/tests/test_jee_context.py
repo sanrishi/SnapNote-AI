@@ -240,3 +240,28 @@ def test_chapter_fallback_needs_two_hits():
     assert status == "matched" and concept is not None
     assert concept["concept_id"] == "jee-physics-rotational-motion-chapter"
     assert any("chapter-level" in e for e in evidence)
+
+
+# Production regression: "Complex Numbers as Square Vertices" must resolve
+# to the Complex Numbers chapter (80 stored records), not stay unresolved.
+def test_complex_numbers_lecture_resolves_to_chapter():
+    body = asyncio.run(_map(
+        "Complex Numbers as Square Vertices",
+        ["complex number z and its conjugate plotted on the argand plane",
+         "vertices of a square with side 4 in the complex plane"],
+    ))
+    assert body["match_status"] == "matched"
+    assert body["concept_id"] == "jee-mathematics-complex-numbers-and-quadratic-equations-chapter"
+    assert any("chapter-level" in e for e in body["evidence"])
+    assert body["pyq_count"] >= 80
+    assert len(body["pyqs"]) >= 1
+    for pyq in body["pyqs"]:
+        assert pyq["answer_status"] in ("confirmed", "unconfirmed")
+        if pyq["answer_key"] is None:
+            assert pyq["answer_status"] == "unconfirmed"
+
+
+def test_complex_numbers_bare_symbols_stay_unresolved():
+    body = asyncio.run(_map("Complex Numbers as Square Vertices", ["z", "conjugate"]))
+    assert body["match_status"] == "unresolved"
+    assert body["pyqs"] == []

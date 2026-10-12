@@ -780,6 +780,15 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
         if not pts:
             continue
         color = _VECTOR_COLORS.get(curve.color, ACCENT if curve.color == "" else INK)
+        if len(pts) == 1 and (curve.label or "").strip():
+            # Labeled single point: plotted vertex marker (e.g. Argand-plane
+            # vertices). Unlabeled singletons stay skipped — no stray dots.
+            mx, my = map_x(pts[0][0]), map_y(pts[0][1])
+            parts.append(
+                f'<circle cx="{_f(mx)}" cy="{_f(my)}" r="5" fill="{color}"/>'
+            )
+            label_anchors.append(((mx, my), curve.label.strip(), color))
+            continue
         # clip to y range for clean visual (keep slightly outside then clip)
         segs: list[list[tuple[float, float]]] = []
         cur: list[tuple[float, float]] = []

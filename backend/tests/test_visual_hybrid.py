@@ -676,4 +676,88 @@ def test_comparison_needs_two_labeled_panels():
         comparison=VisualComparison(panels=[ComparisonPanel(label="Only one")]),
     )
     svg, _ = _render_scene(scene)
-    assert svg == ""  # honest empty, caller falls back — never a fake diagram
+    assert svg == ""
+
+
+# ── Argand-plane regression (production bug: vertex labels omitted/clipped,
+# D expression mistranscribed, dimensions missing) ──
+
+def _argand_square_spec():
+    from app.models.schemas import (
+        DeterministicVisual,
+        VisualCurve,
+        VisualPlot,
+        VisualRelation,
+        VisualScene,
+    )
+
+    return DeterministicVisual(
+        title="Square Vertices in the Argand Plane",
+        scene=VisualScene(
+            scene_kind="plot",
+            caption="Four complex numbers form a square of side 4 centred at the origin.",
+            plot=VisualPlot(
+                x_label="Re",
+                y_label="Im",
+                x_min=-5.0,
+                x_max=5.0,
+                y_min=-5.0,
+                y_max=5.0,
+                show_grid=True,
+                curves=[
+                    VisualCurve(
+                        label="square ABCD, side = 4",
+                        points=[[-2, -2], [2, -2], [2, 2], [-2, 2], [-2, -2]],
+                    ),
+                    VisualCurve(label="A z = x + iy", points=[[2, 2]]),
+                    VisualCurve(label="B zbar = x - iy", points=[[2, -2]]),
+                    VisualCurve(label="C -x - iy", points=[[-2, -2]]),
+                    VisualCurve(label="D z - 2Re(z) = -x + iy", points=[[-2, 2]]),
+                ],
+            ),
+        ),
+    )
+
+
+def test_argand_renders_axes_vertices_square_and_labels():
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_argand_square_spec())
+    assert svg
+    assert ">Re<" in svg and ">Im<" in svg
+    assert "square ABCD, side = 4" in svg
+    assert "A z = x + iy" in svg
+    # Exact D expression: Re(z), never Re(conjugate(z)).
+    assert "D z - 2Re(z) = -x + iy" in svg
+    assert "Re(conjugate" not in svg
+    # Four plotted vertex markers.
+    assert svg.count("<circle cx=") >= 4
+    assert "<script" not in svg
+
+
+def test_argand_labels_stay_in_canvas():
+    import re
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_argand_square_spec())
+    for m in re.finditer(r'<text x="([\d.]+)"', svg):
+        assert float(m.group(1)) <= 800, m.group(0)
+
+
+def test_argand_render_is_byte_deterministic():
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    assert render_deterministic_visual(_argand_square_spec()) == \
+        render_deterministic_visual(_argand_square_spec())
+
+
+def test_argand_spec_validates_in_v3():
+    from app.models.schemas import VisualRenderMode, VisualSpec
+    from app.utils.visual_lesson import validate_lesson_spec
+
+    spec = VisualSpec(
+        concept="Argand square",
+        render_mode=VisualRenderMode.DETERMINISTIC,
+        deterministic=_argand_square_spec(),
+    )
+    assert validate_lesson_spec(spec) == []  # honest empty, caller falls back — never a fake diagram
