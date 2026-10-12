@@ -158,7 +158,7 @@ def test_plot_labels_do_not_overlap_in_hero():
 
     svg = render_deterministic_visual(_argand().deterministic)
     boxes = []
-    for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="11"[^>]*>(.*?)</text>', svg):
+    for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="16"[^>]*>(.*?)</text>', svg):
         x, y, text = float(m.group(1)), float(m.group(2)), m.group(3)
         boxes.append((x, y - 11, len(text) * 6.6 + 8, 14, text))
     assert len(boxes) >= 2
@@ -757,7 +757,7 @@ def test_flow_connector_labels_clear_of_node_band():
     top = min(y for _x, y, _w, _h in node_rects)
     bottom = max(yy + h for _x, yy, _w, h in node_rects)
     texts = [(float(m.group(1)), float(m.group(2)), m.group(3))
-             for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="12.5"[^>]*>(.*?)</text>', svg)]
+             for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="14"[^>]*>(.*?)</text>', svg)]
     assert texts, "expected connector labels"
     for _x, y, label in texts:
         assert y < top - 2 or y > bottom + 2, f"label {label!r} inside node band"
@@ -848,9 +848,9 @@ def test_curve_labels_stay_inside_plot_area():
         VisualCurve(label="Outer Radius g(θ) = some very long bound description here", expr="2"),
     ]
     svg = render_hero_geometry(spec.deterministic)
-    for m in re.finditer(r'<text x="([\d.]+)"[^>]*font-size="11"[^>]*>(.*?)</text>', svg):
+    for m in re.finditer(r'<text x="([\d.]+)"[^>]*font-size="16"[^>]*font-weight="600"[^>]*>(.*?)</text>', svg):
         x, label = float(m.group(1)), m.group(2)
-        est_right = x + len(label) * 6.6 + 8
+        est_right = x + len(label) * 9.6 + 8
         assert est_right <= 752 + 4, f"label spills past plot: {label!r}"
 
 
