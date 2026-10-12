@@ -292,9 +292,9 @@ def _curve_label_boxes(svg: str) -> list[tuple[float, float, float, float]]:
     import re
 
     boxes = []
-    for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="11"[^>]*>(.*?)</text>', svg):
+    for m in re.finditer(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*font-size="16"[^>]*font-weight="600"[^>]*>(.*?)</text>', svg):
         x, y, text = float(m.group(1)), float(m.group(2)), m.group(3)
-        boxes.append((x, y - 11, len(text) * 6.6 + 8, 14))
+        boxes.append((x, y - 11, len(text) * 9.6 + 8, 18))
     return boxes
 
 
@@ -785,4 +785,30 @@ def test_argand_spec_validates_in_v3():
         render_mode=VisualRenderMode.DETERMINISTIC,
         deterministic=_argand_square_spec(),
     )
-    assert validate_lesson_spec(spec) == []  # honest empty, caller falls back — never a fake diagram
+    assert validate_lesson_spec(spec) == []
+
+
+# ── design-token readability contract ──
+
+def _all_text_sizes(svg):
+    import re
+    return [float(x) for x in re.findall(r'<text[^>]*font-size="([\d.]+)"', svg)]
+
+
+def test_no_tiny_text_in_scenes():
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    for spec_fn in (_argand_square_spec, _rotational_comparison_spec):
+        svg = render_deterministic_visual(spec_fn())
+        sizes = _all_text_sizes(svg)
+        assert sizes, spec_fn.__name__
+        assert min(sizes) >= 13, (spec_fn.__name__, min(sizes))
+
+
+def test_titles_meet_display_size():
+    import re
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_argand_square_spec())
+    m = re.search(r'font-size="([\d.]+)" font-weight="700" fill="#1e293b" text-anchor="middle">Square', svg)
+    assert m and float(m.group(1)) >= 28  # honest empty, caller falls back — never a fake diagram

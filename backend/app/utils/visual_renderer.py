@@ -54,6 +54,26 @@ RED = "#dc2626"
 BG_STAGE = "#f8fafc"
 STAGE_STROKE = "#e2e8f0"
 
+# Visual design tokens (readability contract — enforced by the min-font and
+# density regression tests). Sizes are final-rendered px at 800px width.
+# Geometry labels never go below 16, ticks never below 14, titles sit at 32.
+TYPE_TITLE = 32
+TYPE_PANEL = 22
+TYPE_LABEL = 20  # vector/object/point labels
+TYPE_EQUATION = 24
+TYPE_TICK = 14
+TYPE_AXIS = 16
+TYPE_SECONDARY = 14  # legend/caption/notes/connector labels
+TYPE_CURVE = 16  # long curve/vertex labels
+
+
+def _halo(x: float, y: float, w: float, h: float) -> str:
+    """Opaque label background so text over geometry stays readable."""
+    return (
+        f'<rect x="{_f(x - w / 2)}" y="{_f(y - h / 2)}" width="{_f(w)}" height="{_f(h)}" rx="7" '
+        f'fill="white" opacity="0.88"/>'
+    )
+
 # Diagram stage geometry (force diagram) — enlarged ~22% for composition (was 470).
 STAGE_X = 48
 STAGE_Y = 96
@@ -117,14 +137,14 @@ def _wrap(text: str, max_chars: int, hyphenate: bool = False) -> list[str]:
 
 
 def _title(y: int, text: str) -> tuple[str, int]:
-    return f'<text x="{VIEW_W/2:.0f}" y="{y}" font-family="{_FONT}" font-size="26" font-weight="700" fill="{INK}" text-anchor="middle">{_esc(text)}</text>', y + 44
+    return f'<text x="{VIEW_W/2:.0f}" y="{y}" font-family="{_FONT}" font-size="{TYPE_TITLE}" font-weight="700" fill="{INK}" text-anchor="middle">{_esc(text)}</text>', y + 50
 
 
 def _section_header(y: int, text: str) -> tuple[str, int]:
     return (
-        f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="13" font-weight="700" '
+        f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="{TYPE_SECONDARY}" font-weight="700" '
         f'fill="{ACCENT}" text-anchor="start" letter-spacing="1">{_esc(text)}</text>',
-        y + 24,
+        y + 26,
     )
 
 
@@ -143,16 +163,16 @@ def _equation_card(y: int, expression: str, meaning: str) -> tuple[str, int]:
     ty = y + 30
     for line in expr_lines:
         parts.append(
-            f'<text x="{MARGIN + 20}" y="{ty}" font-family="{_FONT}" font-size="22" font-weight="700" '
+            f'<text x="{MARGIN + 20}" y="{ty}" font-family="{_FONT}" font-size="{TYPE_EQUATION}" font-weight="700" '
             f'fill="{INK}" text-anchor="start">{_esc(line)}</text>'
         )
         ty += 30
     for line in meaning_lines:
         parts.append(
-            f'<text x="{MARGIN + 20}" y="{ty}" font-family="{_FONT}" font-size="13" '
+            f'<text x="{MARGIN + 20}" y="{ty}" font-family="{_FONT}" font-size="16" '
             f'fill="{MUTED}" text-anchor="start">{_esc(line)}</text>'
         )
-        ty += 18
+        ty += 20
     return "".join(parts), y + height + 22
 
 
@@ -166,7 +186,7 @@ def _point_line(y: int, text: str) -> tuple[str, int]:
         if i == 0:
             parts.append(f'<circle cx="{bullet_x}" cy="{ty - 5}" r="4" fill="{GREEN}"/>')
         parts.append(
-            f'<text x="{text_x}" y="{ty}" font-family="{_FONT}" font-size="15" '
+            f'<text x="{text_x}" y="{ty}" font-family="{_FONT}" font-size="16" '
             f'fill="{INK}" text-anchor="start">{_esc(line)}</text>'
         )
         ty += 22
@@ -246,8 +266,9 @@ def _render_vector(
         _arrowhead(head[0], head[1], deg),
     ]
     if v.label:
+        parts.append(_halo(lx, ly - 6, len(v.label) * 12.0 + 14, 26))
         parts.append(
-            f'<text x="{_f(lx)}" y="{_f(ly)}" font-family="{_FONT}" font-size="18" '
+            f'<text x="{_f(lx)}" y="{_f(ly)}" font-family="{_FONT}" font-size="{TYPE_LABEL}" '
             f'font-weight="700" fill="{color}" text-anchor="middle">{_esc(v.label)}</text>'
         )
     return "".join(parts)
@@ -271,7 +292,7 @@ def _render_object(obj: VisualObject, x: float, y: float) -> str:
         parts.append(f'<circle cx="{_f(x)}" cy="{_f(y)}" r="6" fill="{INK}"/>')
     if obj.label:
         parts.append(
-            f'<text x="{_f(x)}" y="{_f(y + 38)}" font-family="{_FONT}" font-size="15" '
+            f'<text x="{_f(x)}" y="{_f(y + 38)}" font-family="{_FONT}" font-size="16" '
             f'font-weight="700" fill="{INK}" text-anchor="middle">{_esc(obj.label)}</text>'
         )
     return "".join(parts)
@@ -306,9 +327,10 @@ def _angle_arc(
         _arrowhead(tip[0], tip[1], tip_deg, 10),
     ]
     if angle.label:
+        parts.append(_halo(label_pos[0], label_pos[1] - 6, len(angle.label) * 11.0 + 14, 24))
         parts.append(
             f'<text x="{_f(label_pos[0])}" y="{_f(label_pos[1])}" font-family="{_FONT}" '
-            f'font-size="17" font-weight="700" fill="{ACCENT}" text-anchor="middle">{_esc(angle.label)}</text>'
+            f'font-size="18" font-weight="700" fill="{ACCENT}" text-anchor="middle">{_esc(angle.label)}</text>'
         )
     return "".join(parts)
 
@@ -331,8 +353,9 @@ def _rotation_arc(arc: VisualArc, around: tuple[float, float], label_deg: float 
         # Label sits OUTSIDE the arc ring (radius r+24 along the arc midpoint),
         # never on top of the arc line itself.
         lpos = _polar(around[0], around[1], r + 24, mid_deg)
+        parts.append(_halo(lpos[0], lpos[1] - 6, len(arc.label) * 11.0 + 14, 24))
         parts.append(
-            f'<text x="{_f(lpos[0])}" y="{_f(lpos[1])}" font-family="{_FONT}" font-size="16" '
+            f'<text x="{_f(lpos[0])}" y="{_f(lpos[1])}" font-family="{_FONT}" font-size="18" '
             f'font-weight="700" fill="{GREEN}" text-anchor="middle">{_esc(arc.label)}</text>'
         )
     return "".join(parts)
@@ -343,14 +366,14 @@ def _legend_line(y: int, label: str, text: str) -> str:
     parts = []
     if label:
         parts.append(
-            f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="12.5" font-weight="700" '
+            f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="{TYPE_SECONDARY}" font-weight="700" '
             f'fill="{ACCENT}" text-anchor="start">{_esc(label)}</text>'
         )
         tx = MARGIN + 30
     else:
         tx = MARGIN
     parts.append(
-        f'<text x="{tx}" y="{y}" font-family="{_FONT}" font-size="12.5" fill="{MUTED}" '
+        f'<text x="{tx}" y="{y}" font-family="{_FONT}" font-size="{TYPE_SECONDARY}" fill="{MUTED}" '
         f'text-anchor="start">{_esc(text)}</text>'
     )
     return "".join(parts)
@@ -506,7 +529,7 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
                 # Label BELOW the V point — never inside the node band (R2).
                 parts.append(
                     f'<text x="{_f((sx + tx) / 2)}" y="{_f(vy + 18)}" '
-                    f'font-family="{_FONT}" font-size="12.5" fill="{RED}" text-anchor="middle">{_esc(conn.label)}</text>'
+                    f'font-family="{_FONT}" font-size="14" fill="{RED}" text-anchor="middle">{_esc(conn.label)}</text>'
                 )
             bottom = max(bottom, vy + 34)
         elif abs(conn.target - conn.source) == 1:
@@ -520,7 +543,7 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
                 # Label ABOVE the boxes — the gap midpoint sits inside the
                 # node band, so centering there renders through boxes (R2).
                 parts.append(
-                    f'<text x="{_f((from_x + to_x) / 2)}" y="{_f(y_top - 10)}" font-family="{_FONT}" font-size="12.5" '
+                    f'<text x="{_f((from_x + to_x) / 2)}" y="{_f(y_top - 10)}" font-family="{_FONT}" font-size="14" '
                     f'fill="{MUTED}" text-anchor="middle">{_esc(conn.label)}</text>'
                 )
         else:
@@ -545,7 +568,7 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
             if conn.label:
                 parts.append(
                     f'<text x="{_f((ex + land_x) / 2)}" y="{_f(route_y - 6)}" font-family="{_FONT}" '
-                    f'font-size="12.5" fill="{MUTED}" text-anchor="middle">{_esc(conn.label)}</text>'
+                    f'font-size="14" fill="{MUTED}" text-anchor="middle">{_esc(conn.label)}</text>'
                 )
 
     # Relation card below (returned for the caller to place after the legend).
@@ -740,24 +763,24 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     # clamp axes inside plot
     x_axis_y = max(plot_y0, min(plot_y0 + plot_h, x_axis_y))
     y_axis_x = max(plot_x0, min(plot_x0 + plot_w, y_axis_x))
-    parts.append(f'<line x1="{_f(plot_x0)}" y1="{_f(x_axis_y)}" x2="{_f(plot_x0+plot_w)}" y2="{_f(x_axis_y)}" stroke="{INK}" stroke-width="1.5"/>')
+    parts.append(f'<line x1="{_f(plot_x0)}" y1="{_f(x_axis_y)}" x2="{_f(plot_x0+plot_w)}" y2="{_f(x_axis_y)}" stroke="{INK}" stroke-width="2"/>')
     parts.append(f'<line x1="{_f(y_axis_x)}" y1="{_f(plot_y0)}" x2="{_f(y_axis_x)}" y2="{_f(plot_y0+plot_h)}" stroke="{INK}" stroke-width="1.5"/>')
     parts.append(_arrowhead(plot_x0+plot_w, x_axis_y, 0))
     parts.append(_arrowhead(y_axis_x, plot_y0, 90))
     # axis labels + ticks
-    parts.append(f'<text x="{_f(plot_x0+plot_w+8)}" y="{_f(x_axis_y+4)}" font-family="{_FONT}" font-size="12" fill="{MUTED}" text-anchor="start">{_esc(plot.x_label or "x")}</text>')
-    parts.append(f'<text x="{_f(y_axis_x+6)}" y="{_f(plot_y0-6)}" font-family="{_FONT}" font-size="12" fill="{MUTED}" text-anchor="start">{_esc(plot.y_label or "y")}</text>')
+    parts.append(f'<text x="{_f(plot_x0+plot_w+8)}" y="{_f(x_axis_y+4)}" font-family="{_FONT}" font-size="16" fill="{MUTED}" text-anchor="start">{_esc(plot.x_label or "x")}</text>')
+    parts.append(f'<text x="{_f(y_axis_x+6)}" y="{_f(plot_y0-6)}" font-family="{_FONT}" font-size="16" fill="{MUTED}" text-anchor="start">{_esc(plot.y_label or "y")}</text>')
     # Origin tick dedupe (R5): when 0 sits inside both ranges the two mid
     # ticks land on top of each other at the crossing — draw one "0" instead.
     origin_inside = x_min < 0 < x_max and y_min < 0 < y_max
     x_ticks = [x_min, x_max] if origin_inside else [x_min, (x_min + x_max) / 2, x_max]
     y_ticks = [y_min, y_max] if origin_inside else [y_min, (y_min + y_max) / 2, y_max]
     for xv in x_ticks:
-        parts.append(f'<text x="{_f(map_x(xv))}" y="{_f(x_axis_y+14)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="middle">{_f(xv)}</text>')
+        parts.append(f'<text x="{_f(map_x(xv))}" y="{_f(x_axis_y+18)}" font-family="{_FONT}" font-size="14" fill="{MUTED}" text-anchor="middle">{_f(xv)}</text>')
     for yv in y_ticks:
-        parts.append(f'<text x="{_f(y_axis_x-8)}" y="{_f(map_y(yv)+3)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="end">{_f(yv)}</text>')
+        parts.append(f'<text x="{_f(y_axis_x-10)}" y="{_f(map_y(yv)+3)}" font-family="{_FONT}" font-size="14" fill="{MUTED}" text-anchor="end">{_f(yv)}</text>')
     if origin_inside:
-        parts.append(f'<text x="{_f(y_axis_x-8)}" y="{_f(x_axis_y+14)}" font-family="{_FONT}" font-size="10" fill="{MUTED}" text-anchor="end">0</text>')
+        parts.append(f'<text x="{_f(y_axis_x-10)}" y="{_f(x_axis_y+18)}" font-family="{_FONT}" font-size="14" fill="{MUTED}" text-anchor="end">0</text>')
 
     # curves (labels placed in a second pass with collision avoidance)
     label_anchors: list[tuple[tuple[float, float], str, str]] = []
@@ -826,8 +849,8 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     # render byte-identically to before.
     placed_boxes: list[tuple[float, float, float, float]] = []
     for (ax, ay), label, color in label_anchors:
-        est_w = len(label) * 6.6 + 8
-        est_h = 14.0
+        est_w = len(label) * 9.6 + 8
+        est_h = 18.0
         candidates = [
             (ax + 6, ay - 6 - est_h / 2),
             (ax + 6, ay - 24 - est_h / 2),
@@ -849,15 +872,31 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
                 chosen = (cx, cy)
                 break
         else:
+            # No free in-bounds slot: prefer staying inside the plot over
+            # avoiding overlap (a clipped label is lost; an overlapped one
+            # is still readable via its halo).
             for cx, cy in candidates:
-                box = (cx, cy, est_w, est_h)
-                if not any(_boxes_overlap(box, other, pad=3.0) for other in placed_boxes):
+                if _inside(cx):
                     chosen = (cx, cy)
                     break
+            else:
+                for cx, cy in candidates:
+                    box = (cx, cy, est_w, est_h)
+                    if not any(_boxes_overlap(box, other, pad=3.0) for other in placed_boxes):
+                        chosen = (cx, cy)
+                        break
+        # Hard guarantee: slide the chosen box inside the plot horizontally.
+        # The anchor may sit at the plot edge (curve ends there); selection
+        # alone cannot fix that, clamping can.
+        cx, cy = chosen
+        cx = min(cx, plot_x0 + plot_w + 4 - est_w)
+        cx = max(cx, plot_x0 - 4)
+        chosen = (cx, cy)
         placed_boxes.append((chosen[0], chosen[1], est_w, est_h))
         # text-anchor=start at box left; baseline chosen so the legacy
         # (+6,-6) candidate renders byte-identically to before.
-        parts.append(f'<text x="{_f(chosen[0])}" y="{_f(chosen[1] + est_h / 2)}" font-family="{_FONT}" font-size="11" font-weight="600" fill="{color}" text-anchor="start">{_esc(label)}</text>')
+        parts.append(_halo(chosen[0] + est_w / 2, chosen[1] + est_h / 2 - 3, est_w + 8, est_h + 8))
+        parts.append(f'<text x="{_f(chosen[0])}" y="{_f(chosen[1] + est_h / 2)}" font-family="{_FONT}" font-size="16" font-weight="600" fill="{color}" text-anchor="start">{_esc(label)}</text>')
     return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
 
 
@@ -901,7 +940,7 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
         tlines = _wrap(txt, 22)
         ty2 = py - (len(tlines) - 1) * 7
         for line in tlines:
-            parts.append(f'<text x="{_f(px)}" y="{_f(ty2)}" font-family="{_FONT}" font-size="11.5" fill="{INK}" text-anchor="middle">{_esc(line)}</text>')
+            parts.append(f'<text x="{_f(px)}" y="{_f(ty2)}" font-family="{_FONT}" font-size="14" fill="{INK}" text-anchor="middle">{_esc(line)}</text>')
             ty2 += 14
     return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
 
@@ -942,7 +981,7 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
             if j >= 2:
                 break
             parts.append(
-                f'<text x="{_f(cx)}" y="{_f(label_y + j * 22)}" font-family="{_FONT}" font-size="17" '
+                f'<text x="{_f(cx)}" y="{_f(label_y + j * 26)}" font-family="{_FONT}" font-size="22" '
                 f'font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
             )
         center = (cx, obj_y)
@@ -982,7 +1021,7 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
         note_lines = _wrap(panel.note.strip(), 26)[:2] if panel.note.strip() else []
         for k, line in enumerate(note_lines):
             parts.append(
-                f'<text x="{_f(cx)}" y="{_f(note_y + k * 20)}" font-family="{_FONT}" font-size="14" '
+                f'<text x="{_f(cx)}" y="{_f(note_y + k * 22)}" font-family="{_FONT}" font-size="14" '
                 f'fill="{MUTED}" text-anchor="middle">{_esc(line)}</text>'
             )
     return "".join(parts), STAGE_Y + STAGE_H + 24, legend, comparison.relation
@@ -1020,10 +1059,10 @@ def _render_scene(scene: VisualScene) -> tuple[str, int]:
         parts.append(legend_hdr)
         for line in legend:
             parts.append(
-                f'<text x="{MARGIN + 4}" y="{y_after}" font-family="{_FONT}" font-size="12.5" '
+                f'<text x="{MARGIN + 4}" y="{y_after}" font-family="{_FONT}" font-size="14" '
                 f'fill="{MUTED}" text-anchor="start">{_esc(line)}</text>'
             )
-            y_after += 19
+            y_after += 21
         y_after += 6
 
     if relation is not None and relation.expression.strip():
@@ -1039,10 +1078,10 @@ def _render_scene(scene: VisualScene) -> tuple[str, int]:
         parts.append(cap_html)
         for line in _wrap(scene.caption.strip(), 90):
             parts.append(
-                f'<text x="{MARGIN}" y="{y_after}" font-family="{_FONT}" font-size="14.5" '
+                f'<text x="{MARGIN}" y="{y_after}" font-family="{_FONT}" font-size="16" '
                 f'fill="{INK}" text-anchor="start">{_esc(line)}</text>'
             )
-            y_after += 20
+            y_after += 22
         y_after += 6
 
     return "".join(parts), y_after
