@@ -1048,3 +1048,5 @@ def test_spec_prompt_requires_tangential_velocity():
     assert "TANGENTIAL" in prompt
     assert "never radial" in prompt
     assert "omit the vector rather than guessing" in prompt
+    assert "EQUATION FIDELITY" in prompt
+    assert "never rewrite Re(z)" in prompt

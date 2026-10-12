@@ -427,6 +427,9 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
                "curves": [{"label": "y = x²", "expr": "x**2", "x_min": 0, "x_max": 2, "style": "solid", "color": "accent"},
                           {"label": "trajectory", "points": [[0,0],[1,1.2],[2,1.8]], "style": "solid", "color": ""}]}
         - each curve: EITHER "expr" (safe math in x: x, sin(x), cos(x), sqrt(x), exp(x), log(x), pi) with its own x_min/x_max, OR explicit "points" [[x,y],...]. Prefer expr for accuracy. Colors ""|accent|red|green.
+        - discrete points and polygons: use explicit "points" with a "label" per vertex (e.g. an Argand-plane square: one closed loop [[-2,-2],[2,-2],[2,2],[-2,2],[-2,-2]] plus per-vertex labels like "A z = x + iy"). Vertices belong on the geometry as labels, never only in prose.
+        - dimensions: express side lengths as short curve/vertex labels (e.g. "side = 4"), never as decorative text.
+        - EQUATION FIDELITY: equation and expression strings must be copied verbatim from the image or notes — especially transformed expressions (e.g. write "z - 2Re(z) = -x + iy" exactly as shown; never rewrite Re(z) as Re(conjugate(z)) or otherwise "simplify"). The renderer prints these strings byte-identical; any mistranscription you emit becomes the student's wrong answer.
   - "caption": ONE sentence under "WHAT THE VISUAL SHOWS" teaching what the diagram means conceptually (never an inventory of parts). Example: "Torque magnitude depends on the lever arm r and the angle θ between r and F."
 
   When the screenshot shows a graph/plot/trajectory (parabola, sine wave, polar curve, projectile), prefer "plot" with a safe expr. When it shows vectors/forces, prefer "force_diagram". When it shows boxes/arrows, prefer "process_flow".
