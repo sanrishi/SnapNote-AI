@@ -230,11 +230,87 @@ def test_gemini_429_exhausts_after_single_retry(monkeypatch):
     monkeypatch.setattr(vision_service.asyncio, "sleep", AsyncMock())
 
     async def run():
-        await vision_service._call_gemini("p", _valid_png())
+        return await vision_service._call_gemini("p", _valid_png())
 
     with pytest.raises(UpstreamError):
         asyncio.run(run())
     assert calls["n"] == 2  # max_retries=1 → at most 2 calls
+
+
+# ── Capacity fallback: one alternate-model attempt on 503/504 ──
+
+
+def test_gemini_fallback_succeeds_on_503(monkeypatch):
+    primary_calls = {"n": 0}
+    fallback_calls = {"n": 0}
+
+    async def fake_primary(*args, **kwargs):
+        primary_calls["n"] += 1
+        raise Exception("503 high demand")
+
+    async def fake_fallback(*args, **kwargs):
+        fallback_calls["n"] += 1
+        return type("o", (), {"text": "fallback ok"})()
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async.side_effect = fake_primary
+    monkeypatch.setattr(vision_service, "model", mock_model)
+    fallback_model = AsyncMock()
+    fallback_model.generate_content_async.side_effect = fake_fallback
+    monkeypatch.setattr(vision_service, "_get_fallback_model", lambda: fallback_model)
+
+    async def run():
+        return await vision_service._call_gemini("p", _valid_png())
+
+    assert asyncio.run(run()) == "fallback ok"
+    assert primary_calls["n"] == 1 and fallback_calls["n"] == 1  # bounded
+
+
+def test_gemini_fallback_failure_raises_original_error(monkeypatch):
+    from app.exceptions import UpstreamError
+
+    async def fake_primary(*args, **kwargs):
+        raise Exception("504 Deadline Exceeded")
+
+    async def fake_fallback(*args, **kwargs):
+        raise Exception("503 still down")
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async.side_effect = fake_primary
+    monkeypatch.setattr(vision_service, "model", mock_model)
+    fallback_model = AsyncMock()
+    fallback_model.generate_content_async.side_effect = fake_fallback
+    monkeypatch.setattr(vision_service, "_get_fallback_model", lambda: fallback_model)
+
+    async def run():
+        return await vision_service._call_gemini("p", _valid_png())
+
+    with pytest.raises(UpstreamError) as exc_info:
+        asyncio.run(run())
+    assert "504 Deadline Exceeded" in str(exc_info.value)
+
+
+def test_gemini_no_fallback_for_quota_or_auth_errors(monkeypatch):
+    from app.exceptions import UpstreamError
+
+    async def fake_primary(*args, **kwargs):
+        raise Exception("429 RESOURCE_EXHAUSTED")
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async.side_effect = fake_primary
+    monkeypatch.setattr(vision_service, "model", mock_model)
+    monkeypatch.setattr(vision_service.asyncio, "sleep", AsyncMock())
+
+    async def _boom():
+        raise AssertionError("fallback must not run for quota errors")
+
+    monkeypatch.setattr(vision_service, "_get_fallback_model", _boom)
+
+    async def run():
+        return await vision_service._call_gemini("p", _valid_png())
+
+    with pytest.raises(UpstreamError):
+        asyncio.run(run())
 
 
 # ── Backend 75s timeout: returns 502, charges 0 credits ──
