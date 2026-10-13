@@ -28,9 +28,16 @@ from app.services.vision_service import (
     extract_revision_guide,
     extract_study_notes,
     extract_text_with_llm,
+    repair_thin_spec,
 )
 from app.services.visual_service import generate_visual
-from app.utils.visual_lesson import render_v3_visual, should_use_v3, v3_store_mode
+from app.utils.visual_lesson import (
+    render_v3_visual,
+    should_use_v3,
+    spec_needs_repair,
+    v3_store_mode,
+    validate_lesson_spec,
+)
 from app.services.storage_service import upload_image
 from app.utils.grounding import ground_visual_context
 from app.utils.render_notes import render_study_notes, render_jee_section
@@ -348,6 +355,35 @@ async def extract_visual_route(
         except Exception as e:
             logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
     spec = await build_visual_spec(enhanced, study_notes)
+
+    # Bounded thin-scene repair: a geometry-poor spec (generic family or
+    # structurally empty scene) gets exactly one source-grounded second
+    # chance before rendering. Repair failures keep the original spec; the
+    # existing validation gates below still refuse degenerate cases honestly.
+    # Assessment itself is wrapped: it must never break the render path.
+    try:
+        repair_reason = spec_needs_repair(spec)
+    except Exception:
+        logger.warning("Explain Visually repair assessment failed; rendering original spec")
+        repair_reason = None
+    if repair_reason is not None:
+        logger.info(
+            "Explain Visually thin spec (%s); attempting one bounded repair (diagram %s)",
+            repair_reason, diagramId[:8],
+        )
+        repaired = await repair_thin_spec(spec, enhanced, study_notes, repair_reason)
+        if repaired is not None and not validate_lesson_spec(repaired):
+            old_family = spec.deterministic.scene.scene_kind if spec.deterministic.scene else "?"
+            new_family = repaired.deterministic.scene.scene_kind if repaired.deterministic.scene else "?"
+            logger.info(
+                "Explain Visually repair accepted (diagram %s): %s -> %s",
+                diagramId[:8], old_family, new_family,
+            )
+            spec = repaired
+        else:
+            logger.info(
+                "Explain Visually repair kept original spec (diagram %s)", diagramId[:8]
+            )
 
     # Trust layer: the study-notes context summary describes the SOURCE
     # screenshot, but it renders under OUR rebuilt visual — drop any sentence
