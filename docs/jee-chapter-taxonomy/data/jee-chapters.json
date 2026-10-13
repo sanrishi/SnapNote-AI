@@ -6,7 +6,15 @@
   "syllabus_unit": "SETS, RELATIONS AND FUNCTIONS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Sets, Relations and Functions",
+   "Relations and Functions",
+   "Functions",
+   "domain and range",
+   "inverse function",
+   "composite functions"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-complex-numbers-and-quadratic-equations-chapter",
@@ -17,6 +25,9 @@
   "level": "chapter",
   "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
   "aliases": [
+   "Complex Numbers",
+   "Quadratic Equations",
+   "Complex Numbers and Quadratic Equations",
    "complex numbers",
    "complex number",
    "argand plane",
@@ -32,7 +43,15 @@
   "syllabus_unit": "MATRICES AND DETERMINANTS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Matrices and Determinants",
+   "Determinants",
+   "Matrices",
+   "matrix multiplication",
+   "inverse of a matrix",
+   "system of linear equations"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-permutations-and-combinations-chapter",
@@ -41,7 +60,12 @@
   "syllabus_unit": "PERMUTATIONS AND COMBINATIONS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Permutations and Combinations",
+   "factorial notation",
+   "circular permutations"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-binomial-theorem-and-its-simple-applications-chapter",
@@ -50,7 +74,14 @@
   "syllabus_unit": "BINOMIAL THEOREM AND ITS SIMPLE APPLICATIONS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Binomial Theorem",
+   "Binomial Theorem and its Simple Applications",
+   "binomial expansion",
+   "general term",
+   "middle term"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-sequence-and-series-chapter",
@@ -59,7 +90,15 @@
   "syllabus_unit": "SEQUENCE AND SERIES",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Sequences and Series",
+   "Sequence and Series",
+   "Arithmetic Progression",
+   "geometric progression",
+   "harmonic progression",
+   "sum of series"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-limit-continuity-and-differentiability-chapter",
@@ -68,7 +107,23 @@
   "syllabus_unit": "LIMIT, CONTINUITY AND DIFFERENTIABILITY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Differentiation and Applications of Derivatives",
+   "Limits, Continuity and Differentiability",
+   "Limit, Continuity and Differentiability",
+   "Limits",
+   "Limits and Continuity",
+   "Continuity and Differentiability",
+   "Differentiation",
+   "logarithmic functions",
+   "logarithmic inequality",
+   "logarithm",
+   "continuity",
+   "differentiability",
+   "maxima and minima",
+   "chain rule"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-integral-calculas-chapter",
@@ -77,7 +132,16 @@
   "syllabus_unit": "INTEGRAL CALCULAS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Integral Calculus",
+   "Definite Integration",
+   "Limits and Integration",
+   "Application of Integrals",
+   "indefinite integration",
+   "area under curves",
+   "definite integral properties"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-diffrential-equations-chapter",
@@ -86,7 +150,10 @@
   "syllabus_unit": "DIFFRENTIAL EQUATIONS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Differential Equations"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-co-ordinate-geometry-chapter",
@@ -95,7 +162,19 @@
   "syllabus_unit": "CO-ORDINATE GEOMETRY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Circles",
+   "Conic Sections",
+   "Straight Lines",
+   "Coordinate Geometry",
+   "Co-ordinate Geometry",
+   "Conic Sections - Parabola",
+   "parabola",
+   "ellipse",
+   "hyperbola",
+   "tangent and normal"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-three-dimensional-geometry-chapter",
@@ -104,7 +183,14 @@
   "syllabus_unit": "THREE DIMENSIONAL GEOMETRY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Three Dimensional Geometry",
+   "3D Geometry",
+   "direction cosines",
+   "direction ratios",
+   "shortest distance"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-vector-algebra-chapter",
@@ -113,7 +199,14 @@
   "syllabus_unit": "VECTOR ALGEBRA",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Vector Algebra",
+   "Vectors",
+   "dot product",
+   "cross product",
+   "scalar triple product"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-statistics-and-probability-chapter",
@@ -122,7 +215,15 @@
   "syllabus_unit": "STATISTICS AND PROBABILITY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Probability",
+   "Statistics",
+   "Statistics and Probability",
+   "mean median mode",
+   "variance and standard deviation",
+   "bayes theorem"
+  ]
  },
  {
   "chapter_id": "jee-mathematics-trigonometry-chapter",
@@ -131,7 +232,14 @@
   "syllabus_unit": "TRIGONOMETRY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Inverse Trigonometric Functions",
+   "Trigonometric Ratios and Equations",
+   "Trigonometry",
+   "trigonometric identities",
+   "heights and distances"
+  ]
  },
  {
   "chapter_id": "jee-physics-units-and-measurements-chapter",
@@ -140,7 +248,15 @@
   "syllabus_unit": "Units and Measurements",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Units and Measurements",
+   "Physics and Measurement",
+   "dimensional analysis",
+   "significant figures",
+   "least count",
+   "errors in measurement"
+  ]
  },
  {
   "chapter_id": "jee-physics-kinematics-chapter",
@@ -149,7 +265,16 @@
   "syllabus_unit": "Kinematics",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Kinematics",
+   "Motion in a Plane",
+   "Motion in a Straight Line",
+   "Projectile Motion",
+   "velocity and acceleration",
+   "equations of motion",
+   "relative velocity"
+  ]
  },
  {
   "chapter_id": "jee-physics-laws-of-motion-chapter",
@@ -158,7 +283,13 @@
   "syllabus_unit": "Laws of Motion",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Laws of Motion",
+   "friction",
+   "free body diagram",
+   "connected motion"
+  ]
  },
  {
   "chapter_id": "jee-physics-work-energy-and-power-chapter",
@@ -167,7 +298,15 @@
   "syllabus_unit": "Work, Energy and Power",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Work, Energy and Power",
+   "Collision",
+   "kinetic energy",
+   "potential energy",
+   "conservation of mechanical energy",
+   "elastic collision"
+  ]
  },
  {
   "chapter_id": "jee-physics-rotational-motion-chapter",
@@ -178,9 +317,19 @@
   "level": "chapter",
   "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
   "aliases": [
+   "Rotational Motion",
+   "System of Particles and Rotational Motion",
+   "Rotational motion",
+   "Center of mass",
+   "Angular Momentum",
    "rotation",
    "rotational",
    "rotational motion",
+   "torque",
+   "moment of inertia",
+   "angular momentum",
+   "rolling motion",
+   "rotational dynamics",
    "rigid body motion"
   ]
  },
@@ -191,7 +340,13 @@
   "syllabus_unit": "Gravitation",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Gravitation",
+   "kepler laws",
+   "escape velocity",
+   "satellite motion"
+  ]
  },
  {
   "chapter_id": "jee-physics-properties-of-solids-and-liquids-chapter",
@@ -200,7 +355,19 @@
   "syllabus_unit": "Properties of Solids and Liquids",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Properties of Solids and Liquids",
+   "Thermal Properties of Matter",
+   "Mechanical Properties of Fluids",
+   "Mechanical Properties of Solids",
+   "Properties of Solids",
+   "Mechanics of Fluids",
+   "stress and strain",
+   "hooke law",
+   "surface tension",
+   "viscosity"
+  ]
  },
  {
   "chapter_id": "jee-physics-thermodynamics-chapter",
@@ -209,7 +376,14 @@
   "syllabus_unit": "Thermodynamics",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Heat and Thermodynamics",
+   "first law of thermodynamics",
+   "adiabatic process",
+   "isothermal process",
+   "carnot cycle"
+  ]
  },
  {
   "chapter_id": "jee-physics-kinetic-theory-of-gases-chapter",
@@ -218,7 +392,14 @@
   "syllabus_unit": "Kinetic Theory of Gases",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Kinetic Theory of Gases",
+   "Kinetic Theory",
+   "Kinetic theory of gases",
+   "ideal gas law",
+   "degrees of freedom"
+  ]
  },
  {
   "chapter_id": "jee-physics-oscillations-and-waves-chapter",
@@ -227,7 +408,16 @@
   "syllabus_unit": "Oscillations and Waves",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Oscillations",
+   "Waves",
+   "Oscillations and Waves",
+   "Simple Harmonic Motion",
+   "simple pendulum",
+   "resonance",
+   "wave equation"
+  ]
  },
  {
   "chapter_id": "jee-physics-electrostatics-chapter",
@@ -236,7 +426,17 @@
   "syllabus_unit": "Electrostatics",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Electrostatics",
+   "Electrostatic Potential and Capacitance",
+   "Capacitors",
+   "coulomb law",
+   "electric field",
+   "electric potential",
+   "gauss law",
+   "electric dipole"
+  ]
  },
  {
   "chapter_id": "jee-physics-current-electricity-chapter",
@@ -245,7 +445,15 @@
   "syllabus_unit": "Current Electricity",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Current Electricity",
+   "Current electricity",
+   "ohm law",
+   "kirchhoff laws",
+   "wheatstone bridge",
+   "drift velocity"
+  ]
  },
  {
   "chapter_id": "jee-physics-magnetic-effects-of-current-and-magnetism-chapter",
@@ -254,7 +462,17 @@
   "syllabus_unit": "Magnetic Effects of Current and Magnetism",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Magnetic Effects of Current and Magnetism",
+   "Moving Charges and Magnetism",
+   "Magnetic Effects of Current",
+   "Magnetism and Matter",
+   "Moving charges and magnetism",
+   "biot savart law",
+   "cyclotron",
+   "lorentz force"
+  ]
  },
  {
   "chapter_id": "jee-physics-electromagnetic-induction-and-alternating-currents-chapter",
@@ -263,7 +481,16 @@
   "syllabus_unit": "Electromagnetic Induction and Alternating Currents",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Electromagnetic Induction and Alternating Currents",
+   "Electromagnetic Induction",
+   "Electromagnetic Oscillations",
+   "Alternating Current",
+   "faraday law",
+   "lenz law",
+   "mutual inductance"
+  ]
  },
  {
   "chapter_id": "jee-physics-electromagnetic-waves-chapter",
@@ -272,7 +499,12 @@
   "syllabus_unit": "Electromagnetic Waves",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Electromagnetic Waves",
+   "displacement current",
+   "electromagnetic spectrum"
+  ]
  },
  {
   "chapter_id": "jee-physics-optics-chapter",
@@ -281,7 +513,19 @@
   "syllabus_unit": "Optics",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Ray Optics",
+   "Wave Optics",
+   "Ray Optics and Optical Instruments",
+   "Ray optics",
+   "Optics - Lens",
+   "snell law",
+   "total internal reflection",
+   "lens maker formula",
+   "interference",
+   "diffraction"
+  ]
  },
  {
   "chapter_id": "jee-physics-dual-nature-of-matter-and-radiation-chapter",
@@ -290,7 +534,14 @@
   "syllabus_unit": "Dual Nature of Matter and Radiation",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Dual Nature of Matter and Radiation",
+   "Dual Nature of Radiation and Matter",
+   "Dual nature of matter",
+   "photoelectric effect",
+   "de broglie wavelength"
+  ]
  },
  {
   "chapter_id": "jee-physics-atoms-and-nuclei-chapter",
@@ -299,7 +550,14 @@
   "syllabus_unit": "Atoms and Nuclei",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Atoms and Nuclei",
+   "Nuclei",
+   "Atoms",
+   "bohr model",
+   "hydrogen spectrum"
+  ]
  },
  {
   "chapter_id": "jee-physics-electronic-devices-chapter",
@@ -308,7 +566,16 @@
   "syllabus_unit": "Electronic Devices",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Electronic Devices",
+   "Electronic Devices and Communication",
+   "Semiconductor Electronics",
+   "pn junction",
+   "transistor",
+   "logic gates",
+   "zener diode"
+  ]
  },
  {
   "chapter_id": "jee-physics-experimental-skills-chapter",
@@ -317,7 +584,13 @@
   "syllabus_unit": "Experimental Skills",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Experimental Skills",
+   "vernier calipers",
+   "screw gauge",
+   "error analysis"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-some-basic-concepts-in-chemistry-chapter",
@@ -326,7 +599,15 @@
   "syllabus_unit": "SOME BASIC CONCEPTS IN CHEMISTRY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Some Basic Concepts in Chemistry",
+   "Mole Concept",
+   "Some Basic Concepts of Chemistry",
+   "Some Basic Concepts of Chemistry / Stoichiometry",
+   "mole concept",
+   "stoichiometry"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-atomic-structure-chapter",
@@ -335,7 +616,15 @@
   "syllabus_unit": "ATOMIC STRUCTURE",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Atomic Structure",
+   "Structure of Atom",
+   "atomic number",
+   "bohr model",
+   "quantum numbers",
+   "electronic configuration"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-chemical-bonding-and-molecular-structure-chapter",
@@ -344,7 +633,14 @@
   "syllabus_unit": "CHEMICAL BONDING AND MOLECULAR STRUCTURE",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Chemical Bonding and Molecular Structure",
+   "Chemical Bonding",
+   "hybridization",
+   "molecular orbital",
+   "chemical bond"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-chemical-thermodynamics-chapter",
@@ -353,7 +649,15 @@
   "syllabus_unit": "CHEMICAL THERMODYNAMICS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Chemical Thermodynamics",
+   "Thermodynamics",
+   "enthalpy",
+   "entropy",
+   "gibbs energy",
+   "hess law"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-solutions-chapter",
@@ -362,7 +666,13 @@
   "syllabus_unit": "SOLUTIONS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Solutions",
+   "molarity",
+   "molality",
+   "colligative properties"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-equilibrium-chapter",
@@ -371,7 +681,17 @@
   "syllabus_unit": "EQUILIBRIUM",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Equilibrium",
+   "Chemical Equilibrium",
+   "Ionic Equilibrium",
+   "Chemical and Ionic Equilibrium",
+   "Equilibrium / Ionic Equilibrium",
+   "le chatelier",
+   "solubility product",
+   "buffer solution"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-redox-reactions-and-electrochemistry-chapter",
@@ -380,7 +700,15 @@
   "syllabus_unit": "REDOX REACTIONS AND ELECTROCHEMISTRY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Redox Reactions and Electrochemistry",
+   "Electrochemistry",
+   "Redox Reactions",
+   "oxidation number",
+   "electrochemical cell",
+   "nernst equation"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-chemical-kinetics-chapter",
@@ -389,7 +717,15 @@
   "syllabus_unit": "CHEMICAL KINETICS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Chemical Kinetics",
+   "Physical Chemistry - Chemical Kinetics",
+   "rate law",
+   "order of reaction",
+   "arrhenius equation",
+   "half life"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-classification-of-elements-and-periodicity-in-properties-chapter",
@@ -398,7 +734,17 @@
   "syllabus_unit": "CLASSIFICATION OF ELEMENTS AND PERIODICITY IN PROPERTIES",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Classification of Elements and Periodicity",
+   "Classification of Elements and Periodicity in Properties",
+   "Periodic Table and Properties",
+   "Periodic Properties",
+   "ionization enthalpy",
+   "electron gain enthalpy",
+   "electronegativity",
+   "atomic radius"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-p-block-elements-chapter",
@@ -407,7 +753,16 @@
   "syllabus_unit": "p- BLOCK ELEMENTS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "p-Block Elements",
+   "The p-Block Elements",
+   "p-Block Elements (Group 13 and 14)",
+   "p-Block Elements (Group 15)",
+   "p-Block Elements (Group 16)",
+   "group 13 elements",
+   "group 14 elements"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-d-and-f-block-elements-chapter",
@@ -416,7 +771,14 @@
   "syllabus_unit": "d - and f- BLOCK ELEMENTS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "d- and f-Block Elements",
+   "The d- and f-Block Elements",
+   "d- and f- Block Elements",
+   "d and f Block Elements",
+   "transition metals"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-coordination-compounds-chapter",
@@ -425,7 +787,13 @@
   "syllabus_unit": "COORDINATION COMPOUNDS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Coordination Compounds",
+   "Coordination Chemistry",
+   "ligands",
+   "crystal field theory"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-purification-and-characterisation-of-organic-compounds-chapter",
@@ -434,7 +802,12 @@
   "syllabus_unit": "PURIFICATION AND CHARACTERISATION OF ORGANIC COMPOUNDS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Purification and Characterisation of Organic Compounds",
+   "distillation",
+   "chromatography"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-some-basic-principles-of-organic-chemistry-chapter",
@@ -443,7 +816,22 @@
   "syllabus_unit": "SOME BASIC PRINCIPLES OF ORGANIC CHEMISTRY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Hydrocarbons",
+   "Some Basic Principles of Organic Chemistry",
+   "Organic Chemistry - Some Basic Principles and Techniques",
+   "Organic Chemistry \u2014 Some Basic Principles and Techniques",
+   "Organic Chemistry \u2014 Some Basic Principles",
+   "Organic Chemistry - Basic Principles",
+   "Organic Chemistry - Reaction Mechanism",
+   "Basic Principles of Organic Chemistry",
+   "Organic Chemistry - Some Basic Principles",
+   "inductive effect",
+   "resonance effect",
+   "carbocation",
+   "reaction intermediate"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-organic-compounds-containing-halogens-chapter",
@@ -452,7 +840,14 @@
   "syllabus_unit": "ORGANIC COMPOUNDS CONTAINING HALOGENS",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Organic Compounds Containing Halogens",
+   "Haloalkanes and Haloarenes",
+   "haloalkanes",
+   "haloarenes",
+   "nucleophilic substitution"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-organic-compounds-containing-oxygen-chapter",
@@ -461,7 +856,22 @@
   "syllabus_unit": "ORGANIC COMPOUNDS CONTAINING OXYGEN",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Organic Compounds Containing Oxygen",
+   "Alcohols, Phenols and Ethers",
+   "Aldehydes, Ketones and Carboxylic Acids",
+   "Aldehydes Ketones and Carboxylic Acids",
+   "Organic Chemistry - Aldehydes, Ketones and Carboxylic Acids",
+   "Carbonyl Compounds (Aldehydes, Ketones)",
+   "Alcohols, Phenols and Ethers; Aldehydes and Ketones",
+   "Organic Chemistry - Alcohols, Phenols and Ethers",
+   "Organic Compounds Containing Oxygen / Phenols",
+   "aldehydes",
+   "ketones",
+   "carboxylic acids",
+   "carbonyl compounds"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-organic-compounds-containing-nitrogen-chapter",
@@ -470,7 +880,15 @@
   "syllabus_unit": "ORGANIC COMPOUNDS CONTAINING NITROGEN",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Organic Compounds Containing Nitrogen",
+   "Amines",
+   "Organic Compounds Containing Nitrogen / Amines",
+   "amines",
+   "diazonium salts",
+   "nitro compounds"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-biomolecules-chapter",
@@ -479,7 +897,15 @@
   "syllabus_unit": "BIOMOLECULES",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Biomolecules",
+   "carbohydrates",
+   "proteins",
+   "amino acids",
+   "nucleic acids",
+   "enzymes"
+  ]
  },
  {
   "chapter_id": "jee-chemistry-principles-related-to-practical-chemistry-chapter",
@@ -488,6 +914,12 @@
   "syllabus_unit": "PRINCIPLES RELATED TO PRACTICAL CHEMISTRY",
   "syllabus_source_url": "https://cdnbbsr.s3waas.gov.in/s3f8e59f4b2fe7c5705bf878bbd494ccdf/uploads/2024/10/2024102841.pdf",
   "level": "chapter",
-  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand."
+  "note": "Chapter-level concept derived systematically from the official NTA syllabus unit list. Sub-concept taxonomy is built per chapter on demand.",
+  "aliases": [
+   "Principles Related to Practical Chemistry",
+   "Qualitative Analysis",
+   "salt analysis",
+   "titration"
+  ]
  }
 ]

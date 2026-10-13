@@ -13,7 +13,7 @@ from app.models.schemas import (
     StudyNotes,
     VisualExplanationResponse,
 )
-from app.services.jee_service import map_concept_to_jee
+from app.services.jee_service import build_match_signals, map_concept_to_jee
 from app.services.preprocessor import preprocess, enhance_for_vision
 from app.services.ocr_service import (
     read_raw,
@@ -105,7 +105,7 @@ def _jee_for_notes(study_notes: StudyNotes) -> tuple[JEEConceptContext | None, s
     Returns (context | None, markdown_section). No credits, no LLM calls.
     Unresolved input yields (None, "") so generic screenshots stay JEE-free.
     """
-    key_terms = [f.explanation for f in study_notes.key_formulas if f.explanation]
+    key_terms = build_match_signals(study_notes)
     try:
         ctx = map_concept_to_jee(study_notes.topic.title, key_terms)
     except Exception:

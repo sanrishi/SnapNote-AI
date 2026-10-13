@@ -183,8 +183,79 @@ def _tokens(text: str) -> set[str]:
     return set(re.findall(r"[^\W_]+", text.casefold()))
 
 
+# Whole-word math shorthand expansions, added ALONGSIDE the original terms
+# (never replacing). Lets "log" meet "logarithm" aliases without corrupting
+# words that merely contain the shorthand ("dialog" keeps its meaning).
+_MATH_SYNONYMS = {
+    "log": "logarithm",
+    "ln": "natural logarithm",
+    "trig": "trigonometry",
+    "det": "determinant",
+    "eqn": "equation",
+    "diff": "differentiation",
+    "integral": "integration",
+    "prob": "probability",
+}
+
+
+def expand_math_terms(terms: list[str]) -> list[str]:
+    """Append synonym-expanded copies of match terms (deterministic)."""
+    expanded = list(terms)
+    for term in terms:
+        lowered = term.casefold()
+        for short, full in _MATH_SYNONYMS.items():
+            if re.search(r"\b" + re.escape(short) + r"\b", lowered):
+                expanded.append(re.sub(r"\b" + re.escape(short) + r"\b", full, term, flags=re.IGNORECASE))
+                break
+    return expanded
+
+
+def build_match_signals(study_notes) -> list[str]:
+    """Collect every useful structured match signal from StudyNotes.
+
+    Order is topic-bearing first: title, what-to-remember, understand-it,
+    mistakes, revision bullets, visual summary, formula explanations, and
+    finally raw formula expressions (weak symbols, kept last). Free,
+    deterministic, no LLM calls. Returned strings feed the existing scorer.
+    """
+    signals: list[str] = []
+    topic = getattr(study_notes, "topic", None)
+    title = getattr(topic, "title", "") or ""
+    if title.strip():
+        signals.append(title.strip())
+    remember = getattr(study_notes, "what_you_should_remember", "") or ""
+    if remember.strip():
+        signals.append(remember.strip())
+    for item in getattr(study_notes, "understand_it", []) or []:
+        if str(item).strip():
+            signals.append(str(item).strip())
+    for item in getattr(study_notes, "common_mistakes", []) or []:
+        if str(item).strip():
+            signals.append(str(item).strip())
+    for item in getattr(study_notes, "thirty_second_revision", []) or []:
+        if str(item).strip():
+            signals.append(str(item).strip())
+    visual = getattr(study_notes, "visual_context", None)
+    summary = getattr(visual, "summary", "") or ""
+    if summary.strip():
+        signals.append(summary.strip())
+    for formula in getattr(study_notes, "key_formulas", []) or []:
+        explanation = getattr(formula, "explanation", "") or ""
+        if explanation.strip():
+            signals.append(explanation.strip())
+    for formula in getattr(study_notes, "key_formulas", []) or []:
+        expression = getattr(formula, "formula", "") or ""
+        if expression.strip():
+            signals.append(expression.strip())
+    return expand_math_terms(signals)
+
+
 def _score_concept(concept: dict, terms: list[str]) -> tuple[int, list[str]]:
-    """Fixed scoring: display-name exact +2, alias exact/token +1 each."""
+    """Fixed scoring: display-name exact +2, alias exact +2, partial +1 each.
+
+    Whole-term equality (display name or alias) is high-confidence evidence
+    and suffices alone; partial token/phrase hits need a second independent
+    hit (enforced by the chapter >= 2 threshold downstream)."""
     score = 0
     evidence: list[str] = []
     name = _normalize(str(concept.get("display_name", "")))
@@ -198,7 +269,7 @@ def _score_concept(concept: dict, terms: list[str]) -> tuple[int, list[str]]:
             evidence.append(f"exact concept-name match: {term.strip()!r}")
             continue
         if normalized in aliases:
-            score += 1
+            score += 2
             evidence.append(f"exact alias match: {term.strip()!r}")
             continue
         term_tokens = _tokens(normalized)
@@ -318,8 +389,27 @@ def _pyqs_for(concept_id: str) -> list[JEEPyQRef]:
     return refs
 
 
+_RELEVANCE_STOPWORDS = frozenset({
+    "the", "and", "for", "with", "from", "that", "this", "find", "value",
+    "prove", "show", "state", "using", "used", "when", "where", "which",
+    "into", "over", "under", "between", "such", "then", "than", "also",
+})
+
+
+def _relevance(summary: str | None, topic_tokens: set[str]) -> int:
+    """Count distinctive topic tokens appearing in a question summary.
+
+    Deterministic relevance signal for chapter-level ordering: prefers
+    records whose stored summary shares vocabulary with the lecture.
+    """
+    if not summary:
+        return 0
+    return len(topic_tokens & _tokens(summary))
+
+
 def map_concept_to_jee(topic_title: str, key_terms: list[str]) -> JEEConceptContext:
     """Build the student-facing JEE context for one lecture concept."""
+    key_terms = expand_math_terms(key_terms)
     concept, status, evidence, tied = resolve_concept(topic_title, key_terms)
     if concept is None:
         candidates = [JEEConceptRef(concept_id=c["concept_id"], name=c["name"]) for c in tied]
@@ -338,6 +428,23 @@ def map_concept_to_jee(topic_title: str, key_terms: list[str]) -> JEEConceptCont
     ]
     pyqs = _pyqs_for(str(concept["concept_id"]))
     syllabus = _syllabus_link(concept)
+    granularity = "chapter" if concept.get("level") == "chapter" else "sub-concept"
+    if granularity == "chapter":
+        # Chapter-level match: order by topic relevance first so the most
+        # applicable stored records lead; recency breaks ties deterministically.
+        # Summaries are short, so this is a preference signal, not a claim
+        # that lower-ranked records are irrelevant.
+        topic_tokens = {
+            token
+            for term in [topic_title, *key_terms]
+            for token in _tokens(term)
+            if len(token) > 2 and token not in _RELEVANCE_STOPWORDS
+        }
+        pyqs.sort(
+            key=lambda ref: (_relevance(ref.question_summary, topic_tokens), ref.year,
+                             ref.paper_question_number),
+            reverse=True,
+        )
     valid_ids = {ref.question_id for ref in pyqs}
     chapter_id = str(concept.get("chapter_id", "") or concept.get("concept_id", ""))
     patterns = _patterns_for(chapter_id, valid_ids)
@@ -353,6 +460,11 @@ def map_concept_to_jee(topic_title: str, key_terms: list[str]) -> JEEConceptCont
         )
     else:
         parts.append(f"{len(pyqs)} verified PYQ(s) stored")
+        if granularity == "chapter":
+            parts.append(
+                "these are related chapter records; exact-subtopic coverage "
+                "is not established"
+            )
         if patterns:
             parts.append(
                 f"across {len(patterns)} observed pattern(s); pattern "
@@ -377,4 +489,5 @@ def map_concept_to_jee(topic_title: str, key_terms: list[str]) -> JEEConceptCont
         pyqs_truncated=truncated,
         patterns=patterns,
         coverage_note=coverage_note,
+        match_granularity=granularity,
     )

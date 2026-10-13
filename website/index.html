@@ -1807,6 +1807,27 @@
 
     function wireJeeSection(scope) {
       wireJeeToggle(scope);
+      const pick = scope.querySelector("#jee-chapter-pick");
+      if (pick) {
+        fetch(`${BASE}/api/jee/chapters`).then((r) => r.json()).then((chapters) => {
+          for (const c of chapters || []) {
+            const opt = document.createElement("option");
+            opt.value = c.concept_id;
+            opt.textContent = `${c.subject} · ${c.display_name}`;
+            pick.appendChild(opt);
+          }
+        }).catch(() => {});
+        pick.addEventListener("change", async () => {
+          if (!pick.value) return;
+          try {
+            const resp = await fetch(`${BASE}/api/jee/concept/${encodeURIComponent(pick.value)}`);
+            if (!resp.ok) throw new Error(`chapter lookup failed (${resp.status})`);
+            renderJeeBody(scope, await resp.json());
+          } catch (err) {
+            scope.innerHTML = `<p class="muted">Chapter lookup unavailable right now.</p>`;
+          }
+        });
+      }
       const ySel = scope.querySelector("#jee-filter-year");
       const tSel = scope.querySelector("#jee-filter-type");
       if (ySel) ySel.addEventListener("change", () => { jeeFilter.year = ySel.value; renderJeeBody(scope, jeeCtx); });
@@ -1881,7 +1902,12 @@
 
     function jeeContextHtml(ctx) {
       if (!ctx || (ctx.match_status !== "matched" && ctx.match_status !== "ambiguous")) {
-        return `<p class="muted">JEE mapping not yet verified for this concept.</p>`;
+        const why = (ctx && ctx.evidence && ctx.evidence.length)
+          ? ctx.evidence.map((e) => `<p class="muted">${esc(e)}</p>`).join("")
+          : `<p class="muted">The lecture did not match a supported JEE concept with enough evidence.</p>`;
+        return `<p><strong>No confident JEE match.</strong></p>${why}`
+          + `<p class="muted">If you know the chapter, pick it to browse its verified PYQs — this selects a chapter, it does not claim an exact-concept match.</p>`
+          + `<div class="jee-filters"><label>Chapter <select id="jee-chapter-pick"><option value="">Choose…</option></select></label></div>`;
       }
       if (ctx.match_status === "ambiguous") {
         const cands = (ctx.candidates || []).map((c) => `<li>${esc(c.name)}</li>`).join("");
@@ -1891,6 +1917,9 @@
       const crumb = [ctx.subject, ctx.chapter, ctx.canonical_name].filter(Boolean)
         .map((s) => esc(s)).join(" → ");
       let html = `<p><strong>${crumb}</strong></p>`;
+      if (ctx.match_granularity === "chapter") {
+        html += `<p class="muted">Chapter-level match — the exact sub-concept is not yet mapped. PYQs below are related chapter records.</p>`;
+      }
       if (ctx.syllabus && ctx.syllabus.subtopic) {
         const src = ctx.syllabus.source_url
           ? ` (<a href="${esc(ctx.syllabus.source_url)}" target="_blank" rel="noopener">NTA syllabus</a>)`

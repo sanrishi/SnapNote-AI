@@ -129,6 +129,7 @@ class JEEConceptContext(BaseModel):
     pyqs_truncated: bool = False
     patterns: list[JEEPatternRef] = []
     coverage_note: str = ""
+    match_granularity: str = ""  # "sub-concept" | "chapter" | ""
 
 
 class JEEMapRequest(BaseModel):
