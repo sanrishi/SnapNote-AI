@@ -223,8 +223,52 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
     return errors
 
 
+def spec_needs_repair(spec: VisualSpec) -> str | None:
+    """Decide whether a spec deserves one bounded source-grounded repair.
+
+    Pure, no I/O. Returns a repair reason, or None when the spec should
+    render as-is. Triggers ONLY for:
+    - generic family (no geometry by construction; the source may support
+      a real scene the first pass missed), and
+    - structural emptiness in geometric families (zero labeled
+      vectors/curves/nodes/panels — validation would refuse these; a repair
+      attempt may salvage a rich source before honest refusal).
+    Single-primitive geometric scenes are NOT flagged: a simple concept
+    legitimately needs a simple visual, and forcing richness would invent
+    content. Returns None for generative specs (different pipeline).
+    """
+    if spec.render_mode != VisualRenderMode.DETERMINISTIC:
+        return None
+    det = spec.deterministic
+    scene = det.scene if det is not None else None
+    if scene is None:
+        return "missing scene"
+    kind = scene.scene_kind
+    if kind == "generic":
+        return "generic family carries no geometry"
+    if kind == "force_diagram":
+        force = scene.force
+        if force is None or not [v for v in force.vectors if (v.label or "").strip()]:
+            return "force_diagram has no labeled vectors"
+    elif kind == "plot":
+        plot = scene.plot
+        if plot is None or not plot.curves:
+            return "plot has no curves"
+    elif kind == "process_flow":
+        flow = scene.flow
+        if flow is None or len([n for n in flow.nodes if (n.label or "").strip()]) < 2:
+            return "process_flow has fewer than 2 labeled nodes"
+    elif kind == "comparison":
+        comp = scene.comparison
+        if comp is None or len([p for p in (comp.panels or []) if (p.label or "").strip()]) < 2:
+            return "comparison has fewer than 2 labeled panels"
+    else:
+        return f"unsupported scene_kind: {kind!r}"
+    return None
+
+
 def _scene_relation_expression(scene) -> str:
-    """Extract the scene's own relation expression, if any (force/flow only)."""
+    """Extract the scene's own relation expression, if any (force/flow/comparison)."""
     try:
         if scene.scene_kind == "force_diagram" and scene.force is not None:
             rel = scene.force.relation

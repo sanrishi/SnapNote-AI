@@ -7,6 +7,7 @@ Uses the ground-truth fixtures (torque + argand) — no invented math.
 import re
 import sys
 import os
+import asyncio
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "prototypes", "visual_composition")))
 
@@ -1050,3 +1051,49 @@ def test_spec_prompt_requires_tangential_velocity():
     assert "omit the vector rather than guessing" in prompt
     assert "EQUATION FIDELITY" in prompt
     assert "never rewrite Re(z)" in prompt
+
+
+# ── thin-spec repair decision (semantic-completeness gate) ──
+
+def test_needs_repair_flags_generic_and_empty():
+    from app.models.schemas import VisualRenderMode, VisualSpec
+    from app.utils.visual_lesson import spec_needs_repair
+
+    assert spec_needs_repair(_generic_spec(["a", "b"])) is not None
+    empty_flow = _flow_v3_spec()
+    assert empty_flow.deterministic.scene is not None
+    empty_flow.deterministic.scene.flow.nodes = []
+    assert spec_needs_repair(empty_flow) is not None
+
+
+def test_needs_repair_passes_rich_and_generative():
+    from app.models.schemas import VisualRenderMode, VisualSpec
+    from app.utils.visual_lesson import spec_needs_repair
+
+    assert spec_needs_repair(_torque()) is None
+    assert spec_needs_repair(_comparison_spec()) is None
+    gen = _torque()
+    gen.render_mode = VisualRenderMode.GENERATIVE
+    assert spec_needs_repair(gen) is None
+
+
+def test_repair_thin_spec_returns_repaired_or_none(monkeypatch):
+    import json
+    from unittest.mock import AsyncMock
+    from app.services import vision_service
+
+    rich_json = _comparison_spec().model_dump_json()
+    monkeypatch.setattr(
+        vision_service, "_call_gemini", AsyncMock(return_value=rich_json))
+    out = asyncio.run(vision_service.repair_thin_spec(
+        _generic_spec(["a", "b"]), b"fake-image", None, "generic family carries no geometry"))
+    assert out is not None
+    assert out.deterministic.scene is not None
+    assert out.deterministic.scene.scene_kind == "comparison"
+
+    async def _boom(*_a, **_k):
+        raise vision_service.UpstreamError(service="x", detail="down")
+
+    monkeypatch.setattr(vision_service, "_call_gemini", _boom)
+    assert asyncio.run(vision_service.repair_thin_spec(
+        _generic_spec(["a", "b"]), b"fake-image", None, "x")) is None

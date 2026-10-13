@@ -485,3 +485,144 @@ def test_visual_route_storage_failure_then_retry(sample_diagram_image, monkeypat
     assert get_visual_entitlement(diagram_id)[1] is not None
     remaining, _ = get_credits(device)
     assert remaining == 45
+
+
+# ── thin-spec repair: one bounded second chance before rendering ──
+
+def _thin_generic_spec():
+    from app.models.schemas import (
+        DeterministicVisual,
+        VisualGeneric,
+        VisualRenderMode,
+        VisualScene,
+        VisualSpec,
+    )
+
+    return VisualSpec(
+        concept="Something",
+        render_mode=VisualRenderMode.DETERMINISTIC,
+        deterministic=DeterministicVisual(
+            title="Something",
+            scene=VisualScene(
+                scene_kind="generic",
+                generic=VisualGeneric(central_label="Something", callouts=["a", "b"]),
+            ),
+        ),
+    )
+
+
+def _rich_force_spec():
+    from app.models.schemas import (
+        DeterministicVisual,
+        VisualObject,
+        VisualRelation,
+        VisualRenderMode,
+        VisualScene,
+        VisualSpec,
+        VisualVector,
+        ForceDiagram,
+    )
+
+    return VisualSpec(
+        concept="Torque",
+        render_mode=VisualRenderMode.DETERMINISTIC,
+        deterministic=DeterministicVisual(
+            title="Torque",
+            scene=VisualScene(
+                scene_kind="force_diagram",
+                force=ForceDiagram(
+                    object=VisualObject(kind="pivot", label="O"),
+                    vectors=[
+                        VisualVector(label="r", angle_deg=45, length=1.0),
+                        VisualVector(label="F", angle_deg=90, length=1.0, tail="r"),
+                    ],
+                    relation=VisualRelation(expression="t = r x F"),
+                ),
+            ),
+        ),
+    )
+
+
+def test_visual_route_repairs_thin_spec_once(sample_diagram_image, monkeypatch):
+    """A generic-family spec triggers exactly one repair; the repaired rich
+    spec is what renders and stores. No extra credits, no second repair."""
+    from app.utils.credits_store import get_credits
+
+    device = "visual-repair-device-00000000-0000-000000000004"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=_thin_generic_spec()))
+    repair_mock = AsyncMock(return_value=_rich_force_spec())
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+    monkeypatch.setattr(
+        "app.routes.extract.render_v3_visual", AsyncMock(return_value=("svg", "<svg>hero</svg>")))
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "generated"
+    assert repair_mock.await_count == 1  # bounded: exactly one repair call
+    remaining, _ = get_credits(device)
+    assert remaining == 45  # repair + visual both free
+
+
+def test_visual_route_skips_repair_for_rich_spec(sample_diagram_image, monkeypatch):
+    """A geometry-rich spec renders directly with no repair call."""
+    device = "visual-norepair-device-00000000-0000-000000000005"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=_rich_force_spec()))
+
+    async def _boom(*_a, **_k):
+        raise AssertionError("repair must not run for rich specs")
+
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", _boom)
+    monkeypatch.setattr(
+        "app.routes.extract.render_v3_visual", AsyncMock(return_value=("svg", "<svg>hero</svg>")))
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "generated"

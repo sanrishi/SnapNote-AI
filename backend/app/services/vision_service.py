@@ -629,3 +629,53 @@ def _composition_contradiction(spec: VisualSpec) -> tuple[str, str] | None:
         if " ".join(relation_expr.split()) != " ".join(result_expr.split()):
             return relation_expr, result_expr
     return None
+
+
+THIN_SCENE_REPAIR_PROMPT = r"""Your previous visual plan has too little drawable geometry: {REASON}. A central box with a few callouts does not teach the lesson.
+
+Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants (use "comparison" with one panel per variant), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), or process steps ("process_flow") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
+
+If the lesson is genuinely simple or nothing drawable is honestly supported, return the spec JSON unchanged. Never invent formulas, numbers, vectors, curves, or relationships to fill the page. Return ONLY the JSON object, no other text.
+
+YOUR PREVIOUS RESPONSE:
+{PREVIOUS_JSON}"""
+
+
+async def repair_thin_spec(
+    spec: VisualSpec,
+    image_bytes: bytes,
+    study_notes: StudyNotes | None,
+    reason: str,
+) -> VisualSpec | None:
+    """One bounded attempt to upgrade a geometry-poor spec (pure).
+
+    Returns the repaired spec, or None when the repair call itself fails
+    (caller keeps the original). At most one extra Gemini call, tight
+    sub-budget, no retry — same discipline as the contradiction repair.
+    """
+    prompt = THIN_SCENE_REPAIR_PROMPT.replace("{REASON}", reason).replace(
+        "{PREVIOUS_JSON}", spec.model_dump_json(exclude_none=False)
+    )
+    if study_notes is not None:
+        prompt += (
+            "\n\nGROUNDED CONTEXT (use only these plus the screenshot; "
+            "do not contradict the screenshot):\n" + _minimal_notes_context(study_notes)
+        )
+    try:
+        from app.config import settings
+
+        repair_raw = await _call_gemini(
+            prompt,
+            image_bytes,
+            max_retries=0,
+            json_mode=True,
+            timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
+        )
+        repair_data = _clean_latex_in_dict(_extract_json(repair_raw))
+        from app.utils.latex_clean import normalize_spec_math
+
+        repaired = normalize_spec_math(VisualSpec(**repair_data))
+    except (json.JSONDecodeError, ValidationError, UpstreamError) as e:
+        logger.warning("VisualSpec thin-scene repair failed: %s", e)
+        return None
+    return repaired
