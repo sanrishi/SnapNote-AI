@@ -21,6 +21,29 @@ logger = logging.getLogger(__name__)
 genai.configure(api_key=settings.GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-flash-lite-latest")
 
+_fallback_model = None
+
+
+def _get_fallback_model():
+    """Lazily construct the capacity-fallback model (once per process)."""
+    global _fallback_model
+    if _fallback_model is None and settings.GEMINI_FALLBACK_MODEL.strip():
+        _fallback_model = genai.GenerativeModel(settings.GEMINI_FALLBACK_MODEL.strip())
+    return _fallback_model
+
+
+def _is_capacity_error(err_str: str) -> bool:
+    """503/504-style errors mean the serving pool is sick, not the request.
+
+    A different model usually serves from different capacity, so exactly one
+    fallback attempt is justified. 429/quota and auth errors are excluded:
+    retrying those elsewhere burns budget without helping.
+    """
+    return any(
+        token in err_str
+        for token in ("503", "504", "UNAVAILABLE", "DEADLINE_EXCEEDED", "overloaded", "high demand")
+    )
+
 TEXT_SYSTEM_PROMPT = r"""You extract study notes from a screenshot. RULES — follow them in order:
 
 RULE 1 — NEVER describe the image. START DIRECTLY with the transcribed content. No "The image shows", "This screenshot displays", "An illustration of", or any framing sentence. Just the content.
@@ -259,7 +282,9 @@ async def _call_gemini(
     The SDK default timeout for generate_content is 600s and it internally retries
     on 503 — together with any outer retry loop that stacks unboundedly. We pin a
     sane per-call timeout and retry only on 429/RESOURCE_EXHAUSTED (where a short
-    wait genuinely helps). Everything else fails fast.
+    wait genuinely helps). On 503/504 capacity errors we try the configured
+    fallback model exactly once (different capacity pool), then fail fast.
+    Everything else fails fast.
 
     `timeout_seconds` overrides the configured default so a secondary fallback call
     can be hard-budgeted (keeps the total under the diagram route timeout).
@@ -287,10 +312,30 @@ async def _call_gemini(
                 logger.warning("Gemini rate limited (attempt %d/%d). Retrying in %ds...", attempt + 1, max_retries + 1, delay)
                 await asyncio.sleep(delay)
             else:
-                logger.error("Gemini call failed: %s", str(e))
-                raise UpstreamError(service="Gemini Vision", detail=str(e))
-    logger.error("Gemini call failed after %d retries: %s", max_retries + 1, last_error)
-    raise UpstreamError(service="Gemini Vision", detail=str(last_error))
+                break
+    assert last_error is not None
+    err_str = str(last_error)
+    fallback = _get_fallback_model()
+    if fallback is not None and _is_capacity_error(err_str):
+        logger.warning(
+            "Gemini primary model hit a capacity error; trying fallback model once: %s",
+            settings.GEMINI_FALLBACK_MODEL,
+        )
+        try:
+            config = {"response_mime_type": "application/json"} if json_mode else None
+            response = await fallback.generate_content_async(
+                [prompt, img],
+                generation_config=config,
+                request_options={
+                    "timeout": call_timeout,
+                    "retry": None,
+                },
+            )
+            return response.text.strip()
+        except Exception as e:
+            logger.warning("Gemini fallback model also failed: %s", str(e)[:200])
+    logger.error("Gemini call failed: %s", err_str)
+    raise UpstreamError(service="Gemini Vision", detail=err_str)
 
 
 async def extract_text_with_llm(image_bytes: bytes) -> str:

@@ -57,6 +57,11 @@ class Settings(BaseSettings):
     # expressions), so it gets a tighter deadline than full understanding.
     # Expiry refuses honestly; the timeout is never raised to force a pass.
     GEMINI_REPAIR_TIMEOUT_SECONDS: float = 12.0
+    # Capacity fallback: a different model usually sits in a different
+    # serving pool, so one fallback attempt on 503/504 (capacity errors)
+    # can succeed during a partial outage. Empty disables the fallback.
+    # Never used for 429/quota (account-wide) or auth errors.
+    GEMINI_FALLBACK_MODEL: str = "gemini-3-flash-preview"
     DIAGRAM_TIMEOUT_SECONDS: float = 28.0
 
     # "semantic" = Gemini outputs a structured DiagramSpec, Python renders it
