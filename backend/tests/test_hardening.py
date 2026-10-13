@@ -255,6 +255,7 @@ def test_gemini_fallback_succeeds_on_503(monkeypatch):
     mock_model = AsyncMock()
     mock_model.generate_content_async.side_effect = fake_primary
     monkeypatch.setattr(vision_service, "model", mock_model)
+    monkeypatch.setattr(vision_service.asyncio, "sleep", AsyncMock())
     fallback_model = AsyncMock()
     fallback_model.generate_content_async.side_effect = fake_fallback
     monkeypatch.setattr(vision_service, "_get_fallback_model", lambda: fallback_model)
@@ -263,7 +264,7 @@ def test_gemini_fallback_succeeds_on_503(monkeypatch):
         return await vision_service._call_gemini("p", _valid_png())
 
     assert asyncio.run(run()) == "fallback ok"
-    assert primary_calls["n"] == 1 and fallback_calls["n"] == 1  # bounded
+    assert primary_calls["n"] == 2 and fallback_calls["n"] == 1  # backoff retry, then one failover
 
 
 def test_gemini_fallback_failure_raises_original_error(monkeypatch):
@@ -311,6 +312,39 @@ def test_gemini_no_fallback_for_quota_or_auth_errors(monkeypatch):
 
     with pytest.raises(UpstreamError):
         asyncio.run(run())
+
+
+def test_gemini_backoff_retries_primary_once_on_503(monkeypatch):
+    calls = {"n": 0}
+
+    async def fake_primary(*args, **kwargs):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise Exception("503 high demand")
+        return type("o", (), {"text": "backoff ok"})()
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async.side_effect = fake_primary
+    monkeypatch.setattr(vision_service, "model", mock_model)
+
+    slept = {"s": 0.0}
+
+    async def fake_sleep(s):
+        slept["s"] += s
+
+    monkeypatch.setattr(vision_service.asyncio, "sleep", fake_sleep)
+
+    async def _boom():
+        raise AssertionError("fallback must not run when backoff succeeds")
+
+    monkeypatch.setattr(vision_service, "_get_fallback_model", _boom)
+
+    async def run():
+        return await vision_service._call_gemini("p", _valid_png())
+
+    assert asyncio.run(run()) == "backoff ok"
+    assert calls["n"] == 2  # one backoff retry, then success
+    assert slept["s"] == 5  # single short pause, no storm
 
 
 # ── Backend 75s timeout: returns 502, charges 0 credits ──

@@ -311,6 +311,28 @@ async def _call_gemini(
                 delay = 2 * (attempt + 1)
                 logger.warning("Gemini rate limited (attempt %d/%d). Retrying in %ds...", attempt + 1, max_retries + 1, delay)
                 await asyncio.sleep(delay)
+            elif attempt == 0 and _is_capacity_error(err_str):
+                # Transient capacity dip: one short backoff on the primary
+                # before failing over. 5s is enough to ride out spikes without
+                # materially extending the worst case; 504s are included
+                # because an expired server deadline is also capacity talking.
+                logger.warning("Gemini capacity dip; pausing 5s before failover...")
+                await asyncio.sleep(5)
+                try:
+                    config = {"response_mime_type": "application/json"} if json_mode else None
+                    response = await model.generate_content_async(
+                        [prompt, img],
+                        generation_config=config,
+                        request_options={
+                            "timeout": call_timeout,
+                            "retry": None,
+                        },
+                    )
+                    return response.text.strip()
+                except Exception as e2:
+                    last_error = e2
+                    err_str = str(e2)
+                    break
             else:
                 break
     assert last_error is not None
@@ -331,6 +353,7 @@ async def _call_gemini(
                     "retry": None,
                 },
             )
+            logger.info("Gemini fallback model served the call: %s", settings.GEMINI_FALLBACK_MODEL)
             return response.text.strip()
         except Exception as e:
             logger.warning("Gemini fallback model also failed: %s", str(e)[:200])
