@@ -473,6 +473,17 @@ Choose "render_mode": "deterministic" or "generative" based on INFORMATION PRECI
 
 If in doubt, choose "deterministic". A physics topic like "what is angular momentum?" may still benefit from a generative conceptual illustration — decide by precision, not by topic.
 
+TASK PLANNING (do this FIRST, before choosing any scene):
+Decide the teaching job in a "task" object. The task determines the representation — our validator rejects any scene that cannot do the task's job, so plan honestly:
+   - "task_type": exactly one of "compare_variants" (lesson contrasts 2-3 cases: translation vs rotation, cases of a piecewise solution), "multi_step_solution" (domain/cases/steps combining into one conclusion), "graph_relationship" (a plotted relationship IS the lesson), "vector_arrangement" (bodies, forces/velocities, angles, pivots), "connected_process" (ordered steps with dependencies/feedback), "coordinate_construction" (points/polygons/dimensions placed on axes), "definition_overview" (only when nothing structural is drawable — last resort, never for comparable/graphable/vector content).
+   - "learning_outcome": one sentence stating what the student will be able to do after seeing the visual.
+   - "required_elements": every entity the visual MUST show (bodies, points, axes, steps, variants). Each must be satisfiable by the chosen family's primitives — do not list what no family can draw.
+   - "required_relationships": the connections/transformations/constraints between them.
+   - "exact_claims": verbatim equations/values/labels from the image or notes that MUST appear (e.g. domain restrictions, final results). Copy them character-for-character; the validator checks their presence.
+   - "acceptable_families": scene kinds allowed for this task, chosen ONLY from this registry — compare_variants: ["comparison"]; multi_step_solution: ["process_flow"]; graph_relationship: ["plot"]; vector_arrangement: ["force_diagram"]; connected_process: ["process_flow"]; coordinate_construction: ["plot"]; definition_overview: any family. Your "scene.scene_kind" MUST be one of acceptable_families.
+   - "assumptions": anything you had to assume to draw (empty when nothing assumed). "missing": evidence you needed but could not find.
+   - A simple concept gets a simple task (definition_overview with 1-2 elements). Never inflate a simple lesson to justify a fancy scene; never shrink a structured lesson into generic boxes.
+
 THE SCENE PRIMITIVES (deterministic mode):
 Inside "deterministic.scene" you describe WHAT must be shown using universal educational primitives. Python decides HOW to draw everything — you NEVER give coordinates, pixel positions, or SVG. You decide only the SEMANTICS: which objects, which vectors, their directions in degrees, and which relationships to draw.
   - "scene_kind": "force_diagram" (vectors/forces/angles around a pivot: torque, lever arms, inclined planes, forces on a body) OR "process_flow" (labeled boxes with arrows: control loops, PID, workflows) OR "plot" (2D graphs: functions y=f(x), projectile trajectories, polar curves — rendered as clean axes + curves).
@@ -530,6 +541,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "text_required": true,
   "deterministic": {
     "title": "short title (2-6 words)",
+    "task": {"task_type": "compare_variants", "learning_outcome": "one sentence", "required_elements": ["each entity the visual must show"], "required_relationships": [], "exact_claims": ["verbatim equations/values"], "acceptable_families": ["comparison"], "assumptions": [], "missing": []},
     "scene": {
       "scene_kind": "force_diagram | process_flow | plot | generic | comparison",
       "caption": "one teaching sentence about what the diagram means",
@@ -559,6 +571,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
 }
 
 FIELD RULES:
+- "task": ALWAYS emit it (plan first, then scene). The validator enforces that "scene.scene_kind" is in "task.acceptable_families", that every "required_elements" entry is satisfiable by the scene, and that every "exact_claims" string appears verbatim. A spec whose scene cannot do its task is refused.
 - "text_required": true when readable text/symbols are essential to the visual (always true in deterministic mode). false only for a purely conceptual illustration that conveys meaning through pictures alone.
 - "deterministic": ALWAYS populate it. Prefer providing a "scene" (a real diagram) when the concept maps to force_diagram, process_flow or plot; the renderer draws it. IMPORTANT — Explain Visually is a VISUAL ARTIFACT, not a second study sheet: when you emit a scene, keep it geometry-first (objects, vectors, angles, arcs, relationships, labels) and do NOT fill equations/steps/points with the same material that already lives in the study notes. Leave equations/steps/points EMPTY when a scene is present; the only equation allowed inside the visual is the scene's own "relation" (e.g. "τ = r × F") plus the one-line caption. Fill equations/steps/points ONLY when there is no scene (the renderer then falls back to a card layout). In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
 - Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support.
@@ -585,6 +598,46 @@ def _minimal_notes_context(study_notes: StudyNotes) -> str:
     return json.dumps({"topic": topic, "formulas": formulas}, ensure_ascii=False)
 
 
+def _normalize_task_enums(data: dict) -> dict:
+    """Recover near-miss LLM enum spellings before strict validation.
+
+    Models emit confusable Unicode (observed: "vectorₐrrangement" with U+2090
+    and a missing underscore). NFKC folds the confusables; the remainder is
+    matched against known values with non-alphanumerics stripped. Only exact
+    post-strip matches are repaired — anything else passes through untouched
+    so validation still refuses genuinely unknown kinds. Applied ONLY to the
+    closed enum fields task_type/scene_kind — equation and label strings stay
+    byte-identical (math is case- and glyph-significant).
+    """
+    import re
+    import unicodedata
+
+    from app.models.schemas import VisualTask
+
+    valid_tasks = list(VisualTask.model_fields["task_type"].annotation.__args__)  # type: ignore[union-attr]
+    valid_kinds = ["force_diagram", "process_flow", "plot", "generic", "comparison"]
+
+    def _recover(value: str, valid: list[str]) -> str:
+        folded = unicodedata.normalize("NFKC", value).strip()
+        if folded in valid:
+            return folded
+        bare = re.sub(r"[^a-z0-9]", "", folded.lower())
+        for candidate in valid:
+            if re.sub(r"[^a-z0-9]", "", candidate.lower()) == bare:
+                return candidate
+        return value
+
+    det = data.get("deterministic")
+    if isinstance(det, dict):
+        task = det.get("task")
+        if isinstance(task, dict) and isinstance(task.get("task_type"), str):
+            task["task_type"] = _recover(task["task_type"], valid_tasks)
+        scene = det.get("scene")
+        if isinstance(scene, dict) and isinstance(scene.get("scene_kind"), str):
+            scene["scene_kind"] = _recover(scene["scene_kind"], valid_kinds)
+    return data
+
+
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:
     """Produce the structured VisualSpec that drives the Explain Visually image.
 
@@ -600,7 +653,7 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
         prompt += "\n\nSTUDY NOTES (context — do not contradict the screenshot):\n" + notes_json
     raw = await _call_gemini(prompt, image_bytes, json_mode=True)
     try:
-        data = _clean_latex_in_dict(_extract_json(raw))
+        data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(raw)))
         from app.utils.latex_clean import normalize_spec_math
 
         spec = normalize_spec_math(VisualSpec(**data))
@@ -648,7 +701,7 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
                 json_mode=True,
                 timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
             )
-            repair_data = _clean_latex_in_dict(_extract_json(repair_raw))
+            repair_data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(repair_raw)))
             from app.utils.latex_clean import normalize_spec_math
 
             repaired = normalize_spec_math(VisualSpec(**repair_data))
@@ -676,7 +729,7 @@ COMPOSITION_RECONCILE_PROMPT = r"""You previously emitted the visual spec below,
 YOUR PREVIOUS RESPONSE:
 {{PREVIOUS_JSON}}
 
-Re-emit the COMPLETE spec JSON with this fixed: choose the ONE expression that is actually grounded in the screenshot and study notes and put that identical expression in BOTH the scene relation and the composition result (whitespace differences are fine). If neither expression is truly grounded, omit the composition block entirely instead — never invent a third expression to paper over the disagreement. Keep every other field identical to your previous response above. Return ONLY the JSON object, no other text."""
+Re-emit the COMPLETE spec JSON with this fixed: choose the ONE expression that is actually grounded in the screenshot and study notes and put that identical expression in BOTH the scene relation and the composition result (whitespace differences are fine). If neither expression is truly grounded, omit the composition block entirely instead — never invent a third expression to paper over the disagreement. Keep every other field identical to your previous response above. Respect all field constraints from the original prompt (callout label max 24 chars, value max 80; reasoning expression max 120; result max 120; takeaway max 200; plain-ASCII ids). Return ONLY the JSON object, no other text."""
 
 
 def _composition_contradiction(spec: VisualSpec) -> tuple[str, str] | None:
@@ -704,6 +757,18 @@ THIN_SCENE_REPAIR_PROMPT = r"""Your previous visual plan has too little drawable
 Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants (use "comparison" with one panel per variant), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), or process steps ("process_flow") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
 
 If the lesson is genuinely simple or nothing drawable is honestly supported, return the spec JSON unchanged. Never invent formulas, numbers, vectors, curves, or relationships to fill the page. Return ONLY the JSON object, no other text.
+
+HARD FIELD CONSTRAINTS (violations fail validation — respect every one):
+- callout ids: plain ASCII lowercase/digits/_/-, max 32 chars (never Unicode subscripts).
+- callout label max 24 chars, value max 80 chars. reasoning expression max 120 chars,
+  explanation max 200 chars. result expression max 120 chars. takeaway max 200 chars.
+- scene_kind must be exactly one of: force_diagram, process_flow, plot, generic, comparison.
+- task.task_type must be exactly one of: compare_variants, multi_step_solution,
+  graph_relationship, vector_arrangement, connected_process,
+  coordinate_construction, definition_overview.
+- task.acceptable_families must include your scene_kind; every required_elements
+  entry must be satisfiable by the scene you emit; every exact_claims string
+  must appear verbatim in scene labels or composition.
 
 YOUR PREVIOUS RESPONSE:
 {PREVIOUS_JSON}"""
@@ -739,7 +804,7 @@ async def repair_thin_spec(
             json_mode=True,
             timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
         )
-        repair_data = _clean_latex_in_dict(_extract_json(repair_raw))
+        repair_data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(repair_raw)))
         from app.utils.latex_clean import normalize_spec_math
 
         repaired = normalize_spec_math(VisualSpec(**repair_data))
