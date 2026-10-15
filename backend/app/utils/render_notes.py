@@ -100,11 +100,33 @@ def render_jee_section(ctx: JEEConceptContext | None) -> str:
         return ""
     lines: list[str] = ["\n## 🎓 JEE Context"]
     if ctx.match_status == "ambiguous":
-        lines.append("This looks like it could be more than one JEE concept:")
+        lines.append("**JEE topic identified — chapter not yet certain**")
+        lines.append(
+            "*This lecture may belong to any of these chapters. Related stored "
+            "questions from each are shown below; exact-subtopic relevance has "
+            "not been confirmed.*"
+        )
         for cand in ctx.candidates:
             lines.append(f"- {cand.name}")
         for item in ctx.evidence:
             lines.append(f"*{item}*")
+        for group in ctx.candidate_results:
+            lines.append(f"\n**Possible: {group.name}** ({group.pyq_count} related record(s))")
+            lines.append(f"*{group.coverage_note}*")
+            for pyq in group.pyqs:
+                label = f"{pyq.exam} {pyq.year}"
+                if pyq.session:
+                    label += f" {pyq.session}"
+                if pyq.shift:
+                    label += f" {pyq.shift}"
+                answer = pyq.answer_key if pyq.answer_status == "confirmed" else "answer unconfirmed"
+                provenance = "official NTA paper" if pyq.source_class == "OFFICIAL" else "third-party transcription"
+                lines.append(
+                    f"- {label}, Q{pyq.paper_question_number} ({pyq.question_type}): "
+                    f"{pyq.question_summary or 'see source'} — {answer} [{provenance}]({pyq.source_url})"
+                )
+            if group.pyqs_truncated:
+                lines.append(f"*Showing {len(group.pyqs)} of {group.pyq_count} related records.*")
         return "\n".join(lines)
     lines.append(f"**{ctx.canonical_name}** ({ctx.subject} · {ctx.chapter})")
     if ctx.syllabus is not None:

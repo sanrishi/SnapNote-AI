@@ -145,9 +145,10 @@ def test_jee_markdown_section_states():
     ambiguous = map_concept_to_jee("Moment of inertia", ["torque"])
     assert ambiguous.match_status == "ambiguous"
     amb_section = render_jee_section(ambiguous)
-    assert "could be more than one JEE concept" in amb_section
+    assert "chapter not yet certain" in amb_section
+    assert "Possible: " in amb_section
     assert "## 🎓 JEE Context" in amb_section
-    assert "Torque" in amb_section and "Moment of inertia" in amb_section
+    assert "exact-subtopic relevance has not been confirmed" in amb_section
 
 
 # 8. Route: diagram with JEE-relevant notes attaches context + markdown
