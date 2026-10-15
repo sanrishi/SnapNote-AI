@@ -729,7 +729,7 @@ COMPOSITION_RECONCILE_PROMPT = r"""You previously emitted the visual spec below,
 YOUR PREVIOUS RESPONSE:
 {{PREVIOUS_JSON}}
 
-Re-emit the COMPLETE spec JSON with this fixed: choose the ONE expression that is actually grounded in the screenshot and study notes and put that identical expression in BOTH the scene relation and the composition result (whitespace differences are fine). If neither expression is truly grounded, omit the composition block entirely instead — never invent a third expression to paper over the disagreement. Keep every other field identical to your previous response above. Return ONLY the JSON object, no other text."""
+Re-emit the COMPLETE spec JSON with this fixed: choose the ONE expression that is actually grounded in the screenshot and study notes and put that identical expression in BOTH the scene relation and the composition result (whitespace differences are fine). If neither expression is truly grounded, omit the composition block entirely instead — never invent a third expression to paper over the disagreement. Keep every other field identical to your previous response above. Respect all field constraints from the original prompt (callout label max 24 chars, value max 80; reasoning expression max 120; result max 120; takeaway max 200; plain-ASCII ids). Return ONLY the JSON object, no other text."""
 
 
 def _composition_contradiction(spec: VisualSpec) -> tuple[str, str] | None:
@@ -757,6 +757,18 @@ THIN_SCENE_REPAIR_PROMPT = r"""Your previous visual plan has too little drawable
 Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants (use "comparison" with one panel per variant), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), or process steps ("process_flow") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
 
 If the lesson is genuinely simple or nothing drawable is honestly supported, return the spec JSON unchanged. Never invent formulas, numbers, vectors, curves, or relationships to fill the page. Return ONLY the JSON object, no other text.
+
+HARD FIELD CONSTRAINTS (violations fail validation — respect every one):
+- callout ids: plain ASCII lowercase/digits/_/-, max 32 chars (never Unicode subscripts).
+- callout label max 24 chars, value max 80 chars. reasoning expression max 120 chars,
+  explanation max 200 chars. result expression max 120 chars. takeaway max 200 chars.
+- scene_kind must be exactly one of: force_diagram, process_flow, plot, generic, comparison.
+- task.task_type must be exactly one of: compare_variants, multi_step_solution,
+  graph_relationship, vector_arrangement, connected_process,
+  coordinate_construction, definition_overview.
+- task.acceptable_families must include your scene_kind; every required_elements
+  entry must be satisfiable by the scene you emit; every exact_claims string
+  must appear verbatim in scene labels or composition.
 
 YOUR PREVIOUS RESPONSE:
 {PREVIOUS_JSON}"""

@@ -169,32 +169,43 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
         tokens.add(str(force.object.kind or "").casefold())
         if force.vectors:
             tokens.add("vector")
+            tokens.add("vectors")
         if force.angles:
             tokens.add("angle")
+            tokens.add("angles")
         if force.arcs:
             tokens.add("arc")
+            tokens.add("arcs")
         if force.relation is not None:
             tokens.add("relation")
+            tokens.add("relations")
     elif kind == "plot" and scene.plot is not None:
-        tokens.update({"axes", "curve", "tick"})
+        tokens.update({"axes", "axis", "curve", "curves", "tick", "ticks"})
         if any(len(c.points or []) == 1 for c in scene.plot.curves):
             tokens.add("point")
+            tokens.add("points")
     elif kind == "process_flow" and scene.flow is not None:
         tokens.add("node")
+        tokens.add("nodes")
         if scene.flow.connectors:
             tokens.add("connector")
+            tokens.add("connectors")
         if any(getattr(c, "feedback", False) for c in scene.flow.connectors):
             tokens.add("feedback")
     elif kind == "generic":
         tokens.add("callout")
+        tokens.add("callouts")
     elif kind == "comparison" and scene.comparison is not None:
         tokens.add("panel")
+        tokens.add("panels")
         for p in scene.comparison.panels or []:
             tokens.add(str(p.object.kind or "").casefold())
             if p.vectors:
                 tokens.add("vector")
+                tokens.add("vectors")
             if p.arcs:
                 tokens.add("arc")
+                tokens.add("arcs")
     return {t for t in tokens if t}
 
 
