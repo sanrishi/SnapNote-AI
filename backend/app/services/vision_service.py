@@ -473,6 +473,17 @@ Choose "render_mode": "deterministic" or "generative" based on INFORMATION PRECI
 
 If in doubt, choose "deterministic". A physics topic like "what is angular momentum?" may still benefit from a generative conceptual illustration — decide by precision, not by topic.
 
+TASK PLANNING (do this FIRST, before choosing any scene):
+Decide the teaching job in a "task" object. The task determines the representation — our validator rejects any scene that cannot do the task's job, so plan honestly:
+   - "task_type": exactly one of "compare_variants" (lesson contrasts 2-3 cases: translation vs rotation, cases of a piecewise solution), "multi_step_solution" (domain/cases/steps combining into one conclusion), "graph_relationship" (a plotted relationship IS the lesson), "vector_arrangement" (bodies, forces/velocities, angles, pivots), "connected_process" (ordered steps with dependencies/feedback), "coordinate_construction" (points/polygons/dimensions placed on axes), "definition_overview" (only when nothing structural is drawable — last resort, never for comparable/graphable/vector content).
+   - "learning_outcome": one sentence stating what the student will be able to do after seeing the visual.
+   - "required_elements": every entity the visual MUST show (bodies, points, axes, steps, variants). Each must be satisfiable by the chosen family's primitives — do not list what no family can draw.
+   - "required_relationships": the connections/transformations/constraints between them.
+   - "exact_claims": verbatim equations/values/labels from the image or notes that MUST appear (e.g. domain restrictions, final results). Copy them character-for-character; the validator checks their presence.
+   - "acceptable_families": scene kinds allowed for this task, chosen ONLY from this registry — compare_variants: ["comparison"]; multi_step_solution: ["process_flow"]; graph_relationship: ["plot"]; vector_arrangement: ["force_diagram"]; connected_process: ["process_flow"]; coordinate_construction: ["plot"]; definition_overview: any family. Your "scene.scene_kind" MUST be one of acceptable_families.
+   - "assumptions": anything you had to assume to draw (empty when nothing assumed). "missing": evidence you needed but could not find.
+   - A simple concept gets a simple task (definition_overview with 1-2 elements). Never inflate a simple lesson to justify a fancy scene; never shrink a structured lesson into generic boxes.
+
 THE SCENE PRIMITIVES (deterministic mode):
 Inside "deterministic.scene" you describe WHAT must be shown using universal educational primitives. Python decides HOW to draw everything — you NEVER give coordinates, pixel positions, or SVG. You decide only the SEMANTICS: which objects, which vectors, their directions in degrees, and which relationships to draw.
   - "scene_kind": "force_diagram" (vectors/forces/angles around a pivot: torque, lever arms, inclined planes, forces on a body) OR "process_flow" (labeled boxes with arrows: control loops, PID, workflows) OR "plot" (2D graphs: functions y=f(x), projectile trajectories, polar curves — rendered as clean axes + curves).
@@ -530,6 +541,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "text_required": true,
   "deterministic": {
     "title": "short title (2-6 words)",
+    "task": {"task_type": "compare_variants", "learning_outcome": "one sentence", "required_elements": ["each entity the visual must show"], "required_relationships": [], "exact_claims": ["verbatim equations/values"], "acceptable_families": ["comparison"], "assumptions": [], "missing": []},
     "scene": {
       "scene_kind": "force_diagram | process_flow | plot | generic | comparison",
       "caption": "one teaching sentence about what the diagram means",
@@ -559,6 +571,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
 }
 
 FIELD RULES:
+- "task": ALWAYS emit it (plan first, then scene). The validator enforces that "scene.scene_kind" is in "task.acceptable_families", that every "required_elements" entry is satisfiable by the scene, and that every "exact_claims" string appears verbatim. A spec whose scene cannot do its task is refused.
 - "text_required": true when readable text/symbols are essential to the visual (always true in deterministic mode). false only for a purely conceptual illustration that conveys meaning through pictures alone.
 - "deterministic": ALWAYS populate it. Prefer providing a "scene" (a real diagram) when the concept maps to force_diagram, process_flow or plot; the renderer draws it. IMPORTANT — Explain Visually is a VISUAL ARTIFACT, not a second study sheet: when you emit a scene, keep it geometry-first (objects, vectors, angles, arcs, relationships, labels) and do NOT fill equations/steps/points with the same material that already lives in the study notes. Leave equations/steps/points EMPTY when a scene is present; the only equation allowed inside the visual is the scene's own "relation" (e.g. "τ = r × F") plus the one-line caption. Fill equations/steps/points ONLY when there is no scene (the renderer then falls back to a card layout). In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
 - Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support.

@@ -47,6 +47,170 @@ SUPPORTED_FAMILIES: dict[str, str] = {
     "comparison": "comparison",
 }
 
+# Capability registry: what each family can faithfully represent, and what it
+# must refuse. Family selection is checked against this AND the task plan —
+# both must agree, so neither prompt gaming nor a stale default can silently
+# degrade a complex lesson into a drawable-but-empty figure.
+FAMILY_CAPABILITIES: dict[str, dict[str, object]] = {
+    "force_diagram": {
+        "represents": ["bodies", "pivots", "anchored vectors", "angles", "rotation arcs", "dimensions"],
+        "requires": "at least 1 labeled vector",
+        "cannot": ["plotted functions", "process steps", "multi-case comparisons", "circuits"],
+    },
+    "plot": {
+        "represents": ["axes", "curves", "labeled points", "polygons", "ticks", "dimensions"],
+        "requires": "at least 1 curve",
+        "cannot": ["force vectors", "process steps", "circuits", "chemical structures"],
+    },
+    "process_flow": {
+        "represents": ["ordered steps", "labeled nodes", "connectors", "feedback loops"],
+        "requires": "at least 2 labeled nodes",
+        "cannot": ["geometry", "vectors", "plotted functions", "circuits"],
+    },
+    "generic": {
+        "represents": ["central idea", "short callouts"],
+        "requires": "central label + at least 3 callouts",
+        "cannot": ["vectors", "curves", "points", "processes", "comparisons", "dimensions"],
+    },
+    "comparison": {
+        "represents": ["2-3 labeled variant panels with own objects/vectors/arcs"],
+        "requires": "at least 2 labeled panels, each with vectors or arcs",
+        "cannot": ["plotted functions", "process steps", "circuits"],
+    },
+}
+
+# Educational task -> families capable of expressing it. The task plan names
+# acceptable_families; the scene kind must ALSO appear here. Both agree, or
+# the spec is refused — this is what stops a multi-case solution silently
+# degrading into generic text cards.
+TASK_FAMILIES: dict[str, list[str]] = {
+    "compare_variants": ["comparison"],
+    "multi_step_solution": ["process_flow"],
+    "graph_relationship": ["plot"],
+    "vector_arrangement": ["force_diagram"],
+    "connected_process": ["process_flow"],
+    "coordinate_construction": ["plot"],
+    "definition_overview": ["force_diagram", "plot", "process_flow", "generic", "comparison"],
+}
+
+_TASK_STOPWORDS = frozenset({
+    "the", "and", "for", "with", "from", "that", "this", "into", "over",
+    "under", "between", "such", "then", "than", "also", "must", "show",
+    "with", "each", "both", "will", "must",
+})
+
+
+def _distinctive(text: str) -> set[str]:
+    import re
+
+    return {w for w in re.findall(r"[^\W_]+", text.casefold())
+            if len(w) > 2 and w not in _TASK_STOPWORDS}
+
+
+def _scene_text(scene: VisualScene) -> str:
+    """All human-visible scene strings, for task-link grounding checks."""
+    bits: list[str] = []
+    kind = scene.scene_kind
+    if kind == "force_diagram" and scene.force is not None:
+        force = scene.force
+        bits.append((force.object.label or ""))
+        for v in force.vectors:
+            bits.append(v.label or "")
+        for a in force.angles:
+            bits.append(a.label or "")
+        for a in force.arcs:
+            bits.append((a.label or "") + " " + (a.caption or ""))
+        if force.relation is not None:
+            bits.append((force.relation.expression or "") + " " + (force.relation.caption or ""))
+    elif kind == "plot" and scene.plot is not None:
+        plot = scene.plot
+        bits += [plot.x_label or "", plot.y_label or ""]
+        for c in plot.curves:
+            bits.append(c.label or "")
+    elif kind == "process_flow" and scene.flow is not None:
+        for n in scene.flow.nodes:
+            bits.append((n.label or "") + " " + (getattr(n, "caption", "") or ""))
+        for c in scene.flow.connectors:
+            bits.append(c.label or "")
+        if scene.flow.relation is not None:
+            bits.append(scene.flow.relation.expression or "")
+    elif kind == "generic" and scene.generic is not None:
+        bits.append(scene.generic.central_label or "")
+        bits += [c or "" for c in (scene.generic.callouts or [])]
+    elif kind == "comparison" and scene.comparison is not None:
+        for p in scene.comparison.panels or []:
+            bits.append((p.label or "") + " " + (p.note or ""))
+            bits.append((p.object.label or ""))
+            for v in p.vectors:
+                bits.append(v.label or "")
+            for a in p.arcs:
+                bits.append((a.label or "") + " " + (a.caption or ""))
+        if scene.comparison.relation is not None:
+            bits.append((scene.comparison.relation.expression or "") + " "
+                        + (scene.comparison.relation.caption or ""))
+    bits.append(scene.title or "")
+    bits.append(scene.caption or "")
+    return " ".join(bits)
+
+
+def _composition_callouts(det) -> list[tuple[str, str]]:
+    """(heading, body) pairs from the explicit composition, if present."""
+    comp = det.composition
+    if comp is None:
+        return []
+    pairs = [(c.label or "", c.value or "") for c in (comp.callouts or [])]
+    pairs += [(r.expression or "", r.explanation or "") for r in (comp.reasoning or [])]
+    if comp.result is not None:
+        pairs.append((comp.result.expression or "", ""))
+    pairs.append((comp.takeaway or "", ""))
+    pairs.append((comp.framing or "", ""))
+    return pairs
+
+
+def validate_task_link(spec: VisualSpec) -> list[str]:
+    """Enforce the task -> representation -> scene contract.
+
+    No task plan: legacy behavior, no errors (old specs keep working).
+    With a task plan: the scene kind must be authorized by BOTH the task's
+    acceptable_families and the capability registry; every required element
+    must be satisfiable (half its distinctive tokens present in scene +
+    composition text); every exact claim must appear verbatim. Failures mean
+    the scene cannot teach the planned task — refuse, don't render.
+    """
+    errors: list[str] = []
+    task = spec.task
+    if task is None:
+        return errors
+    det = spec.deterministic
+    scene = det.scene
+    if scene is None:
+        errors.append("task plan present but scene is missing")
+        return errors
+    kind = scene.scene_kind
+    if kind not in task.acceptable_families:
+        errors.append(f"scene kind {kind!r} not in task acceptable_families")
+    registry_ok = TASK_FAMILIES.get(task.task_type, [])
+    if kind not in registry_ok:
+        errors.append(f"scene kind {kind!r} cannot express task {task.task_type!r}")
+    haystack = " ".join([
+        det.title, getattr(det, "caption", "") or "",
+        _scene_text(scene),
+        " ".join(heading + " " + body for heading, body in _composition_callouts(det)),
+    ]).casefold()
+    hay_tokens = set(haystack.split())
+    for element in task.required_elements:
+        need = _distinctive(element)
+        if not need:
+            continue
+        have = len([w for w in need if w in hay_tokens])
+        if have * 2 < len(need):
+            errors.append(f"required element unsatisfied by scene: {element!r}")
+    for claim in task.exact_claims:
+        norm = " ".join(str(claim).split())
+        if norm and norm.casefold() not in haystack:
+            errors.append(f"exact claim missing from scene: {claim!r}")
+    return errors
+
 TYMST_TIMEOUT_SECONDS = 25
 MAX_CALLOUTS = 4
 
@@ -220,6 +384,9 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
                     "composition result contradicts scene relation: "
                     f"{result_expr!r} != {relation_expr!r}"
                 )
+    # Task contract: the planned teaching job must be satisfiable by the
+    # emitted scene. No task plan = legacy behavior, unchanged.
+    errors.extend(validate_task_link(spec))
     return errors
 
 

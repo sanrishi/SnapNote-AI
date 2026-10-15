@@ -428,6 +428,36 @@ class DeterministicVisual(BaseModel):
     composition: LessonComposition | None = None
 
 
+class VisualTask(BaseModel):
+    """Educational task plan: WHAT the visual must teach, before HOW.
+
+    The planner (LLM, untrusted) declares the teaching job; the validator
+    enforces that the emitted scene can actually do it. Task determines
+    representation: `acceptable_families` must contain the scene's kind, and
+    every `required_elements` entry must be satisfiable by that family's
+    primitives. `exact_claims` are strings that must appear verbatim in the
+    rendered output (equations, values, labels) — the renderer's text is
+    checked against them, never the reverse.
+    """
+
+    task_type: Literal[
+        "compare_variants",
+        "multi_step_solution",
+        "graph_relationship",
+        "vector_arrangement",
+        "connected_process",
+        "coordinate_construction",
+        "definition_overview",
+    ] = "definition_overview"
+    learning_outcome: str = ""
+    required_elements: list[str] = []
+    required_relationships: list[str] = []
+    exact_claims: list[str] = []
+    acceptable_families: list[str] = []
+    assumptions: list[str] = []
+    missing: list[str] = []
+
+
 class VisualSpec(BaseModel):
     """Structured, grounded description of the educational visual to generate.
 
@@ -445,6 +475,7 @@ class VisualSpec(BaseModel):
     concept: str = ""
     render_mode: VisualRenderMode = VisualRenderMode.DETERMINISTIC
     text_required: bool = True
+    task: VisualTask | None = None
     deterministic: DeterministicVisual = DeterministicVisual()
     visual_form: str = ""
     key_elements: list[str] = []
