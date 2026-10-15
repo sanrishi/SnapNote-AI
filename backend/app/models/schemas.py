@@ -403,31 +403,6 @@ class LessonComposition(BaseModel):
     takeaway: str = Field(default="", max_length=200)
 
 
-class DeterministicVisual(BaseModel):
-    """Exact, bounded content payload for the deterministic renderer.
-
-    Carries the information that MUST be rendered exactly. Two supported
-    presentations:
-      - a `scene` (universal educational primitives: objects, vectors, angles,
-        arcs, relations, process boxes, connectors) rendered as a real diagram,
-      - or the classic study card (equations + meanings, ordered steps, points).
-
-    Code owns ALL layout/geometry; Gemini only supplies semantics (labels,
-    angles in degrees, relative lengths, relationships). Never pixel
-    coordinates.
-
-    v3: optional `composition` carries the explicit educational composition.
-    Absent = v2 derived behavior (unchanged).
-    """
-
-    title: str = ""
-    scene: VisualScene | None = None
-    equations: list[VisualEquation] = []
-    steps: list[str] = []
-    points: list[str] = []
-    composition: LessonComposition | None = None
-
-
 class VisualTask(BaseModel):
     """Educational task plan: WHAT the visual must teach, before HOW.
 
@@ -457,6 +432,32 @@ class VisualTask(BaseModel):
     assumptions: list[str] = []
     missing: list[str] = []
 
+class DeterministicVisual(BaseModel):
+    """Exact, bounded content payload for the deterministic renderer.
+
+    Carries the information that MUST be rendered exactly. Two supported
+    presentations:
+      - a `scene` (universal educational primitives: objects, vectors, angles,
+        arcs, relations, process boxes, connectors) rendered as a real diagram,
+      - or the classic study card (equations + meanings, ordered steps, points).
+
+    Code owns ALL layout/geometry; Gemini only supplies semantics (labels,
+    angles in degrees, relative lengths, relationships). Never pixel
+    coordinates.
+
+    v3: optional `composition` carries the explicit educational composition.
+    Absent = v2 derived behavior (unchanged).
+    """
+
+    title: str = ""
+    task: VisualTask | None = None
+    scene: VisualScene | None = None
+    equations: list[VisualEquation] = []
+    steps: list[str] = []
+    points: list[str] = []
+    composition: LessonComposition | None = None
+
+
 
 class VisualSpec(BaseModel):
     """Structured, grounded description of the educational visual to generate.
@@ -475,7 +476,6 @@ class VisualSpec(BaseModel):
     concept: str = ""
     render_mode: VisualRenderMode = VisualRenderMode.DETERMINISTIC
     text_required: bool = True
-    task: VisualTask | None = None
     deterministic: DeterministicVisual = DeterministicVisual()
     visual_form: str = ""
     key_elements: list[str] = []

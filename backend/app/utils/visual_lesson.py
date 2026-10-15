@@ -153,6 +153,51 @@ def _scene_text(scene: VisualScene) -> str:
     return " ".join(bits)
 
 
+def _scene_structural_tokens(scene: VisualScene) -> set[str]:
+    """Structural vocabulary: what the geometry IS, independent of labels.
+
+    Lets task requirements name structural facts ("pivot", "vector",
+    "axes", "node") without demanding those exact words appear as printed
+    labels. Labels stay the authority for names/values; structure covers
+    kinds. Keeps the satisfiability check honest without forcing label
+    duplication.
+    """
+    tokens: set[str] = set()
+    kind = scene.scene_kind
+    if kind == "force_diagram" and scene.force is not None:
+        force = scene.force
+        tokens.add(str(force.object.kind or "").casefold())
+        if force.vectors:
+            tokens.add("vector")
+        if force.angles:
+            tokens.add("angle")
+        if force.arcs:
+            tokens.add("arc")
+        if force.relation is not None:
+            tokens.add("relation")
+    elif kind == "plot" and scene.plot is not None:
+        tokens.update({"axes", "curve", "tick"})
+        if any(len(c.points or []) == 1 for c in scene.plot.curves):
+            tokens.add("point")
+    elif kind == "process_flow" and scene.flow is not None:
+        tokens.add("node")
+        if scene.flow.connectors:
+            tokens.add("connector")
+        if any(getattr(c, "feedback", False) for c in scene.flow.connectors):
+            tokens.add("feedback")
+    elif kind == "generic":
+        tokens.add("callout")
+    elif kind == "comparison" and scene.comparison is not None:
+        tokens.add("panel")
+        for p in scene.comparison.panels or []:
+            tokens.add(str(p.object.kind or "").casefold())
+            if p.vectors:
+                tokens.add("vector")
+            if p.arcs:
+                tokens.add("arc")
+    return {t for t in tokens if t}
+
+
 def _composition_callouts(det) -> list[tuple[str, str]]:
     """(heading, body) pairs from the explicit composition, if present."""
     comp = det.composition
@@ -178,7 +223,7 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
     the scene cannot teach the planned task — refuse, don't render.
     """
     errors: list[str] = []
-    task = spec.task
+    task = spec.deterministic.task
     if task is None:
         return errors
     det = spec.deterministic
@@ -197,7 +242,7 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
         _scene_text(scene),
         " ".join(heading + " " + body for heading, body in _composition_callouts(det)),
     ]).casefold()
-    hay_tokens = set(haystack.split())
+    hay_tokens = set(haystack.split()) | _scene_structural_tokens(scene)
     for element in task.required_elements:
         need = _distinctive(element)
         if not need:

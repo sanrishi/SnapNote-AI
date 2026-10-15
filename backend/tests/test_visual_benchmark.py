@@ -89,7 +89,7 @@ def _optics_lens_spec():
 
 
 def _tasked(spec, task_type, elements, claims, families):
-    spec.task = VisualTask(
+    spec.deterministic.task = VisualTask(
         task_type=task_type,
         learning_outcome="student outcome",
         required_elements=list(elements),
@@ -110,9 +110,19 @@ def test_01_torque_vector_arrangement():
     assert render_hero_geometry(spec.deterministic).strip()
 
 
-def test_02_argand_coordinate_construction():
-    import test_visual_hybrid as hybrid
+def test_00_confusable_enum_spelling_survives():
+    from app.services.vision_service import _normalize_task_enums
 
+    data = {"deterministic": {
+        "task": {"task_type": "vectorₐrrangement"},
+        "scene": {"scene_kind": "force_diagram"},
+    }}
+    out = _normalize_task_enums(data)
+    assert out["deterministic"]["task"]["task_type"] == "vector_arrangement"
+    assert out["deterministic"]["scene"]["scene_kind"] == "force_diagram"
+
+
+def test_02_argand_coordinate_construction():
     spec = _tasked(
         _argand_task_wrapped(),
         "coordinate_construction",

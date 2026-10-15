@@ -598,6 +598,46 @@ def _minimal_notes_context(study_notes: StudyNotes) -> str:
     return json.dumps({"topic": topic, "formulas": formulas}, ensure_ascii=False)
 
 
+def _normalize_task_enums(data: dict) -> dict:
+    """Recover near-miss LLM enum spellings before strict validation.
+
+    Models emit confusable Unicode (observed: "vectorₐrrangement" with U+2090
+    and a missing underscore). NFKC folds the confusables; the remainder is
+    matched against known values with non-alphanumerics stripped. Only exact
+    post-strip matches are repaired — anything else passes through untouched
+    so validation still refuses genuinely unknown kinds. Applied ONLY to the
+    closed enum fields task_type/scene_kind — equation and label strings stay
+    byte-identical (math is case- and glyph-significant).
+    """
+    import re
+    import unicodedata
+
+    from app.models.schemas import VisualTask
+
+    valid_tasks = list(VisualTask.model_fields["task_type"].annotation.__args__)  # type: ignore[union-attr]
+    valid_kinds = ["force_diagram", "process_flow", "plot", "generic", "comparison"]
+
+    def _recover(value: str, valid: list[str]) -> str:
+        folded = unicodedata.normalize("NFKC", value).strip()
+        if folded in valid:
+            return folded
+        bare = re.sub(r"[^a-z0-9]", "", folded.lower())
+        for candidate in valid:
+            if re.sub(r"[^a-z0-9]", "", candidate.lower()) == bare:
+                return candidate
+        return value
+
+    det = data.get("deterministic")
+    if isinstance(det, dict):
+        task = det.get("task")
+        if isinstance(task, dict) and isinstance(task.get("task_type"), str):
+            task["task_type"] = _recover(task["task_type"], valid_tasks)
+        scene = det.get("scene")
+        if isinstance(scene, dict) and isinstance(scene.get("scene_kind"), str):
+            scene["scene_kind"] = _recover(scene["scene_kind"], valid_kinds)
+    return data
+
+
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:
     """Produce the structured VisualSpec that drives the Explain Visually image.
 
@@ -613,7 +653,7 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
         prompt += "\n\nSTUDY NOTES (context — do not contradict the screenshot):\n" + notes_json
     raw = await _call_gemini(prompt, image_bytes, json_mode=True)
     try:
-        data = _clean_latex_in_dict(_extract_json(raw))
+        data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(raw)))
         from app.utils.latex_clean import normalize_spec_math
 
         spec = normalize_spec_math(VisualSpec(**data))
@@ -661,7 +701,7 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
                 json_mode=True,
                 timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
             )
-            repair_data = _clean_latex_in_dict(_extract_json(repair_raw))
+            repair_data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(repair_raw)))
             from app.utils.latex_clean import normalize_spec_math
 
             repaired = normalize_spec_math(VisualSpec(**repair_data))
@@ -752,7 +792,7 @@ async def repair_thin_spec(
             json_mode=True,
             timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
         )
-        repair_data = _clean_latex_in_dict(_extract_json(repair_raw))
+        repair_data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(repair_raw)))
         from app.utils.latex_clean import normalize_spec_math
 
         repaired = normalize_spec_math(VisualSpec(**repair_data))
