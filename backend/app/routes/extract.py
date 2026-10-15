@@ -385,6 +385,43 @@ async def extract_visual_route(
                 "Explain Visually repair kept original spec (diagram %s)", diagramId[:8]
             )
 
+    # Validation-refusal repair: a spec the gates would reject (e.g. an
+    # exact claim worded differently from the scene's symbols) gets exactly
+    # one source-grounded chance to reconcile before honest refusal. Bounded:
+    # one call, accepted only when the repaired spec validates clean.
+    # Assessment is wrapped: it must never break the render path.
+    try:
+        gate_errors = validate_lesson_spec(spec)
+    except Exception:
+        logger.warning("Explain Visually validation check failed; rendering original spec")
+        gate_errors = []
+    if gate_errors:
+        logger.info(
+            "Explain Visually spec failed validation (%d errors); attempting one bounded repair (diagram %s)",
+            len(gate_errors), diagramId[:8],
+        )
+        reconciled = await repair_thin_spec(spec, enhanced, study_notes, "; ".join(gate_errors[:3]))
+        if reconciled is not None:
+            try:
+                still_bad = validate_lesson_spec(reconciled)
+            except Exception:
+                still_bad = ["revalidation failed"]
+            if not still_bad:
+                logger.info(
+                    "Explain Visually validation repair accepted (diagram %s)", diagramId[:8]
+                )
+                spec = reconciled
+            else:
+                logger.info(
+                    "Explain Visually validation repair still failing (diagram %s); refusing honestly",
+                    diagramId[:8],
+                )
+        else:
+            logger.info(
+                "Explain Visually validation repair failed (diagram %s); refusing honestly",
+                diagramId[:8],
+            )
+
     # Trust layer: the study-notes context summary describes the SOURCE
     # screenshot, but it renders under OUR rebuilt visual — drop any sentence
     # claiming structural elements the emitted scene does not draw.
