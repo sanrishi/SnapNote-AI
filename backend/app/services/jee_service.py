@@ -19,6 +19,7 @@ from pathlib import Path
 
 from app.models.schemas import (
     JEEConceptContext,
+    JEECandidateResult,
     JEEConceptRef,
     JEEPatternRef,
     JEEPyQRef,
@@ -407,13 +408,113 @@ def _relevance(summary: str | None, topic_tokens: set[str]) -> int:
     return len(topic_tokens & _tokens(summary))
 
 
+# Inline previews per ambiguous candidate (matches the list preview size).
+MAX_CANDIDATE_PYQS = 4
+
+
+def _order_chapter_pyqs(
+    pyqs: list[JEEPyQRef], topic_title: str, key_terms: list[str]
+) -> list[JEEPyQRef]:
+    """Order chapter records by topic relevance; recency breaks ties.
+
+    Deterministic preference signal over short summaries — never a claim
+    that lower-ranked records are irrelevant.
+    """
+    topic_tokens = {
+        token
+        for term in [topic_title, *key_terms]
+        for token in _tokens(term)
+        if len(token) > 2 and token not in _RELEVANCE_STOPWORDS
+    }
+    return sorted(
+        pyqs,
+        key=lambda ref: (_relevance(ref.question_summary, topic_tokens), ref.year,
+                         ref.paper_question_number),
+        reverse=True,
+    )
+
+
+def _chapter_for_concept(concept: dict, concepts_by_id: dict) -> dict | None:
+    """Parent chapter record for a sub-concept, matched by display name.
+
+    Returns None when no chapter linkage exists — the group then honestly
+    reports only the candidate's own records.
+    """
+    if concept.get("level") == "chapter":
+        return concept
+    wanted = _normalize(str(concept.get("chapter", "")))
+    if not wanted:
+        return None
+    for candidate in concepts_by_id.values():
+        if candidate.get("level") == "chapter" and _normalize(
+            str(candidate.get("display_name", ""))
+        ) == wanted:
+            return candidate
+    return None
+
+
+def _candidate_group(
+    tied: dict,
+    topic_title: str,
+    key_terms: list[str],
+    concepts_by_id: dict,
+    seen_ids: set[str],
+) -> JEECandidateResult:
+    """Build one candidate's question group without choosing it as the match."""
+    concept = concepts_by_id.get(tied["concept_id"], {"concept_id": tied["concept_id"]})
+    granularity = "chapter" if concept.get("level") == "chapter" else "sub-concept"
+    pyqs = _pyqs_for(str(concept.get("concept_id", "")))
+    note_suffix = ""
+    if not pyqs and granularity == "sub-concept":
+        parent = _chapter_for_concept(concept, concepts_by_id)
+        if parent is not None and parent.get("concept_id") != concept.get("concept_id"):
+            pyqs = _pyqs_for(str(parent["concept_id"]))
+            note_suffix = (
+                f" (from parent chapter {parent.get('display_name', '')}; "
+                "no direct sub-concept records stored)"
+            )
+    if granularity == "chapter":
+        pyqs = _order_chapter_pyqs(pyqs, topic_title, key_terms)
+    fresh = [ref for ref in pyqs if ref.question_id not in seen_ids]
+    seen_ids.update(ref.question_id for ref in fresh)
+    inline = fresh[:MAX_CANDIDATE_PYQS]
+    if fresh:
+        note = (
+            f"Candidate chapter: {len(fresh)} related record(s); exact-topic "
+            f"relevance is not confirmed{note_suffix}."
+        )
+    else:
+        note = (
+            "No stored records for this candidate yet — that reflects corpus "
+            f"coverage, not proof it is untested{note_suffix}."
+        )
+    return JEECandidateResult(
+        concept_id=str(concept.get("concept_id", tied["concept_id"])),
+        name=str(concept.get("display_name", tied["name"])),
+        subject=str(concept.get("subject", "")),
+        chapter=str(concept.get("chapter", "") or concept.get("display_name", "")),
+        match_granularity=granularity,
+        pyqs=inline,
+        pyq_count=len(fresh),
+        pyqs_truncated=len(fresh) > MAX_CANDIDATE_PYQS,
+        coverage_note=note,
+    )
+
+
 def map_concept_to_jee(topic_title: str, key_terms: list[str]) -> JEEConceptContext:
     """Build the student-facing JEE context for one lecture concept."""
     key_terms = expand_math_terms(key_terms)
     concept, status, evidence, tied = resolve_concept(topic_title, key_terms)
     if concept is None:
         candidates = [JEEConceptRef(concept_id=c["concept_id"], name=c["name"]) for c in tied]
-        return JEEConceptContext(match_status=status, evidence=evidence, candidates=candidates)
+        groups: list[JEECandidateResult] = []
+        if status == "ambiguous" and tied:
+            concepts_by_id = {c["concept_id"]: c for c in _concepts()}
+            seen: set[str] = set()
+            for entry in tied:
+                groups.append(_candidate_group(entry, topic_title, key_terms, concepts_by_id, seen))
+        return JEEConceptContext(match_status=status, evidence=evidence, candidates=candidates,
+                                 candidate_results=groups)
 
     concepts_by_id = {c["concept_id"]: c for c in _concepts()}
     prerequisites = [
@@ -434,17 +535,7 @@ def map_concept_to_jee(topic_title: str, key_terms: list[str]) -> JEEConceptCont
         # applicable stored records lead; recency breaks ties deterministically.
         # Summaries are short, so this is a preference signal, not a claim
         # that lower-ranked records are irrelevant.
-        topic_tokens = {
-            token
-            for term in [topic_title, *key_terms]
-            for token in _tokens(term)
-            if len(token) > 2 and token not in _RELEVANCE_STOPWORDS
-        }
-        pyqs.sort(
-            key=lambda ref: (_relevance(ref.question_summary, topic_tokens), ref.year,
-                             ref.paper_question_number),
-            reverse=True,
-        )
+        pyqs = _order_chapter_pyqs(pyqs, topic_title, key_terms)
     valid_ids = {ref.question_id for ref in pyqs}
     chapter_id = str(concept.get("chapter_id", "") or concept.get("concept_id", ""))
     patterns = _patterns_for(chapter_id, valid_ids)

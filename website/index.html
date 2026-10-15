@@ -1834,6 +1834,17 @@
       if (tSel) tSel.addEventListener("change", () => { jeeFilter.qtype = tSel.value; renderJeeBody(scope, jeeCtx); });
       const line = scope.querySelector(".jee-progress-line");
       if (line && jeeCtx) line.textContent = jeeProgressLine();
+      scope.querySelectorAll(".jee-pbtn[data-concept]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          try {
+            const resp = await fetch(`${BASE}/api/jee/concept/${encodeURIComponent(btn.dataset.concept)}`);
+            if (!resp.ok) throw new Error(`chapter lookup failed (${resp.status})`);
+            renderJeeBody(scope, await resp.json());
+          } catch (err) {
+            scope.innerHTML = `<p class="muted">Chapter lookup unavailable right now.</p>`;
+          }
+        });
+      });
       scope.querySelectorAll(".jee-pbtn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const order = jeeFilteredOrder();
@@ -1912,7 +1923,23 @@
       if (ctx.match_status === "ambiguous") {
         const cands = (ctx.candidates || []).map((c) => `<li>${esc(c.name)}</li>`).join("");
         const ev = (ctx.evidence || []).map((e) => `<p class="muted">${esc(e)}</p>`).join("");
-        return `<p>This lecture could match more than one JEE concept:</p><ul>${cands}</ul>${ev}<p class="muted">Pick the closest one — showing a guess here would be worse than showing options.</p>`;
+        let groups = "";
+        for (const g of (ctx.candidate_results || [])) {
+          const rows = (g.pyqs || []).map((q) => {
+            const label = `${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number} (${esc(q.question_type)})`;
+            const answer = q.answer_status === "confirmed" && q.answer_key != null
+              ? `Answer: ${esc(q.answer_key)}` : "Answer unconfirmed";
+            const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
+            const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>` : ` [${prov}]`;
+            return `<div class="formula jee-pyq">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">${answer} · Source:${link}</div></div>`;
+          }).join("");
+          groups += `<div class="jee-practice"><p><strong>Possible: ${esc(g.name)}</strong> (${g.pyq_count} related record(s))</p>`
+            + `<p class="muted">${esc(g.coverage_note)}</p>`
+            + (rows || `<p class="muted">No stored records for this candidate yet.</p>`)
+            + (g.pyqs_truncated ? `<p class="muted">Showing ${g.pyqs.length} of ${g.pyq_count} related records.</p>` : "")
+            + `<button class="jee-pbtn" data-concept="${esc(g.concept_id)}">Choose this chapter →</button></div>`;
+        }
+        return `<p><strong>JEE topic identified — chapter not yet certain.</strong></p><p class="muted">This lecture may belong to any of these chapters. Related stored questions from each are shown below; exact-subtopic relevance has not been confirmed.</p><ul>${cands}</ul>${ev}${groups}`;
       }
       const crumb = [ctx.subject, ctx.chapter, ctx.canonical_name].filter(Boolean)
         .map((s) => esc(s)).join(" → ");

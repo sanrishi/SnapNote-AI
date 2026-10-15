@@ -99,6 +99,25 @@ class JEEPatternRef(BaseModel):
     coverage_note: str = ""
 
 
+class JEECandidateResult(BaseModel):
+    """One plausible candidate's own question group inside an ambiguous result.
+
+    Never a confirmed match: pyqs are related records from the candidate's
+    chapter/concept, explicitly labelled as such. Empty pyqs with an honest
+    note when the candidate has no stored records.
+    """
+
+    concept_id: str = ""
+    name: str = ""
+    subject: str = ""
+    chapter: str = ""
+    match_granularity: str = ""
+    pyqs: list[JEEPyQRef] = []
+    pyq_count: int = 0
+    pyqs_truncated: bool = False
+    coverage_note: str = ""
+
+
 class JEESyllabusRef(BaseModel):
     node_id: str = ""
     subtopic: str = ""
@@ -122,6 +141,7 @@ class JEEConceptContext(BaseModel):
     match_status: str = "unresolved"  # "matched" | "ambiguous" | "unresolved"
     evidence: list[str] = []
     candidates: list[JEEConceptRef] = []  # tied concepts when ambiguous
+    candidate_results: list[JEECandidateResult] = []  # per-candidate PYQ groups when ambiguous
     prerequisites: list[JEEConceptRef] = []
     related: list[JEEConceptRef] = []
     pyqs: list[JEEPyQRef] = []

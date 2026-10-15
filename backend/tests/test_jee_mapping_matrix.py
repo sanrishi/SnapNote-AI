@@ -116,3 +116,87 @@ def test_chapter_match_retrieves_chapter_records():
                 have.add(record["question_id"])
     assert {p.question_id for p in ctx.pyqs} <= have
     assert ctx.match_granularity == "chapter"
+
+
+# ── ambiguous tie returns per-candidate question groups (never zero help) ──
+
+LCD_ID = "jee-mathematics-limit-continuity-and-differentiability-chapter"
+SOL_ID = "jee-chemistry-solutions-chapter"
+
+
+def _tie(monkeypatch, first, second):
+    import app.services.jee_service as jee_service
+
+    def fake_resolve(topic_title, key_terms):
+        concepts = {c["concept_id"]: c for c in jee_service._concepts()}
+        return None, "ambiguous", ["tie between 2 chapters; refusing to guess"], [
+            {"concept_id": first, "name": concepts[first]["display_name"]},
+            {"concept_id": second, "name": concepts[second]["display_name"]},
+        ]
+
+    monkeypatch.setattr(jee_service, "resolve_concept", fake_resolve)
+
+
+def _corpus_ids_for(concept_id):
+    import glob
+    have = set()
+    for path in glob.glob(os.path.join(_REPO, "docs", "jee-pyq-corpus", "data", "*-pyq.json")):
+        for record in json.load(open(path, encoding="utf-8")):
+            if concept_id in record.get("concept_ids", []):
+                have.add(record["question_id"])
+    return have
+
+
+def test_ambiguous_returns_groups_with_real_records(monkeypatch):
+    _tie(monkeypatch, LCD_ID, SOL_ID)
+    ctx = map_concept_to_jee("Logarithmic Inequality with Variable Base",
+                             ["find all solutions"])
+    assert ctx.match_status == "ambiguous"
+    assert [c.concept_id for c in ctx.candidates] == [LCD_ID, SOL_ID]
+    assert len(ctx.candidate_results) == 2
+    seen: set[str] = set()
+    for group in ctx.candidate_results:
+        assert group.pyq_count >= 1
+        assert group.pyqs, group.concept_id
+        assert "exact-topic" in group.coverage_note or "exact-subtopic" in group.coverage_note
+        for ref in group.pyqs:
+            assert ref.question_id in _corpus_ids_for(group.concept_id), ref.question_id
+            assert ref.question_id not in seen, ref.question_id  # deduped across groups
+            seen.add(ref.question_id)
+            assert ref.answer_status in ("confirmed", "unconfirmed")
+            if ref.answer_key is None:
+                assert ref.answer_status == "unconfirmed"
+
+
+def test_ambiguous_group_empty_state(monkeypatch):
+    import app.services.jee_service as jee_service
+
+    def fake_resolve(topic_title, key_terms):
+        concepts = {c["concept_id"]: c for c in jee_service._concepts()}
+        return None, "ambiguous", ["tie"], [
+            {"concept_id": LCD_ID, "name": concepts[LCD_ID]["display_name"]},
+            {"concept_id": "jee-physics-no-such-chapter", "name": "No Such Chapter"},
+        ]
+
+    monkeypatch.setattr(jee_service, "resolve_concept", fake_resolve)
+    ctx = map_concept_to_jee("Something", ["something"])
+    assert ctx.match_status == "ambiguous"
+    assert len(ctx.candidate_results) == 2
+    empty = [g for g in ctx.candidate_results if g.concept_id == "jee-physics-no-such-chapter"]
+    assert len(empty) == 1
+    assert empty[0].pyqs == [] and empty[0].pyq_count == 0
+    assert "No stored records" in empty[0].coverage_note
+    assert len([g for g in ctx.candidate_results if g.pyqs]) == 1
+
+
+def test_ambiguous_markdown_renders_previews():
+    from app.utils.render_notes import render_jee_section
+
+    ctx = map_concept_to_jee("Thermodynamics", [])
+    assert ctx.match_status == "ambiguous"
+    assert ctx.candidate_results, "tie must carry question groups"
+    md = render_jee_section(ctx)
+    assert "chapter not yet certain" in md
+    assert "Possible: " in md
+    assert "answer unconfirmed" in md or "Answer: " in md
+    assert "exact-subtopic relevance has not been confirmed" in md
