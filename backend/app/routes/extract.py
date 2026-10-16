@@ -32,6 +32,7 @@ from app.services.vision_service import (
 )
 from app.services.visual_service import generate_visual
 from app.utils.visual_lesson import (
+    derive_task_from_scene,
     render_v3_visual,
     should_use_v3,
     spec_needs_repair,
@@ -355,6 +356,23 @@ async def extract_visual_route(
         except Exception as e:
             logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
     spec = await build_visual_spec(enhanced, study_notes)
+
+    # Task coverage: a spec without a task plan would bypass the task/link
+    # enforcement below. Derive the contract deterministically from the
+    # emitted scene (documented as derived, never planned). Derivation is
+    # free and cannot invent content; when the scene is empty it returns None
+    # and the existing repair-or-unavailable path takes over.
+    try:
+        if spec.deterministic.task is None:
+            derived = derive_task_from_scene(spec)
+            if derived is not None:
+                spec.deterministic.task = derived
+                logger.info(
+                    "Explain Visually derived task contract (%s) for diagram %s",
+                    derived.task_type, diagramId[:8],
+                )
+    except Exception:
+        logger.warning("Explain Visually task derivation failed; continuing without task")
 
     # Bounded thin-scene repair: a geometry-poor spec (generic family or
     # structurally empty scene) gets exactly one source-grounded second

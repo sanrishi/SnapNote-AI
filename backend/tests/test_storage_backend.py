@@ -694,3 +694,60 @@ def test_visual_route_repairs_validation_refusal(sample_diagram_image, monkeypat
     assert repair_mock.await_count == 1
     remaining, _ = get_credits(device)
     assert remaining == 45
+
+
+def test_visual_route_derives_missing_task(sample_diagram_image, monkeypatch):
+    """A task-less spec gets a derived contract attached before rendering —
+    the legacy bypass is closed, deterministically, with no extra LLM call."""
+    from app.utils.credits_store import get_credits
+
+    device = "visual-derivetask-device-00000000-0000-000000000007"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    taskless = _rich_force_spec()
+    taskless.deterministic.task = None
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=taskless))
+
+    async def _boom(*_a, **_k):
+        raise AssertionError("no repair needed: derivation is free")
+
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", _boom)
+
+    seen: dict = {}
+
+    async def capture_render(spec):
+        seen["task"] = spec.deterministic.task
+        return ("svg", "<svg>hero</svg>")
+
+    monkeypatch.setattr("app.routes.extract.generate_visual", capture_render)
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "generated"
+    assert seen["task"] is not None
+    assert seen["task"].task_type == "vector_arrangement"
+    assert any("derived" in a for a in seen["task"].assumptions)
+    remaining, _ = get_credits(device)
+    assert remaining == 45
