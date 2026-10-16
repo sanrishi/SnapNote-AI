@@ -33,7 +33,7 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from app.models.schemas import DeterministicVisual, VisualRenderMode, VisualScene, VisualSpec
+from app.models.schemas import DeterministicVisual, VisualRenderMode, VisualScene, VisualSpec, VisualTask
 from app.utils.visual_renderer import render_hero_geometry
 
 logger = logging.getLogger(__name__)
@@ -96,15 +96,18 @@ TASK_FAMILIES: dict[str, list[str]] = {
 _TASK_STOPWORDS = frozenset({
     "the", "and", "for", "with", "from", "that", "this", "into", "over",
     "under", "between", "such", "then", "than", "also", "must", "show",
-    "with", "each", "both", "will", "must",
+    "each", "both", "will",
 })
 
 
-def _distinctive(text: str) -> set[str]:
+def _tokens(text: str) -> set[str]:
     import re
 
-    return {w for w in re.findall(r"[^\W_]+", text.casefold())
-            if len(w) > 2 and w not in _TASK_STOPWORDS}
+    return set(re.findall(r"[^\W_]+", text.casefold()))
+
+
+def _distinctive(text: str) -> set[str]:
+    return {w for w in _tokens(text) if len(w) > 2 and w not in _TASK_STOPWORDS}
 
 
 def _scene_text(scene: VisualScene) -> str:
@@ -223,6 +226,61 @@ def _composition_callouts(det) -> list[tuple[str, str]]:
     return pairs
 
 
+def derive_task_from_scene(spec: VisualSpec) -> VisualTask | None:
+    """Deterministically build a task contract from an emitted scene.
+
+    Used when the model omits the task plan: every successful result must
+    still carry an enforceable contract. Derivation is documented inside the
+    record (assumptions field) so a derived task is never mistaken for a
+    planned one. Returns None when the scene has no drawable content — the
+    caller then falls through to repair-or-unavailable, never to silent
+    acceptance. No LLM calls, no invented content: elements come from scene
+    labels, claims from the scene relation and composition result.
+    """
+    det = spec.deterministic
+    scene = det.scene
+    if scene is None:
+        return None
+    kind = scene.scene_kind
+    text = _scene_text(scene)
+    labels = [w for w in text.split() if len(w) > 2][:12]
+    claims: list[str] = []
+    relation = _scene_relation_expression(scene)
+    if relation.strip():
+        claims.append(" ".join(relation.split()))
+    comp = det.composition
+    if comp is not None and comp.result is not None:
+        result = (comp.result.expression or "").strip()
+        if result:
+            claims.append(" ".join(result.split()))
+    if kind == "force_diagram":
+        task_type, families = "vector_arrangement", ["force_diagram"]
+    elif kind == "plot":
+        has_points = scene.plot is not None and any(
+            len(c.points or []) == 1 for c in scene.plot.curves)
+        task_type = "coordinate_construction" if has_points else "graph_relationship"
+        families = ["plot"]
+    elif kind == "process_flow":
+        task_type, families = "connected_process", ["process_flow"]
+    elif kind == "comparison":
+        task_type, families = "compare_variants", ["comparison"]
+    else:
+        task_type, families = "definition_overview", ["generic"]
+    elements = labels if labels else []
+    if not elements and not claims:
+        return None
+    return VisualTask(
+        task_type=task_type,  # type: ignore[arg-type]
+        learning_outcome="",
+        required_elements=elements,
+        required_relationships=[],
+        exact_claims=claims,
+        acceptable_families=families,
+        assumptions=["task derived deterministically from emitted scene (model omitted task plan)"],
+        missing=[],
+    )
+
+
 def validate_task_link(spec: VisualSpec) -> list[str]:
     """Enforce the task -> representation -> scene contract.
 
@@ -253,7 +311,7 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
         _scene_text(scene),
         " ".join(heading + " " + body for heading, body in _composition_callouts(det)),
     ]).casefold()
-    hay_tokens = set(haystack.split()) | _scene_structural_tokens(scene)
+    hay_tokens = _tokens(haystack) | _scene_structural_tokens(scene)
     for element in task.required_elements:
         need = _distinctive(element)
         if not need:

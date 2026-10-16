@@ -204,3 +204,64 @@ def test_10_optics_holdout_vector_arrangement():
     assert validate_task_link(spec) == []
     assert select_family(spec) == "vector"
     assert render_hero_geometry(spec.deterministic).strip()
+
+
+def _log_solution_flow(domain_label):
+    from app.models.schemas import FlowConnector, FlowNode, ProcessFlow
+
+    return VisualSpec(
+        concept="Log inequality",
+        deterministic=DeterministicVisual(
+            title="Solving the Log Inequality",
+            scene=VisualScene(
+                scene_kind="process_flow",
+                caption="Domain first, then cases, then intersect.",
+                flow=ProcessFlow(
+                    nodes=[
+                        FlowNode(label=domain_label),
+                        FlowNode(label="Case A: base > 1 keeps inequality"),
+                        FlowNode(label="Case B: 0 < base < 1 flips inequality"),
+                        FlowNode(label="Solution: (-3,-2)u(-1,0)u(1,3)"),
+                    ],
+                    connectors=[
+                        FlowConnector(source=0, target=1, label="split"),
+                        FlowConnector(source=0, target=2, label="split"),
+                        FlowConnector(source=1, target=3, label="keep"),
+                        FlowConnector(source=2, target=3, label="keep"),
+                    ],
+                ),
+            ),
+        ),
+    )
+
+
+def test_11_log_solution_domain_preserved():
+    spec = _log_solution_flow("Domain: x > -3, x != -2, x != 0")
+    spec.deterministic.task = VisualTask(
+        task_type="multi_step_solution",
+        learning_outcome="solve it",
+        required_elements=["domain restriction", "case split", "solution intervals"],
+        required_relationships=[],
+        exact_claims=["x > -3", "(-3,-2)u(-1,0)u(1,3)"],
+        acceptable_families=["process_flow"],
+        assumptions=[],
+        missing=[],
+    )
+    assert validate_task_link(spec) == []
+    assert render_hero_geometry(spec.deterministic).strip()
+
+
+def test_12_log_solution_missing_domain_refused():
+    spec = _log_solution_flow("Cases only")
+    spec.deterministic.task = VisualTask(
+        task_type="multi_step_solution",
+        learning_outcome="solve it",
+        required_elements=["domain restriction", "case split", "solution intervals"],
+        required_relationships=[],
+        exact_claims=["x > -3", "(-3,-2)u(-1,0)u(1,3)"],
+        acceptable_families=["process_flow"],
+        assumptions=[],
+        missing=[],
+    )
+    errors = validate_task_link(spec)
+    assert any("domain" in e or "x > -3" in e for e in errors)

@@ -1097,3 +1097,46 @@ def test_repair_thin_spec_returns_repaired_or_none(monkeypatch):
     monkeypatch.setattr(vision_service, "_call_gemini", _boom)
     assert asyncio.run(vision_service.repair_thin_spec(
         _generic_spec(["a", "b"]), b"fake-image", None, "x")) is None
+
+
+# ── deterministic task derivation (no-task bypass closure) ──
+
+def _strip_task(spec):
+    spec.deterministic.task = None
+    return spec
+
+
+def test_derive_task_from_force_scene():
+    from app.utils.visual_lesson import derive_task_from_scene, validate_task_link
+
+    task = derive_task_from_scene(_strip_task(_torque()))
+    assert task is not None
+    assert task.task_type == "vector_arrangement"
+    assert task.acceptable_families == ["force_diagram"]
+    assert "derived deterministically" in task.assumptions[0]
+    spec = _torque()
+    spec.deterministic.task = task
+    assert validate_task_link(spec) == []
+
+
+def test_derive_task_empty_scene_returns_none():
+    from app.models.schemas import DeterministicVisual, VisualScene, VisualSpec
+    from app.utils.visual_lesson import derive_task_from_scene
+
+    blank = VisualSpec(
+        concept="Nothing",
+        deterministic=DeterministicVisual(
+            title="Nothing",
+            scene=VisualScene(scene_kind="generic"),
+        ),
+    )
+    assert derive_task_from_scene(blank) is None
+
+
+def test_derive_task_marks_provenance():
+    from app.utils.visual_lesson import derive_task_from_scene
+
+    task = derive_task_from_scene(_strip_task(_flow_v3_spec()))
+    assert task is not None
+    assert task.task_type == "connected_process"
+    assert any("derived" in a for a in task.assumptions)
