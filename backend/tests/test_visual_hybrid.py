@@ -360,6 +360,7 @@ def test_generate_visual_generative_returns_png_when_legible(monkeypatch):
         render_mode=VisualRenderMode.GENERATIVE,
         text_required=False,
         visual_form="illustration",
+        key_elements=["cell membrane"],
     )
     buf = io.BytesIO()
     Image.new("RGB", (768, 768), "white").save(buf, format="PNG")
@@ -384,6 +385,7 @@ def test_generate_visual_generative_rejects_unreadable_text(monkeypatch):
         render_mode=VisualRenderMode.GENERATIVE,
         text_required=True,
         visual_form="labeled diagram",
+        key_elements=["cell membrane"],
     )
     buf = io.BytesIO()
     Image.new("RGB", (768, 768), "white").save(buf, format="PNG")
@@ -407,6 +409,7 @@ def test_generate_visual_generative_skips_ocr_when_not_required(monkeypatch):
         render_mode=VisualRenderMode.GENERATIVE,
         text_required=False,
         visual_form="illustration",
+        key_elements=["cell membrane"],
     )
     buf = io.BytesIO()
     Image.new("RGB", (768, 768), "white").save(buf, format="PNG")

@@ -33,7 +33,14 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from app.models.schemas import DeterministicVisual, VisualRenderMode, VisualScene, VisualSpec, VisualTask
+from app.models.schemas import (
+    DeterministicVisual,
+    StudyNotes,
+    VisualRenderMode,
+    VisualScene,
+    VisualSpec,
+    VisualTask,
+)
 from app.utils.visual_renderer import render_hero_geometry
 
 logger = logging.getLogger(__name__)
@@ -226,7 +233,65 @@ def _composition_callouts(det) -> list[tuple[str, str]]:
     return pairs
 
 
+def derive_task_from_source(study_notes: StudyNotes | None, scene_kind: str) -> VisualTask | None:
+    """Build a task contract from SOURCE content, not from the proposed scene.
+
+    Required elements come from the StudyNotes topic title and formula
+    explanations; exact claims come from the stored formula expressions.
+    The emitted scene kind only scopes acceptable_families (the representation
+    choice stands; content coverage is what gets enforced). Because
+    requirements originate outside the scene, a sparse-but-consistent scene
+    can no longer satisfy its own contract — missing source requirements
+    fail validation honestly. Returns None when the source has no usable
+    topic/formula content; the caller then repairs or refuses, never renders
+    unvalidated. No LLM calls, no invented content.
+    """
+    if study_notes is None:
+        return None
+    topic = (getattr(getattr(study_notes, "topic", None), "title", "") or "").strip()
+    formulas = getattr(study_notes, "key_formulas", []) or []
+    elements: list[str] = []
+    if topic:
+        elements.append(topic)
+    for formula in formulas[:4]:
+        explanation = (getattr(formula, "explanation", "") or "").strip()
+        if explanation:
+            elements.append(explanation)
+    claims: list[str] = []
+    for formula in formulas[:4]:
+        expression = (getattr(formula, "formula", "") or "").strip()
+        if expression:
+            claims.append(" ".join(expression.split()))
+    if not elements and not claims:
+        return None
+    kind_tasks = {
+        "force_diagram": "vector_arrangement",
+        "process_flow": "connected_process",
+        "comparison": "compare_variants",
+        "generic": "definition_overview",
+    }
+    task_type = kind_tasks.get(scene_kind, "definition_overview")
+    if task_type == "definition_overview" and scene_kind == "plot":
+        task_type = "graph_relationship"
+    return VisualTask(
+        task_type=task_type,  # type: ignore[arg-type]
+        learning_outcome="",
+        required_elements=elements,
+        required_relationships=[],
+        exact_claims=claims,
+        acceptable_families=[scene_kind] if scene_kind else [],
+        assumptions=["task derived from StudyNotes source content (model omitted task plan)"],
+        missing=[],
+    )
+
+
 def derive_task_from_scene(spec: VisualSpec) -> VisualTask | None:
+    """Weak fallback: derive a contract from the scene itself.
+
+    Only for when no StudyNotes exist to ground requirements (corrupt
+    entitlement). Documented as weak: it cannot detect source omissions.
+    Prefer derive_task_from_source whenever notes are available.
+    """
     """Deterministically build a task contract from an emitted scene.
 
     Used when the model omits the task plan: every successful result must
@@ -287,9 +352,10 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
     No task plan: legacy behavior, no errors (old specs keep working).
     With a task plan: the scene kind must be authorized by BOTH the task's
     acceptable_families and the capability registry; every required element
-    must be satisfiable (half its distinctive tokens present in scene +
-    composition text); every exact claim must appear verbatim. Failures mean
-    the scene cannot teach the planned task — refuse, don't render.
+    must be satisfiable (at least one of its distinctive tokens present in
+    scene + composition text); every exact claim must appear verbatim.
+    Failures mean the scene cannot teach the planned task — refuse, don't
+    render.
     """
     errors: list[str] = []
     task = spec.deterministic.task
@@ -316,8 +382,12 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
         need = _distinctive(element)
         if not need:
             continue
-        have = len([w for w in need if w in hay_tokens])
-        if have * 2 < len(need):
+        # Any-token match: free-text explanations paraphrase freely
+        # ("torque equals r cross F" vs symbols τ/r/F), so demanding half
+        # the tokens would refuse honest visuals. Zero shared tokens still
+        # fails ("unicorn levitation field"). Exact formulas/values stay
+        # verbatim-strict via exact_claims below — math fidelity lives there.
+        if not any(w in hay_tokens for w in need):
             errors.append(f"required element unsatisfied by scene: {element!r}")
     for claim in task.exact_claims:
         norm = " ".join(str(claim).split())
@@ -381,6 +451,24 @@ def _finite(value: object, what: str, errors: list[str]) -> float | None:
         errors.append(f"{what} is not finite: {value!r}")
         return None
     return number
+
+
+def validate_legacy_visual(spec: VisualSpec) -> list[str]:
+    """Enforceable contract for the legacy (non-v3) deterministic path.
+
+    Same bar as the v3 gate when a scene exists (full semantic validation,
+    including task links). Sceneless specs are allowed only as explicit
+    equation/step/point cards with a title — the renderer's only other
+    supported shape; anything emptier is refused. Generative specs are
+    validated separately by their own contract.
+    """
+    errors = validate_lesson_spec(spec)
+    det = spec.deterministic
+    if det.scene is not None:
+        return errors
+    if (det.title or "").strip() and any([det.equations, det.steps, det.points]):
+        return []
+    return ["legacy card has no title or card content"]
 
 
 def validate_lesson_spec(spec: VisualSpec) -> list[str]:

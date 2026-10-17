@@ -12,6 +12,8 @@ from app.models.schemas import (
     RevisionResponse,
     StudyNotes,
     VisualExplanationResponse,
+    VisualRenderMode,
+    VisualSpec,
 )
 from app.services.jee_service import build_match_signals, map_concept_to_jee
 from app.services.preprocessor import preprocess, enhance_for_vision
@@ -33,11 +35,12 @@ from app.services.vision_service import (
 from app.services.visual_service import generate_visual
 from app.utils.visual_lesson import (
     derive_task_from_scene,
+    derive_task_from_source,
     render_v3_visual,
     should_use_v3,
     spec_needs_repair,
     v3_store_mode,
-    validate_lesson_spec,
+    validate_legacy_visual,
 )
 from app.services.storage_service import upload_image
 from app.utils.grounding import ground_visual_context
@@ -357,88 +360,116 @@ async def extract_visual_route(
             logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
     spec = await build_visual_spec(enhanced, study_notes)
 
-    # Task coverage: a spec without a task plan would bypass the task/link
-    # enforcement below. Derive the contract deterministically from the
-    # emitted scene (documented as derived, never planned). Derivation is
-    # free and cannot invent content; when the scene is empty it returns None
-    # and the existing repair-or-unavailable path takes over.
-    try:
-        if spec.deterministic.task is None:
-            derived = derive_task_from_scene(spec)
-            if derived is not None:
-                spec.deterministic.task = derived
-                logger.info(
-                    "Explain Visually derived task contract (%s) for diagram %s",
-                    derived.task_type, diagramId[:8],
-                )
-    except Exception:
-        logger.warning("Explain Visually task derivation failed; continuing without task")
-
-    # Bounded thin-scene repair: a geometry-poor spec (generic family or
-    # structurally empty scene) gets exactly one source-grounded second
-    # chance before rendering. Repair failures keep the original spec; the
-    # existing validation gates below still refuse degenerate cases honestly.
-    # Assessment itself is wrapped: it must never break the render path.
-    try:
-        repair_reason = spec_needs_repair(spec)
-    except Exception:
-        logger.warning("Explain Visually repair assessment failed; rendering original spec")
-        repair_reason = None
-    if repair_reason is not None:
-        logger.info(
-            "Explain Visually thin spec (%s); attempting one bounded repair (diagram %s)",
-            repair_reason, diagramId[:8],
+    # Task coverage + validation gate (fail closed) — deterministic specs
+    # only; generative specs are policed by generate_visual's own contract
+    # (concept + grounded key elements + quality/legibility gates).
+    # - scene lesson (non-generic): must carry an enforced task contract.
+    #   task absent -> derive from SOURCE (StudyNotes; scene-derived
+    #   fallback only when notes are missing and documented weak).
+    # - generic scene: task contract waived (a central box cannot satisfy
+    #   source-content requirements); density gate decides.
+    # - sceneless legacy card: allowed only as title + card content
+    #   (validate_legacy_visual) — the legacy renderer's other supported
+    #   shape.
+    # Derivation/assessment exceptions fall through to repair-or-refuse,
+    # never to silent rendering. Non-spec pipeline output is refused
+    # outright (build guarantees VisualSpec or raises). StudyNotes were
+    # already delivered by the diagram response, so refusal here never
+    # discards student work.
+    if not isinstance(spec, VisualSpec):
+        logger.warning("Explain Visually pipeline returned non-spec output (diagram %s); refusing",
+                       diagramId[:8])
+        raise UpstreamError(
+            service="SnapNote AI",
+            detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
         )
-        repaired = await repair_thin_spec(spec, enhanced, study_notes, repair_reason)
-        if repaired is not None and not validate_lesson_spec(repaired):
-            old_family = spec.deterministic.scene.scene_kind if spec.deterministic.scene else "?"
-            new_family = repaired.deterministic.scene.scene_kind if repaired.deterministic.scene else "?"
-            logger.info(
-                "Explain Visually repair accepted (diagram %s): %s -> %s",
-                diagramId[:8], old_family, new_family,
-            )
-            spec = repaired
-        else:
-            logger.info(
-                "Explain Visually repair kept original spec (diagram %s)", diagramId[:8]
-            )
-
-    # Validation-refusal repair: a spec the gates would reject (e.g. an
-    # exact claim worded differently from the scene's symbols) gets exactly
-    # one source-grounded chance to reconcile before honest refusal. Bounded:
-    # one call, accepted only when the repaired spec validates clean.
-    # Assessment is wrapped: it must never break the render path.
-    try:
-        gate_errors = validate_lesson_spec(spec)
-    except Exception:
-        logger.warning("Explain Visually validation check failed; rendering original spec")
-        gate_errors = []
-    if gate_errors:
-        logger.info(
-            "Explain Visually spec failed validation (%d errors); attempting one bounded repair (diagram %s)",
-            len(gate_errors), diagramId[:8],
+    if spec.render_mode == VisualRenderMode.DETERMINISTIC:
+        scene_obj = spec.deterministic.scene
+        scene_kind = scene_obj.scene_kind if scene_obj is not None else ""
+        try:
+            if scene_kind and scene_kind != "generic" and spec.deterministic.task is None:
+                if study_notes is not None:
+                    derived = derive_task_from_source(study_notes, scene_kind)
+                else:
+                    derived = derive_task_from_scene(spec)
+                if derived is not None:
+                    spec.deterministic.task = derived
+                    logger.info(
+                        "Explain Visually derived task contract for diagram %s",
+                        diagramId[:8],
+                    )
+            gate_errors = validate_legacy_visual(spec)
+        except Exception as e:
+            logger.warning("Explain Visually task/validation stage failed (diagram %s): %s",
+                           diagramId[:8], e)
+            gate_errors = ["task/validation stage failed"]
+        needs_contract = (
+            scene_obj is not None
+            and scene_kind != "generic"
+            and spec.deterministic.task is None
         )
-        reconciled = await repair_thin_spec(spec, enhanced, study_notes, "; ".join(gate_errors[:3]))
-        if reconciled is not None:
+        try:
+            upgrade_reason = spec_needs_repair(spec)
+        except Exception as e:
+            logger.warning("Explain Visually repair assessment failed (diagram %s): %s",
+                           diagramId[:8], e)
+            upgrade_reason = None
+        must_fix = bool(gate_errors) or needs_contract
+        if upgrade_reason is not None or must_fix:
+            reason = (
+                "; ".join(gate_errors[:3])
+                or ("missing task contract" if needs_contract else "")
+                or upgrade_reason
+                or "thin spec"
+            )
+            logger.info(
+                "Explain Visually spec not enforceable (%s); attempting one bounded repair (diagram %s)",
+                reason, diagramId[:8],
+            )
             try:
-                still_bad = validate_lesson_spec(reconciled)
-            except Exception:
-                still_bad = ["revalidation failed"]
-            if not still_bad:
-                logger.info(
-                    "Explain Visually validation repair accepted (diagram %s)", diagramId[:8]
-                )
+                reconciled = await repair_thin_spec(spec, enhanced, study_notes, reason)
+            except Exception as e:
+                logger.warning("Explain Visually repair call failed (diagram %s): %s",
+                               diagramId[:8], e)
+                reconciled = None
+            rechecked: list[str] = ["repair failed"]
+            if reconciled is not None and isinstance(reconciled, VisualSpec):
+                try:
+                    rscene = reconciled.deterministic.scene
+                    rkind = rscene.scene_kind if rscene is not None else ""
+                    if rkind and rkind != "generic" and reconciled.deterministic.task is None:
+                        if study_notes is not None:
+                            rderived = derive_task_from_source(study_notes, rkind)
+                        else:
+                            rderived = derive_task_from_scene(reconciled)
+                        if rderived is not None:
+                            reconciled.deterministic.task = rderived
+                    rechecked = validate_legacy_visual(reconciled)
+                    if (
+                        rscene is not None
+                        and rkind != "generic"
+                        and reconciled.deterministic.task is None
+                    ):
+                        rechecked = [*rechecked, "repaired spec has no task contract"]
+                except Exception as e:
+                    rechecked = [f"revalidation failed: {e}"]
+            if reconciled is not None and not rechecked:
+                logger.info("Explain Visually repair accepted (diagram %s)", diagramId[:8])
                 spec = reconciled
+            elif must_fix:
+                logger.warning(
+                    "Explain Visually refusing unvalidated spec (diagram %s): %s",
+                    diagramId[:8], "; ".join(rechecked[:3]),
+                )
+                raise UpstreamError(
+                    service="SnapNote AI",
+                    detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
+                )
             else:
                 logger.info(
-                    "Explain Visually validation repair still failing (diagram %s); refusing honestly",
+                    "Explain Visually upgrade repair not applied; rendering validated original (diagram %s)",
                     diagramId[:8],
                 )
-        else:
-            logger.info(
-                "Explain Visually validation repair failed (diagram %s); refusing honestly",
-                diagramId[:8],
-            )
 
     # Trust layer: the study-notes context summary describes the SOURCE
     # screenshot, but it renders under OUR rebuilt visual — drop any sentence
