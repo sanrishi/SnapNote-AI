@@ -20,7 +20,10 @@ Everything here is pure and deterministic: same problem text in, same sets
 out. No LLM, no network. Solving uses sympy for exact polynomial real roots;
 set algebra uses math_intervals (Fractions). Expression text is parsed
 through a bounded, AST-validated mathematical grammar — never Python eval
-and never sympy.parse_expr on untrusted input.
+and never sympy.parse_expr on untrusted input. Decimal literals are committed
+exactly from their source text (never through a Python float), and every
+divisor (denominator, negative power) is tracked as a domain restriction so
+simplification can never erase the original domain.
 """
 
 from __future__ import annotations
@@ -110,6 +113,7 @@ class MathCase:
     transformed: str  # human-readable transformed inequality
     transformed_num: sympy.Expr  # numerator of (lhs - rhs) for the branch
     solution: IntervalSet
+    transformed_rel: str = ""  # relation of the derived transformation
 
 
 @dataclass
@@ -189,7 +193,14 @@ def _balanced(text: str, start: int, open_ch: str, close_ch: str) -> int | None:
 #      powers.
 # Function calls, attribute access, imports, strings, and every other syntax
 # are rejected outright. Size, node count, depth, and exponent magnitude are
-# bounded to prevent computational abuse.
+# bounded to prevent computational abuse. Decimal literals are rebuilt from
+# their ORIGINAL source text (ast.get_source_segment) so constants that need
+# more precision than a float are committed exactly, not rounded. Division by
+# zero is refused at build time, and every divisor is recorded as a domain
+# restriction (a factor that must be != 0) so cancellation cannot erase the
+# original domain.
+
+_NUMBER_RE = re.compile(r"\d+\.\d*|\.\d+|\d+")
 
 _EXPR_TOKEN_RE = re.compile(
     r"(?P<num>\d+\.\d*|\.\d+|\d+)"
@@ -234,37 +245,51 @@ def _to_python_source(tokens: list[tuple[str, str]]) -> tuple[str, str]:
     return "".join(parts), ""
 
 
-def _build_expr(node: ast.AST, depth: int, budget: list[int]) -> sympy.Expr | str:
-    """Construct a sympy expression from an allowlisted AST node."""
+def _build_expr(
+    node: ast.AST,
+    depth: int,
+    budget: list[int],
+    source: str,
+    restrictions: list[sympy.Expr],
+) -> sympy.Expr | str:
+    """Construct a sympy expression from an allowlisted AST node.
+
+    `restrictions` collects every divisor (denominator / negative-power base)
+    that must be nonzero for the original expression to be defined.
+    """
     budget[0] -= 1
     if budget[0] < 0:
         return "expression is too complex to verify"
     if depth > _MAX_EXPR_DEPTH:
         return "expression is nested too deeply to verify"
     if isinstance(node, ast.Expression):
-        return _build_expr(node.body, depth, budget)
+        return _build_expr(node.body, depth, budget, source, restrictions)
     if isinstance(node, ast.Constant):
         value = node.value
         if isinstance(value, bool) or not isinstance(value, (int, float)):
             return "unsupported literal"
         if isinstance(value, int):
             return sympy.Integer(value)
-        frac = Fraction(str(value))
+        segment = ast.get_source_segment(source, node)
+        if segment is not None and _NUMBER_RE.fullmatch(segment.strip()):
+            frac = Fraction(segment.strip())
+        else:
+            frac = Fraction(str(value))
         return sympy.Rational(frac.numerator, frac.denominator)
     if isinstance(node, ast.Name):
         if node.id == "x":
             return _X
         return f"unsupported symbols ({node.id})"
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
-        operand = _build_expr(node.operand, depth + 1, budget)
+        operand = _build_expr(node.operand, depth + 1, budget, source, restrictions)
         if isinstance(operand, str):
             return operand
         return operand if isinstance(node.op, ast.UAdd) else -operand
     if isinstance(node, ast.BinOp):
-        left = _build_expr(node.left, depth + 1, budget)
+        left = _build_expr(node.left, depth + 1, budget, source, restrictions)
         if isinstance(left, str):
             return left
-        right = _build_expr(node.right, depth + 1, budget)
+        right = _build_expr(node.right, depth + 1, budget, source, restrictions)
         if isinstance(right, str):
             return right
         if isinstance(node.op, ast.Add):
@@ -274,6 +299,9 @@ def _build_expr(node: ast.AST, depth: int, budget: list[int]) -> sympy.Expr | st
         if isinstance(node.op, ast.Mult):
             return left * right
         if isinstance(node.op, ast.Div):
+            if right == 0:
+                return "division by zero"
+            restrictions.append(right)
             return left / right
         if isinstance(node.op, ast.Pow):
             if not right.is_rational or right.q != 1:
@@ -281,12 +309,23 @@ def _build_expr(node: ast.AST, depth: int, budget: list[int]) -> sympy.Expr | st
             exponent = int(right)
             if abs(exponent) > _MAX_POW:
                 return f"exponents are limited to +/-{_MAX_POW}"
+            if exponent < 0:
+                if left == 0:
+                    return "division by zero"
+                restrictions.append(left)
             return left**exponent
         return "unsupported operator"
     return "unsupported syntax"
 
 
-def _parse_expr(text: str) -> sympy.Expr | str:
+def _parse_expr_with_restrictions(
+    text: str,
+) -> tuple[sympy.Expr, tuple[sympy.Expr, ...]] | str:
+    """Parse expression text into (expr, domain restrictions).
+
+    Restrictions are the divisors the expression requires to be nonzero.
+    Returns an error string (never raises) for anything outside the grammar.
+    """
     t = _prep(text).strip()
     if not t:
         return "expression is empty"
@@ -304,13 +343,21 @@ def _parse_expr(text: str) -> sympy.Expr | str:
         tree = ast.parse(source, mode="eval")
     except SyntaxError:
         return f"could not parse expression {t!r}"
-    expr = _build_expr(tree, 0, [_MAX_EXPR_NODES])
+    restrictions: list[sympy.Expr] = []
+    expr = _build_expr(tree, 0, [_MAX_EXPR_NODES], source, restrictions)
     if isinstance(expr, str):
         return f"could not parse expression {t!r}: {expr}"
     if not expr.free_symbols <= {_X}:  # defense in depth; unreachable
         names = ", ".join(sorted(str(s) for s in expr.free_symbols))
         return f"expression uses unsupported symbols ({names}): {t!r}"
-    return expr
+    return expr, tuple(restrictions)
+
+
+def _parse_expr(text: str) -> sympy.Expr | str:
+    parsed = _parse_expr_with_restrictions(text)
+    if isinstance(parsed, str):
+        return parsed
+    return parsed[0]
 
 
 def _poly(expr: sympy.Expr) -> sympy.Poly | None:
@@ -331,6 +378,8 @@ def _poly(expr: sympy.Expr) -> sympy.Poly | None:
 
 def _rational_roots(poly: sympy.Poly) -> list[Fraction] | None:
     """All distinct real roots as exact Fractions; None when any is irrational."""
+    if poly.is_zero:
+        return []  # the zero polynomial vanishes nowhere *exclusively*
     try:
         roots = sympy.real_roots(poly)
     except Exception as e:  # sympy raises assorted errors on exotic input
@@ -342,6 +391,24 @@ def _rational_roots(poly: sympy.Poly) -> list[Fraction] | None:
             return None
         out.add(Fraction(int(sympy.numer(r)), int(sympy.denom(r))))
     return sorted(out)
+
+
+def _restriction_zeros(restrictions: tuple[sympy.Expr, ...]) -> list[Fraction] | str:
+    """Exact zero points of every tracked divisor, or a refusal reason.
+
+    A divisor that is not a polynomial (or whose zero is irrational) cannot be
+    excluded exactly, so the problem is refused instead of guessed.
+    """
+    roots: set[Fraction] = set()
+    for divisor in restrictions:
+        poly = _poly(divisor)
+        if poly is None:
+            return "a divisor does not reduce to a polynomial in x, so the domain cannot be verified exactly"
+        found = _rational_roots(poly)
+        if found is None:
+            return "a divisor vanishes at an irrational point, so the domain cannot be verified exactly"
+        roots.update(found)
+    return sorted(roots)
 
 
 def _sympy_rational(value: Fraction) -> sympy.Rational:
@@ -379,6 +446,8 @@ def _solve_rel(num_expr: sympy.Expr, den_expr: sympy.Expr, rel: str) -> Interval
     den_poly = _poly(den_expr)
     if den_poly is None:
         return "the inequality expands beyond the supported class (polynomials in x up to degree 3)"
+    if den_poly.is_zero:
+        return "division by zero"
     num_roots = _rational_roots(num_poly)
     if num_roots is None:
         return "a critical point is irrational, so the solution cannot be verified exactly"
@@ -396,7 +465,10 @@ def _solve_rel(num_expr: sympy.Expr, den_expr: sympy.Expr, rel: str) -> Interval
         a, b = bounds[i], bounds[i + 1]
         sample = _sample_point(a, b, critical)
         sign = _sign_at(num_expr, sample) * _sign_at(den_expr, sample)
-        satisfied = sign < 0 if want_neg else sign > 0
+        if want_neg:
+            satisfied = sign < 0 or (sign == 0 and not strict)
+        else:
+            satisfied = sign > 0 or (sign == 0 and not strict)
         if not satisfied:
             continue
         lo_closed = (
@@ -494,6 +566,20 @@ def _solve_log(text: str) -> SolveResult:
         return SolveResult(
             False, "the logarithm base and argument must be polynomials in x"
         )
+    constant_base = not base_expr.free_symbols
+    # A constant base that is <= 0 or == 1 is not a valid logarithm: there is
+    # no domain to solve over. Refuse explicitly instead of returning an
+    # empty-domain "solution" that could be confused with a real answer.
+    if constant_base and (base_expr <= 0 or base_expr == 1):
+        return SolveResult(
+            False,
+            "the logarithm base must be a positive number different from 1",
+        )
+    if not constant_base and abs(int(const)) > _MAX_POW:
+        return SolveResult(
+            False,
+            f"the comparison constant is too large for a variable-base logarithm (limit {_MAX_POW})",
+        )
     base_minus_1 = sympy.expand(base_expr - 1)
     if _poly(base_minus_1) is None:
         return SolveResult(False, "the logarithm base must be a polynomial in x")
@@ -510,7 +596,11 @@ def _solve_log(text: str) -> SolveResult:
     if isinstance(arg_pos, str):
         return SolveResult(False, arg_pos)
     domain = base_pos.intersect(arg_pos).without_points(base1_roots)
-    constant_base = not base_expr.free_symbols
+    if domain.is_empty():
+        return SolveResult(
+            False,
+            "the logarithm is never defined for any real x in this problem",
+        )
     base_gt1 = _solve_rel(base_minus_1, sympy.Integer(1), ">")
     if isinstance(base_gt1, str):
         return SolveResult(False, base_gt1)
@@ -560,6 +650,7 @@ def _solve_log(text: str) -> SolveResult:
                 transformed=transformed,
                 transformed_num=num_t,
                 solution=case_solution,
+                transformed_rel=rel_t,
             )
         )
         final = final.union(case_solution)
@@ -592,12 +683,21 @@ def _solve_poly_problem(text: str) -> SolveResult:
     left, rel, right = split
     if not left.strip() or not right.strip():
         return SolveResult(False, "one side of the comparison is empty")
-    lhs = _parse_expr(left)
-    if isinstance(lhs, str):
-        return SolveResult(False, lhs)
-    rhs = _parse_expr(right)
-    if isinstance(rhs, str):
-        return SolveResult(False, rhs)
+    parsed_left = _parse_expr_with_restrictions(left)
+    if isinstance(parsed_left, str):
+        return SolveResult(False, parsed_left)
+    parsed_right = _parse_expr_with_restrictions(right)
+    if isinstance(parsed_right, str):
+        return SolveResult(False, parsed_right)
+    lhs, lhs_restrictions = parsed_left
+    rhs, rhs_restrictions = parsed_right
+    restrictions = lhs_restrictions + rhs_restrictions
+    # The ORIGINAL divisors are the domain authority. `together` may cancel
+    # them (e.g. ((x-1)(x+1))/(x-1) simplifies), so their zeros are computed
+    # from the tracked restrictions, never from the simplified denominator.
+    restriction_roots = _restriction_zeros(restrictions)
+    if isinstance(restriction_roots, str):
+        return SolveResult(False, restriction_roots)
     try:
         num, den = sympy.fraction(sympy.together(lhs - rhs))
     except Exception as e:  # sympy can raise on exotic expressions
@@ -612,15 +712,16 @@ def _solve_poly_problem(text: str) -> SolveResult:
     den_roots = _rational_roots(den_poly)
     if den_roots is None:
         return SolveResult(False, "a critical point is irrational, so the solution cannot be verified exactly")
+    excluded = sorted(set(restriction_roots) | set(den_roots))
     whole = IntervalSet.of(Interval(None, None, False, False))
-    domain = whole.without_points(den_roots) if den_roots else whole
+    domain = whole.without_points(excluded) if excluded else whole
     return SolveResult(
         supported=True,
         problem=text,
         domain=domain,
-        excluded_points=tuple(den_roots),
+        excluded_points=tuple(excluded),
         cases=(),
-        solution=solved.normalized(),
+        solution=solved.intersect(domain).normalized(),
     )
 
 
@@ -639,7 +740,8 @@ def solve_problem(problem: str) -> SolveResult:
 # ── claimed-spec verification ──────────────────────────────────────────────
 
 
-def _track_set(track: VisualNumberLineTrack) -> IntervalSet | str:
+def claimed_track_set(track: VisualNumberLineTrack) -> IntervalSet | str:
+    """The interval set a rendered track CLAIMS (intervals minus marked points)."""
     intervals: list[Interval] = []
     for vi in track.intervals:
         lo = parse_bound(vi.lo, minus_side=True)
@@ -700,26 +802,94 @@ def _same_expr(a: sympy.Expr, b: sympy.Expr) -> bool:
         return False
 
 
-def _solve_claimed_transformed(text: str, regime: IntervalSet) -> IntervalSet | str:
-    split = _split_relation(text)
+def _parse_claim_relation(
+    text: str,
+) -> tuple[sympy.Expr, str, sympy.Expr, tuple[sympy.Expr, ...]] | str:
+    """Parse a model-claimed inequality into (lhs, rel, rhs, restrictions)."""
+    split = _split_relation(_prep(text))
     if split is None:
         return f"no comparison relation found in {text!r}"
     left, rel, right = split
-    lhs = _parse_expr(left)
-    if isinstance(lhs, str):
-        return lhs
-    rhs = _parse_expr(right)
-    if isinstance(rhs, str):
-        return rhs
+    parsed_left = _parse_expr_with_restrictions(left)
+    if isinstance(parsed_left, str):
+        return parsed_left
+    parsed_right = _parse_expr_with_restrictions(right)
+    if isinstance(parsed_right, str):
+        return parsed_right
+    lhs, lhs_restrictions = parsed_left
+    rhs, rhs_restrictions = parsed_right
+    return lhs, rel, rhs, lhs_restrictions + rhs_restrictions
+
+
+def _solve_claim_over_regime(
+    parsed: tuple[sympy.Expr, str, sympy.Expr, tuple[sympy.Expr, ...]],
+    regime: IntervalSet,
+) -> IntervalSet | str:
+    lhs, rel, rhs, restrictions = parsed
+    zeros: list[Fraction] = []
+    if restrictions:
+        computed_zeros = _restriction_zeros(restrictions)
+        if isinstance(computed_zeros, str):
+            return computed_zeros
+        zeros = computed_zeros
     try:
         num, den = sympy.fraction(sympy.together(lhs - rhs))
     except Exception as e:  # sympy can raise on exotic expressions
-        logger.debug("fraction/together failed for %r: %s", text, e)
-        return f"could not parse the transformed inequality {text!r}"
+        logger.debug("fraction/together failed for %r: %s", lhs - rhs, e)
+        return "could not parse the transformed inequality"
     solved = _solve_rel(num, den, rel)
     if isinstance(solved, str):
         return solved
+    if zeros:
+        solved = solved.without_points(zeros)
     return solved.intersect(regime)
+
+
+def _transformed_derivation_mismatch(
+    parsed: tuple[sympy.Expr, str, sympy.Expr, tuple[sympy.Expr, ...]],
+    match: MathCase,
+) -> str | None:
+    """Check the claimed transformation against the DERIVED one algebraically.
+
+    The claimed inequality must be the derived transformation up to a nonzero
+    rational multiple (any additive rearrangement passes; multiplying by a
+    negative constant must flip the direction). A step whose solution set
+    merely coincides with the correct one after intersecting the branch is
+    NOT accepted. Returns a mismatch reason or None.
+    """
+    lhs, rel, rhs, _ = parsed
+    try:
+        claimed_diff = sympy.expand(lhs - rhs)
+        derived_diff = sympy.expand(match.transformed_num)
+    except Exception as e:  # sympy can raise on exotic expressions
+        logger.debug("expand failed for transformed comparison: %s", e)
+        return "could not be compared with the derived transformation"
+    if derived_diff == 0:
+        if claimed_diff != 0:
+            return f"is not equivalent to the derived transformation {match.transformed!r}"
+        return None
+    if claimed_diff == 0:
+        return f"is not equivalent to the derived transformation {match.transformed!r}"
+    try:
+        ratio = sympy.cancel(claimed_diff / derived_diff)
+    except Exception as e:
+        logger.debug("cancel failed for transformed comparison: %s", e)
+        return "could not be compared with the derived transformation"
+    if ratio.free_symbols or not ratio.is_rational:
+        return (
+            f"is not an algebraic rearrangement of the derived transformation "
+            f"{match.transformed!r} (bring every term to one side of the same "
+            "inequality instead of rewriting it)"
+        )
+    expected_rel = match.transformed_rel
+    if ratio < 0:
+        expected_rel = _REVERSE_REL[expected_rel]
+    if rel != expected_rel:
+        return (
+            f"uses the wrong inequality direction for the derived transformation "
+            f"{match.transformed!r}"
+        )
+    return None
 
 
 def verify_number_line(nl: VisualNumberLine) -> list[str]:
@@ -739,7 +909,7 @@ def verify_number_line(nl: VisualNumberLine) -> list[str]:
     assert result.solution is not None  # guaranteed when supported
     errors: list[str] = []
 
-    claimed = _track_set(nl.solution)
+    claimed = claimed_track_set(nl.solution)
     if isinstance(claimed, str):
         errors.append(f"the final answer could not be parsed as intervals: {claimed}")
     elif not claimed.equals(result.solution):
@@ -761,7 +931,7 @@ def verify_number_line(nl: VisualNumberLine) -> list[str]:
                 "verified worked solution"
             )
     else:
-        claimed_domain = _track_set(nl.domain)
+        claimed_domain = claimed_track_set(nl.domain)
         if isinstance(claimed_domain, str):
             errors.append(f"the domain track could not be parsed: {claimed_domain}")
         elif result.domain is not None and not claimed_domain.equals(result.domain):
@@ -769,6 +939,47 @@ def verify_number_line(nl: VisualNumberLine) -> list[str]:
                 f"the domain {format_interval_set(claimed_domain)} is mathematically wrong; "
                 f"the correct domain is {format_interval_set(result.domain)}"
             )
+
+    # Every excluded value must be visually apparent: either marked as a point
+    # on a track or shown as a domain interval endpoint. Markers for values
+    # that are NOT excluded are mislabels and are refused too.
+    marked: set[Fraction] = set()
+    for track in (nl.domain, nl.solution):
+        if track is None:
+            continue
+        for raw_point in track.points:
+            parsed_point = parse_bound(raw_point, minus_side=True)
+            if not isinstance(parsed_point, str) and parsed_point is not None:
+                marked.add(parsed_point)
+    excluded = set(result.excluded_points)
+    extra_marks = sorted(marked - excluded)
+    if extra_marks:
+        values = ", ".join(f"x = {v}" for v in extra_marks)
+        errors.append(
+            f"the scene marks {values} as excluded, but "
+            + ("that value is" if len(extra_marks) == 1 else "those values are")
+            + " in the domain of the problem"
+        )
+    hidden: list[Fraction] = []
+    for point in sorted(excluded - marked):
+        visible = False
+        if nl.domain is not None:
+            for vi in nl.domain.intervals:
+                lo_b = parse_bound(vi.lo, minus_side=True)
+                hi_b = parse_bound(vi.hi, minus_side=False)
+                if (not isinstance(lo_b, str) and lo_b == point) or (
+                    not isinstance(hi_b, str) and hi_b == point
+                ):
+                    visible = True
+                    break
+        if not visible:
+            hidden.append(point)
+    if hidden:
+        values = ", ".join(f"x = {v}" for v in hidden)
+        errors.append(
+            f"the excluded value(s) {values} must be shown on the number line "
+            "(as a marked point or an open domain endpoint)"
+        )
 
     if result.constant_base:
         if nl.cases:
@@ -836,15 +1047,28 @@ def verify_number_line(nl: VisualNumberLine) -> list[str]:
                     "branch is the base > 1 regime"
                 )
         if mc.transformed.strip():
-            checked = _solve_claimed_transformed(mc.transformed, match.regime)
-            if isinstance(checked, str):
-                errors.append(f"case step {mc.transformed!r}: {checked}")
-            elif not checked.equals(match.solution):
-                errors.append(
-                    f"case step {mc.transformed!r} yields {format_interval_set(checked)} "
-                    f"on its branch, but the correct case solution is "
-                    f"{format_interval_set(match.solution)}"
-                )
+            parsed_claim = _parse_claim_relation(mc.transformed)
+            if isinstance(parsed_claim, str):
+                errors.append(f"case step {mc.transformed!r}: {parsed_claim}")
+            else:
+                checked = _solve_claim_over_regime(parsed_claim, match.regime)
+                if isinstance(checked, str):
+                    errors.append(f"case step {mc.transformed!r}: {checked}")
+                elif not checked.equals(match.solution):
+                    errors.append(
+                        f"case step {mc.transformed!r} yields {format_interval_set(checked)} "
+                        f"on its branch, but the correct case solution is "
+                        f"{format_interval_set(match.solution)}"
+                    )
+                else:
+                    mismatch = _transformed_derivation_mismatch(parsed_claim, match)
+                    if mismatch is not None:
+                        errors.append(f"case step {mc.transformed!r} {mismatch}")
+        else:
+            errors.append(
+                f"case step for {match.condition or 'the base regime'} is missing; "
+                "the transformed inequality is required for every branch"
+            )
     if remaining:
         missing = "; ".join(
             f"{format_interval_set(c.solution)} for {c.condition}" for c in remaining

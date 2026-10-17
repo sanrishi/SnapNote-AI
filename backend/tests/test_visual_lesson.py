@@ -1301,3 +1301,29 @@ def test_derive_task_from_source_number_line():
     assert task.task_type == "interval_solution"
     assert task.acceptable_families == ["number_line"]
     assert "derived from StudyNotes" in task.assumptions[0]
+
+
+# ── number_line exact-claim semantic normalization ──
+
+
+def test_number_line_exact_claim_interval_set_normalized():
+    """A final answer written as a canonical interval set must match the scene
+    by SET EQUALITY even when the exact written form differs from scene text."""
+    spec = _number_line_lesson()
+    spec.deterministic.task.exact_claims = ["(-3, -2) \u222a (-1, 0) \u222a (1, 3)"]
+    assert vl.validate_task_link(spec) == []
+
+
+def test_number_line_exact_claim_unicode_subscript_normalized():
+    """\u208a/\u2083/\u00b2/\u2212 in a claim are normalized exactly like the verifier's
+    own problem text before the comparison."""
+    spec = _number_line_lesson()
+    spec.deterministic.task.exact_claims = ["logx\u208a\u2083(x\u00b2 \u2212 x) < 1"]
+    assert vl.validate_task_link(spec) == []
+
+
+def test_number_line_wrong_exact_claim_still_refused():
+    spec = _number_line_lesson()
+    spec.deterministic.task.exact_claims = ["(-3, -2) \u222a (-1, 3)"]
+    errors = vl.validate_task_link(spec)
+    assert any("exact claim missing" in e for e in errors)

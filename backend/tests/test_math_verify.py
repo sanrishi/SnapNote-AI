@@ -457,3 +457,224 @@ def test_malicious_condition_and_step_refused():
     errors = verify_number_line(nl)
     assert errors
     assert any("could not be parsed" in e for e in errors)
+
+
+# ── domain preservation: cancellation, restrictions, degenerate cases ──────
+
+
+def test_cancelled_factor_domain_preserved():
+    """((x-1)(x+1))/(x-1) must keep x != 1 even though sympy cancels it."""
+    r = solve_problem("((x-1)*(x+1))/(x-1) > 0")
+    assert r.supported, r.reason
+    assert format_interval_set(r.solution) == "(-1, 1) \u222a (1, inf)"
+    assert format_interval_set(r.domain) == "(-inf, 1) \u222a (1, inf)"
+    assert r.excluded_points == (Fraction(1),)
+
+
+def test_reciprocal_product_keeps_restriction():
+    r = solve_problem("x*x^(-1) > 0")
+    assert r.supported, r.reason
+    assert format_interval_set(r.solution) == "(-inf, 0) \u222a (0, inf)"
+    assert r.excluded_points == (Fraction(0),)
+
+
+def test_difference_of_identicals_keeps_restriction():
+    for problem in ("1/(x-1) - 1/(x-1) <= 0", "0/(x-1) <= 0"):
+        r = solve_problem(problem)
+        assert r.supported, (problem, r.reason)
+        assert format_interval_set(r.solution) == "(-inf, 1) \u222a (1, inf)", problem
+        assert r.excluded_points == (Fraction(1),), problem
+
+
+def test_zero_polynomial_degenerate_relations():
+    expectations = {
+        "x-x <= 0": "(-inf, inf)",
+        "x-x >= 0": "(-inf, inf)",
+        "x-x < 0": "\u2205",
+        "x-x > 0": "\u2205",
+        "x^2 - x^2 <= 0": "(-inf, inf)",
+        "x^2 - x^2 < 0": "\u2205",
+    }
+    for problem, expected in expectations.items():
+        r = solve_problem(problem)
+        assert r.supported, (problem, r.reason)
+        assert format_interval_set(r.solution) == expected, problem
+
+
+def test_division_by_zero_refused():
+    for problem in ("1/0 > 0", "x/(x-x) > 0", "0^(-1) > 0", "1/(0) < 1"):
+        r = solve_problem(problem)
+        assert not r.supported, problem
+        assert "division by zero" in r.reason, problem
+
+
+def test_unsupported_divisors_refused_explicitly():
+    for problem in ("1/(1/x) > 0", "(x+1)/(x^2 - 2) > 0"):
+        r = solve_problem(problem)
+        assert not r.supported, problem
+        assert "cannot be verified exactly" in r.reason, problem
+
+
+# ── log domain semantics: invalid bases, empty domain ──────────────────────
+
+
+def test_invalid_constant_log_bases_refused():
+    for problem in (
+        "log_1(x) < 1",
+        "log_0(x) < 1",
+        "log_(-2)(x) > 0",
+        "log_{x - x + 1}(x) < 1",  # zero polynomial base -> 1, must not pass
+        "log_{2 - 2}(x) < 1",
+    ):
+        r = solve_problem(problem)
+        assert not r.supported, problem
+        assert "positive number different from 1" in r.reason, problem
+
+
+def test_log_with_empty_domain_refused():
+    r = solve_problem("log_2(-x^2 - 1) < 1")
+    assert not r.supported
+    assert "never defined" in r.reason
+
+
+def test_valid_fraction_constant_base_supported():
+    r = solve_problem("log_{1/2}(x - 1) < 2")
+    assert r.supported, r.reason
+    assert r.constant_base
+    assert format_interval_set(r.solution) == "(5/4, inf)"
+    assert format_interval_set(r.domain) == "(1, inf)"
+
+
+# ── exact decimal constants (never through a Python float) ─────────────────
+
+
+def test_decimal_constants_are_exact_not_floats():
+    text = "0.10000000000000000555111512312578270211815834045410156251"
+    exact = Fraction(text)
+    r = solve_problem(f"x > {text}")
+    assert r.supported, r.reason
+    assert r.solution is not None
+    lo = r.solution.normalized().intervals[0].lo
+    assert lo == exact
+    assert lo != Fraction("0.1")  # the float round-trip would collapse both
+
+    other = "0.10000000000000000555111512312578270211815834045410156252"
+    r2 = solve_problem(f"x > {other}")
+    assert r2.supported, r2.reason
+    assert r2.solution is not None
+    lo2 = r2.solution.normalized().intervals[0].lo
+    # Both literals parse to the SAME float; exact commits must still differ.
+    assert lo2 == Fraction(other)
+    assert lo2 != lo
+
+
+# ── transformed steps: required + algebraic equivalence on the branch ──────
+
+
+def test_missing_transformed_step_refused():
+    nl = _regression_nl()
+    nl.cases[0].transformed = ""
+    errors = verify_number_line(nl)
+    assert any("transformed inequality is required" in e for e in errors)
+
+
+def test_transformed_equivalent_forms_accepted():
+    variants = (
+        "x^2 - 2x - 3 < 0",  # additive rearrangement
+        "(x - 3)*(x + 1) < 0",  # same expression, factored
+        "2*(x^2 - x) < 2*(x + 3)",  # positive scalar multiple
+        "-(x^2 - x) > -(x + 3)",  # negative scalar -> sides swapped
+        "x + 3 > x^2 - x",  # sides swapped
+    )
+    for transformed in variants:
+        nl = _regression_nl()
+        nl.cases[0].transformed = transformed
+        assert verify_number_line(nl) == [], transformed
+
+
+def test_transformed_branch_coincidence_refused():
+    """"x < 3" holds on part of the branch only: refused with the exact
+    branch-set mismatch, never silently accepted."""
+    nl = _regression_nl()
+    nl.cases[0].transformed = "x < 3"
+    errors = verify_number_line(nl)
+    assert any(
+        "yields" in e and "correct case solution" in e for e in errors
+    ), errors
+
+
+def test_transformed_rewrite_not_rearrangement_refused():
+    """'(x^2 - 2x - 3)/(x + 1)^2 < 0' solves to the exact same branch set,
+    but it is a rewrite, not the canonical rearrangement of the derived
+    step \u2014 set coincidence is not correctness."""
+    nl = _regression_nl()
+    nl.cases[0].transformed = "(x^2 - 2x - 3)/(x + 1)^2 < 0"
+    errors = verify_number_line(nl)
+    assert any("not an algebraic rearrangement" in e for e in errors), errors
+
+
+def test_transformed_direction_flip_detected():
+    from app.utils.math_intervals import parse_interval_set
+    from app.utils.math_verify import (
+        MathCase,
+        _parse_claim_relation,
+        _parse_expr,
+        _transformed_derivation_mismatch,
+    )
+
+    derived_num = _parse_expr("(x^2 - x) - (x + 3)")
+    assert not isinstance(derived_num, str)
+    branch = parse_interval_set("(-3, -2)")
+    assert not isinstance(branch, str)
+    case = MathCase(
+        condition="0 < x + 3 < 1",
+        regime=branch,
+        transformed="(x^2 - x) > x + 3",
+        transformed_num=derived_num,
+        solution=branch,
+        transformed_rel=">",
+    )
+    # -(a) > -(b) means a < b: same relation on a negated multiple must be
+    # refused; the correctly flipped form is accepted.
+    bad = _parse_claim_relation("-(x^2 - x) > -(x + 3)")
+    assert not isinstance(bad, str)
+    reason = _transformed_derivation_mismatch(bad, case)
+    assert reason is not None and "wrong inequality direction" in reason
+    good = _parse_claim_relation("-(x^2 - x) < -(x + 3)")
+    assert not isinstance(good, str)
+    assert _transformed_derivation_mismatch(good, case) is None
+
+
+def test_transformed_flipped_step_refused_on_scene():
+    nl = _regression_nl()
+    nl.cases[1].transformed = "(x^2 - x) < x + 3"  # derived form uses ">"
+    errors = verify_number_line(nl)
+    assert any("case step" in e for e in errors)
+
+
+# ── excluded values must be visible; extra markers are mislabels ───────────
+
+
+def test_marker_only_exclusion_accepted():
+    """A domain set with un-split intervals + a marked point is still exact
+    and visually apparent: accepted."""
+    nl = _regression_nl()
+    nl.domain = _track(
+        [("-3", "0", False, False), ("1", "inf", False, False)],
+        points=["-2"],
+    )
+    assert verify_number_line(nl) == []
+
+
+def test_extra_exclusion_marker_refused():
+    nl = _regression_nl()
+    nl.solution = _track(
+        [
+            ("-3", "-2", False, False),
+            ("-1", "0", False, False),
+            ("1", "3", False, False),
+        ],
+        points=["5"],
+    )
+    errors = verify_number_line(nl)
+    assert any("in the domain of the problem" in e for e in errors)

@@ -292,9 +292,10 @@ def parse_interval_set(text: str) -> IntervalSet | str:
     if cleaned.lower() in _EMPTY_MARKERS:
         return IntervalSet()
     cleaned = re.sub(r"\bunited\b|\bor\b|\bunion\b", "U", cleaned, flags=re.IGNORECASE)
-    parts = [p for p in re.split(r"[Uu]", cleaned) if p.strip()]
-    if not parts:
-        return f"unparseable interval set: {text!r}"
+    raw_parts = re.split(r"[Uu]", cleaned)
+    parts = [p.strip() for p in raw_parts]
+    if any(not part for part in parts):
+        return f"malformed union in interval set: {text!r}"
     intervals: list[Interval] = []
     for part in parts:
         parsed = parse_interval(part)

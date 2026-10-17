@@ -20,7 +20,9 @@ Design constraints honoured (svg_safe allowlist):
 
 from __future__ import annotations
 
+import logging
 import math
+from fractions import Fraction
 
 from app.models.schemas import (
     ComparisonPanel,
@@ -38,6 +40,8 @@ from app.models.schemas import (
     VisualVector,
 )
 from app.utils.svg_safe import sanitize_svg
+
+logger = logging.getLogger(__name__)
 
 VIEW_W = 800
 MARGIN = 48
@@ -1077,9 +1081,20 @@ def _nl_x(value: float, lo: float, hi: float) -> float:
     return MARGIN + _NL_INSET + (value - lo) / (hi - lo) * span
 
 
-def _nl_track_svg(track, y: int, lo: float, hi: float, color: str) -> tuple[str, int]:
+def _nl_track_svg(
+    track,
+    y: int,
+    lo: float,
+    hi: float,
+    color: str,
+    empty_text: str = "No real solutions",
+) -> tuple[str, int]:
     """One number-line track. Returns (svg, next_y). Defensive: skips any
-    unparseable value (validation already guarantees parseable payloads)."""
+    unparseable value (validation already guarantees parseable payloads).
+
+    Endpoint labels are exact Fractions (never float-formatted) and are
+    staggered onto extra rows when they would collide, so no two distinct
+    values are ever silently merged into one label."""
     from app.utils.math_intervals import parse_bound
 
     parts: list[str] = []
@@ -1089,6 +1104,13 @@ def _nl_track_svg(track, y: int, lo: float, hi: float, color: str) -> tuple[str,
         f'<line x1="{_f(x_left)}" y1="{y}" x2="{_f(x_right)}" y2="{y}" '
         f'stroke="{SOFT}" stroke-width="2"/>'
     )
+    if not track.intervals and not track.points:
+        parts.append(
+            f'<text x="{_f(VIEW_W / 2)}" y="{_f(y - 12)}" font-family="{_FONT}" '
+            f'font-size="{TYPE_AXIS}" font-weight="700" fill="{MUTED}" '
+            f'text-anchor="middle">{_esc(empty_text)}</text>'
+        )
+        return "".join(parts), y + 26
     labels: list[tuple[float, str, str]] = []
     bar_y = y - _NL_BAR_H / 2 - 8
     for iv in track.intervals:
@@ -1109,14 +1131,14 @@ def _nl_track_svg(track, y: int, lo: float, hi: float, color: str) -> tuple[str,
                 f'<circle cx="{_f(x1)}" cy="{_f(y)}" r="{_NL_DOT_R}" fill="{fill}" '
                 f'stroke="{color}" stroke-width="2.5"/>'
             )
-            labels.append((x1, _nl_fmt(float(lo_b)), color if iv.lo_closed else INK))
+            labels.append((x1, _nl_label(lo_b), color if iv.lo_closed else INK))
         if hi_b is not None:
             fill = color if iv.hi_closed else "white"
             parts.append(
                 f'<circle cx="{_f(x2)}" cy="{_f(y)}" r="{_NL_DOT_R}" fill="{fill}" '
                 f'stroke="{color}" stroke-width="2.5"/>'
             )
-            labels.append((x2, _nl_fmt(float(hi_b)), color if iv.hi_closed else INK))
+            labels.append((x2, _nl_label(hi_b), color if iv.hi_closed else INK))
     excluded: list[tuple[float, str]] = []
     for p in track.points:
         parsed = parse_bound(p, minus_side=True)
@@ -1127,33 +1149,46 @@ def _nl_track_svg(track, y: int, lo: float, hi: float, color: str) -> tuple[str,
             f'<circle cx="{_f(px)}" cy="{_f(y)}" r="{_NL_DOT_R}" fill="white" '
             f'stroke="{RED}" stroke-width="2.5"/>'
         )
-        excluded.append((px, _nl_fmt(float(parsed))))
-    seen: set[float] = set()
-    for x, text, fill in labels:
-        if x in seen:
+        excluded.append((px, _nl_label(parsed)))
+    seen_text: set[str] = set()
+    last_x_per_row: list[float] = []
+    for x, text, fill in sorted(labels, key=lambda item: (item[0], item[1])):
+        if text in seen_text:
             continue
-        seen.add(x)
+        seen_text.add(text)
+        row = 0
+        while row < len(last_x_per_row) and x - last_x_per_row[row] < 34:
+            row += 1
+        if row == len(last_x_per_row):
+            last_x_per_row.append(x)
+        else:
+            last_x_per_row[row] = x
+        label_x = min(max(x, MARGIN + 16), VIEW_W - MARGIN - 16)
         parts.append(
-            f'<text x="{_f(min(max(x, MARGIN + 16), VIEW_W - MARGIN - 16))}" y="{_f(y + 26)}" '
+            f'<text x="{_f(label_x)}" y="{_f(y + 26 + row * 20)}" '
             f'font-family="{_FONT}" font-size="{TYPE_AXIS}" fill="{fill}" '
             f'text-anchor="middle">{_esc(text)}</text>'
         )
-    y_after = y + 34
+    label_rows = len(last_x_per_row)
+    y_after = y + 34 + max(0, label_rows - 1) * 20
     if excluded:
+        excluded_y = y + 26 + max(1, label_rows) * 20
         for x, text in excluded:
+            label_x = min(max(x, MARGIN + 20), VIEW_W - MARGIN - 20)
             parts.append(
-                f'<text x="{_f(min(max(x, MARGIN + 20), VIEW_W - MARGIN - 20))}" y="{_f(y + 46)}" '
+                f'<text x="{_f(label_x)}" y="{_f(excluded_y)}" '
                 f'font-family="{_FONT}" font-size="13" fill="{RED}" '
                 f'text-anchor="middle">x ≠ {_esc(text)}</text>'
             )
-        y_after = y + 54
+        y_after = excluded_y + 20
     return "".join(parts), y_after + 12
 
 
-def _nl_fmt(value: float) -> str:
-    if float(value).is_integer():
-        return str(int(value))
-    return f"{value:g}"
+def _nl_label(value: Fraction) -> str:
+    """Exact endpoint label: integers plain, rationals as n/d (never float)."""
+    if value.denominator == 1:
+        return str(value.numerator)
+    return f"{value.numerator}/{value.denominator}"
 
 
 def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
@@ -1161,6 +1196,16 @@ def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
     case rows, verified final answer. Content-fitted height, no fixed stage."""
     nl = scene.number_line
     assert nl is not None
+    # Defense in depth: this layout carries the "MATHEMATICALLY VERIFIED"
+    # claim, so it re-runs the exact verifier itself. A scene that no longer
+    # verifies can never be drawn as verified, regardless of caller mistakes.
+    from app.utils.math_verify import verify_number_line
+
+    if verify_number_line(nl):
+        logger.warning(
+            "number_line scene failed re-verification at render time; refusing to draw"
+        )
+        return "", y
     parts: list[str] = []
     lo, hi = _nl_scale(nl)
 
@@ -1191,7 +1236,14 @@ def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
                 )
                 y += 20
             y += 4
-        html, y = _nl_track_svg(nl.domain, y + 12, lo, hi, ACCENT)
+        html, y = _nl_track_svg(
+            nl.domain,
+            y + 12,
+            lo,
+            hi,
+            ACCENT,
+            empty_text="The domain is empty — no real x satisfies the restrictions",
+        )
         parts.append(html)
 
     if nl.cases:
@@ -1201,11 +1253,14 @@ def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
             row_lines: list[tuple[str, int, str, str]] = []
             cond = case.condition.strip()
             if cond:
-                row_lines.append((f"If {cond}:", 17, INK, "700"))
+                for line in _wrap(f"If {cond}:", 74):
+                    row_lines.append((line, 17, INK, "700"))
             if case.transformed.strip():
-                row_lines.append((case.transformed.strip(), 17, INK, "400"))
+                for line in _wrap(case.transformed.strip(), 74):
+                    row_lines.append((line, 17, INK, "400"))
             if case.solution.strip():
-                row_lines.append((f"x ∈ {case.solution.strip()}", 17, GREEN, "700"))
+                for line in _wrap(f"x ∈ {case.solution.strip()}", 74):
+                    row_lines.append((line, 17, GREEN, "700"))
             if not row_lines:
                 continue
             cards: list[str] = []
@@ -1229,7 +1284,14 @@ def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
 
     header, y = _section_header(y, "FINAL ANSWER — MATHEMATICALLY VERIFIED")
     parts.append(header)
-    html, y = _nl_track_svg(nl.solution, y + 12, lo, hi, GREEN)
+    html, y = _nl_track_svg(
+        nl.solution,
+        y + 12,
+        lo,
+        hi,
+        GREEN,
+        empty_text="No real solutions — the inequality is never true",
+    )
     parts.append(html)
 
     if scene.caption.strip():
@@ -1338,6 +1400,8 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
         and spec.scene.number_line is not None
     ):
         html, y = _render_number_line_scene(spec.scene, y)
+        if not html.strip():
+            return ""
         parts.append(html)
         return _assemble_svg(parts, max(320, y + 32))
 

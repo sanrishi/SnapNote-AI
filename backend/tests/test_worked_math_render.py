@@ -127,12 +127,15 @@ def test_open_and_closed_endpoints_drawn_exactly():
 def test_closed_endpoint_filled_dot():
     nl = VisualNumberLine(
         problem="log_2(x - 1) >= -1",
+        domain=_track([("1", "inf", False, False)], label="x \u2212 1 > 0"),
         solution=_track([("3/2", "inf", True, False)]),
     )
     svg = _svg(nl)
     assert svg.count(GREEN_FILLED_DOT) == 1
     assert svg.count(GREEN_OPEN_DOT) == 0
-    assert ">1.5</text>" in svg
+    # Endpoint labels stay exact rationals, never float-formatted: 3/2, not 1.5.
+    assert ">3/2</text>" in svg
+    assert ">1.5</text>" not in svg
 
 
 def test_content_fitted_height_no_fixed_stage():
@@ -167,3 +170,56 @@ def test_correct_spec_validates_and_wrong_spec_is_refused():
     wrong.solution = _track([("-3", "-2", False, False), ("-1", "3", False, False)])
     errors = validate_legacy_visual(_spec(wrong))
     assert any("mathematically wrong" in e for e in errors)
+
+
+def test_empty_solution_rendered_explicitly():
+    """An inequality with no solutions renders a complete, honest scene."""
+    nl = VisualNumberLine(problem="x - x < 0", solution=_track([]))
+    svg = _svg(nl)
+    assert "FINAL ANSWER \u2014 MATHEMATICALLY VERIFIED" in svg
+    assert "No real solutions" in svg
+
+
+def test_renderer_refuses_scene_that_fails_verification():
+    """Defense in depth: even called directly, the renderer re-runs the exact
+    verifier and refuses to draw a wrong scene as 'verified'."""
+    wrong = VisualNumberLine(
+        problem="x^2 - 5x + 6 > 0",
+        solution=_track([("-inf", "3", False, False)]),
+    )
+    assert render_deterministic_visual(_spec(wrong).deterministic) == ""
+
+
+def test_long_case_text_wraps_inside_canvas():
+    from app.utils.visual_renderer import _esc, _wrap
+
+    # A long, exact zero literal: adds length without AST depth (an added
+    # " + 0.0 - 0.0" chain trips the depth bound instead, correctly).
+    long_transformed = "(x^2 - x) - (x + 3) + 0." + "0" * 60 + " < 0"
+    assert len(long_transformed) > 74  # must actually need wrapping
+    nl = _regression_nl()
+    nl.cases[0].transformed = long_transformed
+    assert validate_legacy_visual(_spec(nl)) == []  # still the exact rewrite
+    svg = _svg(nl)
+    lines = _wrap(long_transformed, 74)
+    assert len(lines) >= 2
+    for line in lines:
+        assert _esc(line) in svg
+
+
+def test_close_endpoint_labels_stagger_not_merge():
+    """-1/100 and 1/100 land ~5px apart on the axis: both labels must render,
+    on different rows \u2014 never silently merged into one."""
+    nl = VisualNumberLine(
+        problem="(x + 1/100)*(x - 1/100)*(x - 1) <= 0",
+        solution=_track(
+            [("-inf", "-1/100", False, True), ("1/100", "1", True, True)]
+        ),
+    )
+    svg = _svg(nl)
+    first = re.search(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*>-1/100</text>', svg)
+    second = re.search(r'<text x="([\d.]+)" y="([\d.]+)"[^>]*>1/100</text>', svg)
+    assert first is not None and second is not None
+    assert float(second.group(1)) - float(first.group(1)) < 34  # would collide
+    assert first.group(2) != second.group(2)  # different rows: no overlap
+    assert abs(float(first.group(2)) - float(second.group(2))) == 20.0
