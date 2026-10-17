@@ -84,6 +84,28 @@ def test_unicode_problem_solves_identically():
     assert r.problem == PROBLEM  # prepared form is stable
 
 
+def test_unicode_subscript_base_solves():
+    """Live-caught regression: Gemini emits the base as unicode subscripts
+    (logx₊₃(...)); the math is correct and must verify, not refuse."""
+    r = solve_problem("logx\u208a\u2083(x\u00b2 \u2212 x) < 1")
+    assert r.supported, r.reason
+    assert format_interval_set(r.solution) == "(-3, -2) \u222a (-1, 0) \u222a (1, 3)"
+    assert format_interval_set(r.domain) == "(-3, -2) \u222a (-2, 0) \u222a (1, inf)"
+    assert [c.condition for c in r.cases] == ["x + 3 > 1", "0 < x + 3 < 1"]
+
+
+def test_subscript_style_spec_verifies():
+    nl = _regression_nl()
+    nl.problem = "logx\u208a\u2083(x\u00b2 \u2212 x) < 1"
+    assert verify_number_line(nl) == []
+
+
+def test_bare_log_without_base_still_unsupported():
+    r = solve_problem("log(x - 1) < 3")
+    assert not r.supported
+    assert "log_{base}(argument)" in r.reason
+
+
 def test_correct_regression_spec_verifies():
     assert verify_number_line(_regression_nl()) == []
 

@@ -77,11 +77,30 @@ _PREP = {
     "\u2264": "<=",
     "\u2265": ">=",
     "\u2260": "!=",
+    # Unicode subscripts (model output style: logx₊₃(...))
+    "\u2080": "0",
+    "\u2081": "1",
+    "\u2082": "2",
+    "\u2083": "3",
+    "\u2084": "4",
+    "\u2085": "5",
+    "\u2086": "6",
+    "\u2087": "7",
+    "\u2088": "8",
+    "\u2089": "9",
+    "\u208a": "+",
+    "\u208b": "-",
 }
 
 _REVERSE_REL = {"<": ">", "<=": ">=", ">": "<", ">=": "<="}
 
 _LEAD_RE = re.compile(r"^\s*(?:solve|simplify)\b[^0-9x(]*", re.IGNORECASE)
+
+# "logx+3(...)" (no explicit base marker) -> "log_{x+3}(...)". The base text
+# between "log" and the argument parenthesis is unambiguous, and the problem
+# is verified exactly afterward, so this normalization is safe. Plain
+# "log(...)" keeps its (unsupported) bare form — the class needs 1+ chars.
+_LOG_SUBSCRIPT_RE = re.compile(r"\blog([^_({(]+?)\(", re.IGNORECASE)
 
 
 # ── results ────────────────────────────────────────────────────────────────
@@ -122,6 +141,7 @@ def _prep(text: str) -> str:
 
 def _prepare_problem(problem: str) -> str:
     text = _prep(problem).strip()
+    text = _LOG_SUBSCRIPT_RE.sub(r"log_{\1}(", text)
     text = _LEAD_RE.sub("", text)
     text = text.strip().rstrip("?.!")
     return text.strip()
