@@ -18,23 +18,20 @@ never "assumed correct", never "validated".
 
 Everything here is pure and deterministic: same problem text in, same sets
 out. No LLM, no network. Solving uses sympy for exact polynomial real roots;
-set algebra uses math_intervals (Fractions).
+set algebra uses math_intervals (Fractions). Expression text is parsed
+through a bounded, AST-validated mathematical grammar — never Python eval
+and never sympy.parse_expr on untrusted input.
 """
 
 from __future__ import annotations
 
+import ast
 import logging
 import re
 from dataclasses import dataclass
 from fractions import Fraction
 
 import sympy
-from sympy.parsing.sympy_parser import (
-    convert_xor,
-    implicit_multiplication_application,
-    parse_expr,
-    standard_transformations,
-)
 
 from app.models.schemas import VisualNumberLine, VisualNumberLineTrack
 from app.utils.math_intervals import (
@@ -50,11 +47,9 @@ logger = logging.getLogger(__name__)
 _X = sympy.Symbol("x", real=True)
 _MAX_DEGREE = 3
 _MAX_EXPR_LEN = 120
-
-_TRANSFORMATIONS = standard_transformations + (
-    convert_xor,
-    implicit_multiplication_application,
-)
+_MAX_POW = 10
+_MAX_EXPR_NODES = 120
+_MAX_EXPR_DEPTH = 12
 
 _PREP = {
     "\u2212": "-",  # minus
@@ -179,7 +174,116 @@ def _balanced(text: str, start: int, open_ch: str, close_ch: str) -> int | None:
     return None
 
 
-# ── exact expression parsing ───────────────────────────────────────────────
+# ── exact expression parsing (safe, no eval) ───────────────────────────────
+#
+# Expression text is source- and model-derived, so it must never reach Python
+# eval or sympy.parse_expr (sympy's parse_expr evaluates the source string and
+# is documented as unsafe for untrusted input). Instead:
+#   1. tokenize against a strict mathematical grammar,
+#   2. rewrite implicit multiplication ("2x", "x(x+1)", "(x+1)(x-2)") into
+#      explicit Python syntax,
+#   3. parse with ast.parse(mode="eval") — which only builds a syntax tree
+#      and never executes anything,
+#   4. construct sympy expressions from a closed allowlist of AST nodes:
+#      numbers, the variable x, unary signs, +, -, *, /, and bounded integer
+#      powers.
+# Function calls, attribute access, imports, strings, and every other syntax
+# are rejected outright. Size, node count, depth, and exponent magnitude are
+# bounded to prevent computational abuse.
+
+_EXPR_TOKEN_RE = re.compile(
+    r"(?P<num>\d+\.\d*|\.\d+|\d+)"
+    r"|(?P<name>[A-Za-z_][A-Za-z0-9_]*)"
+    r"|(?P<op>\*\*|[+\-*/^()])"
+    r"|(?P<ws>\s+)"
+)
+
+
+def _tokenize_expr(text: str) -> list[tuple[str, str]] | str:
+    """Strict tokenizer. Returns tokens or a human-readable rejection reason."""
+    tokens: list[tuple[str, str]] = []
+    pos = 0
+    while pos < len(text):
+        m = _EXPR_TOKEN_RE.match(text, pos)
+        if m is None:
+            return f"unsupported character {text[pos]!r}"
+        pos = m.end()
+        if m.lastgroup == "ws":
+            continue
+        tokens.append((m.lastgroup or "", m.group()))
+    return tokens
+
+
+def _to_python_source(tokens: list[tuple[str, str]]) -> tuple[str, str]:
+    """Join tokens into Python syntax, inserting explicit multiplication for
+    implicit products. Returns (source, "") or ("", reason)."""
+    parts: list[str] = []
+    prev_kind: str | None = None
+    prev_tok: str | None = None
+    for kind, tok in tokens:
+        starts_factor = kind in ("num", "name") or tok == "("
+        ends_factor = prev_kind in ("num", "name") or prev_tok == ")"
+        if prev_kind is not None and starts_factor and ends_factor:
+            if prev_kind == "num" and kind == "num":
+                return "", "adjacent numbers"
+            if prev_kind == "name" and kind == "num":
+                return "", "unsupported symbol sequence"
+            parts.append("*")
+        parts.append("**" if tok == "^" else tok)
+        prev_kind, prev_tok = kind, tok
+    return "".join(parts), ""
+
+
+def _build_expr(node: ast.AST, depth: int, budget: list[int]) -> sympy.Expr | str:
+    """Construct a sympy expression from an allowlisted AST node."""
+    budget[0] -= 1
+    if budget[0] < 0:
+        return "expression is too complex to verify"
+    if depth > _MAX_EXPR_DEPTH:
+        return "expression is nested too deeply to verify"
+    if isinstance(node, ast.Expression):
+        return _build_expr(node.body, depth, budget)
+    if isinstance(node, ast.Constant):
+        value = node.value
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            return "unsupported literal"
+        if isinstance(value, int):
+            return sympy.Integer(value)
+        frac = Fraction(str(value))
+        return sympy.Rational(frac.numerator, frac.denominator)
+    if isinstance(node, ast.Name):
+        if node.id == "x":
+            return _X
+        return f"unsupported symbols ({node.id})"
+    if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+        operand = _build_expr(node.operand, depth + 1, budget)
+        if isinstance(operand, str):
+            return operand
+        return operand if isinstance(node.op, ast.UAdd) else -operand
+    if isinstance(node, ast.BinOp):
+        left = _build_expr(node.left, depth + 1, budget)
+        if isinstance(left, str):
+            return left
+        right = _build_expr(node.right, depth + 1, budget)
+        if isinstance(right, str):
+            return right
+        if isinstance(node.op, ast.Add):
+            return left + right
+        if isinstance(node.op, ast.Sub):
+            return left - right
+        if isinstance(node.op, ast.Mult):
+            return left * right
+        if isinstance(node.op, ast.Div):
+            return left / right
+        if isinstance(node.op, ast.Pow):
+            if not right.is_rational or right.q != 1:
+                return "exponents must be whole numbers"
+            exponent = int(right)
+            if abs(exponent) > _MAX_POW:
+                return f"exponents are limited to +/-{_MAX_POW}"
+            return left**exponent
+        return "unsupported operator"
+    return "unsupported syntax"
 
 
 def _parse_expr(text: str) -> sympy.Expr | str:
@@ -188,14 +292,22 @@ def _parse_expr(text: str) -> sympy.Expr | str:
         return "expression is empty"
     if len(t) > _MAX_EXPR_LEN:
         return f"expression is too long: {t[:40]!r}..."
+    tokens = _tokenize_expr(t)
+    if isinstance(tokens, str):
+        return f"could not parse expression {t!r}: {tokens}"
+    if not tokens:
+        return "expression is empty"
+    source, err = _to_python_source(tokens)
+    if err:
+        return f"could not parse expression {t!r}: {err}"
     try:
-        expr = parse_expr(
-            t, local_dict={"x": _X}, transformations=_TRANSFORMATIONS, evaluate=True
-        )
-    except Exception as e:  # sympy raises assorted parse errors
-        logger.debug("sympy parse failed for %r: %s", t, e)
+        tree = ast.parse(source, mode="eval")
+    except SyntaxError:
         return f"could not parse expression {t!r}"
-    if not expr.free_symbols <= {_X}:
+    expr = _build_expr(tree, 0, [_MAX_EXPR_NODES])
+    if isinstance(expr, str):
+        return f"could not parse expression {t!r}: {expr}"
+    if not expr.free_symbols <= {_X}:  # defense in depth; unreachable
         names = ", ".join(sorted(str(s) for s in expr.free_symbols))
         return f"expression uses unsupported symbols ({names}): {t!r}"
     return expr
@@ -636,7 +748,19 @@ def verify_number_line(nl: VisualNumberLine) -> list[str]:
             f"for {problem!r}; the correct answer is {format_interval_set(result.solution)}"
         )
 
-    if nl.domain is not None:
+    # A domain track is REQUIRED whenever the problem restricts the domain
+    # (log argument/base, denominator zeros). Only problems whose domain is
+    # the whole real line may omit the track.
+    whole_line = IntervalSet.of(Interval(None, None, False, False))
+    domain_required = result.domain is not None and not result.domain.equals(whole_line)
+    if nl.domain is None:
+        if domain_required:
+            errors.append(
+                f"the domain track is required for {problem!r}: the domain is "
+                f"{format_interval_set(result.domain)}, and it is part of a "
+                "verified worked solution"
+            )
+    else:
         claimed_domain = _track_set(nl.domain)
         if isinstance(claimed_domain, str):
             errors.append(f"the domain track could not be parsed: {claimed_domain}")
@@ -654,71 +778,78 @@ def verify_number_line(nl: VisualNumberLine) -> list[str]:
             )
         return errors
 
+    # Variable-base log: EVERY computed base-regime branch must be shown. An
+    # empty case list is a missing explanation, never a pass.
     computed_cases = [c for c in result.cases]
-    if nl.cases:
-        if len(nl.cases) != len(computed_cases):
-            errors.append(
-                f"expected {len(computed_cases)} case branch(es) for this problem, "
-                f"found {len(nl.cases)}"
+    if len(nl.cases) != len(computed_cases):
+        errors.append(
+            f"expected {len(computed_cases)} case branch(es) for this problem, "
+            f"found {len(nl.cases)}"
+        )
+    remaining = list(computed_cases)
+    for mc in nl.cases:
+        parsed = _parse_interval_set_text(mc.solution)
+        if isinstance(parsed, str):
+            errors.append(f"case solution {mc.solution!r} could not be parsed: {parsed}")
+            continue
+        match = None
+        for candidate in remaining:
+            if parsed.equals(candidate.solution):
+                match = candidate
+                break
+        if match is None:
+            valid = "; ".join(
+                f"{format_interval_set(c.solution)} for {c.condition or 'the base regime'}"
+                for c in computed_cases
             )
-        remaining = list(computed_cases)
-        for mc in nl.cases:
-            parsed = _parse_interval_set_text(mc.solution)
-            if isinstance(parsed, str):
-                errors.append(f"case solution {mc.solution!r} could not be parsed: {parsed}")
-                continue
-            match = None
-            for candidate in remaining:
-                if parsed.equals(candidate.solution):
-                    match = candidate
-                    break
-            if match is None:
-                valid = "; ".join(
-                    f"{format_interval_set(c.solution)} for {c.condition or 'the base regime'}"
-                    for c in computed_cases
-                )
+            errors.append(
+                f"case solution {mc.solution!r} does not match the computed case "
+                f"solutions ({valid})"
+            )
+            continue
+        remaining.remove(match)
+        cond = _parse_condition(mc.condition)
+        if cond is None:
+            errors.append(f"case condition {mc.condition!r} could not be parsed")
+        else:
+            kind, expr = cond
+            base_expr = _base_expr(result)
+            if base_expr is not None and not _same_expr(expr, base_expr):
                 errors.append(
-                    f"case solution {mc.solution!r} does not match the computed case "
-                    f"solutions ({valid})"
+                    f"case condition {mc.condition!r} does not describe the "
+                    "logarithm base"
                 )
-                continue
-            remaining.remove(match)
-            cond = _parse_condition(mc.condition)
-            if cond is None:
-                errors.append(f"case condition {mc.condition!r} could not be parsed")
-            else:
-                kind, expr = cond
-                base_expr = _base_expr(result)
-                if base_expr is not None and not _same_expr(expr, base_expr):
-                    errors.append(
-                        f"case condition {mc.condition!r} does not describe the "
-                        "logarithm base"
-                    )
-                elif match.condition.startswith("0 <") and kind == "gt":
+            elif match.condition.startswith("0 <"):
+                if kind == "gt":
                     errors.append(
                         f"case condition {mc.condition!r} claims base > 1, but this "
                         "branch is the 0 < base < 1 regime"
                     )
-                elif match.condition.endswith("> 1") and kind in ("lt", "between"):
+                elif kind == "lt":
                     errors.append(
-                        f"case condition {mc.condition!r} claims base < 1, but this "
-                        "branch is the base > 1 regime"
+                        f"case condition {mc.condition!r} is incomplete: it omits the "
+                        "positivity requirement; this branch is the 0 < base < 1 regime"
                     )
-            if mc.transformed.strip():
-                checked = _solve_claimed_transformed(mc.transformed, match.regime)
-                if isinstance(checked, str):
-                    errors.append(f"case step {mc.transformed!r}: {checked}")
-                elif not checked.equals(match.solution):
-                    errors.append(
-                        f"case step {mc.transformed!r} yields {format_interval_set(checked)} "
-                        f"on its branch, but the correct case solution is "
-                        f"{format_interval_set(match.solution)}"
-                    )
-        if remaining:
-            missing = "; ".join(
-                f"{format_interval_set(c.solution)} for {c.condition}" for c in remaining
-            )
-            errors.append(f"missing case branch(es): {missing}")
+            elif kind != "gt":
+                errors.append(
+                    f"case condition {mc.condition!r} claims base < 1, but this "
+                    "branch is the base > 1 regime"
+                )
+        if mc.transformed.strip():
+            checked = _solve_claimed_transformed(mc.transformed, match.regime)
+            if isinstance(checked, str):
+                errors.append(f"case step {mc.transformed!r}: {checked}")
+            elif not checked.equals(match.solution):
+                errors.append(
+                    f"case step {mc.transformed!r} yields {format_interval_set(checked)} "
+                    f"on its branch, but the correct case solution is "
+                    f"{format_interval_set(match.solution)}"
+                )
+    if remaining:
+        missing = "; ".join(
+            f"{format_interval_set(c.solution)} for {c.condition}" for c in remaining
+        )
+        errors.append(f"missing case branch(es): {missing}")
     return errors
 
 

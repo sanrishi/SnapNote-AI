@@ -515,9 +515,9 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
      Use this WHENEVER the lesson works through an inequality or a domain whose answer is an interval or union of intervals (log_{x+3}(x² − x) < 1, (x − 2)/(x + 3) ≤ 0, x² − 5x + 6 > 0, "find the domain of ..."). NEVER force such content into "plot", "comparison" or "generic".
        "problem": the ONE inequality exactly as written (plain Unicode, no LaTeX, no words around it), e.g. "log_{x+3}(x² − x) < 1". Copy every symbol/number verbatim.
        "domain": {"label": "x² − x > 0, x + 3 > 0, x + 3 ≠ 1", "intervals": [{"lo": "-3", "hi": "-2"}, {"lo": "-2", "hi": "0"}, {"lo": "1", "hi": "inf"}], "points": ["-2"]}
-         - the FULL final domain: apply every restriction (log argument > 0; log base > 0 and ≠ 1; denominators ≠ 0), intersect them, and list the resulting intervals. Excluded single values (like the base = 1 point) go in "points". OMIT "domain" entirely for pure polynomial inequalities with no restrictions.
+         - the FULL final domain: apply every restriction (log argument > 0; log base > 0 and ≠ 1; denominators ≠ 0), intersect them, and list the resulting intervals. Excluded single values (like the base = 1 point) go in "points". The verifier REQUIRES a domain track whenever any restriction exists (any log, any denominator); OMIT "domain" only for pure polynomial inequalities with no restrictions — omitting it elsewhere is a verification failure.
        "cases": up to 3 branches, each {"condition", "transformed", "solution"}:
-         - "condition": exactly "BASE > 1" form (e.g. "x + 3 > 1") for the increasing regime, or exactly "0 < BASE < 1" form (e.g. "0 < x + 3 < 1") for the decreasing regime.
+         - "condition": exactly "BASE > 1" form (e.g. "x + 3 > 1") for the increasing regime, or exactly "0 < BASE < 1" form (e.g. "0 < x + 3 < 1") for the decreasing regime. NEVER write a bare "BASE < 1" — dropping the positivity bound 0 < BASE makes the condition incorrect and the verifier rejects it.
          - "transformed": the inequality AFTER applying log monotonicity (direction kept for base > 1, REVERSED for 0 < base < 1), e.g. "x² − x < x + 3".
          - "solution": the case's final set with the domain already applied, e.g. "(-1, 0) ∪ (1, 3)".
          - For a CONSTANT base (log_2(...), log_3(...)) there is no case split: OMIT "cases".
@@ -784,7 +784,7 @@ THIN_SCENE_REPAIR_PROMPT = r"""Your previous visual plan was not acceptable: {RE
 
 Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants (use "comparison" with one panel per variant), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), process steps ("process_flow"), or a worked INEQUALITY/DOMAIN whose answer is an interval union ("number_line") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
 
-If the reason mentions a mathematics verification mismatch (phrases like "mathematically wrong", "cannot verify", "correct answer is", "correct domain is"), redo the solution carefully and re-emit a corrected "number_line" scene: apply the domain restrictions first (log argument > 0, log base > 0 and ≠ 1, denominators ≠ 0), split by case (base > 1 keeps the inequality direction; 0 < base < 1 reverses it), intersect EVERY case with the domain, and only then take the union. Use the exact correct sets quoted in the reason when they are given. Never repeat the wrong set.
+If the reason mentions a mathematics verification mismatch (phrases like "mathematically wrong", "cannot verify", "correct answer is", "correct domain is", "domain track is required", "case branch", "omits the positivity"), redo the solution carefully and re-emit a corrected "number_line" scene: apply the domain restrictions first (log argument > 0, log base > 0 and ≠ 1, denominators ≠ 0), ALWAYS include the "domain" track whenever any restriction exists, split by case (base > 1 keeps the inequality direction; 0 < base < 1 reverses it — write the condition with its full positivity bound, never a bare "BASE < 1"), intersect EVERY case with the domain, and only then take the union. Use the exact correct sets quoted in the reason when they are given. Never repeat the wrong set.
 
 If the lesson is genuinely simple or nothing drawable is honestly supported, return the spec JSON unchanged. Never invent formulas, numbers, vectors, curves, or relationships to fill the page. Return ONLY the JSON object, no other text.
 
@@ -801,7 +801,9 @@ HARD FIELD CONSTRAINTS (violations fail validation — respect every one):
   must appear verbatim in scene labels or composition.
 - number_line interval endpoints are "-inf"/"inf" or exact numbers ("-3", "1/2");
   lo_closed/hi_closed mark included endpoints; case conditions are exactly
-  "BASE > 1" or "0 < BASE < 1" forms; omit "cases" only for a constant base.
+  "BASE > 1" or "0 < BASE < 1" forms (the positivity bound must never be
+  dropped); omit "cases" only for a constant base; include the "domain" track
+  whenever any restriction exists (any log or denominator).
 
 YOUR PREVIOUS RESPONSE:
 {PREVIOUS_JSON}"""
