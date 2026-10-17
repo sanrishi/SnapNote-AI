@@ -344,8 +344,63 @@ class VisualComparison(BaseModel):
     relation: VisualRelation | None = None
 
 
+class VisualInterval(BaseModel):
+    """One real interval of a number-line track. Endpoints are exact text.
+
+    lo/hi are "-inf"/"inf" or integer/fraction text ("-3", "1/2", "1.5").
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    lo: str = Field(default="-inf", max_length=16)
+    hi: str = Field(default="inf", max_length=16)
+    lo_closed: bool = False
+    hi_closed: bool = False
+
+
+class VisualNumberLineTrack(BaseModel):
+    """One labeled track: a solution/domain set drawn on a number line.
+
+    `points` are values EXCLUDED from the set (e.g. domain exclusions like
+    x ≠ -2) — they are removed from the interval union and marked hollow.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    label: str = Field(default="", max_length=60)
+    intervals: list[VisualInterval] = Field(default_factory=list, max_length=6)
+    points: list[str] = Field(default_factory=list, max_length=6)
+
+
+class VisualMathCase(BaseModel):
+    """One case branch of a worked inequality solution (e.g. base > 1)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    condition: str = Field(default="", max_length=80)
+    transformed: str = Field(default="", max_length=120)
+    solution: str = Field(default="", max_length=120)
+
+
+class VisualNumberLine(BaseModel):
+    """Worked interval mathematics: problem, domain, case split, final answer.
+
+    The math verifier (app.utils.math_verify) re-solves `problem` exactly and
+    refuses any spec whose claimed domain, case solutions, or final solution
+    interval set disagree with the computed ones. The renderer draws the
+    verified structure; it never re-derives anything.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    problem: str = Field(default="", max_length=160)
+    domain: VisualNumberLineTrack | None = None
+    cases: list[VisualMathCase] = Field(default_factory=list, max_length=3)
+    solution: VisualNumberLineTrack = Field(default_factory=VisualNumberLineTrack)
+
+
 class VisualScene(BaseModel):
-    scene_kind: Literal["force_diagram", "process_flow", "plot", "generic", "comparison"] = "force_diagram"
+    scene_kind: Literal["force_diagram", "process_flow", "plot", "generic", "comparison", "number_line"] = "force_diagram"
     title: str = ""
     caption: str = ""
     force: ForceDiagram | None = None
@@ -353,6 +408,7 @@ class VisualScene(BaseModel):
     plot: VisualPlot | None = None
     generic: VisualGeneric | None = None
     comparison: VisualComparison | None = None
+    number_line: VisualNumberLine | None = None
 
 
 class CompositionCallout(BaseModel):
@@ -423,6 +479,7 @@ class VisualTask(BaseModel):
         "connected_process",
         "coordinate_construction",
         "definition_overview",
+        "interval_solution",
     ] = "definition_overview"
     learning_outcome: str = ""
     required_elements: list[str] = []

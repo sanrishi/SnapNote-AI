@@ -880,3 +880,200 @@ def test_visual_missing_source_requirement_refuses(sample_diagram_image, monkeyp
     resp = asyncio.run(run_visual())
     assert resp.status_code == 502
     assert "unavailable" in resp.json()["error"]
+
+
+# ── worked mathematics (number_line): verified or refused, never wrong ──
+
+_WORKED_MATH_PROBLEM = "log_{x+3}(x^2 - x) < 1"
+_CORRECT_SOLUTION = [
+    ("-3", "-2", False, False),
+    ("-1", "0", False, False),
+    ("1", "3", False, False),
+]
+
+
+def _number_line_spec(solution_intervals, problem=_WORKED_MATH_PROBLEM):
+    from app.models.schemas import (
+        DeterministicVisual,
+        VisualInterval,
+        VisualMathCase,
+        VisualNumberLine,
+        VisualNumberLineTrack,
+        VisualScene,
+        VisualSpec,
+        VisualTask,
+    )
+
+    def track(intervals, points=None, label=""):
+        return VisualNumberLineTrack(
+            label=label,
+            intervals=[
+                VisualInterval(lo=lo, hi=hi, lo_closed=lo_c, hi_closed=hi_c)
+                for lo, hi, lo_c, hi_c in intervals
+            ],
+            points=points or [],
+        )
+
+    nl = VisualNumberLine(
+        problem=problem,
+        domain=track(
+            [
+                ("-3", "-2", False, False),
+                ("-2", "0", False, False),
+                ("1", "inf", False, False),
+            ],
+            points=["-2"],
+        ),
+        cases=[
+            VisualMathCase(
+                condition="x + 3 > 1",
+                transformed="(x^2 - x) < x + 3",
+                solution="(-1, 0) \u222a (1, 3)",
+            ),
+            VisualMathCase(
+                condition="0 < x + 3 < 1",
+                transformed="(x^2 - x) > x + 3",
+                solution="(-3, -2)",
+            ),
+        ],
+        solution=track(solution_intervals, label="Final answer"),
+    )
+    task = VisualTask(
+        task_type="interval_solution",
+        learning_outcome="solve a logarithmic inequality with a variable base",
+        required_elements=["domain", "final answer"],
+        required_relationships=[],
+        exact_claims=[],
+        acceptable_families=["number_line"],
+        assumptions=[],
+        missing=[],
+    )
+    return VisualSpec(
+        concept="logarithmic inequality with a variable base",
+        render_mode="deterministic",
+        text_required=True,
+        deterministic=DeterministicVisual(
+            title="Log Inequality \u2014 Full Case Analysis",
+            task=task,
+            scene=VisualScene(
+                scene_kind="number_line",
+                title="Log Inequality \u2014 Full Case Analysis",
+                caption=(
+                    "A logarithmic inequality with a variable base must satisfy "
+                    "the domain first; the base regime decides the direction."
+                ),
+                number_line=nl,
+            ),
+        ),
+    )
+
+
+def _run_worked_math_visual(device, diagram_id, image):
+    async def run():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    return asyncio.run(run())
+
+
+def _make_diagram(device, image, monkeypatch):
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, image)
+
+    return asyncio.run(run_diagram()).json()["diagramId"]
+
+
+def test_visual_route_refuses_wrong_math_solution(sample_diagram_image, monkeypatch):
+    """The exact CEO regression: a spec claiming (-3, -2) ∪ (-1, 3) is refused
+    with the precise correction, never rendered."""
+    device = "visual-wrongmath-00000000-0000-000000000011"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong))
+    repair_mock = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"]
+    assert repair_mock.await_count == 1
+    reason = repair_mock.call_args.args[3]
+    assert "mathematically wrong" in reason
+    assert "(-3, -2) \u222a (-1, 0) \u222a (1, 3)" in reason
+    from app.utils.credits_store import get_visual_entitlement
+
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")  # nothing stored
+
+
+def test_visual_route_repairs_wrong_math_and_renders_verified(
+    sample_diagram_image, monkeypatch
+):
+    """One bounded repair is allowed to fix the math; the repaired spec is
+    verified again and the REAL renderer then produces the verified SVG."""
+    device = "visual-fixmath-00000000-0000-000000000012"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+    corrected = _number_line_spec(_CORRECT_SOLUTION)
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong))
+    repair_mock = AsyncMock(return_value=corrected)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["status"] == "generated"
+    assert body["renderMode"] == "deterministic"
+    svg = body["imageSvg"]
+    assert "FINAL ANSWER \u2014 MATHEMATICALLY VERIFIED" in svg
+    assert "x \u2208 (-1, 0) \u222a (1, 3)" in svg
+    # The repaired 3-interval final track renders 6 open endpoint dots; the
+    # wrong 2-interval track would render 4. Geometry proves which track won.
+    assert svg.count('fill="white" stroke="#16a34a"') == 6
+    assert repair_mock.await_count == 1
+    from app.utils.credits_store import get_credits
+
+    remaining, _ = get_credits(device)
+    assert remaining == 45  # diagram charged once; explain visually is free
+
+
+def test_visual_route_refuses_unverifiable_math(sample_diagram_image, monkeypatch):
+    """Mathematics outside the supported class refuses honestly: no visual,
+    precise reason handed to repair, study notes stay intact."""
+    device = "visual-unverifiable-00000000-0000-000000000013"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    unsupported = _number_line_spec(
+        [("-inf", "inf", False, False)], problem="x^2 - 2 < 0"
+    )
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=unsupported))
+    repair_mock = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"]
+    reason = repair_mock.call_args.args[3]
+    assert "cannot verify the mathematics" in reason
+    assert "never displayed unverified" in reason
