@@ -1077,3 +1077,56 @@ def test_visual_route_refuses_unverifiable_math(sample_diagram_image, monkeypatc
     reason = repair_mock.call_args.args[3]
     assert "cannot verify the mathematics" in reason
     assert "never displayed unverified" in reason
+
+
+def test_visual_route_refuses_incomplete_math_stores_nothing(
+    sample_diagram_image, monkeypatch
+):
+    """Completeness failures (missing domain track, empty case list) refuse
+    end-to-end with a precise repair reason, and NO visual result is stored —
+    the entitlement row stays empty, so the gate can never leave a false
+    'verified' artifact behind."""
+    from app.utils.credits_store import get_visual_entitlement
+
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    # Scenario 1 — missing domain track on a variable-base log.
+    device = "visual-incomplete-00000000-0000-000000000014"
+    _reset_credits(device)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+    no_domain = _number_line_spec(_CORRECT_SOLUTION)
+    scene = no_domain.deterministic.scene
+    assert scene is not None and scene.number_line is not None
+    scene.number_line.domain = None
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=no_domain))
+    repair_mock = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"]
+    reason = repair_mock.call_args.args[3]
+    assert "domain track is required" in reason
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")
+    assert get_visual_entitlement(diagram_id)[3] in (None, "")
+
+    # Scenario 2 — entire case list missing on a variable-base log.
+    device2 = "visual-incomplete-00000000-0000-000000000015"
+    _reset_credits(device2)
+    diagram_id2 = _make_diagram(device2, sample_diagram_image, monkeypatch)
+    no_cases = _number_line_spec(_CORRECT_SOLUTION)
+    scene2 = no_cases.deterministic.scene
+    assert scene2 is not None and scene2.number_line is not None
+    scene2.number_line.cases = []
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=no_cases))
+    repair_mock2 = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock2)
+
+    resp2 = _run_worked_math_visual(device2, diagram_id2, sample_diagram_image)
+    assert resp2.status_code == 502
+    reason2 = repair_mock2.call_args.args[3]
+    assert "expected 2 case branch(es)" in reason2
+    assert get_visual_entitlement(diagram_id2)[1] in (None, "")
+    assert get_visual_entitlement(diagram_id2)[3] in (None, "")
