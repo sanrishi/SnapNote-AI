@@ -48,6 +48,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt -r backend/requirements-test.txt
+          pip install -r docs/jee-pyq-corpus/requirements.txt
 
       # The product is OCR-first (EasyOCR 1 credit, Gemini escalation 5); the
       # OCR-contract tests need the real OCR stack, so CI installs it exactly
