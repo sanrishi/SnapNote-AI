@@ -471,16 +471,18 @@ Choose "render_mode": "deterministic" or "generative" based on INFORMATION PRECI
   - "deterministic" — when correctness of text, symbols, equations, relationships, or exact structure is CENTRAL to understanding. Our deterministic renderer then draws a clean SVG with your exact equations and steps. Use this for: formulas, derivations, definitions, labeled flows, diagrams where labels matter, physics/math/engineering content, chemistry mechanisms, anything where garbled text would be harmful.
   - "generative" — ONLY when the value is a rich conceptual illustration where exact text is NOT the main payload: conceptual scenes, biology/cell processes, analogy-like images, mechanisms you can convey with pictures. Never use generative mode for content whose understanding depends on reading exact symbols or labels.
 
+Worked mathematics (inequalities, domains, formulas, derivations) is ALWAYS "deterministic".
+
 If in doubt, choose "deterministic". A physics topic like "what is angular momentum?" may still benefit from a generative conceptual illustration — decide by precision, not by topic.
 
 TASK PLANNING (do this FIRST, before choosing any scene):
 Decide the teaching job in a "task" object. The task determines the representation — our validator rejects any scene that cannot do the task's job, so plan honestly:
-   - "task_type": exactly one of "compare_variants" (lesson contrasts 2-3 cases: translation vs rotation, cases of a piecewise solution), "multi_step_solution" (domain/cases/steps combining into one conclusion), "graph_relationship" (a plotted relationship IS the lesson), "vector_arrangement" (bodies, forces/velocities, angles, pivots), "connected_process" (ordered steps with dependencies/feedback), "coordinate_construction" (points/polygons/dimensions placed on axes), "definition_overview" (only when nothing structural is drawable — last resort, never for comparable/graphable/vector content).
+   - "task_type": exactly one of "compare_variants" (lesson contrasts 2-3 cases: translation vs rotation, cases of a piecewise solution), "multi_step_solution" (domain/cases/steps combining into one conclusion), "graph_relationship" (a plotted relationship IS the lesson), "vector_arrangement" (bodies, forces/velocities, angles, pivots), "connected_process" (ordered steps with dependencies/feedback), "coordinate_construction" (points/polygons/dimensions placed on axes), "interval_solution" (worked inequality or domain problem whose answer is a union of intervals — ALWAYS when the lesson solves an inequality), "definition_overview" (only when nothing structural is drawable — last resort, never for comparable/graphable/vector content).
    - "learning_outcome": one sentence stating what the student will be able to do after seeing the visual.
    - "required_elements": every entity the visual MUST show (bodies, points, axes, steps, variants). Each must be satisfiable by the chosen family's primitives — do not list what no family can draw.
    - "required_relationships": the connections/transformations/constraints between them.
    - "exact_claims": verbatim equations/values/labels from the image or notes that MUST appear (e.g. domain restrictions, final results). Copy them character-for-character; the validator checks their presence.
-   - "acceptable_families": scene kinds allowed for this task, chosen ONLY from this registry — compare_variants: ["comparison"]; multi_step_solution: ["process_flow"]; graph_relationship: ["plot"]; vector_arrangement: ["force_diagram"]; connected_process: ["process_flow"]; coordinate_construction: ["plot"]; definition_overview: any family. Your "scene.scene_kind" MUST be one of acceptable_families.
+   - "acceptable_families": scene kinds allowed for this task, chosen ONLY from this registry — compare_variants: ["comparison"]; multi_step_solution: ["process_flow"]; graph_relationship: ["plot"]; vector_arrangement: ["force_diagram"]; connected_process: ["process_flow"]; coordinate_construction: ["plot"]; interval_solution: ["number_line"]; definition_overview: any family. Your "scene.scene_kind" MUST be one of acceptable_families.
    - "assumptions": anything you had to assume to draw (empty when nothing assumed). "missing": evidence you needed but could not find.
    - A simple concept gets a simple task (definition_overview with 1-2 elements). Never inflate a simple lesson to justify a fancy scene; never shrink a structured lesson into generic boxes.
 
@@ -509,9 +511,26 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
         - discrete points and polygons: use explicit "points" with a "label" per vertex (e.g. an Argand-plane square: one closed loop [[-2,-2],[2,-2],[2,2],[-2,2],[-2,-2]] plus per-vertex labels like "A z = x + iy"). Vertices belong on the geometry as labels, never only in prose.
         - dimensions: express side lengths as short curve/vertex labels (e.g. "side = 4"), never as decorative text.
         - EQUATION FIDELITY: equation and expression strings must be copied verbatim from the image or notes — especially transformed expressions (e.g. write "z - 2Re(z) = -x + iy" exactly as shown; never rewrite Re(z) as Re(conjugate(z)) or otherwise "simplify"). The renderer prints these strings byte-identical; any mistranscription you emit becomes the student's wrong answer.
-  - "caption": ONE sentence under "WHAT THE VISUAL SHOWS" teaching what the diagram means conceptually (never an inventory of parts). Example: "Torque magnitude depends on the lever arm r and the angle θ between r and F."
+   - "number_line" (worked interval mathematics — solving ONE inequality: log inequalities, polynomial/rational inequalities, domains):
+     Use this WHENEVER the lesson works through an inequality or a domain whose answer is an interval or union of intervals (log_{x+3}(x² − x) < 1, (x − 2)/(x + 3) ≤ 0, x² − 5x + 6 > 0, "find the domain of ..."). NEVER force such content into "plot", "comparison" or "generic".
+       "problem": the ONE inequality exactly as written (plain Unicode, no LaTeX, no words around it), e.g. "log_{x+3}(x² − x) < 1". Copy every symbol/number verbatim.
+       "domain": {"label": "x² − x > 0, x + 3 > 0, x + 3 ≠ 1", "intervals": [{"lo": "-3", "hi": "-2"}, {"lo": "-2", "hi": "0"}, {"lo": "1", "hi": "inf"}], "points": ["-2"]}
+         - the FULL final domain: apply every restriction (log argument > 0; log base > 0 and ≠ 1; denominators ≠ 0), intersect them, and list the resulting intervals. Excluded single values (like the base = 1 point) go in "points". OMIT "domain" entirely for pure polynomial inequalities with no restrictions.
+       "cases": up to 3 branches, each {"condition", "transformed", "solution"}:
+         - "condition": exactly "BASE > 1" form (e.g. "x + 3 > 1") for the increasing regime, or exactly "0 < BASE < 1" form (e.g. "0 < x + 3 < 1") for the decreasing regime.
+         - "transformed": the inequality AFTER applying log monotonicity (direction kept for base > 1, REVERSED for 0 < base < 1), e.g. "x² − x < x + 3".
+         - "solution": the case's final set with the domain already applied, e.g. "(-1, 0) ∪ (1, 3)".
+         - For a CONSTANT base (log_2(...), log_3(...)) there is no case split: OMIT "cases".
+       "solution": {"label": "Final answer", "intervals": [{"lo": "-3", "hi": "-2"}, {"lo": "-1", "hi": "0"}, {"lo": "1", "hi": "3"}], "points": []}
+         - the COMPLETE union over all cases. Interval endpoints: lo/hi are "-inf"/"inf" or exact numbers ("-3", "1/2", "1.5"); lo_closed/hi_closed (default false = open) say whether the endpoint is included.
+     HARD MATH RULES — a server-side verifier re-solves the problem and REFUSES any wrong domain, case, or final answer (honest refusal beats a wrong visual):
+       - Work the problem correctly BEFORE writing the JSON: domain first (argument > 0; base > 0 and ≠ 1), then case split (base > 1 keeps direction; 0 < base < 1 reverses), then intersect each case with the domain, then union.
+       - Worked reference example (study the full completeness): for log_{x+3}(x² − x) < 1 the domain is (-3, -2) ∪ (-2, 0) ∪ (1, inf) — x² − x > 0 AND x + 3 > 0 AND x + 3 ≠ 1, so the base=1 point x = -2 is excluded. Case x + 3 > 1 (x > -2): x² − x < x + 3 gives (-1, 3), intersected with the domain: (-1, 0) ∪ (1, 3). Case 0 < x + 3 < 1 (-3 < x < -2): x² − x > x + 3 gives (-3, -2). FINAL ANSWER: (-3, -2) ∪ (-1, 0) ∪ (1, 3). A union like (-3, -2) ∪ (-1, 3) that drops the domain intersection is WRONG.
+       - Double-check every endpoint closure (strict <, > = open; ≤, ≥ = closed).
+       - If you cannot derive the exact solution, do NOT emit a number_line scene with a guessed answer — refuse honestly by choosing a different honest representation instead.
+   - "caption": ONE sentence under "WHAT THE VISUAL SHOWS" teaching what the diagram means conceptually (never an inventory of parts). Example: "Torque magnitude depends on the lever arm r and the angle θ between r and F."
 
-  When the screenshot shows a graph/plot/trajectory (parabola, sine wave, polar curve, projectile), prefer "plot" with a safe expr. When it shows vectors/forces, prefer "force_diagram". When it shows boxes/arrows, prefer "process_flow".
+  When the screenshot shows a graph/plot/trajectory (parabola, sine wave, polar curve, projectile), prefer "plot" with a safe expr. When it shows vectors/forces, prefer "force_diagram". When it shows boxes/arrows, prefer "process_flow". When it SOLVES an inequality or finds a domain (answer = interval union), use "number_line" — never generic, never a forced comparison.
 
 THE COMPOSITION BLOCK (explicit lesson content):
 Inside "deterministic.composition" you describe the LESSON the visual teaches — title, framing, callout chips, reasoning chain, highlighted result, takeaway. The renderer draws this block verbatim around the scene geometry, so every word must already be grounded.
@@ -532,7 +551,7 @@ GROUNDING RULES:
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
 3. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
 4. Write labels as short, plain, readable text.
-5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. When the lesson explicitly compares 2-3 variants of one idea (e.g. pure translation vs pure rotation vs combined motion), use "comparison" with one panel per variant: each panel has a short label, an object (block for sliding, disk for rolling/spinning), the motion's own velocity vectors, a rotation arc ONLY where the variant actually rotates, and a one-line note. Velocity vectors on rotating bodies must be TANGENTIAL (perpendicular to the radius), never radial. Never use "generic" for a comparison lesson — a central box with formula callouts teaches nothing. If none of those fit, use "generic" with central_label (2-4 words) and 2-4 callouts (each a short phrase) — this guarantees every concept gets a labeled diagram. Never leave scene empty if you can make a generic.
+5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. An inequality/domain solution should use a number_line. When the lesson explicitly compares 2-3 variants of one idea (e.g. pure translation vs pure rotation vs combined motion), use "comparison" with one panel per variant: each panel has a short label, an object (block for sliding, disk for rolling/spinning), the motion's own velocity vectors, a rotation arc ONLY where the variant actually rotates, and a one-line note. Velocity vectors on rotating bodies must be TANGENTIAL (perpendicular to the radius), never radial. Never use "generic" for a comparison lesson — a central box with formula callouts teaches nothing. If none of those fit, use "generic" with central_label (2-4 words) and 2-4 callouts (each a short phrase) — this guarantees every concept gets a labeled diagram. Never leave scene empty if you can make a generic.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
@@ -543,13 +562,22 @@ OUTPUT: ONLY a JSON object with exactly this structure:
     "title": "short title (2-6 words)",
     "task": {"task_type": "compare_variants", "learning_outcome": "one sentence", "required_elements": ["each entity the visual must show"], "required_relationships": [], "exact_claims": ["verbatim equations/values"], "acceptable_families": ["comparison"], "assumptions": [], "missing": []},
     "scene": {
-      "scene_kind": "force_diagram | process_flow | plot | generic | comparison",
+      "scene_kind": "force_diagram | process_flow | plot | generic | comparison | number_line",
       "caption": "one teaching sentence about what the diagram means",
       "force": { "object": {...}, "vectors": [...], "angles": [...], "arcs": [...], "relation": {...} },
       "flow": { "nodes": [...], "connectors": [...], "relation": {...} },
       "plot": { "x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true, "curves": [{"label": "y=x²", "expr": "x**2", "x_min": 0, "x_max": 2}] },
       "generic": { "central_label": "Main idea", "callouts": ["callout 1", "callout 2"] },
-      "comparison": { "panels": [{"label": "Pure translation", "object": {"kind": "block"}, "vectors": [{"label": "v", "angle_deg": 0, "length": 1.0}], "arcs": [], "note": "all points share v"}], "relation": {"expression": "v = ωr", "caption": "rolling link"} }
+      "comparison": { "panels": [{"label": "Pure translation", "object": {"kind": "block"}, "vectors": [{"label": "v", "angle_deg": 0, "length": 1.0}], "arcs": [], "note": "all points share v"}], "relation": {"expression": "v = ωr", "caption": "rolling link"} },
+      "number_line": {
+        "problem": "log_{x+3}(x² − x) < 1",
+        "domain": {"label": "x² − x > 0, x + 3 > 0, x + 3 ≠ 1", "intervals": [{"lo": "-3", "hi": "-2"}, {"lo": "-2", "hi": "0"}, {"lo": "1", "hi": "inf"}], "points": ["-2"]},
+        "cases": [
+          {"condition": "x + 3 > 1", "transformed": "x² − x < x + 3", "solution": "(-1, 0) ∪ (1, 3)"},
+          {"condition": "0 < x + 3 < 1", "transformed": "x² − x > x + 3", "solution": "(-3, -2)"}
+        ],
+        "solution": {"label": "Final answer", "intervals": [{"lo": "-3", "hi": "-2"}, {"lo": "-1", "hi": "0"}, {"lo": "1", "hi": "3"}], "points": []}
+      }
     },
     "equations": [{"expression": "exact formula in Unicode, no LaTeX, no backslash", "meaning": "one line: what each symbol means and what the relationship represents"}],
     "steps": ["ordered steps, each a short phrase"],
@@ -615,7 +643,7 @@ def _normalize_task_enums(data: dict) -> dict:
     from app.models.schemas import VisualTask
 
     valid_tasks = list(VisualTask.model_fields["task_type"].annotation.__args__)  # type: ignore[union-attr]
-    valid_kinds = ["force_diagram", "process_flow", "plot", "generic", "comparison"]
+    valid_kinds = ["force_diagram", "process_flow", "plot", "generic", "comparison", "number_line"]
 
     def _recover(value: str, valid: list[str]) -> str:
         folded = unicodedata.normalize("NFKC", value).strip()
@@ -752,9 +780,11 @@ def _composition_contradiction(spec: VisualSpec) -> tuple[str, str] | None:
     return None
 
 
-THIN_SCENE_REPAIR_PROMPT = r"""Your previous visual plan has too little drawable geometry: {REASON}. A central box with a few callouts does not teach the lesson.
+THIN_SCENE_REPAIR_PROMPT = r"""Your previous visual plan was not acceptable: {REASON}. A central box with a few callouts does not teach the lesson, and a wrong mathematical answer is worse than no visual at all.
 
-Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants (use "comparison" with one panel per variant), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), or process steps ("process_flow") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
+Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants (use "comparison" with one panel per variant), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), process steps ("process_flow"), or a worked INEQUALITY/DOMAIN whose answer is an interval union ("number_line") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
+
+If the reason mentions a mathematics verification mismatch (phrases like "mathematically wrong", "cannot verify", "correct answer is", "correct domain is"), redo the solution carefully and re-emit a corrected "number_line" scene: apply the domain restrictions first (log argument > 0, log base > 0 and ≠ 1, denominators ≠ 0), split by case (base > 1 keeps the inequality direction; 0 < base < 1 reverses it), intersect EVERY case with the domain, and only then take the union. Use the exact correct sets quoted in the reason when they are given. Never repeat the wrong set.
 
 If the lesson is genuinely simple or nothing drawable is honestly supported, return the spec JSON unchanged. Never invent formulas, numbers, vectors, curves, or relationships to fill the page. Return ONLY the JSON object, no other text.
 
@@ -762,13 +792,16 @@ HARD FIELD CONSTRAINTS (violations fail validation — respect every one):
 - callout ids: plain ASCII lowercase/digits/_/-, max 32 chars (never Unicode subscripts).
 - callout label max 24 chars, value max 80 chars. reasoning expression max 120 chars,
   explanation max 200 chars. result expression max 120 chars. takeaway max 200 chars.
-- scene_kind must be exactly one of: force_diagram, process_flow, plot, generic, comparison.
+- scene_kind must be exactly one of: force_diagram, process_flow, plot, generic, comparison, number_line.
 - task.task_type must be exactly one of: compare_variants, multi_step_solution,
   graph_relationship, vector_arrangement, connected_process,
-  coordinate_construction, definition_overview.
+  coordinate_construction, definition_overview, interval_solution.
 - task.acceptable_families must include your scene_kind; every required_elements
   entry must be satisfiable by the scene you emit; every exact_claims string
   must appear verbatim in scene labels or composition.
+- number_line interval endpoints are "-inf"/"inf" or exact numbers ("-3", "1/2");
+  lo_closed/hi_closed mark included endpoints; case conditions are exactly
+  "BASE > 1" or "0 < BASE < 1" forms; omit "cases" only for a constant base.
 
 YOUR PREVIOUS RESPONSE:
 {PREVIOUS_JSON}"""

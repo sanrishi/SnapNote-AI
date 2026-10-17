@@ -265,3 +265,25 @@ def test_12_log_solution_missing_domain_refused():
     )
     errors = validate_task_link(spec)
     assert any("domain" in e or "x > -3" in e for e in errors)
+
+
+def test_13_worked_math_number_line_verified_holdout():
+    """Holdout: the worked-math family renders the SAME log-inequality content
+    as tests 11/12, but only through the exact verifier — verified spec
+    renders, the wrong union is refused with the correction."""
+    from test_visual_lesson import _number_line_lesson
+
+    spec = _number_line_lesson()
+    assert validate_task_link(spec) == []
+    assert validate_lesson_spec(spec) == []
+    assert select_family(spec) == "worked_math"
+    svg = render_deterministic_visual(spec.deterministic)
+    assert svg.strip().startswith("<svg")
+    assert "x \u2208 (-1, 0) \u222a (1, 3)" in svg
+
+    wrong = _number_line_lesson()
+    scene = wrong.deterministic.scene
+    assert scene is not None and scene.number_line is not None
+    scene.number_line.solution.intervals = scene.number_line.solution.intervals[:2]
+    errors = validate_lesson_spec(wrong)
+    assert any("mathematically wrong" in e for e in errors)

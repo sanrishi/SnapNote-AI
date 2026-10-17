@@ -1027,6 +1027,224 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
     return "".join(parts), STAGE_Y + STAGE_H + 24, legend, comparison.relation
 
 
+# ── worked mathematics: number-line family ─────────────────────────────────
+#
+# Compact, content-fitted layout (no fixed stage, no minimum canvas height):
+# problem card -> domain track -> case rows -> verified final answer track.
+# All geometry is computed here from exact Fractions; typography never
+# overlaps and every label sits inside the canvas.
+
+_NL_TRACK_H = 46  # axis + endpoint labels
+_NL_DOT_R = 7
+_NL_BAR_H = 12
+_NL_INSET = 14
+
+
+def _nl_numbers(nl) -> list[float]:
+    from app.utils.math_intervals import parse_bound
+
+    values: list[float] = []
+    for track in (nl.domain, nl.solution):
+        if track is None:
+            continue
+        for iv in track.intervals:
+            lo = parse_bound(iv.lo, minus_side=True)
+            if not isinstance(lo, str) and lo is not None:
+                values.append(float(lo))
+            hi = parse_bound(iv.hi, minus_side=False)
+            if not isinstance(hi, str) and hi is not None:
+                values.append(float(hi))
+        for p in track.points:
+            parsed = parse_bound(p, minus_side=True)
+            if not isinstance(parsed, str) and parsed is not None:
+                values.append(float(parsed))
+    return values
+
+
+def _nl_scale(nl) -> tuple[float, float]:
+    values = _nl_numbers(nl)
+    if not values:
+        return -1.0, 1.0
+    lo, hi = min(values) - 1.0, max(values) + 1.0
+    if hi - lo < 1.0:
+        mid = (lo + hi) / 2
+        lo, hi = mid - 1.0, mid + 1.0
+    return lo, hi
+
+
+def _nl_x(value: float, lo: float, hi: float) -> float:
+    span = CONTENT_W - 2 * _NL_INSET
+    return MARGIN + _NL_INSET + (value - lo) / (hi - lo) * span
+
+
+def _nl_track_svg(track, y: int, lo: float, hi: float, color: str) -> tuple[str, int]:
+    """One number-line track. Returns (svg, next_y). Defensive: skips any
+    unparseable value (validation already guarantees parseable payloads)."""
+    from app.utils.math_intervals import parse_bound
+
+    parts: list[str] = []
+    x_left = _nl_x(lo, lo, hi)
+    x_right = _nl_x(hi, lo, hi)
+    parts.append(
+        f'<line x1="{_f(x_left)}" y1="{y}" x2="{_f(x_right)}" y2="{y}" '
+        f'stroke="{SOFT}" stroke-width="2"/>'
+    )
+    labels: list[tuple[float, str, str]] = []
+    bar_y = y - _NL_BAR_H / 2 - 8
+    for iv in track.intervals:
+        lo_b = parse_bound(iv.lo, minus_side=True)
+        hi_b = parse_bound(iv.hi, minus_side=False)
+        if isinstance(lo_b, str) or isinstance(hi_b, str):
+            continue
+        x1 = _nl_x(float(lo_b), lo, hi) if lo_b is not None else x_left
+        x2 = _nl_x(float(hi_b), lo, hi) if hi_b is not None else x_right
+        if x2 - x1 >= 1.0:
+            parts.append(
+                f'<rect x="{_f(x1)}" y="{_f(bar_y)}" width="{_f(x2 - x1)}" height="{_NL_BAR_H}" '
+                f'rx="{_NL_BAR_H / 2}" fill="{color}" opacity="0.85"/>'
+            )
+        if lo_b is not None:
+            fill = color if iv.lo_closed else "white"
+            parts.append(
+                f'<circle cx="{_f(x1)}" cy="{_f(y)}" r="{_NL_DOT_R}" fill="{fill}" '
+                f'stroke="{color}" stroke-width="2.5"/>'
+            )
+            labels.append((x1, _nl_fmt(float(lo_b)), color if iv.lo_closed else INK))
+        if hi_b is not None:
+            fill = color if iv.hi_closed else "white"
+            parts.append(
+                f'<circle cx="{_f(x2)}" cy="{_f(y)}" r="{_NL_DOT_R}" fill="{fill}" '
+                f'stroke="{color}" stroke-width="2.5"/>'
+            )
+            labels.append((x2, _nl_fmt(float(hi_b)), color if iv.hi_closed else INK))
+    excluded: list[tuple[float, str]] = []
+    for p in track.points:
+        parsed = parse_bound(p, minus_side=True)
+        if isinstance(parsed, str) or parsed is None:
+            continue
+        px = _nl_x(float(parsed), lo, hi)
+        parts.append(
+            f'<circle cx="{_f(px)}" cy="{_f(y)}" r="{_NL_DOT_R}" fill="white" '
+            f'stroke="{RED}" stroke-width="2.5"/>'
+        )
+        excluded.append((px, _nl_fmt(float(parsed))))
+    seen: set[float] = set()
+    for x, text, fill in labels:
+        if x in seen:
+            continue
+        seen.add(x)
+        parts.append(
+            f'<text x="{_f(min(max(x, MARGIN + 16), VIEW_W - MARGIN - 16))}" y="{_f(y + 26)}" '
+            f'font-family="{_FONT}" font-size="{TYPE_AXIS}" fill="{fill}" '
+            f'text-anchor="middle">{_esc(text)}</text>'
+        )
+    y_after = y + 34
+    if excluded:
+        for x, text in excluded:
+            parts.append(
+                f'<text x="{_f(min(max(x, MARGIN + 20), VIEW_W - MARGIN - 20))}" y="{_f(y + 46)}" '
+                f'font-family="{_FONT}" font-size="13" fill="{RED}" '
+                f'text-anchor="middle">x ≠ {_esc(text)}</text>'
+            )
+        y_after = y + 54
+    return "".join(parts), y_after + 12
+
+
+def _nl_fmt(value: float) -> str:
+    if float(value).is_integer():
+        return str(int(value))
+    return f"{value:g}"
+
+
+def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
+    """Worked-math layout: title already drawn; problem card, domain track,
+    case rows, verified final answer. Content-fitted height, no fixed stage."""
+    nl = scene.number_line
+    assert nl is not None
+    parts: list[str] = []
+    lo, hi = _nl_scale(nl)
+
+    problem_lines = _wrap(nl.problem.strip(), 60)
+    card_h = 22 + 32 * len(problem_lines)
+    parts.append(
+        f'<rect x="{MARGIN}" y="{y}" width="{CONTENT_W}" height="{card_h}" rx="12" '
+        f'fill="{CARD_FILL}" stroke="{CARD_STROKE}" stroke-width="1.5"/>'
+    )
+    py = y + 34
+    for line in problem_lines:
+        parts.append(
+            f'<text x="{VIEW_W / 2:.0f}" y="{py}" font-family="{_FONT}" font-size="22" '
+            f'font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
+        )
+        py += 32
+    y = py + 14
+
+    if nl.domain is not None and (nl.domain.intervals or nl.domain.points):
+        header, y = _section_header(y, "DOMAIN — WHERE THE LOG IS DEFINED")
+        parts.append(header)
+        label = nl.domain.label.strip()
+        if label:
+            for line in _wrap(label, 92):
+                parts.append(
+                    f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="15" '
+                    f'fill="{MUTED}" text-anchor="start">{_esc(line)}</text>'
+                )
+                y += 20
+            y += 4
+        html, y = _nl_track_svg(nl.domain, y + 12, lo, hi, ACCENT)
+        parts.append(html)
+
+    if nl.cases:
+        header, y = _section_header(y, "CASE ANALYSIS")
+        parts.append(header)
+        for case in nl.cases:
+            row_lines: list[tuple[str, int, str, str]] = []
+            cond = case.condition.strip()
+            if cond:
+                row_lines.append((f"If {cond}:", 17, INK, "700"))
+            if case.transformed.strip():
+                row_lines.append((case.transformed.strip(), 17, INK, "400"))
+            if case.solution.strip():
+                row_lines.append((f"x ∈ {case.solution.strip()}", 17, GREEN, "700"))
+            if not row_lines:
+                continue
+            cards: list[str] = []
+            row_h = 18 + 24 * len(row_lines)
+            cards.append(
+                f'<rect x="{MARGIN}" y="{y}" width="{CONTENT_W}" height="{row_h}" rx="10" '
+                f'fill="white" stroke="{CARD_STROKE}" stroke-width="1.5"/>'
+            )
+            cards.append(
+                f'<rect x="{MARGIN}" y="{y}" width="5" height="{row_h}" rx="2.5" fill="{ACCENT}"/>'
+            )
+            ty = y + 26
+            for text, size, color, weight in row_lines:
+                cards.append(
+                    f'<text x="{MARGIN + 18}" y="{ty}" font-family="{_FONT}" font-size="{size}" '
+                    f'font-weight="{weight}" fill="{color}" text-anchor="start">{_esc(text)}</text>'
+                )
+                ty += 24
+            parts.append("".join(cards))
+            y = ty + 8
+
+    header, y = _section_header(y, "FINAL ANSWER — MATHEMATICALLY VERIFIED")
+    parts.append(header)
+    html, y = _nl_track_svg(nl.solution, y + 12, lo, hi, GREEN)
+    parts.append(html)
+
+    if scene.caption.strip():
+        cap_html, y = _section_header(y, "WHAT THE VISUAL SHOWS")
+        parts.append(cap_html)
+        for line in _wrap(scene.caption.strip(), 90):
+            parts.append(
+                f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="{TYPE_AXIS}" '
+                f'fill="{INK}" text-anchor="start">{_esc(line)}</text>'
+            )
+            y += 22
+        y += 6
+    return "".join(parts), y
+
+
 def _render_scene(scene: VisualScene) -> tuple[str, int]:
     """Dispatch a VisualScene to its layout. Returns (svg_html, next_y)."""
     parts: list[str] = []
@@ -1111,6 +1329,18 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
     html, y = _title(y, title)
     parts.append(html)
 
+    # Worked mathematics: compact content-fitted layout, no fixed stage and no
+    # minimum canvas height (the legacy 860px floor left huge empty margins on
+    # short solutions). Rendered only after math verification upstream.
+    if (
+        spec.scene is not None
+        and spec.scene.scene_kind == "number_line"
+        and spec.scene.number_line is not None
+    ):
+        html, y = _render_number_line_scene(spec.scene, y)
+        parts.append(html)
+        return _assemble_svg(parts, max(320, y + 32))
+
     scene_rendered = False
     if spec.scene is not None:
         scene_html, y_after = _render_scene(spec.scene)
@@ -1188,6 +1418,10 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
                 parts.append(html)
 
     height = max(860, y + 32)
+    return _assemble_svg(parts, height)
+
+
+def _assemble_svg(parts: list[str], height: int) -> str:
     svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {VIEW_W} {height}" width="100%">'
     svg += f'<rect x="0" y="0" width="{VIEW_W}" height="{height}" rx="16" fill="white"/>'
     svg += "".join(parts)

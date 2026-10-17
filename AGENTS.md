@@ -220,6 +220,15 @@ The gate checks in order:
 - **Text mode** stays the cheap funnel: structured OCR (formulas/labels/text) at 1 credit; `✨ Make This Revision-Ready` (+1) is a separate Gemini call producing the same learning sheet. Revision button is TEXT-ONLY; diagram mode never shows it.
 - `RevisionResponse` returns the same `StudyNotes` shape (field `study_notes`) — the revision layer is the funnel on-ramp, not the diagram's upsell.
 
+### Rule 8.2c — Worked mathematics is verified or refused (number_line)
+
+Worked interval mathematics (log inequalities with polynomial base/argument, polynomial/rational inequalities) renders ONLY through the deterministic `number_line` scene kind, and ONLY when an exact verifier re-solves the problem and reproduces every claimed set. Regressions that motivated this: `log_{x+3}(x²−x) < 1` was rendered with a union that dropped the domain intersection (`(-3,-2)∪(-1,3)` instead of `(-3,-2)∪(-1,0)∪(1,3)`).
+
+- **`app/utils/math_verify.py`** is the gate (pure, no LLM/network): `solve_problem()` re-solves with sympy (`sympy==1.14.0` is a production dependency, not dev-only) — full log domain (arg > 0, base > 0, base ≠ 1 as excluded points), monotonicity regime split (base > 1 vs 0 < base < 1 with inequality reversal), case-by-case domain intersection; rational critical points only (degree ≤ 3, integer comparison constants). `verify_number_line()` compares claimed vs computed: final solution set, domain track, case count, per-case condition ("BASE > 1" / "0 < BASE < 1"), per-case solution set, and each transformed step semantically (solve the model's transformed inequality over its own regime, compare sets). Constant-base logs must OMIT cases.
+- **`app/utils/math_intervals.py`** is the exact interval-set algebra: Fraction endpoints, `None` = ±infinity, canonical text `(-3, -2) ∪ (-1, 0) ∪ (1, 3)`, union/intersect/without_points/equals. No floats, no tolerance — set equality is exact.
+- **Refusal semantics**: unsupported math (irrational critical points, non-polynomial operands, non-integer constants, unparseable claims) returns a precise reason string and the visual is REFUSED — never "assumed correct", never displayed unverified. Every refusal reason is human-readable and doubles as the single bounded repair prompt input. Repair fails → 502 "Visual explanation unavailable for this material." with study notes intact.
+- **Render path**: `validate_lesson_spec` → `verify_number_line` wired into the same gate as all families. `number_line` is excluded from the v3 Typst composition path (`should_use_v3` False; `extract_lesson_content` raises `LessonValidationError` for `worked_math`) and renders content-fitted (`_render_number_line_scene`: problem card → domain track → case rows → `FINAL ANSWER — MATHEMATICALLY VERIFIED` track → caption; open = hollow dot, closed = filled dot, excluded points = red hollow + `x ≠ N`). No fixed 860px stage.
+
 ### Rule 8.3 — Pricing model
 - `/extract/text`: 1 credit if OCR succeeds standalone; **5 credits if escalation to Gemini fires** (credit check before Gemini call, line 55-57 of extract.py)
 - `/extract/revision`: 1 credit (separate Gemini call for the learning layer)
@@ -253,4 +262,4 @@ The gate checks in order:
 8. Chemistry equilibrium formulas → escalate (untuned, passed cold)
 9. Dark-theme CS BST slide (Unacademy style) → escalate (untuned, passed cold)
 
-*Last updated: August 2026 (Explain Visually becomes a hybrid deterministic/generative renderer)
+*Last updated: October 2026 (worked mathematics is verified or refused — number_line family)

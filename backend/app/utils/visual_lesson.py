@@ -52,6 +52,7 @@ SUPPORTED_FAMILIES: dict[str, str] = {
     "process_flow": "flow",
     "generic": "generic",
     "comparison": "comparison",
+    "number_line": "worked_math",
 }
 
 # Capability registry: what each family can faithfully represent, and what it
@@ -84,6 +85,11 @@ FAMILY_CAPABILITIES: dict[str, dict[str, object]] = {
         "requires": "at least 2 labeled panels, each with vectors or arcs",
         "cannot": ["plotted functions", "process steps", "circuits"],
     },
+    "number_line": {
+        "represents": ["interval sets on number lines", "open/closed endpoints", "excluded values", "domain constraints", "case branches", "final solution sets"],
+        "requires": "a problem statement whose solution the verifier can compute exactly",
+        "cannot": ["vectors", "curves as geometry", "process steps", "unverifiable mathematics (irrational critical points, non-polynomial operands)"],
+    },
 }
 
 # Educational task -> families capable of expressing it. The task plan names
@@ -98,6 +104,7 @@ TASK_FAMILIES: dict[str, list[str]] = {
     "connected_process": ["process_flow"],
     "coordinate_construction": ["plot"],
     "definition_overview": ["force_diagram", "plot", "process_flow", "generic", "comparison"],
+    "interval_solution": ["number_line"],
 }
 
 _TASK_STOPWORDS = frozenset({
@@ -158,6 +165,20 @@ def _scene_text(scene: VisualScene) -> str:
         if scene.comparison.relation is not None:
             bits.append((scene.comparison.relation.expression or "") + " "
                         + (scene.comparison.relation.caption or ""))
+    elif kind == "number_line" and scene.number_line is not None:
+        nl = scene.number_line
+        bits.append(nl.problem or "")
+        for track in (nl.domain, nl.solution):
+            if track is None:
+                continue
+            bits.append(track.label or "")
+            for iv in track.intervals:
+                bits.append(f"{iv.lo} {iv.hi}")
+            bits += [p or "" for p in track.points]
+        for case in nl.cases:
+            bits.append(case.condition or "")
+            bits.append(case.transformed or "")
+            bits.append(case.solution or "")
     bits.append(scene.title or "")
     bits.append(scene.caption or "")
     return " ".join(bits)
@@ -216,6 +237,14 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
             if p.arcs:
                 tokens.add("arc")
                 tokens.add("arcs")
+    elif kind == "number_line" and scene.number_line is not None:
+        tokens.update(
+            {
+                "number", "line", "number line", "interval", "intervals",
+                "endpoint", "endpoints", "domain", "solution", "case", "cases",
+                "excluded", "constraint", "constraints", "set", "union",
+            }
+        )
     return {t for t in tokens if t}
 
 
@@ -269,6 +298,7 @@ def derive_task_from_source(study_notes: StudyNotes | None, scene_kind: str) -> 
         "process_flow": "connected_process",
         "comparison": "compare_variants",
         "generic": "definition_overview",
+        "number_line": "interval_solution",
     }
     task_type = kind_tasks.get(scene_kind, "definition_overview")
     if task_type == "definition_overview" and scene_kind == "plot":
@@ -329,6 +359,8 @@ def derive_task_from_scene(spec: VisualSpec) -> VisualTask | None:
         task_type, families = "connected_process", ["process_flow"]
     elif kind == "comparison":
         task_type, families = "compare_variants", ["comparison"]
+    elif kind == "number_line":
+        task_type, families = "interval_solution", ["number_line"]
     else:
         task_type, families = "definition_overview", ["generic"]
     elements = labels if labels else []
@@ -566,6 +598,18 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
                 tail = (v.tail or "").strip()
                 if tail and tail not in known:
                     errors.append(f"vector {v.label!r} tails on unknown {tail!r}")
+    elif kind == "number_line":
+        nl = scene.number_line
+        if nl is None:
+            errors.append("number_line has no number_line payload")
+            return errors
+        # Deterministic mathematics verification: the scene may render ONLY
+        # when the verifier can re-solve the problem and reproduce every
+        # claimed interval set exactly (see app.utils.math_verify). Anything
+        # unsupported or mismatched is refused — never displayed unverified.
+        from app.utils.math_verify import verify_number_line
+
+        errors.extend(verify_number_line(nl))
     comp = det.composition
     if comp is not None:
         errors.extend(_validate_composition(comp))
@@ -631,6 +675,11 @@ def spec_needs_repair(spec: VisualSpec) -> str | None:
         comp = scene.comparison
         if comp is None or len([p for p in (comp.panels or []) if (p.label or "").strip()]) < 2:
             return "comparison has fewer than 2 labeled panels"
+    elif kind == "number_line":
+        # Worked math is never repaired by adding geometry: correctness is
+        # judged by the math verifier, and a thin-looking solution is a
+        # legitimate solution. No repair trigger.
+        return None
     else:
         return f"unsupported scene_kind: {kind!r}"
     return None
@@ -700,12 +749,20 @@ def should_use_v3(spec: VisualSpec) -> bool:
 
     True only when the flag is on AND the spec is deterministic. Generative
     specs always use the legacy path (v3 composition is deterministic-only).
-    Pure function of (flag, spec) — no I/O, so the route stays thin and the
-    decision is unit-testable without FastAPI.
+    number_line (worked mathematics) also stays on the legacy deterministic
+    path: its layout is content-fitted and exactness-critical, so it must not
+    go through the generic Typst page composition. Pure function of
+    (flag, spec) — no I/O, so the route stays thin and the decision is
+    unit-testable without FastAPI.
     """
     from app.config import settings
 
-    return bool(settings.EXPLAIN_VISUALLY_V3) and spec.render_mode == VisualRenderMode.DETERMINISTIC
+    if not settings.EXPLAIN_VISUALLY_V3 or spec.render_mode != VisualRenderMode.DETERMINISTIC:
+        return False
+    scene = spec.deterministic.scene
+    if scene is not None and scene.scene_kind == "number_line":
+        return False
+    return True
 
 
 def _clean(text: str) -> str:
@@ -804,6 +861,11 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             result_text = compa.relation.expression.strip()
             if (compa.relation.caption or "").strip():
                 reasoning_bits.append(compa.relation.caption.strip())
+    elif family == "worked_math":
+        raise LessonValidationError(
+            "worked math renders through the deterministic number-line path; "
+            "the composition engine is not used for it"
+        )
     else:
         raise LessonValidationError(f"unsupported family for content extraction: {family!r}")
     callouts = callouts[:MAX_CALLOUTS]

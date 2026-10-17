@@ -1140,3 +1140,164 @@ def test_derive_task_marks_provenance():
     assert task is not None
     assert task.task_type == "connected_process"
     assert any("derived" in a for a in task.assumptions)
+
+
+# ── worked math (number_line): registries, gates, no v3 ──
+
+def _number_line_lesson() -> VisualSpec:
+    from app.models.schemas import (
+        DeterministicVisual,
+        VisualInterval,
+        VisualMathCase,
+        VisualNumberLine,
+        VisualNumberLineTrack,
+        VisualScene,
+        VisualTask,
+    )
+
+    def track(intervals, points=None, label=""):
+        return VisualNumberLineTrack(
+            label=label,
+            intervals=[
+                VisualInterval(lo=lo, hi=hi, lo_closed=lo_c, hi_closed=hi_c)
+                for lo, hi, lo_c, hi_c in intervals
+            ],
+            points=points or [],
+        )
+
+    nl = VisualNumberLine(
+        problem="log_{x+3}(x^2 - x) < 1",
+        domain=track(
+            [
+                ("-3", "-2", False, False),
+                ("-2", "0", False, False),
+                ("1", "inf", False, False),
+            ],
+            points=["-2"],
+        ),
+        cases=[
+            VisualMathCase(
+                condition="x + 3 > 1",
+                transformed="(x^2 - x) < x + 3",
+                solution="(-1, 0) \u222a (1, 3)",
+            ),
+            VisualMathCase(
+                condition="0 < x + 3 < 1",
+                transformed="(x^2 - x) > x + 3",
+                solution="(-3, -2)",
+            ),
+        ],
+        solution=track(
+            [
+                ("-3", "-2", False, False),
+                ("-1", "0", False, False),
+                ("1", "3", False, False),
+            ],
+            label="Final answer",
+        ),
+    )
+    return VisualSpec(
+        concept="logarithmic inequality with a variable base",
+        render_mode="deterministic",
+        text_required=True,
+        deterministic=DeterministicVisual(
+            title="Log Inequality \u2014 Full Case Analysis",
+            task=VisualTask(
+                task_type="interval_solution",
+                learning_outcome="solve a logarithmic inequality with a variable base",
+                required_elements=["domain", "final answer"],
+                required_relationships=[],
+                exact_claims=[],
+                acceptable_families=["number_line"],
+                assumptions=[],
+                missing=[],
+            ),
+            scene=VisualScene(
+                scene_kind="number_line",
+                title="Log Inequality \u2014 Full Case Analysis",
+                caption=(
+                    "A logarithmic inequality with a variable base must satisfy "
+                    "the domain first; the base regime decides the direction."
+                ),
+                number_line=nl,
+            ),
+        ),
+    )
+
+
+def test_number_line_registries():
+    assert select_family(_number_line_lesson()) == "worked_math"
+    assert vl.TASK_FAMILIES["interval_solution"] == ["number_line"]
+    caps = vl.FAMILY_CAPABILITIES["number_line"]
+    assert "interval sets on number lines" in caps["represents"]
+    assert "unverifiable mathematics (irrational critical points, non-polynomial operands)" in caps["cannot"]
+
+
+def test_number_line_verified_math_passes_gates():
+    from app.utils.visual_lesson import validate_legacy_visual
+
+    spec = _number_line_lesson()
+    assert validate_lesson_spec(spec) == []
+    assert validate_legacy_visual(spec) == []
+
+
+def test_number_line_wrong_math_fails_gate():
+    spec = _number_line_lesson()
+    scene = spec.deterministic.scene
+    assert scene is not None and scene.number_line is not None
+    scene.number_line.solution.intervals = scene.number_line.solution.intervals[:2]
+    errors = validate_lesson_spec(spec)
+    assert any("mathematically wrong" in e for e in errors)
+
+
+def test_number_line_stays_off_v3(monkeypatch):
+    from app.utils.visual_lesson import spec_needs_repair
+
+    monkeypatch.setattr("app.config.settings.EXPLAIN_VISUALLY_V3", True, raising=False)
+    spec = _number_line_lesson()
+    assert should_use_v3(spec) is False
+    assert spec_needs_repair(spec) is None
+
+
+def test_extract_lesson_content_refuses_worked_math():
+    with pytest.raises(LessonValidationError, match="deterministic number-line path"):
+        extract_lesson_content(_number_line_lesson(), hero_svg="<svg/>")
+
+
+def test_derive_task_from_number_line_scene():
+    from app.models.schemas import VisualTask
+    from app.utils.visual_lesson import derive_task_from_scene, validate_task_link
+
+    spec = _number_line_lesson()
+    spec.deterministic.task = None
+    task = derive_task_from_scene(spec)
+    assert task is not None
+    assert task.task_type == "interval_solution"
+    assert task.acceptable_families == ["number_line"]
+    spec.deterministic.task = task
+    assert validate_task_link(spec) == []
+    assert isinstance(spec.deterministic.task, VisualTask)
+
+
+def test_derive_task_from_source_number_line():
+    from app.models.schemas import StudyNotes
+    from app.utils.visual_lesson import derive_task_from_source
+
+    notes = StudyNotes.model_validate(
+        {
+            "topic": {"title": "Logarithmic inequalities", "is_probable": False},
+            "key_formulas": [
+                {
+                    "formula": "log_{b}(x) < c",
+                    "explanation": "base and domain constraints decide the solution set",
+                    "uncertain_symbols": [],
+                    "confidence": "clear",
+                }
+            ],
+        }
+    )
+    task = derive_task_from_source(notes, "number_line")
+    assert task is not None
+    assert task.task_type == "interval_solution"
+    assert task.acceptable_families == ["number_line"]
+    assert "derived from StudyNotes" in task.assumptions[0]
