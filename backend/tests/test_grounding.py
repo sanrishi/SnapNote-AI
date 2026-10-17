@@ -38,6 +38,7 @@ def _plot_spec() -> VisualSpec:
     return VisualSpec(
         concept="Area",
         deterministic=DeterministicVisual(
+            title="Area",
             scene=VisualScene(
                 scene_kind="plot",
                 plot=VisualPlot(
@@ -188,7 +189,19 @@ def test_visual_route_returns_grounded_context(sample_diagram_image, monkeypatch
     buf = _io.BytesIO()
     Image.new("RGB", (32, 32), "white").save(buf, format="PNG")
     render_mock = AsyncMock(return_value=("png", buf.getvalue()))
-    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=_plot_spec()))
+    plot_spec = _plot_spec()
+    from app.models.schemas import VisualTask
+    plot_spec.deterministic.task = VisualTask(
+        task_type="graph_relationship",
+        learning_outcome="",
+        required_elements=["curve"],
+        required_relationships=[],
+        exact_claims=[],
+        acceptable_families=["plot"],
+        assumptions=[],
+        missing=[],
+    )
+    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=plot_spec))
     monkeypatch.setattr("app.routes.extract.should_use_v3", lambda spec: True)
     monkeypatch.setattr("app.routes.extract.render_v3_visual", render_mock)
 

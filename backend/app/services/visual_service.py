@@ -219,23 +219,47 @@ async def _render_generative(spec: VisualSpec) -> bytes | None:
 async def generate_visual(spec: VisualSpec) -> tuple[str, str | bytes] | None:
     """Hybrid dispatcher: render the educational visual for a VisualSpec.
 
-    - deterministic: exact text/symbols are the payload -> code renders a clean
-      sanitized SVG (visual_renderer). Returns ("svg", svg_string).
-    - generative: exact typography is NOT the payload -> Pollinations draws a
-      conceptual illustration, gated by brightness + conditional OCR legibility.
-      Returns ("png", image_bytes).
+    - deterministic: exact text/symbols are the payload -> the spec must pass
+      the shared semantic validation first (same gate as the v3 path); then
+      code renders a clean sanitized SVG (visual_renderer). Returns
+      ("svg", svg_string).
+    - generative: exact typography is NOT the payload -> requires a named
+      concept plus at least one grounded key element (otherwise there is
+      nothing to illustrate) -> Pollinations draws a conceptual illustration,
+      gated by brightness + conditional OCR legibility. Returns
+      ("png", image_bytes).
+
+    Generative fidelity beyond legible rendering is NOT verifiable here: a
+    passed OCR/brightness gate proves the image is readable, not that every
+    depicted relation matches the source. Generative results are therefore
+    always labeled illustrative downstream, never verified reconstructions.
 
     Returns None when the chosen branch produced nothing usable, so the route
     reports an honest unavailable state. The same spec always renders the same
     deterministic SVG (no randomness).
     """
     if spec.render_mode == VisualRenderMode.DETERMINISTIC:
+        from app.utils.visual_lesson import validate_legacy_visual
+
+        try:
+            errors = validate_legacy_visual(spec)
+        except Exception as e:
+            logger.warning("Legacy deterministic spec failed validation check: %s", e)
+            return None
+        if errors:
+            logger.warning("Legacy deterministic spec refused: %s", "; ".join(errors[:3]))
+            return None
         svg = await asyncio.to_thread(render_deterministic_visual, spec.deterministic)
         if not svg:
             logger.warning("Deterministic visual: empty SVG (nothing meaningful to draw)")
             return None
         return ("svg", svg)
 
+    if not (spec.concept or "").strip() or not [
+        e for e in (spec.key_elements or []) if (e or "").strip()
+    ]:
+        logger.warning("Generative visual refused: no concept plus grounded elements to illustrate")
+        return None
     png = await _render_generative(spec)
     if png is None:
         return None

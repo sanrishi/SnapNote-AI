@@ -55,6 +55,7 @@ def test_generative_pipeline_serves_png_to_gates(monkeypatch):
         render_mode=VisualRenderMode.GENERATIVE,
         text_required=False,
         visual_form="illustration",
+        key_elements=["cell membrane"],
     )
     seen: dict = {}
 

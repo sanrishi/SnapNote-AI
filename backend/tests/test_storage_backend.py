@@ -7,7 +7,7 @@ import asyncio
 import base64
 import io
 import json
-from unittest.mock import AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from httpx import ASGITransport, AsyncClient
@@ -119,9 +119,9 @@ def test_imgbb_backend_still_uploads(monkeypatch):
 # ── routes: diagram + visual over data_uri, credits, dedup ──
 
 _DIAGRAM_PAYLOAD = {
-    "topic": {"title": "Rotation", "is_probable": False},
+    "topic": {"title": "Torque", "is_probable": False},
     "what_you_should_remember": "Takeaway.",
-    "key_formulas": [{"formula": "τ = r × F", "explanation": "", "uncertain_symbols": [], "confidence": "clear"}],
+    "key_formulas": [{"formula": "t = r x F", "explanation": "torque link between vectors", "uncertain_symbols": [], "confidence": "clear"}],
     "understand_it": ["Concept explanation."],
     "common_mistakes": [],
     "thirty_second_revision": [],
@@ -187,7 +187,7 @@ def test_visual_route_data_uri_generated_then_reused(sample_diagram_image, monke
 
     png = _make_png()
     render_mock = AsyncMock(return_value=("png", png))
-    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=object()))
+    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=_rich_force_spec()))
     monkeypatch.setattr("app.routes.extract.should_use_v3", lambda spec: True)
     monkeypatch.setattr("app.routes.extract.render_v3_visual", render_mock)
 
@@ -397,7 +397,7 @@ def test_visual_route_r2_generated_then_reused(sample_diagram_image, monkeypatch
 
     png = _make_png()
     render_mock = AsyncMock(return_value=("png", png))
-    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=object()))
+    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=_rich_force_spec()))
     monkeypatch.setattr("app.routes.extract.should_use_v3", lambda spec: True)
     monkeypatch.setattr("app.routes.extract.render_v3_visual", render_mock)
 
@@ -453,7 +453,7 @@ def test_visual_route_storage_failure_then_retry(sample_diagram_image, monkeypat
     diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
 
     png = _make_png()
-    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=object()))
+    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=_rich_force_spec()))
     monkeypatch.setattr("app.routes.extract.should_use_v3", lambda spec: False)
     monkeypatch.setattr("app.routes.extract.generate_visual", AsyncMock(return_value=("png", png)))
 
@@ -751,3 +751,132 @@ def test_visual_route_derives_missing_task(sample_diagram_image, monkeypatch):
     assert any("derived" in a for a in seen["task"].assumptions)
     remaining, _ = get_credits(device)
     assert remaining == 45
+
+def test_visual_derivation_failure_refuses_honestly(sample_diagram_image, monkeypatch):
+    """A derivation crash must refuse, never silently render unvalidated."""
+    device = "visual-derivfail-00000000-0000-000000000008"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    taskless = _rich_force_spec()
+    taskless.deterministic.task = None
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=taskless))
+    monkeypatch.setattr(
+        "app.routes.extract.derive_task_from_source",
+        MagicMock(side_effect=RuntimeError("derivation exploded")))
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image)},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"]
+
+
+def test_visual_validation_exception_refuses(sample_diagram_image, monkeypatch):
+    """A validator crash counts as failure, not as an empty error list."""
+    device = "visual-valfail-device-00000000-0000-000000000009"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=_rich_force_spec()))
+
+    def _boom(*_a, **_k):
+        raise RuntimeError("validator exploded")
+
+    monkeypatch.setattr("app.routes.extract.validate_legacy_visual", _boom)
+    monkeypatch.setattr(
+        "app.routes.extract.repair_thin_spec", AsyncMock(return_value=None))
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image)},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"]
+
+
+def test_visual_missing_source_requirement_refuses(sample_diagram_image, monkeypatch):
+    """Sparse-but-consistent scene missing a source requirement refuses;
+    notes stay intact (diagram response already delivered them)."""
+    from app.models.schemas import VisualTask
+
+    device = "visual-missingreq-device-00000000-0000-000000000010"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    thin = _thin_generic_spec()
+    thin.deterministic.task = VisualTask(
+        task_type="definition_overview",
+        learning_outcome="x",
+        required_elements=["unicorn levitation field"],
+        required_relationships=[],
+        exact_claims=[],
+        acceptable_families=["generic"],
+        assumptions=[],
+        missing=[],
+    )
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=thin))
+    monkeypatch.setattr(
+        "app.routes.extract.repair_thin_spec", AsyncMock(return_value=None))
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image)},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"]
