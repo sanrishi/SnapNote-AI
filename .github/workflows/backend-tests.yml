@@ -49,6 +49,24 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt -r backend/requirements-test.txt
 
+      # The product is OCR-first (EasyOCR 1 credit, Gemini escalation 5); the
+      # OCR-contract tests need the real OCR stack, so CI installs it exactly
+      # like the intended production image (CPU torch + easyocr).
+      - name: Install CPU PyTorch + EasyOCR
+        run: |
+          pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install --no-cache-dir easyocr==1.7.2
+
+      - name: Cache EasyOCR models
+        uses: actions/cache@v4
+        with:
+          path: ~/.EasyOCR
+          key: easyocr-models-1.7.2
+
+      - name: Warm EasyOCR models (deterministic first OCR test)
+        run: |
+          python -c "import easyocr; easyocr.Reader(['en'], gpu=False, verbose=False); print('easyocr ready')"
+
       - name: Backend test suite
         run: python -m pytest backend/tests -q -p no:cacheprovider
 
