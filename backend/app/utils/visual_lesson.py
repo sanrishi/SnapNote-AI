@@ -378,6 +378,53 @@ def derive_task_from_scene(spec: VisualSpec) -> VisualTask | None:
     )
 
 
+def _number_line_claim_matches(claim: str, scene: VisualScene, haystack: str) -> bool:
+    """Semantic normalization for number_line exact claims (never weakens math).
+
+    A claim that is an interval set matches when the scene shows the SAME set
+    anywhere (canonicalized through the exact Fraction algebra). A claim that
+    is text/formula appears when it is identical after the same symbol
+    normalization the verifier applies (unicode minus/union/exponents and
+    spacing). The mathematics itself is independently re-solved by
+    app.utils.math_verify before any render; this only stops honest
+    display-form differences from failing the task contract.
+    """
+    from app.utils.math_intervals import (
+        IntervalSet,
+        format_interval_set,
+        parse_interval_set,
+    )
+    from app.utils.math_verify import _LOG_SUBSCRIPT_RE, _prep, claimed_track_set
+
+    def normalize(text: str) -> str:
+        normalized = _LOG_SUBSCRIPT_RE.sub(r"log_{\1}(", _prep(text))
+        return " ".join(normalized.split())
+
+    nl = scene.number_line
+    if nl is None:
+        return False
+    claim_set = parse_interval_set(claim)
+    if not isinstance(claim_set, str):
+        candidates: list[IntervalSet] = []
+        for track in (nl.domain, nl.solution):
+            if track is None:
+                continue
+            track_set = claimed_track_set(track)
+            if not isinstance(track_set, str):
+                candidates.append(track_set)
+        for case in nl.cases:
+            case_set = parse_interval_set(case.solution)
+            if not isinstance(case_set, str):
+                candidates.append(case_set)
+        if any(candidate.equals(claim_set) for candidate in candidates):
+            return True
+        return format_interval_set(claim_set) in haystack
+    normalized_claim = normalize(claim)
+    if not normalized_claim:
+        return False
+    return normalized_claim in normalize(haystack)
+
+
 def validate_task_link(spec: VisualSpec) -> list[str]:
     """Enforce the task -> representation -> scene contract.
 
@@ -423,8 +470,15 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
             errors.append(f"required element unsatisfied by scene: {element!r}")
     for claim in task.exact_claims:
         norm = " ".join(str(claim).split())
-        if norm and norm.casefold() not in haystack:
-            errors.append(f"exact claim missing from scene: {claim!r}")
+        if not norm:
+            continue
+        if norm.casefold() in haystack:
+            continue
+        if scene.scene_kind == "number_line" and _number_line_claim_matches(
+            norm, scene, haystack
+        ):
+            continue
+        errors.append(f"exact claim missing from scene: {claim!r}")
     return errors
 
 TYMST_TIMEOUT_SECONDS = 25

@@ -8,7 +8,14 @@ from PIL import Image, ImageDraw, ImageFont
 try:
     _font = ImageFont.truetype("arial.ttf", 22)
 except Exception:
-    _font = ImageFont.load_default()
+    try:
+        # Linux CI runners: DejaVu keeps the fixtures legible for EasyOCR
+        # (the bitmap fallback load_default() is too small for table OCR).
+        _font = ImageFont.truetype(
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22
+        )
+    except Exception:
+        _font = ImageFont.load_default()
 
 
 def _draw_text(draw, xy, text, **kw):

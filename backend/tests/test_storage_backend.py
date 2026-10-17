@@ -1130,3 +1130,63 @@ def test_visual_route_refuses_incomplete_math_stores_nothing(
     assert "expected 2 case branch(es)" in reason2
     assert get_visual_entitlement(diagram_id2)[1] in (None, "")
     assert get_visual_entitlement(diagram_id2)[3] in (None, "")
+
+
+def test_visual_route_repaired_spec_is_reverified(sample_diagram_image, monkeypatch):
+    """A repair that returns ANOTHER wrong spec must be refused: the retry
+    never bypasses the gate, stores nothing, and costs no extra credits."""
+    from app.utils.credits_store import get_credits, get_visual_entitlement
+
+    device = "visual-reverify-00000000-0000-000000000016"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+    still_wrong = _number_line_spec(
+        [("-3", "-2", False, False), ("-1", "3", False, False)]
+    )
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong)
+    )
+    repair_mock = AsyncMock(return_value=still_wrong)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"]
+    assert repair_mock.await_count == 1
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")
+    assert get_visual_entitlement(diagram_id)[3] in (None, "")
+    remaining, _ = get_credits(device)
+    assert remaining == 45  # diagram charged once; the refusal costs nothing
+
+
+def test_visual_route_security_payload_refused(sample_diagram_image, monkeypatch):
+    """Executable-looking text smuggled through the math field is parsed by the
+    safe grammar, refused as unverifiable, and never stored."""
+    from app.utils.credits_store import get_visual_entitlement
+
+    device = "visual-secpayload-00000000-0000-000000000017"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    malicious = _number_line_spec(
+        [("-inf", "inf", False, False)],
+        problem="__import__('os').system('echo pwned') < 1",
+    )
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=malicious)
+    )
+    repair_mock = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    assert "unavailable" in resp.json()["error"]
+    reason = repair_mock.call_args.args[3]
+    assert "cannot verify the mathematics" in reason
+    assert "never displayed unverified" in reason
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")
+    assert get_visual_entitlement(diagram_id)[3] in (None, "")

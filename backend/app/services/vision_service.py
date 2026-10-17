@@ -515,14 +515,14 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
      Use this WHENEVER the lesson works through an inequality or a domain whose answer is an interval or union of intervals (log_{x+3}(x² − x) < 1, (x − 2)/(x + 3) ≤ 0, x² − 5x + 6 > 0, "find the domain of ..."). NEVER force such content into "plot", "comparison" or "generic".
        "problem": the ONE inequality exactly as written (plain Unicode, no LaTeX, no words around it), e.g. "log_{x+3}(x² − x) < 1". Copy every symbol/number verbatim.
        "domain": {"label": "x² − x > 0, x + 3 > 0, x + 3 ≠ 1", "intervals": [{"lo": "-3", "hi": "-2"}, {"lo": "-2", "hi": "0"}, {"lo": "1", "hi": "inf"}], "points": ["-2"]}
-         - the FULL final domain: apply every restriction (log argument > 0; log base > 0 and ≠ 1; denominators ≠ 0), intersect them, and list the resulting intervals. Excluded single values (like the base = 1 point) go in "points". The verifier REQUIRES a domain track whenever any restriction exists (any log, any denominator); OMIT "domain" only for pure polynomial inequalities with no restrictions — omitting it elsewhere is a verification failure.
+         - the FULL final domain: apply every restriction (log argument > 0; log base > 0 and ≠ 1; denominators ≠ 0), intersect them, and list the resulting intervals. Excluded single values (like the base = 1 point) go in "points". The verifier REQUIRES a domain track whenever any restriction exists (any log, any denominator) AND requires every excluded value to be visibly represented (as a listed point or as an open endpoint of the domain intervals); OMIT "domain" only for pure polynomial inequalities with no restrictions — omitting it elsewhere is a verification failure.
        "cases": up to 3 branches, each {"condition", "transformed", "solution"}:
          - "condition": exactly "BASE > 1" form (e.g. "x + 3 > 1") for the increasing regime, or exactly "0 < BASE < 1" form (e.g. "0 < x + 3 < 1") for the decreasing regime. NEVER write a bare "BASE < 1" — dropping the positivity bound 0 < BASE makes the condition incorrect and the verifier rejects it.
-         - "transformed": the inequality AFTER applying log monotonicity (direction kept for base > 1, REVERSED for 0 < base < 1), e.g. "x² − x < x + 3".
+         - "transformed": REQUIRED for every branch — never leave it empty. The inequality AFTER applying log monotonicity (direction kept for base > 1, REVERSED for 0 < base < 1), e.g. "x² − x < x + 3". Write the SAME inequality derived from monotonicity: bring terms to one side instead of rewriting it into a different form, and never re-solve.
          - "solution": the case's final set with the domain already applied, e.g. "(-1, 0) ∪ (1, 3)".
          - For a CONSTANT base (log_2(...), log_3(...)) there is no case split: OMIT "cases".
        "solution": {"label": "Final answer", "intervals": [{"lo": "-3", "hi": "-2"}, {"lo": "-1", "hi": "0"}, {"lo": "1", "hi": "3"}], "points": []}
-         - the COMPLETE union over all cases. Interval endpoints: lo/hi are "-inf"/"inf" or exact numbers ("-3", "1/2", "1.5"); lo_closed/hi_closed (default false = open) say whether the endpoint is included.
+         - the COMPLETE union over all cases. Interval endpoints: lo/hi are "-inf"/"inf" or exact numbers ("-3", "1/2", "1.5"); lo_closed/hi_closed (default false = open) say whether the endpoint is included. If the inequality has NO solutions at all, emit empty "intervals" and "points" (the visual renders "No real solutions" explicitly — that is a correct, complete answer, not a failure).
      HARD MATH RULES — a server-side verifier re-solves the problem and REFUSES any wrong domain, case, or final answer (honest refusal beats a wrong visual):
        - Work the problem correctly BEFORE writing the JSON: domain first (argument > 0; base > 0 and ≠ 1), then case split (base > 1 keeps direction; 0 < base < 1 reverses), then intersect each case with the domain, then union.
        - Worked reference example (study the full completeness): for log_{x+3}(x² − x) < 1 the domain is (-3, -2) ∪ (-2, 0) ∪ (1, inf) — x² − x > 0 AND x + 3 > 0 AND x + 3 ≠ 1, so the base=1 point x = -2 is excluded. Case x + 3 > 1 (x > -2): x² − x < x + 3 gives (-1, 3), intersected with the domain: (-1, 0) ∪ (1, 3). Case 0 < x + 3 < 1 (-3 < x < -2): x² − x > x + 3 gives (-3, -2). FINAL ANSWER: (-3, -2) ∪ (-1, 0) ∪ (1, 3). A union like (-3, -2) ∪ (-1, 3) that drops the domain intersection is WRONG.
@@ -799,11 +799,14 @@ HARD FIELD CONSTRAINTS (violations fail validation — respect every one):
 - task.acceptable_families must include your scene_kind; every required_elements
   entry must be satisfiable by the scene you emit; every exact_claims string
   must appear verbatim in scene labels or composition.
-- number_line interval endpoints are "-inf"/"inf" or exact numbers ("-3", "1/2");
-  lo_closed/hi_closed mark included endpoints; case conditions are exactly
-  "BASE > 1" or "0 < BASE < 1" forms (the positivity bound must never be
-  dropped); omit "cases" only for a constant base; include the "domain" track
-  whenever any restriction exists (any log or denominator).
+- number_line interval endpoints are "-inf"/"inf" or exact numbers ("-3", "1/2", "0.75");
+  decimal endpoints are committed exactly — write every digit you mean, never round;
+  lo_closed/hi_closed mark included endpoints; "transformed" is REQUIRED for every case;
+  case conditions are exactly "BASE > 1" or "0 < BASE < 1" forms (the positivity bound
+  must never be dropped); omit "cases" only for a constant base; include the "domain"
+  track whenever any restriction exists (any log or denominator) and list EVERY excluded
+  value in "points" (or as an open endpoint of the domain intervals); an inequality with
+  no solutions emits empty intervals and points.
 
 YOUR PREVIOUS RESPONSE:
 {PREVIOUS_JSON}"""

@@ -1,0 +1,78 @@
+name: Backend tests
+
+# Permanent CI gate for the backend: the full pytest suite, the JEE corpus
+# tests, and the corpus coverage audit. Runs on every PR to master (and on
+# master itself for post-merge verification). No secrets are used: all settings
+# have empty-string defaults and every external API is mocked in tests.
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: backend-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: backend
+      PYTHONIOENCODING: utf-8
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11 (matches the production Dockerfile)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            backend/requirements.txt
+            backend/requirements-test.txt
+
+      # Same pinned binary as the production Dockerfile; enables the
+      # Typst-backed composition tests that skip on developer machines.
+      - name: Install Typst 0.15.1
+        run: |
+          curl -fsSL -o /tmp/typst.tar.xz \
+            https://github.com/typst/typst/releases/download/v0.15.1/typst-x86_64-unknown-linux-musl.tar.xz
+          tar -xJf /tmp/typst.tar.xz -C /tmp
+          sudo mv /tmp/typst-x86_64-unknown-linux-musl/typst /usr/local/bin/typst
+          typst --version
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt -r backend/requirements-test.txt
+          pip install -r docs/jee-pyq-corpus/requirements.txt
+
+      # The product is OCR-first (EasyOCR 1 credit, Gemini escalation 5); the
+      # OCR-contract tests need the real OCR stack, so CI installs it exactly
+      # like the intended production image (CPU torch + easyocr).
+      - name: Install CPU PyTorch + EasyOCR
+        run: |
+          pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
+          pip install --no-cache-dir easyocr==1.7.2
+
+      - name: Cache EasyOCR models
+        uses: actions/cache@v4
+        with:
+          path: ~/.EasyOCR
+          key: easyocr-models-1.7.2
+
+      - name: Warm EasyOCR models (deterministic first OCR test)
+        run: |
+          python -c "import easyocr; easyocr.Reader(['en'], gpu=False, verbose=False); print('easyocr ready')"
+
+      - name: Backend test suite
+        run: python -m pytest backend/tests -q -p no:cacheprovider
+
+      - name: JEE corpus tests
+        run: python -m pytest docs/jee-pyq-corpus/tests -q -p no:cacheprovider
+
+      - name: Corpus coverage audit
+        run: python docs/jee-pyq-corpus/coverage/audit_corpus.py

@@ -1,0 +1,3 @@
+# Corpus tooling/test dependencies (not needed by the API runtime).
+beautifulsoup4
+requests

@@ -347,13 +347,15 @@ class VisualComparison(BaseModel):
 class VisualInterval(BaseModel):
     """One real interval of a number-line track. Endpoints are exact text.
 
-    lo/hi are "-inf"/"inf" or integer/fraction text ("-3", "1/2", "1.5").
+    lo/hi are "-inf"/"inf" or integer/fraction/decimal text ("-3", "1/2",
+    "0.30000000000000004"). The bound is wide enough for exact decimal
+    endpoints (never truncated to floats).
     """
 
     model_config = ConfigDict(extra="forbid")
 
-    lo: str = Field(default="-inf", max_length=16)
-    hi: str = Field(default="inf", max_length=16)
+    lo: str = Field(default="-inf", max_length=32)
+    hi: str = Field(default="inf", max_length=32)
     lo_closed: bool = False
     hi_closed: bool = False
 
@@ -363,13 +365,15 @@ class VisualNumberLineTrack(BaseModel):
 
     `points` are values EXCLUDED from the set (e.g. domain exclusions like
     x ≠ -2) — they are removed from the interval union and marked hollow.
+    Bounds cover the verifier's worst case (domains split by several
+    excluded values), so solver output is never truncated.
     """
 
     model_config = ConfigDict(extra="forbid")
 
     label: str = Field(default="", max_length=60)
-    intervals: list[VisualInterval] = Field(default_factory=list, max_length=6)
-    points: list[str] = Field(default_factory=list, max_length=6)
+    intervals: list[VisualInterval] = Field(default_factory=list, max_length=12)
+    points: list[str] = Field(default_factory=list, max_length=12)
 
 
 class VisualMathCase(BaseModel):
@@ -378,8 +382,8 @@ class VisualMathCase(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     condition: str = Field(default="", max_length=80)
-    transformed: str = Field(default="", max_length=120)
-    solution: str = Field(default="", max_length=120)
+    transformed: str = Field(default="", max_length=160)
+    solution: str = Field(default="", max_length=160)
 
 
 class VisualNumberLine(BaseModel):
@@ -393,7 +397,7 @@ class VisualNumberLine(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    problem: str = Field(default="", max_length=160)
+    problem: str = Field(default="", max_length=200)
     domain: VisualNumberLineTrack | None = None
     cases: list[VisualMathCase] = Field(default_factory=list, max_length=3)
     solution: VisualNumberLineTrack = Field(default_factory=VisualNumberLineTrack)

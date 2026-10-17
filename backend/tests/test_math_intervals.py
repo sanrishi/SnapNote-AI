@@ -90,3 +90,48 @@ def test_degenerate_and_bad_inputs_return_errors():
 def test_interval_normalization_drops_bad_closures():
     iv = Interval(None, Fraction(3), True, True)
     assert iv.normalized().lo_closed is False
+
+
+# ── boundary and edge semantics ────────────────────────────────────────────
+
+
+def test_without_points_unbounded_closed_and_repeated():
+    whole = _set("(-inf, inf)")
+    assert format_interval_set(whole.without_points([Fraction(2)])) == "(-inf, 2) \u222a (2, inf)"
+    closed = _set("[1, 2]")
+    assert format_interval_set(closed.without_points([Fraction(1)])) == "(1, 2]"
+    assert format_interval_set(closed.without_points([Fraction(2)])) == "[1, 2)"
+    assert closed.without_points([Fraction(1), Fraction(1)]).equals(
+        closed.without_points([Fraction(1)])
+    )
+    assert closed.without_points([]).equals(closed)
+    assert format_interval_set(_set("[2, 2]").without_points([Fraction(2)])) == "\u2205"
+    assert format_interval_set(_set("(-2, 2)").without_points([Fraction(0)])) == "(-2, 0) \u222a (0, 2)"
+    # a point outside every interval leaves the set untouched
+    assert _set("(-1, 1)").without_points([Fraction(7)]).equals(_set("(-1, 1)"))
+
+
+def test_union_intersect_edge_semantics():
+    # (0, 1] meets [1, 2) exactly at the single point 1 ...
+    assert _set("(0, 1]").intersect(_set("[1, 2)")).equals(_set("[1, 1]"))
+    # ... but (0, 1) excludes it, so the intersection is empty.
+    assert _set("(0, 1)").intersect(_set("[1, 2)")).is_empty()
+    assert _set("[0, 1]").union(_set("[1, 2]")).equals(_set("[0, 2]"))
+    assert _set("(-inf, 0)").union(_set("(0, inf)")).equals(_set("(-inf, 0) \u222a (0, inf)"))
+    assert _set("\u2205").union(_set("[1, 2]")).equals(_set("[1, 2]"))
+    assert _set("[1, 2]").intersect(_set("\u2205")).is_empty()
+    assert _set("(-inf, inf)").intersect(_set("[3, 4]")).equals(_set("[3, 4]"))
+
+
+def test_malformed_union_separators_rejected():
+    assert isinstance(parse_interval_set("(1, 2) \u222a"), str)
+    assert isinstance(parse_interval_set("\u222a (1, 2)"), str)
+    assert isinstance(parse_interval_set("(1, 2) \u222a \u222a (3, 4)"), str)
+
+
+def test_decimal_and_fraction_bounds_are_equal_exactly():
+    assert _set("[0.1, 0.3]").equals(_set("[1/10, 3/10]"))
+    long_decimal = "0.1000000000000000000000000000000000001"
+    long_fraction = "1000000000000000000000000000000000001/10000000000000000000000000000000000000"
+    assert _set(f"[{long_decimal}, 1]").equals(_set(f"[{long_fraction}, 1]"))
+    assert not _set("[0.1, 0.3]").equals(_set("[0.1000000000000000055511151231257827021181583404541015625, 0.3]"))
