@@ -47,6 +47,12 @@ class Settings(BaseSettings):
     MAX_IMAGE_SIZE_MB: int = 10
     CREDITS_DB_PATH: str = "credits.db"
 
+    # OCR working-resolution cap: preprocess() downscales the long edge to
+    # this BEFORE denoise/threshold so per-request transients (which scale
+    # with pixels) stay bounded on the 512 MB instance. Slide fixtures and
+    # 1080p screenshots (long edge <= 2048) are never touched.
+    OCR_MAX_LONG_EDGE: int = 2048
+
     # Tuned for 15-20s student SLA: smaller JPEG + tighter Gemini deadlines so
     # a slow upstream fails fast (502 in 22s) instead of 504 in 60s. See
     # extract.py / vision_service.py which both respect these.

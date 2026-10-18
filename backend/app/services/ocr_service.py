@@ -5,6 +5,8 @@ import threading
 import time
 from typing import Any
 
+from app.utils.image_window import image_window
+
 logger = logging.getLogger(__name__)
 
 _engine_lock = threading.Lock()
@@ -107,7 +109,9 @@ def read_raw(image_np: Any) -> OCRResult:
     if engine is None:
         return []
     try:
-        with _engine_lock:
+        # The image window serializes inference against concurrent decode/denoise
+        # work so transients never overlap (see app/utils/image_window.py).
+        with image_window(), _engine_lock:
             out = engine(image_np)
         return _to_ocr_result(out)
     except Exception as exc:
