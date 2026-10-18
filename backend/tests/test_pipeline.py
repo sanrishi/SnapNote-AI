@@ -28,7 +28,12 @@ async def test_health():
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         resp = await client.get("/health")
     assert resp.status_code == 200
-    assert resp.json()["status"] == "ok"
+    body = resp.json()
+    assert body["status"] == "ok"
+    assert body["ocr_engine"] == "rapidocr"
+    assert isinstance(body["ocr_importable"], bool)
+    assert body["rss_mb"] is None or isinstance(body["rss_mb"], float)
+    assert body["rss_mb"] is None or body["rss_mb"] > 0
 
 
 # ── Fixture 1: Clean text extraction ──

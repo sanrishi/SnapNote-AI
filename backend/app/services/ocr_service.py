@@ -1,42 +1,137 @@
+import importlib.util
 import logging
+import sys
 import threading
+import time
 from typing import Any
 
 logger = logging.getLogger(__name__)
 
-_reader_lock = threading.Lock()
+_engine_lock = threading.Lock()
+_engine_init_lock = threading.Lock()
 OCRResult = list[tuple[list[list[float]], str, float]]
 ROW_TOLERANCE = 15.0
 CONF_THRESHOLD = 0.3
 
-_reader = None
+# RapidOCR (PP-OCRv6 ONNX models, bundled in the wheel) is the OCR engine:
+# ONNX Runtime CPU keeps peak RSS ~300 MB (EasyOCR/torch peaked near 1 GB,
+# which cannot fit the production 512 MB instance). Pinned in requirements.
+OCR_ENGINE_NAME = "rapidocr"
+OCR_ENGINE_PACKAGES = ("rapidocr", "onnxruntime")
+
+_engine = None
+_engine_error: str | None = None
 
 
-def _get_reader():
-    global _reader
-    if _reader is not None:
-        return _reader
+def rss_mb() -> float | None:
+    """Peak process RSS in MB (Linux only — prod observability; None elsewhere)."""
+    if sys.platform != "linux":
+        return None
     try:
-        import easyocr
-        _reader = easyocr.Reader(["en"], gpu=False, verbose=False)
-        logger.info("EasyOCR reader initialized")
-    except ImportError:
-        logger.warning("EasyOCR not available — will escalate all extraction to Gemini")
-        _reader = None
-    return _reader
+        import resource
+
+        return round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024, 1)
+    except Exception:
+        return None
+
+
+def _create_engine() -> Any:
+    from rapidocr import RapidOCR
+
+    engine = RapidOCR(
+        params={
+            "EngineConfig.onnxruntime.intra_op_num_threads": 1,
+            "Global.log_level": "warning",
+        }
+    )
+    # RapidOCR loads models lazily on first call; a trivial warm-up makes a
+    # broken engine observable at init (structured log) instead of surfacing
+    # as a mysterious per-request degradation later.
+    import numpy as np
+
+    engine(np.full((64, 256, 3), 255, dtype=np.uint8))
+    return engine
+
+
+def _get_engine() -> Any | None:
+    global _engine, _engine_error
+    if _engine is not None:
+        return _engine
+    if _engine_error is not None:
+        return None
+    with _engine_init_lock:
+        if _engine is not None:
+            return _engine
+        if _engine_error is not None:
+            return None
+        started = time.perf_counter()
+        try:
+            _engine = _create_engine()
+            logger.info(
+                "OCR engine initialized engine=%s init_ms=%d rss_mb=%s",
+                OCR_ENGINE_NAME,
+                int((time.perf_counter() - started) * 1000),
+                rss_mb(),
+            )
+        except Exception as exc:
+            _engine = None
+            _engine_error = f"{type(exc).__name__}: {exc}"
+            logger.error(
+                "OCR engine unavailable engine=%s error=%s — extraction will escalate to Gemini",
+                OCR_ENGINE_NAME,
+                _engine_error,
+            )
+    return _engine
+
+
+def _to_ocr_result(out: Any) -> OCRResult:
+    """Convert a RapidOCR output object into the internal OCRResult shape."""
+    boxes = getattr(out, "boxes", None)
+    txts = getattr(out, "txts", None)
+    scores = getattr(out, "scores", None)
+    if boxes is None or txts is None or scores is None:
+        return []
+    results: OCRResult = []
+    for box, text, score in zip(boxes, txts, scores):
+        points = box.tolist() if hasattr(box, "tolist") else box
+        try:
+            poly = [[float(p[0]), float(p[1])] for p in points]
+        except (TypeError, ValueError, IndexError):
+            continue
+        results.append((poly, str(text), float(score)))
+    return results
 
 
 def read_raw(image_np: Any) -> OCRResult:
-    reader = _get_reader()
-    if reader is None:
+    engine = _get_engine()
+    if engine is None:
         return []
-    with _reader_lock:
-        return reader.readtext(image_np)
+    try:
+        with _engine_lock:
+            out = engine(image_np)
+        return _to_ocr_result(out)
+    except Exception as exc:
+        # Recoverable inference failure: degrade to Gemini escalation via the
+        # empty-result gate. Never raise, never fabricate text. An OS-level
+        # OOM kill cannot be caught here — it ends the process (the reason the
+        # engine is memory-bounded and measured against the 512 MB instance).
+        logger.error(
+            "OCR inference failed engine=%s error=%s: %s",
+            OCR_ENGINE_NAME,
+            type(exc).__name__,
+            exc,
+        )
+        return []
 
 
 def ocr_available() -> bool:
-    """True when the EasyOCR reader is importable (may lazily initialize)."""
-    return _get_reader() is not None
+    """True when the OCR engine initializes (loads models on first call)."""
+    return _get_engine() is not None
+
+
+def ocr_importable() -> bool:
+    """Cheap package-presence check for /health — never initializes the engine."""
+    return all(importlib.util.find_spec(pkg) is not None for pkg in OCR_ENGINE_PACKAGES)
 
 
 def _is_english_like(word: str) -> bool:
@@ -109,8 +204,19 @@ def low_quality_result(ocr_results: OCRResult) -> bool:
     if len(tokens) > 0 and symbol_tokens / len(tokens) > 0.3:
         return True
 
-    # Mixed digit-letter ratio: garbled formulas mix digits and letters oddly
-    mixed = sum(1 for t in tokens if any(c.isdigit() for c in t) and any(c.isalpha() for c in t))
+    # Mixed digit-letter ratio: garbled formulas glue digits into words
+    # ("x2y", "4ac)"), while legitimate prose merely contains both across a
+    # whole line ("1. All cells arise...", "Robert Hooke (1665)"). Count a
+    # token only when it holds at least one suspicious MIXED WORD, so
+    # numbered lines and years in clean notes do not masquerade as formulas.
+    mixed = sum(
+        1
+        for t in tokens
+        if any(
+            any(c.isdigit() for c in w) and any(c.isalpha() for c in w)
+            for w in t.split()
+        )
+    )
     if len(tokens) > 0 and mixed / len(tokens) > 0.2:
         return True
 

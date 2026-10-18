@@ -9,8 +9,8 @@ try:
     _font = ImageFont.truetype("arial.ttf", 22)
 except Exception:
     try:
-        # Linux CI runners: DejaVu keeps the fixtures legible for EasyOCR
-        # (the bitmap fallback load_default() is too small for table OCR).
+        # Linux CI runners: DejaVu keeps the fixtures legible for the OCR
+        # engine (the bitmap fallback load_default() is too small for table OCR).
         _font = ImageFont.truetype(
             "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 22
         )

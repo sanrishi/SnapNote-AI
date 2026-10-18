@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 from app.config import settings
 from app.routes import auth, extract, jee, payments
 from app.exceptions import SnapNoteError
+from app.services.ocr_service import OCR_ENGINE_NAME, ocr_importable, rss_mb
 from app.utils.visual_lesson import typst_status
 
 logging.basicConfig(
@@ -78,10 +79,15 @@ async def health():
     ts = typst_status()
     if not ts["available"]:
         logger.warning("health: Typst CLI not available — v3 composition will use bare-hero fallback")
+    if not ocr_importable():
+        logger.warning("health: OCR engine packages not importable — text extraction will escalate to Gemini")
     return {
         "status": "ok",
         "version": settings.APP_VERSION,
         "typst_available": ts["available"],
         "typst_version": ts["version"],
         "explain_visually_v3": settings.EXPLAIN_VISUALLY_V3,
+        "ocr_engine": OCR_ENGINE_NAME,
+        "ocr_importable": ocr_importable(),
+        "rss_mb": rss_mb(),
     }

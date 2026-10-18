@@ -2,11 +2,9 @@
 import os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "backend"))
 
-os.environ["EASYOCR_VERBOSE"] = "0"
-
 from app.services.preprocessor import preprocess
 from app.services.ocr_service import (
-    _get_reader, read_raw, raw_to_lines, is_table_layout,
+    read_raw, raw_to_lines, is_table_layout,
     low_quality_result, _is_english_like
 )
 

@@ -14,3 +14,9 @@ bcrypt==4.0.1
 email-validator
 firebase-admin
 sympy==1.14.0
+# OCR engine: RapidOCR v3 (PP-OCRv6 ONNX models bundled in the wheel).
+# onnxruntime is an optional extra upstream, so it is pinned explicitly.
+# Chosen over EasyOCR/torch: peak RSS ~300 MB fits the 512 MB production
+# instance (EasyOCR init alone was ~337 MB, inference peaked near 1 GB).
+rapidocr==3.10.0
+onnxruntime==1.31.0
