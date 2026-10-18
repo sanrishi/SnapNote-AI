@@ -1,4 +1,5 @@
 import logging
+import time
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,6 +9,7 @@ from app.config import settings
 from app.routes import auth, extract, jee, payments
 from app.exceptions import SnapNoteError
 from app.services.ocr_service import OCR_ENGINE_NAME, ocr_importable, rss_mb
+from app.utils.memory_probe import cgroup_memory_mb, current_rss_mb
 from app.utils.visual_lesson import typst_status
 
 logging.basicConfig(
@@ -15,6 +17,8 @@ logging.basicConfig(
     format="%(asctime)s | %(name)s | %(levelname)s | %(message)s",
 )
 logger = logging.getLogger(__name__)
+
+_PROCESS_START = time.time()
 
 
 @asynccontextmanager
@@ -81,6 +85,7 @@ async def health():
         logger.warning("health: Typst CLI not available — v3 composition will use bare-hero fallback")
     if not ocr_importable():
         logger.warning("health: OCR engine packages not importable — text extraction will escalate to Gemini")
+    mem = cgroup_memory_mb()
     return {
         "status": "ok",
         "version": settings.APP_VERSION,
@@ -90,4 +95,9 @@ async def health():
         "ocr_engine": OCR_ENGINE_NAME,
         "ocr_importable": ocr_importable(),
         "rss_mb": rss_mb(),
+        "rss_current_mb": current_rss_mb(),
+        "cgroup_current_mb": mem["current_mb"],
+        "cgroup_peak_mb": mem["peak_mb"],
+        "cgroup_limit_mb": mem["limit_mb"],
+        "uptime_s": int(time.time() - _PROCESS_START),
     }

@@ -34,6 +34,12 @@ async def test_health():
     assert isinstance(body["ocr_importable"], bool)
     assert body["rss_mb"] is None or isinstance(body["rss_mb"], float)
     assert body["rss_mb"] is None or body["rss_mb"] > 0
+    assert body["rss_current_mb"] is None or body["rss_current_mb"] > 0
+    for key in ("cgroup_current_mb", "cgroup_peak_mb", "cgroup_limit_mb"):
+        assert key in body
+        assert body[key] is None or body[key] > 0
+    assert isinstance(body["uptime_s"], int)
+    assert body["uptime_s"] >= 0
 
 
 # ── Fixture 1: Clean text extraction ──
