@@ -44,6 +44,7 @@ from app.utils.visual_lesson import (
 )
 from app.services.storage_service import upload_image
 from app.utils.grounding import ground_visual_context
+from app.utils.image_window import run_in_image_window
 from app.utils.render_notes import render_study_notes, render_jee_section
 from app.utils.tags import parse_context, generate_tags
 from app.utils.validation import validate_image_size
@@ -134,7 +135,7 @@ async def extract_text_route(
     validate_image_size(image_bytes)
 
     try:
-        processed = await asyncio.to_thread(preprocess, image_bytes)
+        processed = await run_in_image_window(preprocess, image_bytes)
     except ValueError as e:
         raise InvalidInputError(message=str(e))
 
@@ -142,7 +143,7 @@ async def extract_text_route(
     tags = generate_tags(ctx)
     extraction_type = ExtractionType.TEXT
 
-    raw_results = await asyncio.to_thread(read_raw, processed)
+    raw_results = await run_in_image_window(read_raw, processed)
     if low_quality_result(raw_results):
         logger.info("OCR quality low — escalating to Gemini (id=%s)", effective_id[:8])
         extra_cost = settings.DIAGRAM_CREDIT_COST - settings.TEXT_CREDIT_COST
@@ -156,7 +157,7 @@ async def extract_text_route(
             if rem < extra_cost:
                 raise CreditLimitError()
         try:
-            enhanced = await asyncio.to_thread(enhance_for_vision, image_bytes)
+            enhanced = await run_in_image_window(enhance_for_vision, image_bytes)
             result = await extract_text_with_llm(enhanced)
             markdown = result
             final_cost = settings.DIAGRAM_CREDIT_COST
@@ -205,7 +206,7 @@ async def extract_diagram_route(
     validate_image_size(image_bytes)
 
     try:
-        enhanced = await asyncio.to_thread(enhance_for_vision, image_bytes)
+        enhanced = await run_in_image_window(enhance_for_vision, image_bytes)
     except ValueError as e:
         raise InvalidInputError(message=str(e))
 
@@ -272,7 +273,7 @@ async def extract_revision_route(
     context_hint = context.strip()[:2000] if context.strip() not in ("", "{}", "null") else ""
 
     try:
-        enhanced = await asyncio.to_thread(enhance_for_vision, image_bytes)
+        enhanced = await run_in_image_window(enhance_for_vision, image_bytes)
     except ValueError as e:
         raise InvalidInputError(message=str(e))
 
@@ -348,7 +349,7 @@ async def extract_visual_route(
     validate_image_size(image_bytes)
 
     try:
-        enhanced = await asyncio.to_thread(enhance_for_vision, image_bytes)
+        enhanced = await run_in_image_window(enhance_for_vision, image_bytes)
     except ValueError as e:
         raise InvalidInputError(message=str(e))
 

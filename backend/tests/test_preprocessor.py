@@ -1,3 +1,4 @@
+import asyncio
 import io
 import threading
 import time
@@ -7,7 +8,7 @@ from PIL import Image
 
 from app.config import settings
 from app.services.preprocessor import enhance_for_vision, preprocess
-from app.utils.image_window import image_window
+from app.utils.image_window import image_window, run_in_image_window
 
 
 def _png(w: int, h: int) -> bytes:
@@ -88,3 +89,21 @@ def test_image_window_serializes_threads():
     t1.join(timeout=10)
     t2.join(timeout=10)
     assert order == ["a-in", "a-out", "b-in"]
+
+
+def test_run_in_image_window_uses_one_dedicated_thread():
+    """All heavy image work must land on the SAME non-caller thread so
+    allocator high-water marks are owned by one thread, not per request."""
+    ids: list[int] = []
+
+    def capture() -> int:
+        ids.append(threading.get_ident())
+        return 42
+
+    async def go() -> list[int]:
+        return [await run_in_image_window(capture), await run_in_image_window(capture)]
+
+    results = asyncio.run(go())
+    assert results == [42, 42]
+    assert len(set(ids)) == 1  # one dedicated worker thread
+    assert ids[0] != threading.get_ident()  # never the event-loop thread
