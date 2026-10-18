@@ -1,5 +1,10 @@
 FROM python:3.11-slim
 
+# Cap glibc malloc arenas: worker threads must reuse large image transients
+# instead of keeping per-thread arena high-water marks (measured OOM driver
+# on the 512 MB instance — see app/utils/image_window.py).
+ENV MALLOC_ARENA_MAX=2
+
 WORKDIR /app
 
 # NOTE: libgl1-mesa-glx was removed in Debian trixie (current python:3.11-slim

@@ -8,6 +8,7 @@ from PIL import Image
 from app.config import settings
 from app.models.schemas import VisualRenderMode, VisualSpec
 from app.services import ocr_service
+from app.utils.image_window import run_in_image_window
 from app.utils.visual_renderer import render_deterministic_visual
 
 logger = logging.getLogger(__name__)
@@ -203,7 +204,7 @@ async def _render_generative(spec: VisualSpec) -> bytes | None:
         raw = await _render_once(prompt)
         png = _normalize_to_png(raw)
         if png is not None and _quality_pass(png):
-            if spec.text_required and not await asyncio.to_thread(_legibility_pass, png):
+            if spec.text_required and not await run_in_image_window(_legibility_pass, png):
                 logger.info("Visual rejected by OCR legibility gate on attempt %d; one hidden retry", attempt)
                 png = None
             else:
