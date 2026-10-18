@@ -186,7 +186,8 @@ Before every PR, check:
 ## 8. OCR Confidence Gate Architecture
 
 ### Rule 8.1 — Nine heuristics in `low_quality_result()`
-The gate checks in order:
+The gate is engine-neutral: it consumes line-level `(box, text, confidence)` tokens
+from the OCR adapter, regardless of which engine produced them. The gate checks in order:
 1. Empty result → escalate
 2. Total chars < 10 → escalate
 3. Average confidence < 0.4 → escalate
@@ -197,7 +198,11 @@ The gate checks in order:
 8. Average alpha-token length < 4.5 → escalate
 9. Token ending with `})]>` ratio > 0.15 → escalate
 10. Symbol-containing token ratio > 0.3 → escalate
-11. Mixed digit-letter token ratio > 0.2 → escalate
+11. Token ratio > 0.2 where the token contains at least one MIXED digit-letter **word** (e.g. `x2y`, `4ac)`) → escalate.
+    Word-level, not line-level, on purpose: garbled formulas glue digits into
+    words, while legitimate prose merely contains both across a line
+    (`1. All living organisms…`, `Robert Hooke (1665)`) — the line-level test
+    misfired on numbered lists and years in clean notes.
 
 ### Rule 8.2 — Known soft spots
 - **CS/algorithms content**: Big-O notation (`O(n)`, `O(log n)`) pushes `symbol_ratio` toward 0.3 threshold but is legitimate, not garbled. Gate may under-trigger on clean-format CS slides with heavy notation.
@@ -233,6 +238,13 @@ Worked interval mathematics (log inequalities with polynomial base/argument, pol
 - **Render path**: `validate_lesson_spec` → `verify_number_line` wired into the same gate as all families. `number_line` is excluded from the v3 Typst composition path (`should_use_v3` False; `extract_lesson_content` raises `LessonValidationError` for `worked_math`) and renders content-fitted (`_render_number_line_scene`: problem card → domain track → case rows → `FINAL ANSWER — MATHEMATICALLY VERIFIED` track → caption; open = hollow dot, closed = filled dot, excluded points = red hollow + `x ≠ N`). Endpoint labels are exact Fractions (`3/2`, never `1.5`) and close-together labels are staggered onto extra rows — two distinct values are never silently merged into one label. Empty solution sets render explicitly ("No real solutions — the inequality is never true"; empty domain: "The domain is empty…"). No fixed 860px stage. Defense in depth: the renderer re-runs `verify_number_line` itself and refuses to draw (returns "") any scene that fails — the "MATHEMATICALLY VERIFIED" header can never appear on an unverified scene, regardless of caller mistakes.
 - **Hosted CI**: `.github/workflows/backend-tests.yml` (Python 3.11 = production base, Typst 0.15.1 pinned like the Dockerfile) runs the full backend suite, the JEE corpus tests, and the corpus coverage audit on every PR to master — no secrets required.
 
+### Rule 8.2d — OCR engine (RapidOCR) and the fail-safe contract
+- Production OCR engine = **RapidOCR v3** (`rapidocr==3.10.0` + `onnxruntime==1.31.0`, PP-OCRv6 ONNX models bundled in the wheel), picked by measurement, not preference: EasyOCR/torch import alone is ~322 MB, init ~337 MB, and a dense-formula inference peaked ~958 MB — unfit for the 512 MB production instance. RapidOCR peaked ~300 MB total (lazy model load, ONNX arena disabled, 1 inference thread), init ~1.4 s, ~2–8 s/image at full CPU.
+- **Adapter contract**: `read_raw()` returns the engine-neutral internal `OCRResult` = `(4-point box, text, confidence 0–1)` tokens; `raw_to_lines`, `is_table_layout`, and the gate consume only this shape. Swapping engines must not touch those consumers.
+- **Fail-safe**: engine init wraps ALL exceptions (not just ImportError), caches the failure (`_engine_error` — one attempt per process, no per-request retry storms) and logs it with engine + reason. Inference errors are caught, logged, and degrade to `[]` → the gate escalates to Gemini — never a 500, never fabricated text. A warm-up call runs at init so a broken engine is observable in structured logs immediately. OS-level OOM kills cannot be caught in Python — that is why the engine is memory-bounded and measured against the 512 MB instance rather than trusted because it imports.
+- **Observability**: `/health` exposes `ocr_engine`, `ocr_importable` (cheap `find_spec` — must NEVER initialize the engine; /health has a 5 s probe timeout) and `rss_mb` (Linux peak RSS). Engine init logs `engine/init_ms/rss_mb`.
+- **Dockerfile**: no torch — the OCR stack installs purely from `backend/requirements.txt`. **CI**: no model download/cache/warm steps (models ship inside the rapidocr wheel).
+
 ### Rule 8.3 — Pricing model
 - `/extract/text`: 1 credit if OCR succeeds standalone; **5 credits if escalation to Gemini fires** (credit check before Gemini call, line 55-57 of extract.py)
 - `/extract/revision`: 1 credit (separate Gemini call for the learning layer)
@@ -266,4 +278,4 @@ Worked interval mathematics (log inequalities with polynomial base/argument, pol
 8. Chemistry equilibrium formulas → escalate (untuned, passed cold)
 9. Dark-theme CS BST slide (Unacademy style) → escalate (untuned, passed cold)
 
-*Last updated: October 2026 (worked mathematics is verified or refused — number_line family; safe AST parser with exact-decimal literals; expression-domain preservation; transformed steps verified algebraically; excluded values must be visible; render-time re-verification; permanent hosted CI)
+*Last updated: October 2026 (worked mathematics is verified or refused — number_line family; safe AST parser with exact-decimal literals; expression-domain preservation; transformed steps verified algebraically; excluded values must be visible; render-time re-verification; permanent hosted CI; OCR engine = RapidOCR with fail-safe degradation + /health observability; gate mixed digit-letter heuristic is word-level)
