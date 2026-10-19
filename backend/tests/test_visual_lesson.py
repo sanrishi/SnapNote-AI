@@ -1500,6 +1500,21 @@ def test_flow_node_labels_never_hyphenated():
     assert "Proport-ional" not in svg
 
 
+def test_flow_node_words_never_split_mid_word():
+    """Case 7 follow-up: the font search must keep whole words whole
+    ("Proportion"/"al" split was still observed after the hyphen ban)."""
+    from app.utils.visual_renderer import _wrap
+
+    assert _wrap("Proportional = Kp × e(t)", 8, break_long_words=False) == [
+        "Proportional",
+        "= Kp ×",
+        "e(t)",
+    ]
+    svg = render_hero_geometry(_pid_like_spec().deterministic)
+    assert "Proportion</text>" not in svg
+    assert "Proportional" in svg
+
+
 def test_generic_renders_five_callouts():
     """Case 10: the fifth formula satellite used to be silently dropped."""
     from app.models.schemas import VisualGeneric

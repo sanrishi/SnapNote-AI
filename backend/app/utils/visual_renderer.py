@@ -109,18 +109,24 @@ def _f(value: float) -> str:
     return f"{value:.1f}"
 
 
-def _wrap(text: str, max_chars: int, hyphenate: bool = False) -> list[str]:
+def _wrap(
+    text: str, max_chars: int, hyphenate: bool = False, break_long_words: bool = True
+) -> list[str]:
     """Deterministic word-wrap (no font metrics). Breaks long tokens when needed.
 
     hyphenate=True marks mid-word breaks with a visible "-" (narrow flow
     boxes): "Proportional" -> ["Proporti-", "onal"]. Spec values are never
     altered — the hyphen is presentation only, like newspaper columns.
+
+    break_long_words=False keeps every word whole (observed flow defect:
+    "Proportion"/"al" split across lines); the fit search then measures the
+    unbroken word and shrinks the font instead of fragmenting the label.
     """
     words = text.split(" ")
     lines: list[str] = []
     cur = ""
     for word in words:
-        while len(word) > max_chars:
+        while break_long_words and len(word) > max_chars:
             if cur:
                 lines.append(cur)
                 cur = ""
@@ -489,16 +495,20 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
     # the loops let 14px win at a 6-char wrap, fragmenting every label.
     inner_w = min(available, 170.0)
     for max_chars in (18, 16, 14, 12, 10, 8):
-        for size in (14, 13, 12, 11, 10):
-            trial = [_wrap(node.label, max_chars) for node in nodes]
+        for size in (14, 13, 12, 11, 10, 9, 8):
+            trial = [
+                _wrap(node.label, max_chars, break_long_words=False) for node in nodes
+            ]
             longest = max(len(line) for lines in trial for line in lines)
-            if longest * size * 0.64 + 8 <= inner_w:
+            if longest * size * 0.64 + 6 <= inner_w:
                 wrapped, font_size = trial, size
                 break
         else:
             continue
         break
     else:
+        # Nothing fits even unbroken at the minimum font (single monster
+        # token): split as the last resort so the row never overflows.
         wrapped = [_wrap(node.label, 6) for node in nodes]
         font_size = 10
     box_w = min(170.0, available)
