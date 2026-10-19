@@ -696,6 +696,78 @@ def test_visual_route_repairs_validation_refusal(sample_diagram_image, monkeypat
     assert remaining == 45
 
 
+def test_visual_route_promotes_equations_only_claim(sample_diagram_image, monkeypatch):
+    """Trust layer: a claim living only in deterministic.equations renders
+    nowhere; the route promotes it into a visible callout deterministically
+    instead of paying for a model repair."""
+    from app.models.schemas import (
+        CompositionCallout,
+        LessonComposition,
+        VisualEquation,
+        VisualTask,
+    )
+    from app.utils.credits_store import get_credits
+
+    device = "visual-promote-claim-00000000-0000-000000000019"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    spec = _rich_force_spec()
+    spec.deterministic.equations = [
+        VisualEquation(expression="L = I\u03c9", meaning="angular momentum")
+    ]
+    spec.deterministic.composition = LessonComposition(
+        title="Torque",
+        callouts=[CompositionCallout(label="O", value="pivot")],
+    )
+    spec.deterministic.task = VisualTask(
+        task_type="vector_arrangement",
+        learning_outcome="x",
+        required_elements=[],
+        required_relationships=[],
+        exact_claims=["L = I\u03c9"],
+        acceptable_families=["force_diagram"],
+        assumptions=[],
+        missing=[],
+    )
+    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=spec))
+    repair_mock = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+    monkeypatch.setattr(
+        "app.routes.extract.render_v3_visual", AsyncMock(return_value=("svg", "<svg>hero</svg>")))
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "generated"
+    assert repair_mock.await_count == 0
+    assert spec.deterministic.composition is not None
+    assert any(
+        c.label == "L = I\u03c9" for c in spec.deterministic.composition.callouts
+    )
+    remaining, _ = get_credits(device)
+    assert remaining == 45
+
+
 def test_visual_route_derives_missing_task(sample_diagram_image, monkeypatch):
     """A task-less spec gets a derived contract attached before rendering —
     the legacy bypass is closed, deterministically, with no extra LLM call."""

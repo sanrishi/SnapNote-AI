@@ -35,7 +35,11 @@ from app.utils.visual_lesson import (
     v3_store_mode,
     validate_lesson_spec,
 )
-from ground_truth_specs import argand_spec_from_ground_truth, torque_spec_from_ground_truth
+from ground_truth_specs import (
+    argand_spec_from_ground_truth,
+    torque_spec_from_ground_truth,
+    torque_v3_spec_from_ground_truth,
+)
 
 
 def _torque() -> VisualSpec:
@@ -1053,6 +1057,21 @@ def test_validate_accepts_dense_generic():
     assert validate_lesson_spec(_generic_spec(["one", "two", "three"])) == []
 
 
+def test_generic_hero_renders_up_to_satellite_capacity():
+    """Capacity is a render contract: every count up to the cap draws, and
+    content beyond the cap is visibly absent (the gate mirrors this)."""
+    from app.utils.visual_renderer import GENERIC_SATELLITE_CAP, render_hero_geometry
+
+    callouts = [f"item {i}" for i in range(GENERIC_SATELLITE_CAP)]
+    hero = render_hero_geometry(_generic_spec(callouts).deterministic)
+    for c in callouts:
+        assert c in hero
+    overflow = render_hero_geometry(
+        _generic_spec(callouts + ["overflow item"]).deterministic
+    )
+    assert "overflow item" not in overflow
+
+
 # ── tangential-velocity physics rule lives in the spec prompt ──
 
 def test_spec_prompt_requires_tangential_velocity():
@@ -1377,9 +1396,10 @@ def test_unknown_acceptable_family_still_refused():
     assert any("acceptable_families" in e for e in errors)
 
 
-def test_task_claims_satisfied_by_card_equations():
-    """Case 10: claims rendered in deterministic.equations count as shown —
-    the haystack used to ignore the card content entirely."""
+def test_equations_only_claim_is_invisible_and_not_accepted():
+    """Trust layer: with a scene present, deterministic.equations render
+    nowhere (card content is for scene-less specs only), so a claim living
+    only there must NOT silently pass the gate as 'shown'."""
     from app.models.schemas import VisualTask
 
     spec = _argand()
@@ -1390,7 +1410,97 @@ def test_task_claims_satisfied_by_card_equations():
         exact_claims=["Area = 4"],
         acceptable_families=["plot"],
     )
+    errors = vl.validate_task_link(spec)
+    assert any("exact claim missing" in e for e in errors)
+    # No composition chip channel here -> promotion cannot rescue; the route
+    # then repairs with the model (or refuses honestly).
+    assert vl.promote_equation_claims(spec, errors) == 0
+
+
+def test_promote_equation_claim_into_composition_callouts():
+    """A claim satisfied only by an equation is promoted verbatim into a
+    visible composition callout chip — no LLM call, content unchanged."""
+    from app.models.schemas import VisualTask
+
+    spec = torque_v3_spec_from_ground_truth()
+    det = spec.deterministic
+    det.task = VisualTask(
+        task_type="vector_arrangement",
+        required_elements=[],
+        exact_claims=["L = I\u03c9"],
+        acceptable_families=["force_diagram"],
+    )
+    errors = vl.validate_task_link(spec)
+    assert any("exact claim missing" in e for e in errors)
+    assert vl.promote_equation_claims(spec, errors) == 1
     assert vl.validate_task_link(spec) == []
+    assert det.composition is not None
+    assert any(c.label == "L = I\u03c9" for c in det.composition.callouts)
+
+
+def test_promote_equation_claim_into_generic_satellites_and_cap():
+    """Generic hero renders at most GENERIC_SATELLITE_CAP satellites: claims
+    are promoted while capacity remains, and beyond it promotion refuses so
+    the model repair rearranges content instead of silently losing it."""
+    from app.models.schemas import VisualEquation, VisualGeneric, VisualTask
+    from app.utils.visual_renderer import GENERIC_SATELLITE_CAP
+
+    def _generic_spec(filled: int):
+        spec = _torque()
+        det = spec.deterministic
+        scene = det.scene
+        assert scene is not None
+        scene.scene_kind = "generic"
+        scene.force = None
+        scene.generic = VisualGeneric(
+            central_label="Angular momentum",
+            callouts=[f"item {i}" for i in range(filled)],
+        )
+        det.equations = [VisualEquation(expression="L = I\u03c9", meaning="angular momentum")]
+        det.task = VisualTask(
+            task_type="definition_overview",
+            required_elements=[],
+            exact_claims=["L = I\u03c9"],
+            acceptable_families=["generic"],
+        )
+        return spec
+
+    spec = _generic_spec(GENERIC_SATELLITE_CAP - 2)
+    errors = vl.validate_task_link(spec)
+    assert any("exact claim missing" in e for e in errors)
+    assert vl.promote_equation_claims(spec, errors) == 1
+    assert vl.validate_task_link(spec) == []
+    assert spec.deterministic.scene.generic.callouts[-1] == "L = I\u03c9"
+
+    full = _generic_spec(GENERIC_SATELLITE_CAP)
+    errors = vl.validate_task_link(full)
+    assert any("exact claim missing" in e for e in errors)
+    assert vl.promote_equation_claims(full, errors) == 0
+
+
+def test_generic_callouts_beyond_capacity_are_not_visible():
+    """The gate only counts generic callouts the hero can actually draw."""
+    from app.models.schemas import VisualGeneric, VisualTask
+    from app.utils.visual_renderer import GENERIC_SATELLITE_CAP
+
+    spec = _torque()
+    det = spec.deterministic
+    scene = det.scene
+    assert scene is not None
+    scene.scene_kind = "generic"
+    scene.force = None
+    scene.generic = VisualGeneric(
+        central_label="List",
+        callouts=[f"item {i}" for i in range(GENERIC_SATELLITE_CAP)] + ["hidden = 9"],
+    )
+    det.task = VisualTask(
+        task_type="definition_overview",
+        required_elements=[],
+        exact_claims=["hidden = 9"],
+        acceptable_families=["generic"],
+    )
+    errors = vl.validate_task_link(spec)
+    assert any("exact claim missing" in e for e in errors)
 
 
 def test_plot_structural_tokens_satisfy_slot_elements():

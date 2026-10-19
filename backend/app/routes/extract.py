@@ -39,6 +39,7 @@ from app.services.visual_service import generate_visual
 from app.utils.visual_lesson import (
     derive_task_from_scene,
     derive_task_from_source,
+    promote_equation_claims,
     render_v3_visual,
     should_use_v3,
     spec_needs_repair,
@@ -455,6 +456,13 @@ async def extract_visual_route(
                         diagramId[:8],
                     )
             gate_errors = validate_legacy_visual(spec)
+            promoted = promote_equation_claims(spec, gate_errors)
+            if promoted:
+                logger.info(
+                    "Explain Visually promoted %d equations-only claim(s) into visible callouts (diagram %s)",
+                    promoted, diagramId[:8],
+                )
+                gate_errors = validate_legacy_visual(spec)
         except Exception as e:
             logger.warning("Explain Visually task/validation stage failed (diagram %s): %s",
                            diagramId[:8], e)
@@ -513,6 +521,13 @@ async def extract_visual_route(
                             if rderived is not None:
                                 reconciled.deterministic.task = rderived
                         rechecked = validate_legacy_visual(reconciled)
+                        rpromoted = promote_equation_claims(reconciled, rechecked)
+                        if rpromoted:
+                            logger.info(
+                                "Explain Visually promoted %d equations-only claim(s) from repaired spec (diagram %s)",
+                                rpromoted, diagramId[:8],
+                            )
+                            rechecked = validate_legacy_visual(reconciled)
                         if (
                             rscene is not None
                             and rkind != "generic"

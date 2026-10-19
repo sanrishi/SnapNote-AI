@@ -26,6 +26,7 @@ import asyncio
 import functools
 import logging
 import math
+import re
 import shutil
 import subprocess
 import tempfile
@@ -34,6 +35,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from app.models.schemas import (
+    CompositionCallout,
     DeterministicVisual,
     StudyNotes,
     VisualRenderMode,
@@ -41,7 +43,7 @@ from app.models.schemas import (
     VisualSpec,
     VisualTask,
 )
-from app.utils.visual_renderer import render_hero_geometry
+from app.utils.visual_renderer import GENERIC_SATELLITE_CAP, render_hero_geometry
 
 logger = logging.getLogger(__name__)
 
@@ -139,8 +141,12 @@ def _distinctive(text: str) -> set[str]:
     return {w for w in _tokens(text) if len(w) > 2 and w not in _TASK_STOPWORDS}
 
 
-def _scene_text(scene: VisualScene) -> str:
-    """All human-visible scene strings, for task-link grounding checks."""
+def _scene_text(scene: VisualScene, generic_cap: int | None = None) -> str:
+    """All human-visible scene strings, for task-link grounding checks.
+
+    ``generic_cap`` truncates generic callouts to the hero's visible
+    satellite capacity (default: no truncation, for non-gate callers).
+    """
     bits: list[str] = []
     kind = scene.scene_kind
     if kind == "force_diagram" and scene.force is not None:
@@ -172,7 +178,10 @@ def _scene_text(scene: VisualScene) -> str:
             bits.append(scene.flow.relation.expression or "")
     elif kind == "generic" and scene.generic is not None:
         bits.append(scene.generic.central_label or "")
-        bits += [c or "" for c in (scene.generic.callouts or [])]
+        callouts = [c for c in (scene.generic.callouts or []) if (c or "").strip()]
+        if generic_cap is not None:
+            callouts = callouts[:generic_cap]
+        bits += callouts
     elif kind == "comparison" and scene.comparison is not None:
         for p in scene.comparison.panels or []:
             bits.append((p.label or "") + " " + (p.note or ""))
@@ -276,12 +285,19 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
     return {t for t in tokens if t}
 
 
-def _composition_callouts(det) -> list[tuple[str, str]]:
-    """(heading, body) pairs from the explicit composition, if present."""
+def _composition_callouts(det, scene_kind: str = "") -> list[tuple[str, str]]:
+    """(heading, body) pairs the composed lesson ACTUALLY renders.
+
+    Generic scenes drop composition callouts from the chip grid (the hero
+    already carries the callout set, so repeating them duplicates labels
+    verbatim), so they are excluded for that family.
+    """
     comp = det.composition
     if comp is None:
         return []
-    pairs = [(c.label or "", c.value or "") for c in (comp.callouts or [])]
+    pairs: list[tuple[str, str]] = []
+    if scene_kind != "generic":
+        pairs += [(c.label or "", c.value or "") for c in (comp.callouts or [])]
     pairs += [(r.expression or "", r.explanation or "") for r in (comp.reasoning or [])]
     if comp.result is not None:
         pairs.append((comp.result.expression or "", ""))
@@ -514,18 +530,20 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
     registry_ok = TASK_FAMILIES.get(task.task_type, [])
     if kind not in registry_ok:
         errors.append(f"scene kind {kind!r} cannot express task {task.task_type!r}")
-    # The haystack is EVERYTHING the rendered visual actually shows: scene
-    # primitives AND the card content (equations/steps/points) AND the
-    # composition. Omitting the card lists false-failed claims that the
-    # renderer prints verbatim (observed: "Σ i = n(n+1)/2" present in
-    # deterministic.equations but flagged missing).
+    # The haystack is STRICTLY what the rendered artifact shows: with a scene
+    # present (always true when a task plan exists) both render paths center
+    # on the scene hero — the card content (equations/steps/points) renders
+    # only when no scene exists, so it can never satisfy a claim. A claim
+    # living only in deterministic.equations is invisible in the product and
+    # is promoted verbatim into a visible callout by
+    # promote_equation_claims() before this gate runs. Generic satellites are
+    # capped by the hero, so callouts beyond the cap are not visible either.
+    comp = det.composition
     haystack = " ".join([
         det.title, getattr(det, "caption", "") or "",
-        " ".join(f"{eq.expression} {eq.meaning}" for eq in det.equations),
-        " ".join(str(s) for s in det.steps),
-        " ".join(str(p) for p in det.points),
-        _scene_text(scene),
-        " ".join(heading + " " + body for heading, body in _composition_callouts(det)),
+        (comp.title if comp is not None else "") or "",
+        _scene_text(scene, generic_cap=GENERIC_SATELLITE_CAP),
+        " ".join(heading + " " + body for heading, body in _composition_callouts(det, scene.scene_kind)),
     ]).casefold()
     hay_tokens = _tokens(haystack) | _scene_structural_tokens(scene)
     for element in task.required_elements:
@@ -551,6 +569,84 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
             continue
         errors.append(f"exact claim missing from scene: {claim!r}")
     return errors
+
+
+_CLAIM_MISSING_RE = re.compile(r"^exact claim missing from scene: '(?P<claim>.*)'$")
+
+
+def promote_equation_claims(spec: VisualSpec, gate_errors: list[str]) -> int:
+    """Make equations-only claims visible WITHOUT a model call.
+
+    Neither the composed lesson nor the scene hero renders
+    ``deterministic.equations`` (that card content exists for scene-less
+    specs only), so a claim satisfied solely by an equation entry passes the
+    naive text check while being invisible in the product. This promotes such
+    claims — verbatim, nothing invented — into a channel that actually
+    renders: generic satellite slots (while capacity remains) or composition
+    callout chips. Returns the number of claims promoted. Callers recompute
+    the gate afterwards; claims that fit nowhere still go to model repair.
+
+    ``gate_errors`` must come from ``validate_legacy_visual``/``validate_task_link``
+    so the promoted text provably closes the reported gap.
+    """
+    det = spec.deterministic
+    scene = det.scene
+    if scene is None or scene.scene_kind == "number_line":
+        return 0
+    missing: list[str] = []
+    for err in gate_errors:
+        m = _CLAIM_MISSING_RE.match(err)
+        if m:
+            missing.append(m.group("claim"))
+    if not missing:
+        return 0
+    equations = [
+        (e.expression.strip(), e.meaning.strip())
+        for e in det.equations
+        if e.expression.strip()
+    ]
+    generic = scene.generic if scene.scene_kind == "generic" else None
+    comp = det.composition
+    visible_satellites = (
+        len([c for c in (generic.callouts or []) if (c or "").strip()])
+        if generic is not None
+        else 0
+    )
+    promoted = 0
+    for claim in missing:
+        ck = _claim_key(claim)
+        match: tuple[str, str] | None = None
+        for expr, meaning in equations:
+            if ck == _claim_key(expr) or ck in _claim_key(f"{expr} {meaning}"):
+                match = (expr, meaning)
+                break
+        if match is None:
+            continue
+        _, meaning = match
+        if generic is not None:
+            if visible_satellites >= GENERIC_SATELLITE_CAP:
+                continue
+            generic.callouts.append(claim)
+            visible_satellites += 1
+            promoted += 1
+        elif comp is not None:
+            # Chip bounds come from the CompositionCallout schema (label 24,
+            # value 80) and LessonComposition (6 callouts); refuse to exceed
+            # them — a claim that cannot fit visibly goes to model repair.
+            if len(comp.callouts) >= 6 or len(claim) > 24 or len(meaning) > 80:
+                continue
+            existing_ids = {c.id for c in comp.callouts}
+            idx = 1
+            while f"promoted-claim-{idx}" in existing_ids:
+                idx += 1
+            comp.callouts.append(
+                CompositionCallout(
+                    id=f"promoted-claim-{idx}", label=claim, value=meaning
+                )
+            )
+            promoted += 1
+    return promoted
+
 
 TYMST_TIMEOUT_SECONDS = 25
 MAX_CALLOUTS = 4

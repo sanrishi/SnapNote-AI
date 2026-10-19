@@ -980,13 +980,19 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
 
 
+# Visible satellite capacity of the generic hero. The gate may only treat
+# callouts within this capacity as shown, and the deterministic claim
+# promotion (visual_lesson.promote_equation_claims) must not exceed it.
+GENERIC_SATELLITE_CAP = 8
+
+
 def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, int, list[str], object]:
     generic = scene.generic
     central = ""
     callouts: list[str] = []
     if generic is not None:
         central = (generic.central_label or "").strip()
-        callouts = [c.strip() for c in (generic.callouts or []) if c.strip()][:5]
+        callouts = [c.strip() for c in (generic.callouts or []) if c.strip()][:GENERIC_SATELLITE_CAP]
     if not central:
         central = (scene.title or fallback_title or "Key Concept").strip()
     if not callouts:
@@ -996,7 +1002,7 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
             callouts = _wrap(cap, 28)[:2]
     if not central and not callouts:
         return "", STAGE_Y + STAGE_H + 24, [], None
-    # layout: centre box + up to 5 satellites
+    # layout: centre box + up to GENERIC_SATELLITE_CAP satellites
     cx, cy = 400.0, STAGE_Y + 230
     cw, ch = 220, 64
     parts: list[str] = []
@@ -1008,10 +1014,14 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
         parts.append(f'<text x="{_f(cx)}" y="{_f(ty)}" font-family="{_FONT}" font-size="14" font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>')
         ty += 18
     # satellites (fifth drops below centre so 5-item formula sheets never
-    # silently lose a formula to the old 4-satellite cap)
-    positions = [(-150, -96), (150, -96), (-150, 96), (150, 96), (0, 196)]
+    # silently lose a formula to the old 4-satellite cap; sixth/seventh flank
+    # it and eighth sits above centre — all inside the stage)
+    positions = [
+        (-150, -96), (150, -96), (-150, 96), (150, 96),
+        (0, 196), (-180, 196), (180, 196), (0, -196),
+    ]
     bw, bh = 168, 46
-    for idx, txt in enumerate(callouts[:5]):
+    for idx, txt in enumerate(callouts[: len(positions)]):
         px, py = cx + positions[idx][0], cy + positions[idx][1]
         # connector
         sx = cx + (cw/2 + 8) * (1 if px > cx else -1) if abs(px - cx) > 80 else cx
