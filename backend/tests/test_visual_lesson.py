@@ -76,6 +76,19 @@ def test_validate_rejects_unknown_scene_kind():
     assert any("hologram" in e for e in errors)
 
 
+def test_scene_relation_must_be_an_equation():
+    """Case 7 defect: a reconcile repair chose the node label "Plant G(s)"
+    as the highlighted relation; labels are not equations."""
+    spec = _torque()
+    force = spec.deterministic.scene.force  # type: ignore[union-attr]
+    assert force is not None and force.relation is not None
+    force.relation.expression = "Plant G(s)"
+    errors = validate_lesson_spec(spec)
+    assert any("not an equation" in e for e in errors)
+    force.relation.expression = "τ = r × F"
+    assert validate_lesson_spec(spec) == []
+
+
 def test_render_refuses_invalid_spec():
     spec = _torque()
     assert spec.deterministic.scene is not None
@@ -1327,3 +1340,247 @@ def test_number_line_wrong_exact_claim_still_refused():
     spec.deterministic.task.exact_claims = ["(-3, -2) \u222a (-1, 3)"]
     errors = vl.validate_task_link(spec)
     assert any("exact claim missing" in e for e in errors)
+
+# ── reliability milestone (benchmark cases 2/4/6/7/8/10) ──────────────────
+
+
+def test_acceptable_families_task_type_alias_expands():
+    """Case 8: the planner wrote a task_type name into acceptable_families;
+    alias expansion must map it to the registry families (the hard registry
+    check still runs)."""
+    from app.models.schemas import VisualTask
+
+    spec = _torque()
+    det = spec.deterministic
+    assert det.scene is not None
+    det.task = VisualTask(
+        task_type="vector_arrangement",
+        required_elements=[],
+        exact_claims=[],
+        acceptable_families=["vector_arrangement"],
+    )
+    assert vl.validate_task_link(spec) == []
+
+
+def test_unknown_acceptable_family_still_refused():
+    from app.models.schemas import VisualTask
+
+    spec = _torque()
+    det = spec.deterministic
+    det.task = VisualTask(
+        task_type="vector_arrangement",
+        required_elements=[],
+        exact_claims=[],
+        acceptable_families=["hologram"],
+    )
+    errors = vl.validate_task_link(spec)
+    assert any("acceptable_families" in e for e in errors)
+
+
+def test_task_claims_satisfied_by_card_equations():
+    """Case 10: claims rendered in deterministic.equations count as shown —
+    the haystack used to ignore the card content entirely."""
+    from app.models.schemas import VisualTask
+
+    spec = _argand()
+    det = spec.deterministic
+    det.task = VisualTask(
+        task_type="coordinate_construction",
+        required_elements=[],
+        exact_claims=["Area = 4"],
+        acceptable_families=["plot"],
+    )
+    assert vl.validate_task_link(spec) == []
+
+
+def test_plot_structural_tokens_satisfy_slot_elements():
+    """Case 2: placeholder slot nouns ("point", "segment") are satisfiable by
+    the scene's structural primitives, not by literal label text."""
+    from app.models.schemas import PlotMarker, PlotSegment, VisualTask
+
+    spec = _argand()
+    det = spec.deterministic
+    assert det.scene is not None and det.scene.plot is not None
+    det.scene.plot.markers = [PlotMarker(x=2, y=1, label="F")]
+    det.scene.plot.segments = [
+        PlotSegment(x1=2, y1=0, x2=2, y2=3, label="lens", style="dashed")
+    ]
+    det.task = VisualTask(
+        task_type="coordinate_construction",
+        required_elements=["point", "segment"],
+        exact_claims=[],
+        acceptable_families=["plot"],
+    )
+    assert vl.validate_task_link(spec) == []
+
+
+def test_exact_claim_tolerates_multiplication_spacing():
+    """Case 10: the same printed expression with/without an explicit × is one
+    claim; different values still fail."""
+    from app.models.schemas import VisualGeneric, VisualTask
+
+    spec = _torque()
+    det = spec.deterministic
+    scene = det.scene
+    assert scene is not None
+    scene.scene_kind = "generic"
+    scene.force = None
+    scene.generic = VisualGeneric(
+        central_label="Normal distribution",
+        callouts=["f(z) = (1/√(2π))exp(-z²/2)"],
+    )
+    det.task = VisualTask(
+        task_type="definition_overview",
+        required_elements=[],
+        exact_claims=["f(z) = (1/√(2π)) × exp(-z²/2)"],
+        acceptable_families=["generic"],
+    )
+    assert vl.validate_task_link(spec) == []
+
+    det.task.exact_claims = ["f(z) = (1/√(2π)) × exp(-z²/3)"]
+    assert any("exact claim missing" in e for e in vl.validate_task_link(spec))
+
+
+def test_plot_accepts_segments_and_markers_without_curves():
+    from app.models.schemas import PlotMarker, PlotSegment
+
+    spec = _argand()
+    det = spec.deterministic
+    assert det.scene is not None and det.scene.plot is not None
+    det.scene.plot.curves = []
+    det.scene.plot.markers = [PlotMarker(x=2, y=1, label="F")]
+    det.scene.plot.segments = [
+        PlotSegment(x1=2, y1=0, x2=2, y2=3, label="lens", style="dashed")
+    ]
+    assert validate_lesson_spec(spec) == []
+
+
+def test_plot_renders_markers_and_segments():
+    from app.models.schemas import PlotMarker, PlotSegment
+
+    spec = _argand()
+    det = spec.deterministic
+    assert det.scene is not None and det.scene.plot is not None
+    det.scene.plot.markers = [PlotMarker(x=2, y=1, label="F")]
+    det.scene.plot.segments = [
+        PlotSegment(
+            x1=2, y1=0, x2=2, y2=3, label="lens", style="dashed", arrow=True
+        )
+    ]
+    svg = render_hero_geometry(det)
+    assert "lens" in svg
+    assert "F" in svg
+    assert 'stroke-dasharray="6 4"' in svg
+    assert "<polygon" in svg
+
+
+def test_flow_drops_connector_label_echoing_node():
+    """Case 7: connector labels restating a node's own text are noise."""
+    from app.models.schemas import FlowConnector, FlowNode, ProcessFlow
+
+    spec = _torque()
+    det = spec.deterministic
+    scene = det.scene
+    assert scene is not None
+    scene.scene_kind = "process_flow"
+    scene.force = None
+    scene.flow = ProcessFlow(
+        nodes=[FlowNode(label="Error e(t)"), FlowNode(label="Plant G(s)")],
+        connectors=[FlowConnector(source=0, target=1, label="e(t)")],
+    )
+    svg = render_hero_geometry(det)
+    assert ">e(t)</text>" not in svg
+    assert "Error e(t)" in svg
+
+
+def test_flow_node_labels_never_hyphenated():
+    """Case 7: "Proport-ional"/"Summati-on" mid-word hyphens must not return."""
+    svg = render_hero_geometry(_pid_like_spec().deterministic)
+    assert "-</text>" not in svg
+    assert "Proport-ional" not in svg
+
+
+def test_generic_renders_five_callouts():
+    """Case 10: the fifth formula satellite used to be silently dropped."""
+    from app.models.schemas import VisualGeneric
+
+    spec = _torque()
+    det = spec.deterministic
+    scene = det.scene
+    assert scene is not None
+    scene.scene_kind = "generic"
+    scene.force = None
+    scene.generic = VisualGeneric(
+        central_label="Formula sheet",
+        callouts=[
+            "a = 1: first",
+            "b = 2: second",
+            "c = 3: third",
+            "d = 4: fourth",
+            "e = 5: fifth",
+        ],
+    )
+    svg = render_hero_geometry(det)
+    for text in ("first", "second", "third", "fourth", "fifth"):
+        assert text in svg
+
+
+def test_generic_composition_chips_deduplicated():
+    """Case 10: generic hero satellites already ARE the callouts; the v3 chip
+    grid repeated every formula verbatim below the scene."""
+    from app.models.schemas import VisualGeneric
+
+    spec = _torque()
+    det = spec.deterministic
+    assert det.scene is not None
+    det.scene.scene_kind = "generic"
+    det.scene.force = None
+    det.scene.generic = VisualGeneric(
+        central_label="Formula sheet", callouts=["a = 1: first"]
+    )
+    content = extract_lesson_content(spec)
+    assert content.callouts == []
+
+
+def test_force_ground_satisfies_surface_requirement():
+    """Case 4: "horizontal surface" is satisfied by the code-drawn ground."""
+    from app.models.schemas import VisualTask
+
+    spec = _torque()
+    det = spec.deterministic
+    assert det.scene is not None and det.scene.force is not None
+    det.scene.force.ground = True
+    det.task = VisualTask(
+        task_type="vector_arrangement",
+        required_elements=["horizontal surface"],
+        exact_claims=[],
+        acceptable_families=["force_diagram"],
+    )
+    assert vl.validate_task_link(spec) == []
+
+
+def test_force_ground_draws_surface():
+    """Case 4: a rolling disk needs its contact surface, not a floating body."""
+    spec = _torque()
+    det = spec.deterministic
+    assert det.scene is not None and det.scene.force is not None
+    det.scene.force.ground = True
+    svg = render_hero_geometry(det)
+    assert "surface" in svg
+    assert svg.count('stroke-width="2.5"') >= 1
+
+
+def test_deterministic_visual_coerces_legacy_card_strings():
+    """Case 6: repair emitted equations as plain strings -> pydantic crash."""
+    from app.models.schemas import DeterministicVisual
+
+    det = DeterministicVisual(
+        title="t",
+        equations=["1/v - 1/u = 1/f"],
+        steps=["apply lens formula"],
+        points=["f is focal length"],
+    )
+    assert det.equations[0].expression == "1/v - 1/u = 1/f"
+    assert det.equations[0].meaning == ""
+    assert det.steps == ["apply lens formula"]
+    assert det.points == ["f is focal length"]

@@ -418,6 +418,26 @@ def _render_force_diagram(scene: VisualScene) -> tuple[str, int, list[str], Visu
     obj_html = _render_object(force.object, pivot[0], pivot[1])
     parts.insert(0, obj_html)
 
+    # Ground/contact line: rolling and friction scenes need the surface the
+    # object rolls/rests on, otherwise the body reads as floating. Code-owned
+    # geometry: baseline + hatch ticks + contact dot at the tangent point.
+    if force.ground:
+        drop = {"disk": 56.0, "block": 24.0}.get(force.object.kind, 20.0)
+        gy = PIVOT_Y + drop
+        gx0, gx1 = STAGE_X + 24, STAGE_X + STAGE_W - 24
+        ground_parts = [f'<line x1="{_f(gx0)}" y1="{_f(gy)}" x2="{_f(gx1)}" y2="{_f(gy)}" stroke="{INK}" stroke-width="2.5"/>']
+        x = gx0 + 4
+        while x + 12 < gx1 - 4:
+            ground_parts.append(_line(x, gy, x + 12, gy + 9, SOFT, width=1.5))
+            x += 22
+        if force.object.kind == "disk":
+            ground_parts.append(f'<circle cx="{_f(PIVOT_X)}" cy="{_f(gy)}" r="4.5" fill="{ACCENT}"/>')
+        ground_parts.append(
+            f'<text x="{_f(gx0)}" y="{_f(gy + 26)}" font-family="{_FONT}" font-size="15" '
+            f'fill="{MUTED}" text-anchor="start">surface</text>'
+        )
+        parts.append("".join(ground_parts))
+
     # Angle arcs: vertex is the shared head of the referenced vectors, else pivot.
     for angle in force.angles:
         dirs: list[float] = []
@@ -453,26 +473,35 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
         return "", STAGE_Y + STAGE_H + 24, [], None
 
     n = len(nodes)
-    # Fit guarantee (R1): the old max(92, ...) floor let wide rows overflow the
-    # stage (8-node PID hit x0 < 0). Boxes now size from their own text and the
-    # row ALWAYS fits: wrap harder / shrink gap+font until it does. Pure
-    # character-count arithmetic — no font metrics, stays byte-deterministic.
-    font_size = 14 if n <= 6 else 12
-    # Conservative mean glyph advance for 600-weight sans (measured against
-    # the real PID board: 0.58 let 8-char lines spill past box borders).
-    est_char = font_size * 0.64
+    # Fit guarantee (R1): boxes size from their own text and the row ALWAYS
+    # fits. Mid-word hyphenation is banned (observed: "Proport-ional",
+    # "Summati-on" — unreadable); instead the search picks the first
+    # (font size, wrap width) pair that fits, shrinking the FONT as the last
+    # resort. Pure character-count arithmetic — no font metrics, stays
+    # byte-deterministic. Mean glyph advance 0.64 for 600-weight sans was
+    # measured against the real PID board (0.58 let 8-char lines spill).
     gap = 30 if n <= 4 else (20 if n <= 6 else 12)
-    wrapped: list[list[str]] = []
-    box_w = 150
-    for max_chars in (16, 14, 12, 10, 8):
-        wrapped = [_wrap(node.label, max_chars, hyphenate=True) for node in nodes]
-        need = max(len(line) for lines in wrapped for line in lines) * est_char + 30
-        box_w = min(170, need)
-        if n * box_w + (n - 1) * gap <= CONTENT_W - 40:
-            break
+    available = (CONTENT_W - 40 - (n - 1) * gap) / n
+    font_size = 12
+    wrapped: list[list[str]] = [_wrap(node.label, 10) for node in nodes]
+    # Width preference OUTSIDE font preference: pick the widest wrap that fits
+    # at some readable font, then the largest font for that width. Reversing
+    # the loops let 14px win at a 6-char wrap, fragmenting every label.
+    inner_w = min(available, 170.0)
+    for max_chars in (18, 16, 14, 12, 10, 8):
+        for size in (14, 13, 12, 11, 10):
+            trial = [_wrap(node.label, max_chars) for node in nodes]
+            longest = max(len(line) for lines in trial for line in lines)
+            if longest * size * 0.64 + 8 <= inner_w:
+                wrapped, font_size = trial, size
+                break
+        else:
+            continue
+        break
     else:
-        wrapped = [_wrap(node.label, 8, hyphenate=True) for node in nodes]
-    box_w = min(box_w, (CONTENT_W - 40 - (n - 1) * gap) / n)
+        wrapped = [_wrap(node.label, 6) for node in nodes]
+        font_size = 10
+    box_w = min(170.0, available)
     max_lines = max(len(lines) for lines in wrapped)
     box_h = max(54, 20 + 22 * max_lines)
     y_center = STAGE_Y + STAGE_H // 2 - 40
@@ -508,6 +537,23 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
     # never stack on one point (R4).
     landings: dict[int, int] = {}
     bottom = y_bot + 74
+    node_labels = [" ".join(node.label.split()).casefold() for node in nodes]
+
+    def _echo_label(label: str, conn: FlowConnector) -> str:
+        """Drop connector labels that merely restate a node's own label.
+
+        Observed: node "Error e(t)" + connector label "e(t)" + chip "Error"
+        printed the same symbol around one arrow repeatedly. A label already
+        contained in its source/target node text adds no information.
+        """
+        text = " ".join(label.split()).casefold()
+        if not text:
+            return ""
+        for idx in (conn.source, conn.target):
+            if text in node_labels[idx]:
+                return ""
+        return label
+
     for conn in flow.connectors:
         if not (0 <= conn.source < n and 0 <= conn.target < n):
             continue
@@ -515,6 +561,7 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
         if key in seen_edges:
             continue
         seen_edges.add(key)
+        conn_label = _echo_label(conn.label, conn)
         s = centers[conn.source]
         t = centers[conn.target]
         if conn.feedback:
@@ -529,11 +576,11 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
             parts.append(
                 f'<polyline points="{path_pts}" fill="none" stroke="{RED}" stroke-width="2" stroke-dasharray="6 4"/>'
             )
-            if conn.label:
+            if conn_label:
                 # Label BELOW the V point — never inside the node band (R2).
                 parts.append(
                     f'<text x="{_f((sx + tx) / 2)}" y="{_f(vy + 18)}" '
-                    f'font-family="{_FONT}" font-size="14" fill="{RED}" text-anchor="middle">{_esc(conn.label)}</text>'
+                    f'font-family="{_FONT}" font-size="14" fill="{RED}" text-anchor="middle">{_esc(conn_label)}</text>'
                 )
             bottom = max(bottom, vy + 34)
         elif abs(conn.target - conn.source) == 1:
@@ -543,12 +590,12 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
             parts.append(_line(from_x + box_w / 2, y, to_x - box_w / 2, y, ACCENT, width=2.2))
             tip_x = to_x - box_w / 2 if arrow_deg == 0.0 else to_x + box_w / 2
             parts.append(_arrowhead(tip_x, y, arrow_deg, 11))
-            if conn.label:
+            if conn_label:
                 # Label ABOVE the boxes — the gap midpoint sits inside the
                 # node band, so centering there renders through boxes (R2).
                 parts.append(
                     f'<text x="{_f((from_x + to_x) / 2)}" y="{_f(y_top - 10)}" font-family="{_FONT}" font-size="14" '
-                    f'fill="{MUTED}" text-anchor="middle">{_esc(conn.label)}</text>'
+                    f'fill="{MUTED}" text-anchor="middle">{_esc(conn_label)}</text>'
                 )
         else:
             # Non-adjacent edge (fan-out/fan-in/backward): elbow routed ABOVE
@@ -569,10 +616,10 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
             )
             parts.append(seg)
             parts.append(_arrowhead(land_x, y_top, 270, 11))
-            if conn.label:
+            if conn_label:
                 parts.append(
                     f'<text x="{_f((ex + land_x) / 2)}" y="{_f(route_y - 6)}" font-family="{_FONT}" '
-                    f'font-size="14" fill="{MUTED}" text-anchor="middle">{_esc(conn.label)}</text>'
+                    f'font-size="14" fill="{MUTED}" text-anchor="middle">{_esc(conn_label)}</text>'
                 )
 
     # Relation card below (returned for the caller to place after the legend).
@@ -846,6 +893,25 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
                     p0, p1 = segs[-1][0], segs[-1][1]
                     anchor = ((p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2)
             label_anchors.append((anchor, curve.label, color))
+    # Spec-supplied straight primitives: lens lines, object/image arrows,
+    # dimension segments. Code owns the arrowhead geometry (never spec SVG).
+    for segment in plot.segments:
+        color = _VECTOR_COLORS.get(segment.color, ACCENT if segment.color == "" else INK)
+        sx, sy = map_x(segment.x1), map_y(segment.y1)
+        ex, ey = map_x(segment.x2), map_y(segment.y2)
+        dash = "6 4" if segment.style == "dashed" else None
+        parts.append(_line(sx, sy, ex, ey, color, width=2.4, dash=dash))
+        if segment.arrow:
+            deg = math.degrees(math.atan2(segment.y2 - segment.y1, segment.x2 - segment.x1))
+            parts.append(_arrowhead(ex, ey, deg, 11))
+        if (segment.label or "").strip():
+            label_anchors.append((((sx + ex) / 2, (sy + ey) / 2), segment.label.strip(), color))
+    for marker in plot.markers:
+        color = _VECTOR_COLORS.get(marker.color, ACCENT if marker.color == "" else INK)
+        mx, my = map_x(marker.x), map_y(marker.y)
+        parts.append(f'<circle cx="{_f(mx)}" cy="{_f(my)}" r="5" fill="{color}"/>')
+        if (marker.label or "").strip():
+            label_anchors.append(((mx, my), marker.label.strip(), color))
     # Generic collision-aware curve labels: labels sharing an anchor point
     # (e.g. "square ABCD" and "A(1,1)" ending at the same corner) get
     # deterministic fallback offsets so they never occupy the same box.
@@ -910,7 +976,7 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
     callouts: list[str] = []
     if generic is not None:
         central = (generic.central_label or "").strip()
-        callouts = [c.strip() for c in (generic.callouts or []) if c.strip()][:4]
+        callouts = [c.strip() for c in (generic.callouts or []) if c.strip()][:5]
     if not central:
         central = (scene.title or fallback_title or "Key Concept").strip()
     if not callouts:
@@ -920,7 +986,7 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
             callouts = _wrap(cap, 28)[:2]
     if not central and not callouts:
         return "", STAGE_Y + STAGE_H + 24, [], None
-    # layout: centre box + up to 4 satellites
+    # layout: centre box + up to 5 satellites
     cx, cy = 400.0, STAGE_Y + 230
     cw, ch = 220, 64
     parts: list[str] = []
@@ -931,10 +997,11 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
     for line in clines:
         parts.append(f'<text x="{_f(cx)}" y="{_f(ty)}" font-family="{_FONT}" font-size="14" font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>')
         ty += 18
-    # satellites
-    positions = [(-150, -96), (150, -96), (-150, 96), (150, 96)]
+    # satellites (fifth drops below centre so 5-item formula sheets never
+    # silently lose a formula to the old 4-satellite cap)
+    positions = [(-150, -96), (150, -96), (-150, 96), (150, 96), (0, 196)]
     bw, bh = 168, 46
-    for idx, txt in enumerate(callouts[:4]):
+    for idx, txt in enumerate(callouts[:5]):
         px, py = cx + positions[idx][0], cy + positions[idx][1]
         # connector
         sx = cx + (cw/2 + 8) * (1 if px > cx else -1) if abs(px - cx) > 80 else cx
@@ -1022,7 +1089,9 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
             parts.append(_rotation_arc(arc, center, label_deg=arc_deg))
             if arc.caption.strip():
                 legend.append(f"{arc.label.strip()} — {arc.caption.strip()}")
-        note_lines = _wrap(panel.note.strip(), 26)[:2] if panel.note.strip() else []
+        # Full note up to the stage floor (4 wrapped lines at 14px); the old
+        # [:2] cap cut every note mid-sentence (observed: biology comparison).
+        note_lines = _wrap(panel.note.strip(), 26)[:4] if panel.note.strip() else []
         for k, line in enumerate(note_lines):
             parts.append(
                 f'<text x="{_f(cx)}" y="{_f(note_y + k * 22)}" font-family="{_FONT}" font-size="14" '

@@ -299,7 +299,18 @@ async def test_concurrent_extraction(sample_text_image, sample_tight_table_image
             return resp
 
         results = await asyncio.gather(do_text(), do_table(), do_text(), do_table(), do_text())
-        assert all(r.status_code == 200 for r in results)
-        parsed = [ExtractionResponse(**r.json()) for r in results]
+        # Bounded admission (MAX_ADMITTED=1): one request runs, the rest are
+        # rejected FAST with 503 before any image work or credit charge —
+        # queueing behind the single heavy worker would exceed the client
+        # timeout with an unclear charge state.
+        statuses = [r.status_code for r in results]
+        assert 200 in statuses
+        assert all(code in (200, 503) for code in statuses), statuses
+        for r in results:
+            if r.status_code == 503:
+                body = r.json()
+                assert body["code"] == 503
+                assert "try again" in body["error"].lower()
+        parsed = [ExtractionResponse(**r.json()) for r in results if r.status_code == 200]
         assert all(p.creditsUsed >= 1 for p in parsed)
         assert all(len(p.markdown) > 0 for p in parsed)

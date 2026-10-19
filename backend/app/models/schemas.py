@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class ExtractionType(str, Enum):
@@ -278,6 +278,10 @@ class ForceDiagram(BaseModel):
     angles: list[VisualAngle] = []
     arcs: list[VisualArc] = []
     relation: VisualRelation | None = None
+    # True when the object rolls/rests on a surface: the renderer draws the
+    # ground/contact line under it. Rolling and friction contexts need the
+    # contact line present — without it the diagram reads as floating.
+    ground: bool = False
 
 
 class FlowNode(BaseModel):
@@ -307,6 +311,36 @@ class VisualCurve(BaseModel):
     x_max: float = 5.0
 
 
+class PlotMarker(BaseModel):
+    """One labeled point on a plot (focal point, vertex, object base, ...).
+
+    Semantics only: coordinates in data space. The renderer owns pixels,
+    halo placement and collision avoidance.
+    """
+
+    x: float = 0.0
+    y: float = 0.0
+    label: str = ""
+    color: str = ""  # ""|accent|red|green
+
+
+class PlotSegment(BaseModel):
+    """One straight labeled segment on a plot (lens, object/image arrow, ...).
+
+    With ``arrow`` the renderer draws an arrowhead at (x2, y2) — code-owned
+    geometry, so arrowheads are never spec-supplied SVG.
+    """
+
+    x1: float = 0.0
+    y1: float = 0.0
+    x2: float = 0.0
+    y2: float = 0.0
+    label: str = ""
+    color: str = ""  # ""|accent|red|green
+    style: Literal["solid", "dashed"] = "solid"
+    arrow: bool = False
+
+
 class VisualPlot(BaseModel):
     x_label: str = "x"
     y_label: str = "y"
@@ -316,6 +350,8 @@ class VisualPlot(BaseModel):
     y_max: float = 5.0
     show_grid: bool = True
     curves: list[VisualCurve] = Field(default_factory=list)
+    markers: list[PlotMarker] = Field(default_factory=list)
+    segments: list[PlotSegment] = Field(default_factory=list)
 
 
 class VisualGeneric(BaseModel):
@@ -374,6 +410,28 @@ class VisualNumberLineTrack(BaseModel):
     label: str = Field(default="", max_length=60)
     intervals: list[VisualInterval] = Field(default_factory=list, max_length=12)
     points: list[str] = Field(default_factory=list, max_length=12)
+
+    @field_validator("points", mode="before")
+    @classmethod
+    def _coerce_point_objects(cls, value: object) -> object:
+        """Accept the observed {"val": "-1", "open": true} point shape.
+
+        The repair leg occasionally emits excluded points as objects instead
+        of strings, which crashed repair with a pydantic error and turned an
+        otherwise recoverable number_line spec into a refusal. "open" carries
+        no extra information here (every listed point is an exclusion drawn
+        hollow), so only the exact value text is kept — never rounded, never
+        re-derived.
+        """
+        if not isinstance(value, list):
+            return value
+        out: list[object] = []
+        for item in value:
+            if isinstance(item, dict) and "val" in item:
+                out.append(str(item["val"]))
+            else:
+                out.append(item)
+        return out
 
 
 class VisualMathCase(BaseModel):
@@ -517,6 +575,34 @@ class DeterministicVisual(BaseModel):
     steps: list[str] = []
     points: list[str] = []
     composition: LessonComposition | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _coerce_card_items(cls, data: object) -> object:
+        """Tolerate near-miss shapes for the card lists before strict parse.
+
+        Observed LLM emission (thin-scene repair): "equations": ["1/v - 1/u
+        = 1/f"] — bare strings instead of {"expression", "meaning"} objects,
+        which hard-failed pydantic and turned a repairable spec into a 502.
+        Same class of shape drift for steps/points items. Coercion is
+        structural only: no value is altered, invented, or dropped.
+        """
+        if not isinstance(data, dict):
+            return data
+        equations = data.get("equations")
+        if isinstance(equations, list):
+            data["equations"] = [
+                {"expression": item, "meaning": ""} if isinstance(item, str) else item
+                for item in equations
+            ]
+        for key in ("steps", "points"):
+            values = data.get(key)
+            if isinstance(values, list):
+                data[key] = [
+                    item if isinstance(item, str) else ("" if item is None else str(item))
+                    for item in values
+                ]
+        return data
 
 
 

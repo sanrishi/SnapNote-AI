@@ -418,7 +418,31 @@ async def extract_study_notes(image_bytes: bytes) -> StudyNotes:
 
     if semantic and result.diagram_spec is not None:
         await _apply_diagram_spec(result, image_bytes)
+    _normalize_confidence(result)
     return result
+
+
+def _normalize_confidence(notes: StudyNotes) -> None:
+    """Canonicalize formula confidence labels to the three known states.
+
+    Gemini occasionally emits near-miss spellings (observed:
+    "possibleₑxtraction_issue" — U+2091 in place of 'e'; also capitalization
+    drift). The frontend keys its subtle-note / Verify Before Studying styling
+    off the EXACT string, so a near-miss silently renders as "clear" and hides
+    a real warning. NFKC folds the confusable subscript; containment matching
+    then maps to the canonical state. Unknown strings are left untouched —
+    guessing "clear" would hide evidence, guessing a warning would invent one.
+    """
+    import unicodedata
+
+    for formula in notes.key_formulas or []:
+        folded = unicodedata.normalize("NFKC", str(formula.confidence)).casefold()
+        if "extraction" in folded:
+            formula.confidence = "possible_extraction_issue"
+        elif "context" in folded:
+            formula.confidence = "context_needed"
+        elif "clear" in folded:
+            formula.confidence = "clear"
 
 
 async def _apply_diagram_spec(notes: StudyNotes, image_bytes: bytes) -> None:
@@ -448,8 +472,22 @@ async def _apply_diagram_spec(notes: StudyNotes, image_bytes: bytes) -> None:
     else:
         notes.diagram = DiagramRep(present=False, svg="")
         for reason in validation.reasons:
-            if reason.strip() and reason.strip() not in notes.uncertainties:
-                notes.uncertainties.append(reason.strip())
+            text = reason.strip()
+            if not text:
+                continue
+            # The spec leg says "No diagram was detected" when it has no
+            # geometry — but the extraction leg may have SEEN a diagram and
+            # described it in visual_context. Printing both contradicts the
+            # trust layer (observed: case 3 described the Argand diagram and
+            # still warned that no diagram was detected). Reword, never drop
+            # the uncertainty.
+            if "no diagram was detected" in text.casefold() and notes.visual_context.present:
+                text = (
+                    "The source diagram could not be rebuilt exactly — "
+                    "the visual context above describes it."
+                )
+            if text not in notes.uncertainties:
+                notes.uncertainties.append(text)
 
     notes.diagram_spec = None
 
@@ -461,6 +499,7 @@ async def extract_revision_guide(image_bytes: bytes, context_hint: str = "") -> 
     result = await _extract_structured(
         prompt, REVISION_REPAIR_PROMPT, image_bytes, StudyNotes
     )
+    _normalize_confidence(result)
     return result
 
 
@@ -479,10 +518,10 @@ TASK PLANNING (do this FIRST, before choosing any scene):
 Decide the teaching job in a "task" object. The task determines the representation — our validator rejects any scene that cannot do the task's job, so plan honestly:
    - "task_type": exactly one of "compare_variants" (lesson contrasts 2-3 cases: translation vs rotation, cases of a piecewise solution), "multi_step_solution" (domain/cases/steps combining into one conclusion), "graph_relationship" (a plotted relationship IS the lesson), "vector_arrangement" (bodies, forces/velocities, angles, pivots), "connected_process" (ordered steps with dependencies/feedback), "coordinate_construction" (points/polygons/dimensions placed on axes), "interval_solution" (worked inequality or domain problem whose answer is a union of intervals — ALWAYS when the lesson solves an inequality), "definition_overview" (only when nothing structural is drawable — last resort, never for comparable/graphable/vector content).
    - "learning_outcome": one sentence stating what the student will be able to do after seeing the visual.
-   - "required_elements": every entity the visual MUST show (bodies, points, axes, steps, variants). Each must be satisfiable by the chosen family's primitives — do not list what no family can draw.
+   - "required_elements": every entity the visual MUST show (bodies, points, axes, steps, variants), written as CONCRETE grounded strings — the actual symbols/values/names the scene will render ("x² − x", "F", "domain x > −3", "lens with F and F′"), never placeholder slot nouns ("problem", "domain", "solution", "diagram", "concept"). A required element is a content claim the validator checks against the rendered visual: a placeholder noun that appears nowhere in the scene fails the whole spec. Each must be satisfiable by the chosen family's primitives — do not list what no family can draw.
    - "required_relationships": the connections/transformations/constraints between them.
-   - "exact_claims": verbatim equations/values/labels from the image or notes that MUST appear (e.g. domain restrictions, final results). Copy them character-for-character; the validator checks their presence.
-   - "acceptable_families": scene kinds allowed for this task, chosen ONLY from this registry — compare_variants: ["comparison"]; multi_step_solution: ["process_flow"]; graph_relationship: ["plot"]; vector_arrangement: ["force_diagram"]; connected_process: ["process_flow"]; coordinate_construction: ["plot"]; interval_solution: ["number_line"]; definition_overview: any family. Your "scene.scene_kind" MUST be one of acceptable_families.
+   - "exact_claims": verbatim equations/values/labels from the image or notes that MUST appear (e.g. domain restrictions, final results). Copy them character-for-character; the validator checks their presence. Only declare claims you will actually PRINT in the visual (scene relation, equations, composition result/callouts) — do not copy every formula from the notes. Keep these to equations, values, and SHORT labels — never whole prose sentences: a sentence-length claim can only be satisfied by printing that sentence verbatim in the visual, which a clean diagram should not do. For a prose/definition lesson use the term labels instead ("Cell Theory", "Prokaryotic cells").
+   - "acceptable_families": SCENE KINDS allowed for this task, chosen ONLY from this registry — compare_variants: ["comparison"]; multi_step_solution: ["process_flow"]; graph_relationship: ["plot"]; vector_arrangement: ["force_diagram"]; connected_process: ["process_flow"]; coordinate_construction: ["plot"]; interval_solution: ["number_line"]; definition_overview: any family. These entries are scene_kind values ("force_diagram" | "process_flow" | "plot" | "generic" | "comparison" | "number_line") — NEVER task_type names like "definition_overview". Your "scene.scene_kind" MUST appear in acceptable_families, and acceptable_families must never contradict the registry row above.
    - "assumptions": anything you had to assume to draw (empty when nothing assumed). "missing": evidence you needed but could not find.
    - A simple concept gets a simple task (definition_overview with 1-2 elements). Never inflate a simple lesson to justify a fancy scene; never shrink a structured lesson into generic boxes.
 
@@ -491,6 +530,7 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
   - "scene_kind": "force_diagram" (vectors/forces/angles around a pivot: torque, lever arms, inclined planes, forces on a body) OR "process_flow" (labeled boxes with arrows: control loops, PID, workflows) OR "plot" (2D graphs: functions y=f(x), projectile trajectories, polar curves — rendered as clean axes + curves).
   - "force_diagram" fields:
       "object": {"kind": "pivot"|"disk"|"point"|"block", "label": "O" (a short name), "caption": "what it is"}
+      "ground": true|false — draw the surface the body rolls/rests on (baseline + contact point). ALWAYS true for a rolling disk, a block sliding on a floor/incline, or any body whose contact with the ground is part of the lesson; false otherwise. Without it a rolling body reads as floating.
       "vectors": [{"label": "r", "angle_deg": 55, "length": 1.0, "tail": "r" (label of the vector this one starts from; omit/empty to start at the object), "color": ""|"accent"|"red"|"green", "caption": "what this vector represents"}]
         - "angle_deg": direction in degrees, 0 = pointing right, 90 = straight up, 180 = left, 270 = down. Use the direction that matches the real diagram.
         - "length": relative length (0.4 to 1.6). 1.0 is the default.
@@ -499,15 +539,20 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
       "relation": {"expression": "τ = r × F" (exact Unicode equation, NO LaTeX, NO backslash), "caption": "one line meaning"}
         - PHYSICS CORRECTNESS (non-negotiable): velocity arrows show instantaneous direction of motion. For rotation about an axis, velocity is TANGENTIAL (perpendicular to the radius at that point) — never radial, never pointing at or away from the centre. A rotation arc shows the turning sense; a velocity vector on a rotating body must be tangent to its circular path. If the source does not fix the tangent direction, omit the vector rather than guessing.
   - "process_flow" fields:
-      "nodes": [{"label": "Controller"}, {"label": "Plant"}, ...] (2-6 nodes)
+      "nodes": [{"label": "P: Kp e(t)"}, {"label": "I: Ki ∫e dt"}, ...] (2-6 nodes)
+        - One node per distinct block visible on the board, in its real order. Keep labels TIGHT: block name + its own formula inline ("P: Kp e(t)", "Σ: sum", "Plant: G(s)"). Do NOT merge parallel blocks (P, I, D side by side) into one node and do NOT serialize a summing junction — a summation point is its own node labeled with Σ. Never transliterate symbols: write "Σ: sum" — never "Summation S" or "Sum"; write "∫ e(t)dt" — never "Integ e(t)dt"; × stays ×, Greek letters stay Greek.
       "connectors": [{"source": 0, "target": 1, "label": "u(t)" (optional), "feedback": false}]
         - "feedback": true on the connector that loops the output back to the input (drawn as a curved dashed return arrow).
+        - Do not repeat a node's own label as a connector label (the renderer drops the echo anyway, but the spec should be clean).
       "relation": {"expression": "...", "caption": "..."} (optional)
   - "plot" fields:
       "plot": {"x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true,
                "curves": [{"label": "y = x²", "expr": "x**2", "x_min": 0, "x_max": 2, "style": "solid", "color": "accent"},
-                          {"label": "trajectory", "points": [[0,0],[1,1.2],[2,1.8]], "style": "solid", "color": ""}]}
+                          {"label": "trajectory", "points": [[0,0],[1,1.2],[2,1.8]], "style": "solid", "color": ""}],
+               "markers": [{"x": 2.5, "y": 2.5, "label": "F", "color": "accent"}],
+               "segments": [{"x1": 2.5, "y1": 0.5, "x2": 2.5, "y2": 4.5, "label": "lens", "style": "dashed", "arrow": false}]}
         - each curve: EITHER "expr" (safe math in x: x, sin(x), cos(x), sqrt(x), exp(x), log(x), pi) with its own x_min/x_max, OR explicit "points" [[x,y],...]. Prefer expr for accuracy. Colors ""|accent|red|green.
+        - "markers": labeled points (focal points F, F′, vertices, intercepts) — drawn as a dot + label. "segments": straight primitives with optional "style": "solid"|"dashed", "arrow": true to put an arrowhead at (x2,y2). USE THESE for ray/lens diagrams on axes: the lens is a vertical dashed segment, F and F′ are markers, the object and image are vertical arrow segments, and rays are curves made of explicit points. Never fake a lens/arrow with a text label or a decorative curve.
         - discrete points and polygons: use explicit "points" with a "label" per vertex (e.g. an Argand-plane square: one closed loop [[-2,-2],[2,-2],[2,2],[-2,2],[-2,-2]] plus per-vertex labels like "A z = x + iy"). Vertices belong on the geometry as labels, never only in prose.
         - dimensions: express side lengths as short curve/vertex labels (e.g. "side = 4"), never as decorative text.
         - EQUATION FIDELITY: equation and expression strings must be copied verbatim from the image or notes — especially transformed expressions (e.g. write "z - 2Re(z) = -x + iy" exactly as shown; never rewrite Re(z) as Re(conjugate(z)) or otherwise "simplify"). The renderer prints these strings byte-identical; any mistranscription you emit becomes the student's wrong answer.
@@ -550,8 +595,8 @@ GROUNDING RULES:
 1. The screenshot is the source of truth. The study notes below are helpful context, but never invent content that conflicts with what the image actually shows.
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
 3. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
-4. Write labels as short, plain, readable text.
-5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. An inequality/domain solution should use a number_line. When the lesson explicitly compares 2-3 variants of one idea (e.g. pure translation vs pure rotation vs combined motion), use "comparison" with one panel per variant: each panel has a short label, an object (block for sliding, disk for rolling/spinning), the motion's own velocity vectors, a rotation arc ONLY where the variant actually rotates, and a one-line note. Velocity vectors on rotating bodies must be TANGENTIAL (perpendicular to the radius), never radial. Never use "generic" for a comparison lesson — a central box with formula callouts teaches nothing. If none of those fit, use "generic" with central_label (2-4 words) and 2-4 callouts (each a short phrase) — this guarantees every concept gets a labeled diagram. Never leave scene empty if you can make a generic.
+4. Write labels as short, plain, readable text. Preserve mathematical symbols VERBATIM: Σ, ∫, ×, ±, √, π, θ, ω, τ and other Greek letters stay exactly as written — never transliterate them into ASCII words or single letters ("Summation S", "Integ", "sqrt"). A student must read the same mathematics they saw on the board.
+5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. An inequality/domain solution should use a number_line. When the lesson explicitly compares 2-3 variants of one idea (e.g. pure translation vs pure rotation vs combined motion), use "comparison" with one panel per variant: each panel has a short label, an object (block for sliding, disk for rolling/spinning), the motion's own velocity vectors, a rotation arc ONLY where the variant actually rotates, and a one-line note. Velocity vectors on rotating bodies must be TANGENTIAL (perpendicular to the radius), never radial. Never use "generic" for a comparison lesson — a central box with formula callouts teaches nothing. If none of those fit, use "generic" with central_label (2-4 words) and 3-5 callouts, each written as "Label: value" — one idea per callout, max ~52 chars, carrying BOTH the symbol/formula and its meaning (e.g. "Σ i = n(n+1)/2: sum of first n integers") so the visual is self-contained. This guarantees every concept gets a labeled diagram. Never leave scene empty if you can make a generic.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
@@ -564,10 +609,10 @@ OUTPUT: ONLY a JSON object with exactly this structure:
     "scene": {
       "scene_kind": "force_diagram | process_flow | plot | generic | comparison | number_line",
       "caption": "one teaching sentence about what the diagram means",
-      "force": { "object": {...}, "vectors": [...], "angles": [...], "arcs": [...], "relation": {...} },
+      "force": { "object": {...}, "ground": false, "vectors": [...], "angles": [...], "arcs": [...], "relation": {...} },
       "flow": { "nodes": [...], "connectors": [...], "relation": {...} },
-      "plot": { "x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true, "curves": [{"label": "y=x²", "expr": "x**2", "x_min": 0, "x_max": 2}] },
-      "generic": { "central_label": "Main idea", "callouts": ["callout 1", "callout 2"] },
+      "plot": { "x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true, "curves": [{"label": "y=x²", "expr": "x**2", "x_min": 0, "x_max": 2}], "markers": [{"x": 2, "y": 4, "label": "F"}], "segments": [{"x1": 2, "y1": 0, "x2": 2, "y2": 5, "label": "lens", "style": "dashed"}] },
+      "generic": { "central_label": "Main idea", "callouts": ["F = ma: force equals mass times acceleration", "Σ i = n(n+1)/2: sum of first n integers"] },
       "comparison": { "panels": [{"label": "Pure translation", "object": {"kind": "block"}, "vectors": [{"label": "v", "angle_deg": 0, "length": 1.0}], "arcs": [], "note": "all points share v"}], "relation": {"expression": "v = ωr", "caption": "rolling link"} },
       "number_line": {
         "problem": "log_{x+3}(x² − x) < 1",
@@ -666,6 +711,40 @@ def _normalize_task_enums(data: dict) -> dict:
     return data
 
 
+def _normalize_composition_ids(data: dict) -> dict:
+    """Fold model-authored composition ids to the ASCII contract (pure).
+
+    Ids are internal anchors, not student-visible content. The model still
+    emits Unicode subscripts occasionally ("eqₐ", "rs₁"); the pydantic pattern
+    then crashed the repair leg and turned a recoverable spec into a refusal.
+    NFKC folds the confusables (ₐ→a, ₁→1); any remaining disallowed character
+    becomes "-". Equation/label text is untouched. Duplicate ids after folding
+    still fail honest composition validation downstream.
+    """
+    import re
+    import unicodedata
+
+    det = data.get("deterministic")
+    if not isinstance(det, dict):
+        return data
+    comp = det.get("composition")
+    if not isinstance(comp, dict):
+        return data
+    for section in ("callouts", "reasoning"):
+        items = comp.get(section)
+        if not isinstance(items, list):
+            continue
+        for index, item in enumerate(items):
+            if not isinstance(item, dict) or not isinstance(item.get("id"), str):
+                continue
+            raw = unicodedata.normalize("NFKC", item["id"]).strip().casefold()
+            norm = re.sub(r"[^a-z0-9_-]+", "-", raw).strip("-")
+            if not norm:
+                norm = f"item-{index + 1}"
+            item["id"] = norm[:32]
+    return data
+
+
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:
     """Produce the structured VisualSpec that drives the Explain Visually image.
 
@@ -681,7 +760,9 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
         prompt += "\n\nSTUDY NOTES (context — do not contradict the screenshot):\n" + notes_json
     raw = await _call_gemini(prompt, image_bytes, json_mode=True)
     try:
-        data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(raw)))
+        data = _normalize_composition_ids(
+            _normalize_task_enums(_clean_latex_in_dict(_extract_json(raw)))
+        )
         from app.utils.latex_clean import normalize_spec_math
 
         spec = normalize_spec_math(VisualSpec(**data))
@@ -729,7 +810,9 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
                 json_mode=True,
                 timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
             )
-            repair_data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(repair_raw)))
+            repair_data = _normalize_composition_ids(
+                _normalize_task_enums(_clean_latex_in_dict(_extract_json(repair_raw)))
+            )
             from app.utils.latex_clean import normalize_spec_math
 
             repaired = normalize_spec_math(VisualSpec(**repair_data))
@@ -757,7 +840,7 @@ COMPOSITION_RECONCILE_PROMPT = r"""You previously emitted the visual spec below,
 YOUR PREVIOUS RESPONSE:
 {{PREVIOUS_JSON}}
 
-Re-emit the COMPLETE spec JSON with this fixed: choose the ONE expression that is actually grounded in the screenshot and study notes and put that identical expression in BOTH the scene relation and the composition result (whitespace differences are fine). If neither expression is truly grounded, omit the composition block entirely instead — never invent a third expression to paper over the disagreement. Keep every other field identical to your previous response above. Respect all field constraints from the original prompt (callout label max 24 chars, value max 80; reasoning expression max 120; result max 120; takeaway max 200; plain-ASCII ids). Return ONLY the JSON object, no other text."""
+Re-emit the COMPLETE spec JSON with this fixed: choose the ONE expression that is actually grounded in the screenshot and study notes and put that identical expression in BOTH the scene relation and the composition result (whitespace differences are fine). The chosen expression MUST be a complete mathematical statement (contain "=" or a comparison operator) — a block name or node label such as "Plant G(s)" is never the relation; if the two candidates are "Plant G(s)" and an actual equation, the equation is the answer. If neither expression is truly grounded, omit the composition block entirely instead — never invent a third expression to paper over the disagreement. Keep every other field identical to your previous response above. Respect all field constraints from the original prompt (callout label max 24 chars, value max 80; reasoning expression max 120; result max 120; takeaway max 200; plain-ASCII ids). Return ONLY the JSON object, no other text."""
 
 
 def _composition_contradiction(spec: VisualSpec) -> tuple[str, str] | None:
@@ -785,6 +868,10 @@ THIN_SCENE_REPAIR_PROMPT = r"""Your previous visual plan was not acceptable: {RE
 Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants (use "comparison" with one panel per variant), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), process steps ("process_flow"), or a worked INEQUALITY/DOMAIN whose answer is an interval union ("number_line") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
 
 If the reason mentions a mathematics verification mismatch (phrases like "mathematically wrong", "cannot verify", "correct answer is", "correct domain is", "domain track is required", "case branch", "omits the positivity"), redo the solution carefully and re-emit a corrected "number_line" scene: apply the domain restrictions first (log argument > 0, log base > 0 and ≠ 1, denominators ≠ 0), ALWAYS include the "domain" track whenever any restriction exists, split by case (base > 1 keeps the inequality direction; 0 < base < 1 reverses it — write the condition with its full positivity bound, never a bare "BASE < 1"), intersect EVERY case with the domain, and only then take the union. Use the exact correct sets quoted in the reason when they are given. Never repeat the wrong set.
+
+If the reason mentions "number_line has no number_line payload", the scene kind is right but the payload is empty: emit the COMPLETE "number_line" object (problem + domain when any restriction exists + cases + solution) as the WORKED MATHEMATICS rules describe. Never leave it null.
+
+If the reason mentions "exact claim missing from scene", do NOT edit or drop the claims and do NOT change the scene kind or its geometry. Keep every existing scene primitive and print each missing claim VERBATIM: add it to "deterministic.equations" (expression = the claim) and/or as a composition callout (short label, claim as value). A force_diagram/plot/process_flow stays exactly that kind — switching it to "generic" or "comparison" is not a repair (a generic scene needs its own central_label and cannot satisfy disk/ground/axes requirements; a comparison with fewer than 2 labeled panels is refused). Only when the CURRENT scene is already "generic" should you add the claims as its callouts (3-5 verbatim callouts).
 
 If the lesson is genuinely simple or nothing drawable is honestly supported, return the spec JSON unchanged. Never invent formulas, numbers, vectors, curves, or relationships to fill the page. Return ONLY the JSON object, no other text.
 
@@ -842,7 +929,9 @@ async def repair_thin_spec(
             json_mode=True,
             timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
         )
-        repair_data = _normalize_task_enums(_clean_latex_in_dict(_extract_json(repair_raw)))
+        repair_data = _normalize_composition_ids(
+            _normalize_task_enums(_clean_latex_in_dict(_extract_json(repair_raw)))
+        )
         from app.utils.latex_clean import normalize_spec_math
 
         repaired = normalize_spec_math(VisualSpec(**repair_data))

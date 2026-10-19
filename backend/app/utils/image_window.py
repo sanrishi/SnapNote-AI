@@ -31,6 +31,35 @@ T = TypeVar("T")
 _IMAGE_WINDOW = threading.Semaphore(1)
 _HEAVY_WORKERS = ThreadPoolExecutor(max_workers=1, thread_name_prefix="image-window")
 
+# Admission control (bounded capacity): at most MAX_ADMITTED requests may be
+# inside a heavy route at once. Beyond that the route fails FAST (503, before
+# any credit charge) instead of queueing: with ONE heavy worker and ~23-25 s
+# per request, queueing already exceeds the 32 s client timeout, so a queued
+# request would present as a hang/timeout with an unclear charge state.
+# A lock-guarded counter (not a second semaphore) keeps the rejection path
+# non-blocking.
+MAX_ADMITTED = 1
+_admitted = 0
+_admitted_lock = threading.Lock()
+
+
+def admit_image_work() -> bool:
+    """Reserve a heavy-work slot; False when the instance is already busy."""
+    global _admitted
+    with _admitted_lock:
+        if _admitted >= MAX_ADMITTED:
+            return False
+        _admitted += 1
+        return True
+
+
+def release_image_work() -> None:
+    """Release a slot reserved by :func:`admit_image_work`."""
+    global _admitted
+    with _admitted_lock:
+        if _admitted > 0:
+            _admitted -= 1
+
 
 @contextmanager
 def image_window() -> Iterator[None]:

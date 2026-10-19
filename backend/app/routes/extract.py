@@ -2,7 +2,10 @@ import asyncio
 import logging
 import time
 import uuid
-from fastapi import APIRouter, Form, Header, UploadFile, File, HTTPException
+from collections.abc import AsyncIterator
+from typing import NoReturn
+
+from fastapi import APIRouter, Depends, Form, Header, UploadFile, File, HTTPException
 
 from app.config import settings
 from app.models.schemas import (
@@ -44,11 +47,21 @@ from app.utils.visual_lesson import (
 )
 from app.services.storage_service import upload_image
 from app.utils.grounding import ground_visual_context
-from app.utils.image_window import run_in_image_window
+from app.utils.image_window import (
+    admit_image_work,
+    release_image_work,
+    run_in_image_window,
+)
 from app.utils.render_notes import render_study_notes, render_jee_section
 from app.utils.tags import parse_context, generate_tags
 from app.utils.validation import validate_image_size
-from app.exceptions import AuthError, InvalidInputError, CreditLimitError, UpstreamError
+from app.exceptions import (
+    AuthError,
+    CreditLimitError,
+    InvalidInputError,
+    ServerBusyError,
+    UpstreamError,
+)
 from app.utils.auth import decode_token
 from app.utils.credits_store import (
     get_credits,
@@ -64,6 +77,42 @@ from app.utils.rate_limiter import check_rate_limits
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
+
+_VISUAL_REFUSAL = (
+    "Visual explanation unavailable for this material. The concept may not "
+    "translate into a clean visual — your study notes above still cover it."
+)
+
+
+async def image_admission() -> AsyncIterator[None]:
+    """Bounded-capacity gate for heavy routes, BEFORE credits or image work.
+
+    Only MAX_ADMITTED requests may run at once; beyond that the request fails
+    fast with 503 (retry guidance) instead of queueing behind a single heavy
+    worker past the client timeout. A rejection here never charges credits.
+    """
+    if not admit_image_work():
+        logger.warning("Extract admission rejected: heavy slot busy (fast 503)")
+        raise ServerBusyError()
+    try:
+        yield
+    finally:
+        release_image_work()
+
+
+def _refuse_visual(diagram_id: str, stage: str, reason: str = "") -> NoReturn:
+    """Single structured refusal log + 502 for the Explain Visually pipeline.
+
+    stage is the pipeline phase that refused: specification_generation |
+    contract_validation | verification | rendering | upstream.
+    """
+    logger.warning(
+        "Explain Visually refused (diagram %s): stage=%s reason=%s",
+        diagram_id[:8],
+        stage,
+        (reason or "n/a")[:300],
+    )
+    raise UpstreamError(service="SnapNote AI", detail=_VISUAL_REFUSAL)
 
 
 def _resolve_identity(deviceId: str, authorization: str | None) -> tuple[str, bool]:
@@ -127,6 +176,7 @@ async def extract_text_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
     authorization: str | None = Header(default=None),
+    _admission: None = Depends(image_admission),
 ) -> ExtractionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
@@ -198,6 +248,7 @@ async def extract_diagram_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
     authorization: str | None = Header(default=None),
+    _admission: None = Depends(image_admission),
 ) -> ExtractionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
@@ -263,6 +314,7 @@ async def extract_revision_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
     authorization: str | None = Header(default=None),
+    _admission: None = Depends(image_admission),
 ) -> RevisionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
@@ -313,6 +365,7 @@ async def extract_visual_route(
     deviceId: str = Form(...),
     diagramId: str = Form(...),
     authorization: str | None = Header(default=None),
+    _admission: None = Depends(image_admission),
 ) -> VisualExplanationResponse:
     """Explain Visually — free, bundled with the 5-credit diagram result.
 
@@ -359,7 +412,14 @@ async def extract_visual_route(
             study_notes = StudyNotes.model_validate_json(study_notes_json)
         except Exception as e:
             logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
-    spec = await build_visual_spec(enhanced, study_notes)
+    try:
+        spec = await build_visual_spec(enhanced, study_notes)
+    except UpstreamError as e:
+        logger.warning(
+            "Explain Visually refused (diagram %s): stage=specification_generation reason=%s",
+            diagramId[:8], e.message,
+        )
+        raise
 
     # Task coverage + validation gate (fail closed) — deterministic specs
     # only; generative specs are policed by generate_visual's own contract
@@ -378,12 +438,7 @@ async def extract_visual_route(
     # already delivered by the diagram response, so refusal here never
     # discards student work.
     if not isinstance(spec, VisualSpec):
-        logger.warning("Explain Visually pipeline returned non-spec output (diagram %s); refusing",
-                       diagramId[:8])
-        raise UpstreamError(
-            service="SnapNote AI",
-            detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
-        )
+        _refuse_visual(diagramId, "specification_generation", "pipeline returned non-spec output")
     if spec.render_mode == VisualRenderMode.DETERMINISTIC:
         scene_obj = spec.deterministic.scene
         scene_kind = scene_obj.scene_kind if scene_obj is not None else ""
@@ -458,13 +513,8 @@ async def extract_visual_route(
                 logger.info("Explain Visually repair accepted (diagram %s)", diagramId[:8])
                 spec = reconciled
             elif must_fix:
-                logger.warning(
-                    "Explain Visually refusing unvalidated spec (diagram %s): %s",
-                    diagramId[:8], "; ".join(rechecked[:3]),
-                )
-                raise UpstreamError(
-                    service="SnapNote AI",
-                    detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
+                _refuse_visual(
+                    diagramId, "contract_validation", "; ".join(rechecked[:3])
                 )
             else:
                 logger.info(
@@ -497,10 +547,7 @@ async def extract_visual_route(
             logger.info("Explain Visually legacy path (v3 flag off, diagram %s)", diagramId[:8])
         result = await generate_visual(spec)
     if result is None:
-        raise UpstreamError(
-            service="SnapNote AI",
-            detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
-        )
+        _refuse_visual(diagramId, "rendering", "renderer returned no visual")
 
     mode, payload = result
     if mode == "svg":
