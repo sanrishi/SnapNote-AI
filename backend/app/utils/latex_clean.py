@@ -87,13 +87,18 @@ _ASCII_MATH_RES = [
     (re.compile(r"\bcbrt\s*\("), "\u221b("),
     (re.compile(r"\bSum\b"), "\u03a3"),
     # "Integ" is the observed transliteration of ∫ inside printed formulas
-    # ("Ki × Integ e(t)dt"). Word-bounded so "Integral"/"Integration" (prose)
-    # are untouched.
-    (re.compile(r"\bInteg\b(?=\s*[A-Za-z(])"), "\u222b"),
+    # ("Ki × Integ e(t)dt", "Integ₋∞∞ f(t) dt"). Word-bounded so
+    # "Integral"/"Integration" (prose) are untouched; unicode
+    # subscript/superscript followers count as formula context.
+    (re.compile(r"\bInteg\b(?=\s*[A-Za-z(_\u2070-\u209f])"), "\u222b"),
     # "Summation S" is the observed transliteration of the Σ junction in a
     # control-flow label; exact two-word form only, so ordinary prose using
     # "summation" is untouched.
     (re.compile(r"\bSummation\s+S\b"), "\u03a3"),
+    # "Sumi₁ⁿ"/"Sumₙ₌₀∞" glue the index onto the word; only the word becomes
+    # Σ, the subscript block is preserved. The letter lookbehind keeps prose
+    # words containing "sumi"/"sum" mid-word untouched.
+    (re.compile(r"(?<![A-Za-z])Sumi?(?=[\u2070-\u209f])"), "\u03a3"),
 ]
 
 # Bare-word Greek: exactly the LaTeX converter's vocabulary minus the

@@ -126,9 +126,15 @@ def test_ascii_operators_and_functions():
     # Transliterated integral in printed formulas; "Integral" (prose) stays.
     assert normalize_ascii_math("Ki × Integ e(t)dt") == "Ki × ∫ e(t)dt"
     assert normalize_ascii_math("Integral action") == "Integral action"
+    # Case 10: unicode-subscript follower is still formula context.
+    assert normalize_ascii_math("Integ\u208b\u221e\u221e f(t) dt") == "\u222b\u208b\u221e\u221e f(t) dt"
     # Transliterated summation junction; ordinary prose is untouched.
     assert normalize_ascii_math("Summation S") == "Σ"
     assert normalize_ascii_math("Summation and integration") == "Summation and integration"
+    # Case 10: the index glued onto the word becomes a plain Σ, subscripts kept.
+    assert normalize_ascii_math("Sumi\u2081\u207f i = n(n+1)/2") == "\u03a3\u2081\u207f i = n(n+1)/2"
+    assert normalize_ascii_math("Sum\u2099\u208c\u2080\u221e f\u207f(a)/n!") == "\u03a3\u2099\u208c\u2080\u221e f\u207f(a)/n!"
+    assert normalize_ascii_math("Sumerian tablets") == "Sumerian tablets"
 
 
 def test_bare_word_greek_with_boundaries():
