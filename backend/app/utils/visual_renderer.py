@@ -1036,8 +1036,12 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
         sx = cx + (cw/2 + 8) * (1 if px > cx else -1) if abs(px - cx) > 80 else cx
         sy = cy + (ch/2 + 6) * (1 if py > cy else -1) if abs(py - cy) > 40 else cy
         parts.append(f'<line x1="{_f(sx)}" y1="{_f(sy)}" x2="{_f(px)}" y2="{_f(py)}" stroke="{ACCENT}" stroke-width="1.4" stroke-dasharray="5 4" opacity="0.9"/>')
-        parts.append(f'<rect x="{_f(px-bw/2)}" y="{_f(py-bh/2)}" width="{bw}" height="{bh}" rx="10" fill="{CARD_FILL}" stroke="{CARD_STROKE}" stroke-width="1.5"/>')
-        tlines = _wrap(txt, 22)
+        # Wrap to the pill width (18 chars at size 14 fits 168px at the 0.64
+        # advance; 22-char lines spilled ~15px past each edge) and grow the
+        # pill when the text block needs the height.
+        tlines = _wrap(txt, 18)
+        ph = max(bh, 22 + 14 * (len(tlines) - 1))
+        parts.append(f'<rect x="{_f(px-bw/2)}" y="{_f(py-ph/2)}" width="{bw}" height="{_f(ph)}" rx="10" fill="{CARD_FILL}" stroke="{CARD_STROKE}" stroke-width="1.5"/>')
         ty2 = py - (len(tlines) - 1) * 7
         for line in tlines:
             parts.append(f'<text x="{_f(px)}" y="{_f(ty2)}" font-family="{_FONT}" font-size="14" fill="{INK}" text-anchor="middle">{_esc(line)}</text>')

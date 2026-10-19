@@ -1673,6 +1673,36 @@ def test_generic_renders_five_callouts():
         assert text in svg
 
 
+def test_generic_satellite_text_fits_its_pill():
+    """Case 8 (run 4): a long callout wrapped at 22 chars spilled outside the
+    168px pill. Satellites now wrap to the pill width and grow when the text
+    block needs the height."""
+    from app.models.schemas import VisualGeneric
+    from app.utils.visual_renderer import _esc, _wrap
+
+    spec = _torque()
+    det = spec.deterministic
+    scene = det.scene
+    assert scene is not None
+    scene.scene_kind = "generic"
+    scene.force = None
+    long_text = (
+        "Cell Theory: All organisms are composed of cells; basic unit of "
+        "life; cells arise from pre-existing cells."
+    )
+    scene.generic = VisualGeneric(
+        central_label="Cell Structure & Theory", callouts=[long_text]
+    )
+    svg = render_hero_geometry(det)
+    lines = _wrap(long_text, 18)
+    assert max(len(line) for line in lines) <= 18
+    for line in lines:
+        assert _esc(line) in svg
+    expected_h = max(46, 22 + 14 * (len(lines) - 1))
+    assert f'height="{expected_h:.1f}"' in svg  # pill grew with its text
+    assert "organisms are composed" not in svg  # old 22-char spilling line
+
+
 def test_generic_composition_chips_deduplicated():
     """Case 10: generic hero satellites already ARE the callouts; the v3 chip
     grid repeated every formula verbatim below the scene."""
