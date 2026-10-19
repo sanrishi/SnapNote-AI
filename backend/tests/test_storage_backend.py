@@ -1266,6 +1266,96 @@ def test_visual_route_second_repair_attempt_recovers(
     assert "mathematically wrong" in second_reason
 
 
+def test_visual_route_rate_limited_spec_reports_high_demand(
+    sample_diagram_image, monkeypatch
+):
+    """A Gemini 429 during specification is upstream load, not a property of
+    the student's material: the error must say high demand, never 'the concept
+    may not translate'."""
+    from app.exceptions import UpstreamError
+    from app.utils.credits_store import get_credits, get_visual_entitlement
+
+    device = "visual-ratelimit-spec-0000000000000019"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec",
+        AsyncMock(
+            side_effect=UpstreamError(
+                service="Gemini Vision",
+                detail="429 RESOURCE_EXHAUSTED You exceeded your current quota",
+            )
+        ),
+    )
+    repair_mock = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    error = resp.json()["error"]
+    assert "high demand" in error
+    assert "may not translate" not in error
+    assert repair_mock.await_count == 0  # no pointless repair calls
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")
+    remaining, _ = get_credits(device)
+    assert remaining == 45  # diagram charged once; the refusal costs nothing
+
+
+def test_visual_route_rate_limited_repairs_report_high_demand(
+    sample_diagram_image, monkeypatch
+):
+    """When BOTH bounded repairs fail on 429 (no spec ever came back), the
+    refusal is upstream load; when any repair did return a spec that failed
+    validation, the honest material-specific refusal stands."""
+    from app.exceptions import UpstreamError
+    from app.utils.credits_store import get_visual_entitlement
+
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    rate_limited = UpstreamError(
+        service="Gemini Vision",
+        detail="429 RESOURCE_EXHAUSTED You exceeded your current quota",
+    )
+    wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+
+    # Scenario A — validation fails, both repair calls are rate limited.
+    device = "visual-ratelimit-fix-0000000000000020"
+    _reset_credits(device)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong)
+    )
+    repair_mock = AsyncMock(side_effect=rate_limited)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    error = resp.json()["error"]
+    assert "high demand" in error
+    assert "may not translate" not in error
+    assert repair_mock.await_count == 2
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")
+
+    # Scenario B — one repair 429, the other returns a still-invalid spec:
+    # a real validation signal exists, so the material refusal is truthful.
+    device2 = "visual-ratelimit-mix-0000000000000021"
+    _reset_credits(device2)
+    diagram_id2 = _make_diagram(device2, sample_diagram_image, monkeypatch)
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong)
+    )
+    repair_mock2 = AsyncMock(side_effect=[rate_limited, wrong])
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock2)
+
+    resp2 = _run_worked_math_visual(device2, diagram_id2, sample_diagram_image)
+    assert resp2.status_code == 502
+    error2 = resp2.json()["error"]
+    assert "unavailable" in error2
+    assert "high demand" not in error2
+    assert repair_mock2.await_count == 2
+
+
 def test_visual_route_security_payload_refused(sample_diagram_image, monkeypatch):
     """Executable-looking text smuggled through the math field is parsed by the
     safe grammar, refused as unverifiable, and never stored."""

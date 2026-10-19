@@ -83,6 +83,15 @@ _VISUAL_REFUSAL = (
     "Visual explanation unavailable for this material. The concept may not "
     "translate into a clean visual — your study notes above still cover it."
 )
+_VISUAL_HIGH_DEMAND = (
+    "Visual explanations are at high demand right now. Please try again in "
+    "a few minutes — your study notes above are already saved."
+)
+
+
+def _is_rate_limited(message: str) -> bool:
+    """Gemini capacity/quota signature (429 or RESOURCE_EXHAUSTED)."""
+    return "429" in message or "RESOURCE_EXHAUSTED" in message
 
 
 async def image_admission() -> AsyncIterator[None]:
@@ -416,6 +425,12 @@ async def extract_visual_route(
     try:
         spec = await build_visual_spec(enhanced, study_notes)
     except UpstreamError as e:
+        if _is_rate_limited(e.message):
+            logger.warning(
+                "Explain Visually declined (diagram %s): stage=specification_generation reason=rate_limited",
+                diagramId[:8],
+            )
+            raise UpstreamError(service="SnapNote AI", detail=_VISUAL_HIGH_DEMAND)
         logger.warning(
             "Explain Visually refused (diagram %s): stage=specification_generation reason=%s",
             diagramId[:8], e.message,
@@ -500,6 +515,8 @@ async def extract_visual_route(
             reconciled: VisualSpec | None = None
             accepted = False
             attempts = 2 if must_fix else 1
+            rate_limited_repairs = 0
+            repair_specs_seen = 0
             for attempt in range(1, attempts + 1):
                 reconciled = None
                 try:
@@ -507,9 +524,12 @@ async def extract_visual_route(
                 except Exception as e:
                     logger.warning("Explain Visually repair call failed (diagram %s, attempt %d): %s",
                                    diagramId[:8], attempt, e)
+                    if _is_rate_limited(str(e)):
+                        rate_limited_repairs += 1
                     reconciled = None
                 rechecked = ["repair failed"]
                 if reconciled is not None and isinstance(reconciled, VisualSpec):
+                    repair_specs_seen += 1
                     try:
                         rscene = reconciled.deterministic.scene
                         rkind = rscene.scene_kind if rscene is not None else ""
@@ -551,6 +571,12 @@ async def extract_visual_route(
                     )
             if not accepted:
                 if must_fix:
+                    if rate_limited_repairs and not repair_specs_seen:
+                        logger.warning(
+                            "Explain Visually declined (diagram %s): stage=contract_validation reason=rate_limited",
+                            diagramId[:8],
+                        )
+                        raise UpstreamError(service="SnapNote AI", detail=_VISUAL_HIGH_DEMAND)
                     _refuse_visual(
                         diagramId, "contract_validation", "; ".join(rechecked[:3])
                     )
