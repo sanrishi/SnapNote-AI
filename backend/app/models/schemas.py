@@ -266,6 +266,19 @@ class VisualArc(BaseModel):
     direction: Literal["ccw", "cw"] = "ccw"
     caption: str = ""
 
+    @field_validator("around", mode="before")
+    @classmethod
+    def _coerce_point_around(cls, value: object) -> object:
+        """Repair emissions sometimes give the arc centre as coordinates
+        (e.g. [0.0, 0.0]) instead of the wrapped object's label. Coordinates
+        for a rotation arc always mean the pivot, which is the renderer's
+        default when `around` is empty — so an empty label reproduces the
+        intended geometry exactly; only the redundant coordinate is dropped.
+        """
+        if isinstance(value, str) or value is None:
+            return value or ""
+        return ""
+
 
 class VisualRelation(BaseModel):
     expression: str = ""

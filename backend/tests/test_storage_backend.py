@@ -1011,7 +1011,8 @@ def test_visual_route_refuses_wrong_math_solution(sample_diagram_image, monkeypa
     resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
     assert resp.status_code == 502
     assert "unavailable" in resp.json()["error"]
-    assert repair_mock.await_count == 1
+    # Two bounded attempts: the second still gets the reason and may not pass.
+    assert repair_mock.await_count == 2
     reason = repair_mock.call_args.args[3]
     assert "mathematically wrong" in reason
     assert "(-3, -2) \u222a (-1, 0) \u222a (1, 3)" in reason
@@ -1155,11 +1156,42 @@ def test_visual_route_repaired_spec_is_reverified(sample_diagram_image, monkeypa
     resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
     assert resp.status_code == 502
     assert "unavailable" in resp.json()["error"]
-    assert repair_mock.await_count == 1
+    # Both bounded attempts returned a still-wrong spec; the gate held.
+    assert repair_mock.await_count == 2
     assert get_visual_entitlement(diagram_id)[1] in (None, "")
     assert get_visual_entitlement(diagram_id)[3] in (None, "")
     remaining, _ = get_credits(device)
     assert remaining == 45  # diagram charged once; the refusal costs nothing
+
+
+def test_visual_route_second_repair_attempt_recovers(
+    sample_diagram_image, monkeypatch
+):
+    """Reliability milestone: when the first repair returns a still-invalid
+    spec, the SECOND attempt receives the fresh revalidation errors and may
+    recover — the visual renders verified instead of a false refusal."""
+    device = "visual-repair2-00000000-0000-000000000018"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+    still_wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+    corrected = _number_line_spec(_CORRECT_SOLUTION)
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong)
+    )
+    repair_mock = AsyncMock(side_effect=[still_wrong, corrected])
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["status"] == "generated"
+    assert repair_mock.await_count == 2
+    # The second attempt was fed the fresh validation errors as its reason.
+    second_reason = repair_mock.call_args.args[3]
+    assert "mathematically wrong" in second_reason
 
 
 def test_visual_route_security_payload_refused(sample_diagram_image, monkeypatch):

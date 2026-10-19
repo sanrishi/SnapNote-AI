@@ -479,48 +479,71 @@ async def extract_visual_route(
                 or "thin spec"
             )
             logger.info(
-                "Explain Visually spec not enforceable (%s); attempting one bounded repair (diagram %s)",
+                "Explain Visually spec not enforceable (%s); attempting bounded repair (diagram %s)",
                 reason, diagramId[:8],
             )
-            try:
-                reconciled = await repair_thin_spec(spec, enhanced, study_notes, reason)
-            except Exception as e:
-                logger.warning("Explain Visually repair call failed (diagram %s): %s",
-                               diagramId[:8], e)
-                reconciled = None
+            # Bounded repair: at most 2 attempts, and a second one ONLY when
+            # the request already fails validation (must_fix) — an upgrade-
+            # only spec renders either way, so one attempt is enough there.
+            # A malformed/parse-failed repair or a still-invalid spec earns
+            # the second attempt with the fresh revalidation errors as the
+            # new reason; anything still failing refuses honestly after it.
             rechecked: list[str] = ["repair failed"]
-            if reconciled is not None and isinstance(reconciled, VisualSpec):
+            reconciled: VisualSpec | None = None
+            accepted = False
+            attempts = 2 if must_fix else 1
+            for attempt in range(1, attempts + 1):
+                reconciled = None
                 try:
-                    rscene = reconciled.deterministic.scene
-                    rkind = rscene.scene_kind if rscene is not None else ""
-                    if rkind and rkind != "generic" and reconciled.deterministic.task is None:
-                        if study_notes is not None:
-                            rderived = derive_task_from_source(study_notes, rkind)
-                        else:
-                            rderived = derive_task_from_scene(reconciled)
-                        if rderived is not None:
-                            reconciled.deterministic.task = rderived
-                    rechecked = validate_legacy_visual(reconciled)
-                    if (
-                        rscene is not None
-                        and rkind != "generic"
-                        and reconciled.deterministic.task is None
-                    ):
-                        rechecked = [*rechecked, "repaired spec has no task contract"]
+                    reconciled = await repair_thin_spec(spec, enhanced, study_notes, reason)
                 except Exception as e:
-                    rechecked = [f"revalidation failed: {e}"]
-            if reconciled is not None and not rechecked:
-                logger.info("Explain Visually repair accepted (diagram %s)", diagramId[:8])
-                spec = reconciled
-            elif must_fix:
-                _refuse_visual(
-                    diagramId, "contract_validation", "; ".join(rechecked[:3])
-                )
-            else:
-                logger.info(
-                    "Explain Visually upgrade repair not applied; rendering validated original (diagram %s)",
-                    diagramId[:8],
-                )
+                    logger.warning("Explain Visually repair call failed (diagram %s, attempt %d): %s",
+                                   diagramId[:8], attempt, e)
+                    reconciled = None
+                rechecked = ["repair failed"]
+                if reconciled is not None and isinstance(reconciled, VisualSpec):
+                    try:
+                        rscene = reconciled.deterministic.scene
+                        rkind = rscene.scene_kind if rscene is not None else ""
+                        if rkind and rkind != "generic" and reconciled.deterministic.task is None:
+                            if study_notes is not None:
+                                rderived = derive_task_from_source(study_notes, rkind)
+                            else:
+                                rderived = derive_task_from_scene(reconciled)
+                            if rderived is not None:
+                                reconciled.deterministic.task = rderived
+                        rechecked = validate_legacy_visual(reconciled)
+                        if (
+                            rscene is not None
+                            and rkind != "generic"
+                            and reconciled.deterministic.task is None
+                        ):
+                            rechecked = [*rechecked, "repaired spec has no task contract"]
+                    except Exception as e:
+                        rechecked = [f"revalidation failed: {e}"]
+                if reconciled is not None and not rechecked:
+                    logger.info("Explain Visually repair accepted (diagram %s, attempt %d)",
+                                diagramId[:8], attempt)
+                    spec = reconciled
+                    accepted = True
+                    break
+                if attempt < attempts:
+                    if rechecked and rechecked != ["repair failed"]:
+                        reason = "; ".join(rechecked[:3])
+                    logger.info(
+                        "Explain Visually repair attempt %d still invalid (%s); retrying (diagram %s)",
+                        attempt, reason, diagramId[:8],
+                    )
+            if not accepted:
+                if must_fix:
+                    _refuse_visual(
+                        diagramId, "contract_validation", "; ".join(rechecked[:3])
+                    )
+                else:
+                    logger.info(
+                        "Explain Visually upgrade repair not applied; rendering validated original (diagram %s)",
+                        diagramId[:8],
+                    )
 
     # Trust layer: the study-notes context summary describes the SOURCE
     # screenshot, but it renders under OUR rebuilt visual — drop any sentence

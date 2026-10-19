@@ -222,6 +222,17 @@ def test_composition_ids_folded_to_ascii():
     assert out["deterministic"]["composition"]["reasoning"][0]["id"] == "rs1"
 
 
+def test_arc_around_coordinates_coerce_to_pivot_default():
+    """Repair emission observed on case 4: arc.around=[0.0, 0.0] (the pivot)
+    instead of an object label hard-failed the parse; coordinates for a
+    rotation arc mean the pivot, which is the empty-label default."""
+    from app.models.schemas import VisualArc
+
+    assert VisualArc.model_validate({"label": "ω", "around": [0.0, 0.0]}).around == ""
+    assert VisualArc.model_validate({"around": None}).around == ""
+    assert VisualArc.model_validate({"around": "disk"}).around == "disk"
+
+
 def test_number_line_points_accept_val_objects():
     from app.models.schemas import VisualNumberLineTrack
 
