@@ -486,7 +486,7 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
     # resort. Pure character-count arithmetic — no font metrics, stays
     # byte-deterministic. Mean glyph advance 0.64 for 600-weight sans was
     # measured against the real PID board (0.58 let 8-char lines spill).
-    gap = 30 if n <= 4 else (20 if n <= 6 else 12)
+    gap = 30 if n <= 4 else (20 if n <= 6 else (12 if n <= 7 else 10))
     available = (CONTENT_W - 40 - (n - 1) * gap) / n
     font_size = 12
     wrapped: list[list[str]] = [_wrap(node.label, 10) for node in nodes]
@@ -507,10 +507,19 @@ def _render_flow(scene: VisualScene) -> tuple[str, int, list[str], VisualRelatio
             continue
         break
     else:
-        # Nothing fits even unbroken at the minimum font (single monster
-        # token): split as the last resort so the row never overflows.
-        wrapped = [_wrap(node.label, 6) for node in nodes]
-        font_size = 10
+        # A monster token cannot fit unbroken at any readable size. Split
+        # ONLY the labels that overflow: one over-long word must never mangle
+        # every other label (observed on the real PID row, where a 13-char
+        # word missed the 8px fit by 0.06px and all 8 labels broke mid-word).
+        font_size = 8
+        chunk = max(6, int((inner_w - 6) / (font_size * 0.64)))
+        wrapped = []
+        for node in nodes:
+            lines = _wrap(node.label, chunk, break_long_words=False)
+            widest = max((len(line) for line in lines), default=0)
+            if widest > chunk:
+                lines = _wrap(node.label, chunk)
+            wrapped.append(lines)
     box_w = min(170.0, available)
     max_lines = max(len(lines) for lines in wrapped)
     box_h = max(54, 20 + 22 * max_lines)
@@ -1314,7 +1323,13 @@ def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
     y = py + 14
 
     if nl.domain is not None and (nl.domain.intervals or nl.domain.points):
-        header, y = _section_header(y, "DOMAIN — WHERE THE LOG IS DEFINED")
+        domain_context = f"{nl.problem} {nl.domain.label}".casefold()
+        domain_header = (
+            "DOMAIN — WHERE THE LOG IS DEFINED"
+            if "log" in domain_context
+            else "DOMAIN — WHERE THE EXPRESSION IS DEFINED"
+        )
+        header, y = _section_header(y, domain_header)
         parts.append(header)
         label = nl.domain.label.strip()
         if label:

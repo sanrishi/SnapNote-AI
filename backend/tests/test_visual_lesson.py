@@ -715,8 +715,8 @@ def _pid_like_spec():
     spec.deterministic.scene.force = None
     spec.deterministic.scene.flow = ProcessFlow(
         nodes=[FlowNode(label=l) for l in [
-            "Set Point r(t)", "Error e(t)", "Proportional Kp × e(t)", "Integral Ki × ∫ e(t) dt",
-            "Derivative Kd × de/dt", "Summation S", "Plant G(s)", "Output y(t)"]],
+            "Set Point r(t)", "Error e(t)", "Proportional: Kp × e(t)", "Integral: Ki × ∫ e(t) dt",
+            "Derivative: Kd × de/dt", "Summation S", "Plant G(s)", "Output y(t)"]],
         connectors=[FlowConnector(source=0, target=1, label="r(t)"),
                     FlowConnector(source=1, target=2, label="e(t)"),
                     FlowConnector(source=1, target=3, label="e(t)"),
@@ -1621,8 +1621,31 @@ def test_flow_node_words_never_split_mid_word():
         "e(t)",
     ]
     svg = render_hero_geometry(_pid_like_spec().deterministic)
-    assert "Proportion</text>" not in svg
-    assert "Proportional" in svg
+    # Real board labels carry the colon ("Proportional:" is 13 chars, which
+    # missed the old 8px fit by 0.06px and tripped the blanket fallback).
+    assert "Proportional:</text>" in svg
+    assert "Derivative:</text>" in svg
+    assert "Propor</text>" not in svg
+    assert ">tional" not in svg
+    assert "Integr</text>" not in svg
+    assert "Deriva</text>" not in svg
+
+
+def test_flow_monster_token_splits_only_its_own_label():
+    """Last-resort fallback: one unbreakable monster word splits, but every
+    other label keeps whole words (the old blanket fallback mangled all 8
+    PID labels because a single 13-char word missed the 8px fit)."""
+    from app.models.schemas import FlowNode
+
+    spec = _pid_like_spec()
+    scene = spec.deterministic.scene
+    assert scene is not None and scene.flow is not None
+    scene.flow.nodes[2] = FlowNode(label="Pseudoproportional: Kp × e(t)")
+    svg = render_hero_geometry(spec.deterministic)
+    assert "Pseudoproportional:</text>" not in svg
+    assert "Pseudoproport</text>" in svg  # monster splits...
+    assert "Derivative:</text>" in svg  # ...while clean labels stay whole
+    assert "Plant G(s)</text>" in svg
 
 
 def test_generic_renders_five_callouts():

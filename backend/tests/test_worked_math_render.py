@@ -138,6 +138,22 @@ def test_closed_endpoint_filled_dot():
     assert ">1.5</text>" not in svg
 
 
+def test_rational_domain_header_is_not_log_specific():
+    """Case 2: a rational inequality's domain track must not be labelled
+    with log wording ("DOMAIN — WHERE THE LOG IS DEFINED")."""
+    nl = VisualNumberLine(
+        problem="(x - 2)/(x + 3) <= 0",
+        domain=_track(
+            [("-inf", "-3", False, False), ("-3", "inf", False, False)],
+            label="x + 3 \u2260 0",
+        ),
+        solution=_track([("-3", "2", False, True)]),
+    )
+    svg = _svg(nl)
+    assert "DOMAIN \u2014 WHERE THE EXPRESSION IS DEFINED" in svg
+    assert "WHERE THE LOG" not in svg
+
+
 def test_content_fitted_height_no_fixed_stage():
     svg = _svg(_regression_nl())
     m = re.search(r'viewBox="0 0 800 (\d+)"', svg)
