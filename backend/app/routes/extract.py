@@ -2,7 +2,10 @@ import asyncio
 import logging
 import time
 import uuid
-from fastapi import APIRouter, Form, Header, UploadFile, File, HTTPException
+from collections.abc import AsyncIterator
+from typing import NoReturn
+
+from fastapi import APIRouter, Depends, Form, Header, UploadFile, File, HTTPException
 
 from app.config import settings
 from app.models.schemas import (
@@ -36,6 +39,7 @@ from app.services.visual_service import generate_visual
 from app.utils.visual_lesson import (
     derive_task_from_scene,
     derive_task_from_source,
+    promote_equation_claims,
     render_v3_visual,
     should_use_v3,
     spec_needs_repair,
@@ -44,11 +48,21 @@ from app.utils.visual_lesson import (
 )
 from app.services.storage_service import upload_image
 from app.utils.grounding import ground_visual_context
-from app.utils.image_window import run_in_image_window
+from app.utils.image_window import (
+    admit_image_work,
+    release_image_work,
+    run_in_image_window,
+)
 from app.utils.render_notes import render_study_notes, render_jee_section
 from app.utils.tags import parse_context, generate_tags
 from app.utils.validation import validate_image_size
-from app.exceptions import AuthError, InvalidInputError, CreditLimitError, UpstreamError
+from app.exceptions import (
+    AuthError,
+    CreditLimitError,
+    InvalidInputError,
+    ServerBusyError,
+    UpstreamError,
+)
 from app.utils.auth import decode_token
 from app.utils.credits_store import (
     get_credits,
@@ -64,6 +78,51 @@ from app.utils.rate_limiter import check_rate_limits
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
+
+_VISUAL_REFUSAL = (
+    "Visual explanation unavailable for this material. The concept may not "
+    "translate into a clean visual — your study notes above still cover it."
+)
+_VISUAL_HIGH_DEMAND = (
+    "Visual explanations are at high demand right now. Please try again in "
+    "a few minutes — your study notes above are already saved."
+)
+
+
+def _is_rate_limited(message: str) -> bool:
+    """Gemini capacity/quota signature (429 or RESOURCE_EXHAUSTED)."""
+    return "429" in message or "RESOURCE_EXHAUSTED" in message
+
+
+async def image_admission() -> AsyncIterator[None]:
+    """Bounded-capacity gate for heavy routes, BEFORE credits or image work.
+
+    Only MAX_ADMITTED requests may run at once; beyond that the request fails
+    fast with 503 (retry guidance) instead of queueing behind a single heavy
+    worker past the client timeout. A rejection here never charges credits.
+    """
+    if not admit_image_work():
+        logger.warning("Extract admission rejected: heavy slot busy (fast 503)")
+        raise ServerBusyError()
+    try:
+        yield
+    finally:
+        release_image_work()
+
+
+def _refuse_visual(diagram_id: str, stage: str, reason: str = "") -> NoReturn:
+    """Single structured refusal log + 502 for the Explain Visually pipeline.
+
+    stage is the pipeline phase that refused: specification_generation |
+    contract_validation | verification | rendering | upstream.
+    """
+    logger.warning(
+        "Explain Visually refused (diagram %s): stage=%s reason=%s",
+        diagram_id[:8],
+        stage,
+        (reason or "n/a")[:300],
+    )
+    raise UpstreamError(service="SnapNote AI", detail=_VISUAL_REFUSAL)
 
 
 def _resolve_identity(deviceId: str, authorization: str | None) -> tuple[str, bool]:
@@ -127,6 +186,7 @@ async def extract_text_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
     authorization: str | None = Header(default=None),
+    _admission: None = Depends(image_admission),
 ) -> ExtractionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
@@ -198,6 +258,7 @@ async def extract_diagram_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
     authorization: str | None = Header(default=None),
+    _admission: None = Depends(image_admission),
 ) -> ExtractionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
@@ -263,6 +324,7 @@ async def extract_revision_route(
     context: str = Form("{}"),
     deviceId: str = Form(...),
     authorization: str | None = Header(default=None),
+    _admission: None = Depends(image_admission),
 ) -> RevisionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
@@ -313,6 +375,7 @@ async def extract_visual_route(
     deviceId: str = Form(...),
     diagramId: str = Form(...),
     authorization: str | None = Header(default=None),
+    _admission: None = Depends(image_admission),
 ) -> VisualExplanationResponse:
     """Explain Visually — free, bundled with the 5-credit diagram result.
 
@@ -359,7 +422,20 @@ async def extract_visual_route(
             study_notes = StudyNotes.model_validate_json(study_notes_json)
         except Exception as e:
             logger.warning("Stored study notes invalid for diagram %s: %s", diagramId[:8], e)
-    spec = await build_visual_spec(enhanced, study_notes)
+    try:
+        spec = await build_visual_spec(enhanced, study_notes)
+    except UpstreamError as e:
+        if _is_rate_limited(e.message):
+            logger.warning(
+                "Explain Visually declined (diagram %s): stage=specification_generation reason=rate_limited",
+                diagramId[:8],
+            )
+            raise UpstreamError(service="SnapNote AI", detail=_VISUAL_HIGH_DEMAND)
+        logger.warning(
+            "Explain Visually refused (diagram %s): stage=specification_generation reason=%s",
+            diagramId[:8], e.message,
+        )
+        raise
 
     # Task coverage + validation gate (fail closed) — deterministic specs
     # only; generative specs are policed by generate_visual's own contract
@@ -378,12 +454,7 @@ async def extract_visual_route(
     # already delivered by the diagram response, so refusal here never
     # discards student work.
     if not isinstance(spec, VisualSpec):
-        logger.warning("Explain Visually pipeline returned non-spec output (diagram %s); refusing",
-                       diagramId[:8])
-        raise UpstreamError(
-            service="SnapNote AI",
-            detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
-        )
+        _refuse_visual(diagramId, "specification_generation", "pipeline returned non-spec output")
     if spec.render_mode == VisualRenderMode.DETERMINISTIC:
         scene_obj = spec.deterministic.scene
         scene_kind = scene_obj.scene_kind if scene_obj is not None else ""
@@ -400,6 +471,13 @@ async def extract_visual_route(
                         diagramId[:8],
                     )
             gate_errors = validate_legacy_visual(spec)
+            promoted = promote_equation_claims(spec, gate_errors)
+            if promoted:
+                logger.info(
+                    "Explain Visually promoted %d equations-only claim(s) into visible callouts (diagram %s)",
+                    promoted, diagramId[:8],
+                )
+                gate_errors = validate_legacy_visual(spec)
         except Exception as e:
             logger.warning("Explain Visually task/validation stage failed (diagram %s): %s",
                            diagramId[:8], e)
@@ -424,53 +502,89 @@ async def extract_visual_route(
                 or "thin spec"
             )
             logger.info(
-                "Explain Visually spec not enforceable (%s); attempting one bounded repair (diagram %s)",
+                "Explain Visually spec not enforceable (%s); attempting bounded repair (diagram %s)",
                 reason, diagramId[:8],
             )
-            try:
-                reconciled = await repair_thin_spec(spec, enhanced, study_notes, reason)
-            except Exception as e:
-                logger.warning("Explain Visually repair call failed (diagram %s): %s",
-                               diagramId[:8], e)
-                reconciled = None
+            # Bounded repair: at most 2 attempts, and a second one ONLY when
+            # the request already fails validation (must_fix) — an upgrade-
+            # only spec renders either way, so one attempt is enough there.
+            # A malformed/parse-failed repair or a still-invalid spec earns
+            # the second attempt with the fresh revalidation errors as the
+            # new reason; anything still failing refuses honestly after it.
             rechecked: list[str] = ["repair failed"]
-            if reconciled is not None and isinstance(reconciled, VisualSpec):
+            reconciled: VisualSpec | None = None
+            accepted = False
+            attempts = 2 if must_fix else 1
+            rate_limited_repairs = 0
+            repair_specs_seen = 0
+            for attempt in range(1, attempts + 1):
+                reconciled = None
                 try:
-                    rscene = reconciled.deterministic.scene
-                    rkind = rscene.scene_kind if rscene is not None else ""
-                    if rkind and rkind != "generic" and reconciled.deterministic.task is None:
-                        if study_notes is not None:
-                            rderived = derive_task_from_source(study_notes, rkind)
-                        else:
-                            rderived = derive_task_from_scene(reconciled)
-                        if rderived is not None:
-                            reconciled.deterministic.task = rderived
-                    rechecked = validate_legacy_visual(reconciled)
-                    if (
-                        rscene is not None
-                        and rkind != "generic"
-                        and reconciled.deterministic.task is None
-                    ):
-                        rechecked = [*rechecked, "repaired spec has no task contract"]
+                    reconciled = await repair_thin_spec(spec, enhanced, study_notes, reason)
                 except Exception as e:
-                    rechecked = [f"revalidation failed: {e}"]
-            if reconciled is not None and not rechecked:
-                logger.info("Explain Visually repair accepted (diagram %s)", diagramId[:8])
-                spec = reconciled
-            elif must_fix:
-                logger.warning(
-                    "Explain Visually refusing unvalidated spec (diagram %s): %s",
-                    diagramId[:8], "; ".join(rechecked[:3]),
-                )
-                raise UpstreamError(
-                    service="SnapNote AI",
-                    detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
-                )
-            else:
-                logger.info(
-                    "Explain Visually upgrade repair not applied; rendering validated original (diagram %s)",
-                    diagramId[:8],
-                )
+                    logger.warning("Explain Visually repair call failed (diagram %s, attempt %d): %s",
+                                   diagramId[:8], attempt, e)
+                    if _is_rate_limited(str(e)):
+                        rate_limited_repairs += 1
+                    reconciled = None
+                rechecked = ["repair failed"]
+                if reconciled is not None and isinstance(reconciled, VisualSpec):
+                    repair_specs_seen += 1
+                    try:
+                        rscene = reconciled.deterministic.scene
+                        rkind = rscene.scene_kind if rscene is not None else ""
+                        if rkind and rkind != "generic" and reconciled.deterministic.task is None:
+                            if study_notes is not None:
+                                rderived = derive_task_from_source(study_notes, rkind)
+                            else:
+                                rderived = derive_task_from_scene(reconciled)
+                            if rderived is not None:
+                                reconciled.deterministic.task = rderived
+                        rechecked = validate_legacy_visual(reconciled)
+                        rpromoted = promote_equation_claims(reconciled, rechecked)
+                        if rpromoted:
+                            logger.info(
+                                "Explain Visually promoted %d equations-only claim(s) from repaired spec (diagram %s)",
+                                rpromoted, diagramId[:8],
+                            )
+                            rechecked = validate_legacy_visual(reconciled)
+                        if (
+                            rscene is not None
+                            and rkind != "generic"
+                            and reconciled.deterministic.task is None
+                        ):
+                            rechecked = [*rechecked, "repaired spec has no task contract"]
+                    except Exception as e:
+                        rechecked = [f"revalidation failed: {e}"]
+                if reconciled is not None and not rechecked:
+                    logger.info("Explain Visually repair accepted (diagram %s, attempt %d)",
+                                diagramId[:8], attempt)
+                    spec = reconciled
+                    accepted = True
+                    break
+                if attempt < attempts:
+                    if rechecked and rechecked != ["repair failed"]:
+                        reason = "; ".join(rechecked[:3])
+                    logger.info(
+                        "Explain Visually repair attempt %d still invalid (%s); retrying (diagram %s)",
+                        attempt, reason, diagramId[:8],
+                    )
+            if not accepted:
+                if must_fix:
+                    if rate_limited_repairs and not repair_specs_seen:
+                        logger.warning(
+                            "Explain Visually declined (diagram %s): stage=contract_validation reason=rate_limited",
+                            diagramId[:8],
+                        )
+                        raise UpstreamError(service="SnapNote AI", detail=_VISUAL_HIGH_DEMAND)
+                    _refuse_visual(
+                        diagramId, "contract_validation", "; ".join(rechecked[:3])
+                    )
+                else:
+                    logger.info(
+                        "Explain Visually upgrade repair not applied; rendering validated original (diagram %s)",
+                        diagramId[:8],
+                    )
 
     # Trust layer: the study-notes context summary describes the SOURCE
     # screenshot, but it renders under OUR rebuilt visual — drop any sentence
@@ -497,10 +611,7 @@ async def extract_visual_route(
             logger.info("Explain Visually legacy path (v3 flag off, diagram %s)", diagramId[:8])
         result = await generate_visual(spec)
     if result is None:
-        raise UpstreamError(
-            service="SnapNote AI",
-            detail="Visual explanation unavailable for this material. The concept may not translate into a clean visual — your study notes above still cover it.",
-        )
+        _refuse_visual(diagramId, "rendering", "renderer returned no visual")
 
     mode, payload = result
     if mode == "svg":

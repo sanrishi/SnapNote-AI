@@ -696,6 +696,78 @@ def test_visual_route_repairs_validation_refusal(sample_diagram_image, monkeypat
     assert remaining == 45
 
 
+def test_visual_route_promotes_equations_only_claim(sample_diagram_image, monkeypatch):
+    """Trust layer: a claim living only in deterministic.equations renders
+    nowhere; the route promotes it into a visible callout deterministically
+    instead of paying for a model repair."""
+    from app.models.schemas import (
+        CompositionCallout,
+        LessonComposition,
+        VisualEquation,
+        VisualTask,
+    )
+    from app.utils.credits_store import get_credits
+
+    device = "visual-promote-claim-00000000-0000-000000000019"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async = AsyncMock(
+        return_value=type("o", (), {"text": json.dumps(_DIAGRAM_PAYLOAD)})()
+    )
+    monkeypatch.setattr("app.services.vision_service.model", mock_model)
+
+    async def run_diagram():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await _post_diagram(client, device, sample_diagram_image)
+
+    diagram_id = asyncio.run(run_diagram()).json()["diagramId"]
+
+    spec = _rich_force_spec()
+    spec.deterministic.equations = [
+        VisualEquation(expression="L = I\u03c9", meaning="angular momentum")
+    ]
+    spec.deterministic.composition = LessonComposition(
+        title="Torque",
+        callouts=[CompositionCallout(label="O", value="pivot")],
+    )
+    spec.deterministic.task = VisualTask(
+        task_type="vector_arrangement",
+        learning_outcome="x",
+        required_elements=[],
+        required_relationships=[],
+        exact_claims=["L = I\u03c9"],
+        acceptable_families=["force_diagram"],
+        assumptions=[],
+        missing=[],
+    )
+    monkeypatch.setattr("app.routes.extract.build_visual_spec", AsyncMock(return_value=spec))
+    repair_mock = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+    monkeypatch.setattr(
+        "app.routes.extract.render_v3_visual", AsyncMock(return_value=("svg", "<svg>hero</svg>")))
+
+    async def run_visual():
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            return await client.post(
+                "/api/extract/visual",
+                files={"image": ("v.png", sample_diagram_image, "image/png")},
+                data={"deviceId": device, "diagramId": diagram_id},
+            )
+
+    resp = asyncio.run(run_visual())
+    assert resp.status_code == 200
+    assert resp.json()["status"] == "generated"
+    assert repair_mock.await_count == 0
+    assert spec.deterministic.composition is not None
+    assert any(
+        c.label == "L = I\u03c9" for c in spec.deterministic.composition.callouts
+    )
+    remaining, _ = get_credits(device)
+    assert remaining == 45
+
+
 def test_visual_route_derives_missing_task(sample_diagram_image, monkeypatch):
     """A task-less spec gets a derived contract attached before rendering —
     the legacy bypass is closed, deterministically, with no extra LLM call."""
@@ -1011,7 +1083,8 @@ def test_visual_route_refuses_wrong_math_solution(sample_diagram_image, monkeypa
     resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
     assert resp.status_code == 502
     assert "unavailable" in resp.json()["error"]
-    assert repair_mock.await_count == 1
+    # Two bounded attempts: the second still gets the reason and may not pass.
+    assert repair_mock.await_count == 2
     reason = repair_mock.call_args.args[3]
     assert "mathematically wrong" in reason
     assert "(-3, -2) \u222a (-1, 0) \u222a (1, 3)" in reason
@@ -1155,11 +1228,132 @@ def test_visual_route_repaired_spec_is_reverified(sample_diagram_image, monkeypa
     resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
     assert resp.status_code == 502
     assert "unavailable" in resp.json()["error"]
-    assert repair_mock.await_count == 1
+    # Both bounded attempts returned a still-wrong spec; the gate held.
+    assert repair_mock.await_count == 2
     assert get_visual_entitlement(diagram_id)[1] in (None, "")
     assert get_visual_entitlement(diagram_id)[3] in (None, "")
     remaining, _ = get_credits(device)
     assert remaining == 45  # diagram charged once; the refusal costs nothing
+
+
+def test_visual_route_second_repair_attempt_recovers(
+    sample_diagram_image, monkeypatch
+):
+    """Reliability milestone: when the first repair returns a still-invalid
+    spec, the SECOND attempt receives the fresh revalidation errors and may
+    recover — the visual renders verified instead of a false refusal."""
+    device = "visual-repair2-00000000-0000-000000000018"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+    still_wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+    corrected = _number_line_spec(_CORRECT_SOLUTION)
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong)
+    )
+    repair_mock = AsyncMock(side_effect=[still_wrong, corrected])
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["status"] == "generated"
+    assert repair_mock.await_count == 2
+    # The second attempt was fed the fresh validation errors as its reason.
+    second_reason = repair_mock.call_args.args[3]
+    assert "mathematically wrong" in second_reason
+
+
+def test_visual_route_rate_limited_spec_reports_high_demand(
+    sample_diagram_image, monkeypatch
+):
+    """A Gemini 429 during specification is upstream load, not a property of
+    the student's material: the error must say high demand, never 'the concept
+    may not translate'."""
+    from app.exceptions import UpstreamError
+    from app.utils.credits_store import get_credits, get_visual_entitlement
+
+    device = "visual-ratelimit-spec-0000000000000019"
+    _reset_credits(device)
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec",
+        AsyncMock(
+            side_effect=UpstreamError(
+                service="Gemini Vision",
+                detail="429 RESOURCE_EXHAUSTED You exceeded your current quota",
+            )
+        ),
+    )
+    repair_mock = AsyncMock(return_value=None)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    error = resp.json()["error"]
+    assert "high demand" in error
+    assert "may not translate" not in error
+    assert repair_mock.await_count == 0  # no pointless repair calls
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")
+    remaining, _ = get_credits(device)
+    assert remaining == 45  # diagram charged once; the refusal costs nothing
+
+
+def test_visual_route_rate_limited_repairs_report_high_demand(
+    sample_diagram_image, monkeypatch
+):
+    """When BOTH bounded repairs fail on 429 (no spec ever came back), the
+    refusal is upstream load; when any repair did return a spec that failed
+    validation, the honest material-specific refusal stands."""
+    from app.exceptions import UpstreamError
+    from app.utils.credits_store import get_visual_entitlement
+
+    monkeypatch.setattr("app.config.settings.IMAGE_STORAGE_BACKEND", "data_uri", raising=False)
+    rate_limited = UpstreamError(
+        service="Gemini Vision",
+        detail="429 RESOURCE_EXHAUSTED You exceeded your current quota",
+    )
+    wrong = _number_line_spec([("-3", "-2", False, False), ("-1", "3", False, False)])
+
+    # Scenario A — validation fails, both repair calls are rate limited.
+    device = "visual-ratelimit-fix-0000000000000020"
+    _reset_credits(device)
+    diagram_id = _make_diagram(device, sample_diagram_image, monkeypatch)
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong)
+    )
+    repair_mock = AsyncMock(side_effect=rate_limited)
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock)
+
+    resp = _run_worked_math_visual(device, diagram_id, sample_diagram_image)
+    assert resp.status_code == 502
+    error = resp.json()["error"]
+    assert "high demand" in error
+    assert "may not translate" not in error
+    assert repair_mock.await_count == 2
+    assert get_visual_entitlement(diagram_id)[1] in (None, "")
+
+    # Scenario B — one repair 429, the other returns a still-invalid spec:
+    # a real validation signal exists, so the material refusal is truthful.
+    device2 = "visual-ratelimit-mix-0000000000000021"
+    _reset_credits(device2)
+    diagram_id2 = _make_diagram(device2, sample_diagram_image, monkeypatch)
+    monkeypatch.setattr(
+        "app.routes.extract.build_visual_spec", AsyncMock(return_value=wrong)
+    )
+    repair_mock2 = AsyncMock(side_effect=[rate_limited, wrong])
+    monkeypatch.setattr("app.routes.extract.repair_thin_spec", repair_mock2)
+
+    resp2 = _run_worked_math_visual(device2, diagram_id2, sample_diagram_image)
+    assert resp2.status_code == 502
+    error2 = resp2.json()["error"]
+    assert "unavailable" in error2
+    assert "high demand" not in error2
+    assert repair_mock2.await_count == 2
 
 
 def test_visual_route_security_payload_refused(sample_diagram_image, monkeypatch):

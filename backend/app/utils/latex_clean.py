@@ -86,6 +86,19 @@ _ASCII_MATH_RES = [
     (re.compile(r"\bsqrt\s*\("), "\u221a("),
     (re.compile(r"\bcbrt\s*\("), "\u221b("),
     (re.compile(r"\bSum\b"), "\u03a3"),
+    # "Integ" is the observed transliteration of ∫ inside printed formulas
+    # ("Ki × Integ e(t)dt", "Integ₋∞∞ f(t) dt"). Word-bounded so
+    # "Integral"/"Integration" (prose) are untouched; unicode
+    # subscript/superscript followers count as formula context.
+    (re.compile(r"\bInteg\b(?=\s*[A-Za-z(_\u2070-\u209f])"), "\u222b"),
+    # "Summation S" is the observed transliteration of the Σ junction in a
+    # control-flow label; exact two-word form only, so ordinary prose using
+    # "summation" is untouched.
+    (re.compile(r"\bSummation\s+S\b"), "\u03a3"),
+    # "Sumi₁ⁿ"/"Sumₙ₌₀∞" glue the index onto the word; only the word becomes
+    # Σ, the subscript block is preserved. The letter lookbehind keeps prose
+    # words containing "sumi"/"sum" mid-word untouched.
+    (re.compile(r"(?<![A-Za-z])Sumi?(?=[\u2070-\u209f])"), "\u03a3"),
 ]
 
 # Bare-word Greek: exactly the LaTeX converter's vocabulary minus the
@@ -121,12 +134,18 @@ def normalize_ascii_math(text: str) -> str:
 def normalize_spec_math(spec: object) -> object:
     """Apply normalize_ascii_math to math-designated spec slots, in place.
 
-    Covered: equation expressions, force/flow relation expressions,
-    composition reasoning/result expressions, callout labels+values, plot
-    curve labels. Deliberately NOT covered: titles, captions, framings,
-    takeaways, explanations, meanings (prose), node/connector labels
-    (natural language), and curve EXPRS (evaluator code — "sqrt(" must stay
-    ASCII there). Returns the same object for chaining.
+    Covered: equation expressions, task exact_claims (gate strings that must
+    appear verbatim in the RENDERED output, which is itself normalized — a
+    claim written "sqrt(b² - 4ac)" must compare equal to the rendered
+    "√(b² - 4ac)"), force/flow relation expressions, composition
+    reasoning/result expressions, callout labels+values, plot curve labels,
+    generic callouts (rendered verbatim by the hero), flow NODE labels (short
+    math-bearing blocks — "Integ" → ∫; connector labels stay untouched), and
+    task required_elements (matched against those labels).
+    Deliberately NOT covered: titles, captions, framings, takeaways,
+    explanations, meanings (prose), connector labels (natural language),
+    and curve EXPRS (evaluator code — "sqrt(" must stay ASCII there).
+    Returns the same object for chaining.
     """
     det = getattr(spec, "deterministic", None)
     if det is None:
@@ -134,6 +153,23 @@ def normalize_spec_math(spec: object) -> object:
     for eq in getattr(det, "equations", None) or []:
         if getattr(eq, "expression", None):
             eq.expression = normalize_ascii_math(eq.expression)
+    task = getattr(det, "task", None)
+    if task is not None:
+        claims = getattr(task, "exact_claims", None)
+        if isinstance(claims, list):
+            task.exact_claims = [
+                normalize_ascii_math(claim) if isinstance(claim, str) else claim
+                for claim in claims
+            ]
+        # Required elements are matched against scene labels; normalizing the
+        # scene but not the requirement false-failed case 7 ("Summation S"
+        # rendered as "Σ" no longer matched the un-normalized requirement).
+        required = getattr(task, "required_elements", None)
+        if isinstance(required, list):
+            task.required_elements = [
+                normalize_ascii_math(item) if isinstance(item, str) else item
+                for item in required
+            ]
     scene = getattr(det, "scene", None)
     if scene is not None:
         for payload_name in ("force", "flow"):
@@ -145,6 +181,21 @@ def normalize_spec_math(spec: object) -> object:
         for curve in getattr(plot, "curves", None) or []:
             if getattr(curve, "label", None):
                 curve.label = normalize_ascii_math(curve.label)
+        flow = getattr(scene, "flow", None)
+        for node in getattr(flow, "nodes", None) or []:
+            if getattr(node, "label", None):
+                node.label = normalize_ascii_math(node.label)
+        generic = getattr(scene, "generic", None)
+        if generic is not None:
+            # Generic callouts are math slots by contract ("Label: value") and
+            # are printed verbatim by the hero; the exact-claim gate compares
+            # against them (observed: claims normalized to √ but callouts kept
+            # "sqrt(", false-failing case 10).
+            if getattr(generic, "central_label", None):
+                generic.central_label = normalize_ascii_math(generic.central_label)
+            generic.callouts = [
+                normalize_ascii_math(callout) for callout in generic.callouts
+            ]
     comp = getattr(det, "composition", None)
     if comp is not None:
         for step in getattr(comp, "reasoning", None) or []:

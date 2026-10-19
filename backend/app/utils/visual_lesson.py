@@ -26,6 +26,7 @@ import asyncio
 import functools
 import logging
 import math
+import re
 import shutil
 import subprocess
 import tempfile
@@ -34,6 +35,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from app.models.schemas import (
+    CompositionCallout,
     DeterministicVisual,
     StudyNotes,
     VisualRenderMode,
@@ -41,7 +43,7 @@ from app.models.schemas import (
     VisualSpec,
     VisualTask,
 )
-from app.utils.visual_renderer import render_hero_geometry
+from app.utils.visual_renderer import GENERIC_SATELLITE_CAP, render_hero_geometry
 
 logger = logging.getLogger(__name__)
 
@@ -120,12 +122,31 @@ def _tokens(text: str) -> set[str]:
     return set(re.findall(r"[^\W_]+", text.casefold()))
 
 
+def _claim_key(text: str) -> str:
+    """Presentation-insensitive key for exact-claim containment.
+
+    Claims must still appear with the same symbols and values — this only
+    ignores whitespace and the multiplication glyph (×, ·, *) which the
+    planner writes inconsistently around the same printed expression
+    (observed: claim "f(z) = (1/√(2π)) × exp(-z²/2)" vs rendered
+    "f(z) = (1/√(2π))exp(-z²/2)"). Different numbers, variables, powers or
+    operators still fail.
+    """
+    import re
+
+    return re.sub(r"[\s×·*]+", "", text).casefold()
+
+
 def _distinctive(text: str) -> set[str]:
     return {w for w in _tokens(text) if len(w) > 2 and w not in _TASK_STOPWORDS}
 
 
-def _scene_text(scene: VisualScene) -> str:
-    """All human-visible scene strings, for task-link grounding checks."""
+def _scene_text(scene: VisualScene, generic_cap: int | None = None) -> str:
+    """All human-visible scene strings, for task-link grounding checks.
+
+    ``generic_cap`` truncates generic callouts to the hero's visible
+    satellite capacity (default: no truncation, for non-gate callers).
+    """
     bits: list[str] = []
     kind = scene.scene_kind
     if kind == "force_diagram" and scene.force is not None:
@@ -144,6 +165,10 @@ def _scene_text(scene: VisualScene) -> str:
         bits += [plot.x_label or "", plot.y_label or ""]
         for c in plot.curves:
             bits.append(c.label or "")
+        for m in plot.markers:
+            bits.append(m.label or "")
+        for s in plot.segments:
+            bits.append(s.label or "")
     elif kind == "process_flow" and scene.flow is not None:
         for n in scene.flow.nodes:
             bits.append((n.label or "") + " " + (getattr(n, "caption", "") or ""))
@@ -153,7 +178,10 @@ def _scene_text(scene: VisualScene) -> str:
             bits.append(scene.flow.relation.expression or "")
     elif kind == "generic" and scene.generic is not None:
         bits.append(scene.generic.central_label or "")
-        bits += [c or "" for c in (scene.generic.callouts or [])]
+        callouts = [c for c in (scene.generic.callouts or []) if (c or "").strip()]
+        if generic_cap is not None:
+            callouts = callouts[:generic_cap]
+        bits += callouts
     elif kind == "comparison" and scene.comparison is not None:
         for p in scene.comparison.panels or []:
             bits.append((p.label or "") + " " + (p.note or ""))
@@ -210,11 +238,20 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
         if force.relation is not None:
             tokens.add("relation")
             tokens.add("relations")
+        if force.ground:
+            # The renderer draws the contact baseline itself ("surface"), so
+            # "ground"/"surface" requirements are structurally satisfied even
+            # though no spec label prints those words.
+            tokens.update({"ground", "surface", "floor", "table"})
     elif kind == "plot" and scene.plot is not None:
         tokens.update({"axes", "axis", "curve", "curves", "tick", "ticks"})
         if any(len(c.points or []) == 1 for c in scene.plot.curves):
             tokens.add("point")
             tokens.add("points")
+        if scene.plot.markers:
+            tokens.update({"marker", "markers", "point", "points"})
+        if scene.plot.segments:
+            tokens.update({"segment", "segments", "line", "lines"})
     elif kind == "process_flow" and scene.flow is not None:
         tokens.add("node")
         tokens.add("nodes")
@@ -248,12 +285,19 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
     return {t for t in tokens if t}
 
 
-def _composition_callouts(det) -> list[tuple[str, str]]:
-    """(heading, body) pairs from the explicit composition, if present."""
+def _composition_callouts(det, scene_kind: str = "") -> list[tuple[str, str]]:
+    """(heading, body) pairs the composed lesson ACTUALLY renders.
+
+    Generic scenes drop composition callouts from the chip grid (the hero
+    already carries the callout set, so repeating them duplicates labels
+    verbatim), so they are excluded for that family.
+    """
     comp = det.composition
     if comp is None:
         return []
-    pairs = [(c.label or "", c.value or "") for c in (comp.callouts or [])]
+    pairs: list[tuple[str, str]] = []
+    if scene_kind != "generic":
+        pairs += [(c.label or "", c.value or "") for c in (comp.callouts or [])]
     pairs += [(r.expression or "", r.explanation or "") for r in (comp.reasoning or [])]
     if comp.result is not None:
         pairs.append((comp.result.expression or "", ""))
@@ -425,14 +469,40 @@ def _number_line_claim_matches(claim: str, scene: VisualScene, haystack: str) ->
     return normalized_claim in normalize(haystack)
 
 
+def _expand_acceptable_families(task: VisualTask) -> set[str]:
+    """Normalize the model-authored family list against our registry (pure).
+
+    The planner sometimes writes task_type names ("definition_overview",
+    "graph_relationship") into acceptable_families instead of scene kinds —
+    near-miss vocabulary that would false-refuse a scene our own capability
+    registry authorizes. Each entry that IS a scene kind is kept; each entry
+    that matches a known task_type expands to that task type's registry
+    families; unrecognized entries authorize nothing and are dropped. The
+    hard capability check against TASK_FAMILIES still runs separately, so
+    this can never admit a scene the registry forbids. An EMPTY list after
+    expansion means the planner expressed no family constraint at all — the
+    registry is then the only (and stricter) authority.
+    """
+    known_kinds = set(SUPPORTED_FAMILIES)
+    expanded: set[str] = set()
+    for family in task.acceptable_families or []:
+        token = str(family).strip()
+        if token in known_kinds:
+            expanded.add(token)
+        elif token in TASK_FAMILIES:
+            expanded.update(TASK_FAMILIES[token])
+    return expanded
+
+
 def validate_task_link(spec: VisualSpec) -> list[str]:
     """Enforce the task -> representation -> scene contract.
 
     No task plan: legacy behavior, no errors (old specs keep working).
     With a task plan: the scene kind must be authorized by BOTH the task's
-    acceptable_families and the capability registry; every required element
-    must be satisfiable (at least one of its distinctive tokens present in
-    scene + composition text); every exact claim must appear verbatim.
+    acceptable_families (alias-normalized) and the capability registry; every
+    required element must be satisfiable (at least one of its distinctive
+    tokens present in the rendered lesson text: scene, equations, steps,
+    points, composition); every exact claim must appear verbatim.
     Failures mean the scene cannot teach the planned task — refuse, don't
     render.
     """
@@ -446,15 +516,34 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
         errors.append("task plan present but scene is missing")
         return errors
     kind = scene.scene_kind
-    if kind not in task.acceptable_families:
-        errors.append(f"scene kind {kind!r} not in task acceptable_families")
+    authorized = _expand_acceptable_families(task)
+    if authorized:
+        if kind not in authorized:
+            errors.append(f"scene kind {kind!r} not in task acceptable_families")
+    elif task.acceptable_families:
+        # A non-empty list matched neither a scene kind nor a known task type:
+        # the planner expressed a constraint we cannot honor. Silently
+        # treating it as "no constraint" would neutralize the contract.
+        errors.append(
+            "task acceptable_families contains no recognized scene kind or task type"
+        )
     registry_ok = TASK_FAMILIES.get(task.task_type, [])
     if kind not in registry_ok:
         errors.append(f"scene kind {kind!r} cannot express task {task.task_type!r}")
+    # The haystack is STRICTLY what the rendered artifact shows: with a scene
+    # present (always true when a task plan exists) both render paths center
+    # on the scene hero — the card content (equations/steps/points) renders
+    # only when no scene exists, so it can never satisfy a claim. A claim
+    # living only in deterministic.equations is invisible in the product and
+    # is promoted verbatim into a visible callout by
+    # promote_equation_claims() before this gate runs. Generic satellites are
+    # capped by the hero, so callouts beyond the cap are not visible either.
+    comp = det.composition
     haystack = " ".join([
         det.title, getattr(det, "caption", "") or "",
-        _scene_text(scene),
-        " ".join(heading + " " + body for heading, body in _composition_callouts(det)),
+        (comp.title if comp is not None else "") or "",
+        _scene_text(scene, generic_cap=GENERIC_SATELLITE_CAP),
+        " ".join(heading + " " + body for heading, body in _composition_callouts(det, scene.scene_kind)),
     ]).casefold()
     hay_tokens = _tokens(haystack) | _scene_structural_tokens(scene)
     for element in task.required_elements:
@@ -472,7 +561,7 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
         norm = " ".join(str(claim).split())
         if not norm:
             continue
-        if norm.casefold() in haystack:
+        if norm.casefold() in haystack or _claim_key(norm) in _claim_key(haystack):
             continue
         if scene.scene_kind == "number_line" and _number_line_claim_matches(
             norm, scene, haystack
@@ -480,6 +569,84 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
             continue
         errors.append(f"exact claim missing from scene: {claim!r}")
     return errors
+
+
+_CLAIM_MISSING_RE = re.compile(r"^exact claim missing from scene: '(?P<claim>.*)'$")
+
+
+def promote_equation_claims(spec: VisualSpec, gate_errors: list[str]) -> int:
+    """Make equations-only claims visible WITHOUT a model call.
+
+    Neither the composed lesson nor the scene hero renders
+    ``deterministic.equations`` (that card content exists for scene-less
+    specs only), so a claim satisfied solely by an equation entry passes the
+    naive text check while being invisible in the product. This promotes such
+    claims — verbatim, nothing invented — into a channel that actually
+    renders: generic satellite slots (while capacity remains) or composition
+    callout chips. Returns the number of claims promoted. Callers recompute
+    the gate afterwards; claims that fit nowhere still go to model repair.
+
+    ``gate_errors`` must come from ``validate_legacy_visual``/``validate_task_link``
+    so the promoted text provably closes the reported gap.
+    """
+    det = spec.deterministic
+    scene = det.scene
+    if scene is None or scene.scene_kind == "number_line":
+        return 0
+    missing: list[str] = []
+    for err in gate_errors:
+        m = _CLAIM_MISSING_RE.match(err)
+        if m:
+            missing.append(m.group("claim"))
+    if not missing:
+        return 0
+    equations = [
+        (e.expression.strip(), e.meaning.strip())
+        for e in det.equations
+        if e.expression.strip()
+    ]
+    generic = scene.generic if scene.scene_kind == "generic" else None
+    comp = det.composition
+    visible_satellites = (
+        len([c for c in (generic.callouts or []) if (c or "").strip()])
+        if generic is not None
+        else 0
+    )
+    promoted = 0
+    for claim in missing:
+        ck = _claim_key(claim)
+        match: tuple[str, str] | None = None
+        for expr, meaning in equations:
+            if ck == _claim_key(expr) or ck in _claim_key(f"{expr} {meaning}"):
+                match = (expr, meaning)
+                break
+        if match is None:
+            continue
+        _, meaning = match
+        if generic is not None:
+            if visible_satellites >= GENERIC_SATELLITE_CAP:
+                continue
+            generic.callouts.append(claim)
+            visible_satellites += 1
+            promoted += 1
+        elif comp is not None:
+            # Chip bounds come from the CompositionCallout schema (label 24,
+            # value 80) and LessonComposition (6 callouts); refuse to exceed
+            # them — a claim that cannot fit visibly goes to model repair.
+            if len(comp.callouts) >= 6 or len(claim) > 24 or len(meaning) > 80:
+                continue
+            existing_ids = {c.id for c in comp.callouts}
+            idx = 1
+            while f"promoted-claim-{idx}" in existing_ids:
+                idx += 1
+            comp.callouts.append(
+                CompositionCallout(
+                    id=f"promoted-claim-{idx}", label=claim, value=meaning
+                )
+            )
+            promoted += 1
+    return promoted
+
 
 TYMST_TIMEOUT_SECONDS = 25
 MAX_CALLOUTS = 4
@@ -539,6 +706,28 @@ def _finite(value: object, what: str, errors: list[str]) -> float | None:
     return number
 
 
+_RELATION_OPERATORS = ("=", "<", ">", "\u2264", "\u2265", "\u2260", "\u2248", "\u221d")
+
+
+def _relation_errors(relation: object) -> list[str]:
+    """The scene relation renders as the visual's highlighted answer chip.
+
+    Observed defect (case 7): a bounded reconcile repair chose the node label
+    "Plant G(s)" as the relation, so the hero showed a block name where the
+    PID equation belongs. A relation must be a complete mathematical
+    statement (equality/comparison), not a label; empty is allowed (the chip
+    is simply omitted). The message doubles as the repair instruction.
+    """
+    expr = (getattr(relation, "expression", "") or "").strip()
+    if not expr or any(op in expr for op in _RELATION_OPERATORS):
+        return []
+    return [
+        "scene relation is not an equation (it must contain = or a "
+        f"comparison operator): {expr!r} — replace it with the actual "
+        "relation equation or leave the relation empty"
+    ]
+
+
 def validate_legacy_visual(spec: VisualSpec) -> list[str]:
     """Enforceable contract for the legacy (non-v3) deterministic path.
 
@@ -593,10 +782,11 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
         for arc in force.arcs:
             if (arc.around or "").strip() and (arc.around or "").strip() not in known:
                 errors.append(f"arc {arc.label!r} wraps unknown {arc.around!r}")
+        errors.extend(_relation_errors(force.relation))
     elif kind == "plot":
         plot = scene.plot
-        if plot is None or not plot.curves:
-            errors.append("plot has no curves")
+        if plot is None or not (plot.curves or plot.segments or plot.markers):
+            errors.append("plot has no curves, segments, or markers")
             return errors
         _finite(plot.x_min, "plot.x_min", errors)
         _finite(plot.x_max, "plot.x_max", errors)
@@ -614,6 +804,15 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
                 if len(p) != 2 or _finite(p[0], "point x", errors) is None or _finite(p[1], "point y", errors) is None:
                     errors.append(f"curve {c.label!r} has a malformed point")
                     break
+        for m in plot.markers:
+            _finite(m.x, f"marker {m.label!r} x", errors)
+            _finite(m.y, f"marker {m.label!r} y", errors)
+        for s in plot.segments:
+            for value, what in (
+                (s.x1, "segment x1"), (s.y1, "segment y1"),
+                (s.x2, "segment x2"), (s.y2, "segment y2"),
+            ):
+                _finite(value, f"{what} ({s.label!r})", errors)
     elif kind == "process_flow":
         flow = scene.flow
         if flow is None or len([n for n in flow.nodes if (n.label or "").strip()]) < 2:
@@ -623,6 +822,7 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
         for c in flow.connectors:
             if not (0 <= c.source < n and 0 <= c.target < n):
                 errors.append(f"connector {c.source}->{c.target} out of range for {n} nodes")
+        errors.extend(_relation_errors(flow.relation))
     elif kind == "generic":
         if scene.generic is None or not (scene.generic.central_label or "").strip():
             errors.append("generic scene needs a central_label")
@@ -719,8 +919,8 @@ def spec_needs_repair(spec: VisualSpec) -> str | None:
             return "force_diagram has no labeled vectors"
     elif kind == "plot":
         plot = scene.plot
-        if plot is None or not plot.curves:
-            return "plot has no curves"
+        if plot is None or not (plot.curves or plot.segments or plot.markers):
+            return "plot has no curves, segments, or markers"
     elif kind == "process_flow":
         flow = scene.flow
         if flow is None or len([n for n in flow.nodes if (n.label or "").strip()]) < 2:
@@ -840,6 +1040,14 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             LessonCallout(heading=c.label.strip(), body=_clean(c.value))
             for c in comp.callouts
         ]
+        # The generic scene IS a callout box set (central label + satellite
+        # boxes) — rendering the composition callouts again as a chip grid
+        # below it duplicates the same labels verbatim (observed: case-10
+        # formula sheet showed every formula twice). The hero carries the
+        # callout set for this family; the composition still contributes
+        # framing, reasoning, result and takeaway.
+        if scene.scene_kind == "generic":
+            v3_callouts = []
         v3_reasoning = "; ".join(
             (f"{s.expression.strip()} — {_clean(s.explanation)}" if _clean(s.explanation) else s.expression.strip())
             for s in comp.reasoning
@@ -877,6 +1085,12 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
         for c in plot.curves:
             if (c.label or "").strip():
                 callouts.append(LessonCallout(heading=c.label.strip(), body=""))
+        for m in plot.markers:
+            if (m.label or "").strip():
+                callouts.append(LessonCallout(heading=m.label.strip(), body=""))
+        for s in plot.segments:
+            if (s.label or "").strip():
+                callouts.append(LessonCallout(heading=s.label.strip(), body=""))
         if plot.x_label or plot.y_label:
             reasoning_bits.append(f"Axes: {plot.x_label} × {plot.y_label}".strip())
     elif family == "flow":
@@ -895,11 +1109,10 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
         if flow.relation is not None and (flow.relation.expression or "").strip():
             result_text = flow.relation.expression.strip()
     elif family == "generic":
-        gen = scene.generic
-        assert gen is not None
-        for c in (gen.callouts or [])[:MAX_CALLOUTS]:
-            if c.strip():
-                callouts.append(LessonCallout(heading=c.strip(), body=""))
+        # The hero already IS the callout box set (central label + satellites).
+        # Emitting the same callouts again as Typst chips duplicates every
+        # formula verbatim; the hero carries this family's content.
+        pass
     elif family == "comparison":
         compa = scene.comparison
         assert compa is not None

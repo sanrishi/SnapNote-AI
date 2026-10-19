@@ -34,3 +34,16 @@ class UpstreamError(SnapNoteError):
     def __init__(self, service: str, detail: str = ""):
         msg = f"{service} failed: {detail}" if detail else f"{service} failed"
         super().__init__(msg, status_code=502)
+
+
+class ServerBusyError(SnapNoteError):
+    """Bounded-capacity admission rejection (fast 503, before any credits)."""
+
+    def __init__(
+        self,
+        message: str = (
+            "SnapNote is handling another image right now. Please try again in "
+            "about 30 seconds."
+        ),
+    ):
+        super().__init__(message, status_code=503)

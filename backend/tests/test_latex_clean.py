@@ -123,6 +123,18 @@ def test_ascii_operators_and_functions():
     assert normalize_ascii_math("Qc < Kc") == "Qc < Kc"
     assert normalize_ascii_math("a <= b and c != d") == "a ≤ b and c ≠ d"
     assert normalize_ascii_math("Sum i = n(n+1)/2") == "Σ i = n(n+1)/2"
+    # Transliterated integral in printed formulas; "Integral" (prose) stays.
+    assert normalize_ascii_math("Ki × Integ e(t)dt") == "Ki × ∫ e(t)dt"
+    assert normalize_ascii_math("Integral action") == "Integral action"
+    # Case 10: unicode-subscript follower is still formula context.
+    assert normalize_ascii_math("Integ\u208b\u221e\u221e f(t) dt") == "\u222b\u208b\u221e\u221e f(t) dt"
+    # Transliterated summation junction; ordinary prose is untouched.
+    assert normalize_ascii_math("Summation S") == "Σ"
+    assert normalize_ascii_math("Summation and integration") == "Summation and integration"
+    # Case 10: the index glued onto the word becomes a plain Σ, subscripts kept.
+    assert normalize_ascii_math("Sumi\u2081\u207f i = n(n+1)/2") == "\u03a3\u2081\u207f i = n(n+1)/2"
+    assert normalize_ascii_math("Sum\u2099\u208c\u2080\u221e f\u207f(a)/n!") == "\u03a3\u2099\u208c\u2080\u221e f\u207f(a)/n!"
+    assert normalize_ascii_math("Sumerian tablets") == "Sumerian tablets"
 
 
 def test_bare_word_greek_with_boundaries():
@@ -196,3 +208,44 @@ def test_normalize_spec_math_slot_scoping():
     # Prose slots pass through byte-identical.
     assert det.title == "Sum of everything -> done"
     assert det.scene.caption == "plain caption"
+
+
+def test_normalize_spec_math_flow_nodes_only():
+    from app.models.schemas import (
+        DeterministicVisual,
+        FlowConnector,
+        FlowNode,
+        ProcessFlow,
+        VisualRenderMode,
+        VisualScene,
+        VisualSpec,
+    )
+
+    spec = VisualSpec(
+        concept="PID",
+        render_mode=VisualRenderMode.DETERMINISTIC,
+        text_required=True,
+        deterministic=DeterministicVisual(
+            title="PID control",
+            scene=VisualScene(
+                scene_kind="process_flow",
+                caption="c",
+                flow=ProcessFlow(
+                    nodes=[
+                        FlowNode(label="Integral: Ki × Integ e(t)dt"),
+                        FlowNode(label="Σ: sum"),
+                    ],
+                    connectors=[
+                        FlowConnector(source=0, target=1, label="Feedback (Sensor)", feedback=True)
+                    ],
+                ),
+            ),
+        ),
+    )
+    normalize_spec_math(spec)
+    flow = spec.deterministic.scene.flow
+    assert flow is not None
+    assert flow.nodes[0].label == "Integral: Ki × ∫ e(t)dt"
+    assert flow.nodes[1].label == "Σ: sum"
+    # Connector labels are natural language — untouched.
+    assert flow.connectors[0].label == "Feedback (Sensor)"
