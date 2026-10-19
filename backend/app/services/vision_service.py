@@ -44,6 +44,25 @@ def _is_capacity_error(err_str: str) -> bool:
         for token in ("503", "504", "UNAVAILABLE", "DEADLINE_EXCEEDED", "overloaded", "high demand")
     )
 
+
+_DAILY_QUOTA_RETRY_IN_RE = re.compile(r"retry in \d+h", re.IGNORECASE)
+_QUOTA_RETRY_DELAY_RE = re.compile(r"retry_delay\s*\{\s*seconds:\s*(\d+)")
+
+
+def _is_daily_quota_error(err_str: str) -> bool:
+    """True when a 429 is a per-DAY quota bucket, not a per-minute burst.
+
+    The daily reset is hours away, so the short 429 retry loop cannot help —
+    it only delays the honest "high demand" mapping at the route. Per-minute
+    429s (small retry_delay) keep their retry.
+    """
+    if "PerDay" in err_str:
+        return True
+    if _DAILY_QUOTA_RETRY_IN_RE.search(err_str):
+        return True
+    m = _QUOTA_RETRY_DELAY_RE.search(err_str)
+    return bool(m and int(m.group(1)) > 300)
+
 TEXT_SYSTEM_PROMPT = r"""You extract study notes from a screenshot. RULES — follow them in order:
 
 RULE 1 — NEVER describe the image. START DIRECTLY with the transcribed content. No "The image shows", "This screenshot displays", "An illustration of", or any framing sentence. Just the content.
@@ -308,6 +327,9 @@ async def _call_gemini(
             last_error = e
             err_str = str(e)
             if attempt < max_retries and ("RESOURCE_EXHAUSTED" in err_str or "429" in err_str):
+                if _is_daily_quota_error(err_str):
+                    logger.warning("Gemini daily quota exhausted; failing fast (reset is hours away).")
+                    break
                 delay = 2 * (attempt + 1)
                 logger.warning("Gemini rate limited (attempt %d/%d). Retrying in %ds...", attempt + 1, max_retries + 1, delay)
                 await asyncio.sleep(delay)

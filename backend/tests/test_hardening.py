@@ -237,6 +237,75 @@ def test_gemini_429_exhausts_after_single_retry(monkeypatch):
     assert calls["n"] == 2  # max_retries=1 → at most 2 calls
 
 
+_DAILY_QUOTA_429 = (
+    "429 You exceeded your current quota, please check your plan and billing details. "
+    "[violations { quota_metric: \"generativelanguage.googleapis.com/generate_content_free_tier_requests\" "
+    "quota_id: \"GenerateRequestsPerDayPerProjectPerModel-FreeTier\" "
+    "quota_dimensions { key: \"model\" value: \"gemini-3.5-flash-lite\" } } "
+    ", retry_delay { seconds: 75673 } ] Please retry in 21h1m13.58271978s."
+)
+
+_PER_MINUTE_429 = (
+    "429 Resource has been exhausted (e.g. check quota). "
+    "[violations { quota_id: \"GenerateRequestsPerMinutePerProjectPerModel-FreeTier\" } "
+    ", retry_delay { seconds: 4 } ] Please retry in 4.2s."
+)
+
+
+def test_is_daily_quota_error_detection():
+    assert vision_service._is_daily_quota_error(_DAILY_QUOTA_429) is True
+    assert vision_service._is_daily_quota_error(_PER_MINUTE_429) is False
+    assert vision_service._is_daily_quota_error("429 rate limit") is False
+
+
+def test_gemini_daily_quota_does_not_retry(monkeypatch):
+    """A per-day quota 429 cannot succeed seconds later — one call, no sleep,
+    so the route's high-demand mapping fires fast instead of eating the
+    request timeout."""
+    from app.exceptions import UpstreamError
+
+    calls = {"n": 0}
+
+    async def fake(*args, **kwargs):
+        calls["n"] += 1
+        raise Exception(_DAILY_QUOTA_429)
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async.side_effect = fake
+    sleep_mock = AsyncMock()
+    monkeypatch.setattr(vision_service, "model", mock_model)
+    monkeypatch.setattr(vision_service.asyncio, "sleep", sleep_mock)
+
+    async def run():
+        return await vision_service._call_gemini("p", _valid_png())
+
+    with pytest.raises(UpstreamError):
+        asyncio.run(run())
+    assert calls["n"] == 1
+    sleep_mock.assert_not_awaited()
+
+
+def test_gemini_per_minute_429_still_retries(monkeypatch):
+    calls = {"n": 0}
+
+    async def fake(*args, **kwargs):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise Exception(_PER_MINUTE_429)
+        return type("o", (), {"text": "retried ok"})()
+
+    mock_model = AsyncMock()
+    mock_model.generate_content_async.side_effect = fake
+    monkeypatch.setattr(vision_service, "model", mock_model)
+    monkeypatch.setattr(vision_service.asyncio, "sleep", AsyncMock())
+
+    async def run():
+        return await vision_service._call_gemini("p", _valid_png())
+
+    assert asyncio.run(run()) == "retried ok"
+    assert calls["n"] == 2
+
+
 # ── Capacity fallback: one alternate-model attempt on 503/504 ──
 
 
