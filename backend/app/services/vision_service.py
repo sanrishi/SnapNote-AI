@@ -873,6 +873,8 @@ If the reason mentions "number_line has no number_line payload", the scene kind 
 
 If the reason mentions "exact claim missing from scene", do NOT edit or drop the claims and do NOT change the scene kind or its geometry. Keep every existing scene primitive and print each missing claim VERBATIM: add it to "deterministic.equations" (expression = the claim) and/or as a composition callout (short label, claim as value). A force_diagram/plot/process_flow stays exactly that kind — switching it to "generic" or "comparison" is not a repair (a generic scene needs its own central_label and cannot satisfy disk/ground/axes requirements; a comparison with fewer than 2 labeled panels is refused). Only when the CURRENT scene is already "generic" should you add the claims as its callouts (3-5 verbatim callouts).
 
+If the reason mentions a comparison panel "without vectors or arcs" (or "comparison needs at least 2 labeled panels"), the comparison scene does not fit this material — a definition/prose lesson has no drawable vectors to put in panels. Re-emit a "generic" scene instead: central_label = the lesson topic and 3-5 callouts carrying the exact terms/claims VERBATIM (short label ≤ 24 chars, value = the claim). Generic IS the correct family for definition/prose lessons; do not re-emit another empty comparison.
+
 If the lesson is genuinely simple or nothing drawable is honestly supported, return the spec JSON unchanged. Never invent formulas, numbers, vectors, curves, or relationships to fill the page. Return ONLY the JSON object, no other text.
 
 HARD FIELD CONSTRAINTS (violations fail validation — respect every one):

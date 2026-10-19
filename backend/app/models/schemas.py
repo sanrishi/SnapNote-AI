@@ -358,6 +358,31 @@ class VisualGeneric(BaseModel):
     central_label: str = ""
     callouts: list[str] = Field(default_factory=list)  # 2-5 short labels
 
+    @field_validator("callouts", mode="before")
+    @classmethod
+    def _coerce_callout_dicts(cls, value: object) -> object:
+        """Tolerate repair emitting {id,label,value} objects (observed
+        case 8: three claim dicts hard-failed pydantic, turning a repairable
+        spec into a 502). Structural coercion only — the printed text is the
+        prefixed label/value pair, nothing invented or dropped."""
+        if value is None:
+            return []
+        if not isinstance(value, list):
+            return value
+        coerced: list[object] = []
+        for item in value:
+            if isinstance(item, dict):
+                label = str(item.get("label") or "").strip()
+                body = item.get("value") or item.get("text") or item.get("claim") or ""
+                body = str(body).strip()
+                if label and body:
+                    coerced.append(f"{label}: {body}")
+                else:
+                    coerced.append(body or label)
+            else:
+                coerced.append(item)
+        return coerced
+
 
 class ComparisonPanel(BaseModel):
     """One panel of a side-by-side comparison (2-3 panels per scene).

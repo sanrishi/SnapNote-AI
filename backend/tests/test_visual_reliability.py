@@ -178,6 +178,34 @@ def test_required_elements_normalized_with_scene_labels():
     assert validate_task_link(spec) == []
 
 
+def test_generic_callout_dicts_coerced_to_strings():
+    """Observed repair emission (case 8): callouts as {id,label,value}
+    objects must coerce instead of hard-failing the whole spec."""
+    from app.models.schemas import VisualGeneric, VisualScene
+
+    scene = VisualScene.model_validate(
+        {
+            "scene_kind": "generic",
+            "generic": {
+                "central_label": "Cell Theory",
+                "callouts": [
+                    {"id": "claim1", "label": "Tenet 1", "value": "All living organisms are composed of cells"},
+                    {"id": "claim2", "value": "Cells arise from pre-existing cells"},
+                    "Plain string callout",
+                ],
+            },
+        }
+    )
+    generic = scene.generic
+    assert generic is not None
+    assert generic.callouts == [
+        "Tenet 1: All living organisms are composed of cells",
+        "Cells arise from pre-existing cells",
+        "Plain string callout",
+    ]
+    assert VisualGeneric.model_validate({"callouts": None}).callouts == []
+
+
 def test_composition_ids_folded_to_ascii():
     from app.services.vision_service import _normalize_composition_ids
 
