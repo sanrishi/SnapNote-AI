@@ -978,7 +978,8 @@ def test_frontend_explain_visually_button():
     html_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "website", "index.html"))
     with open(html_path, "r", encoding="utf-8") as fh:
         html = fh.read()
-    assert "✨ Explain Visually" in html
+    assert "Explain Visually" in html
+    assert 'id="explain-btn"' in html
     assert "handleExplainVisual" in html
     assert "diagramId" in html
     assert "↻ Regenerate diagram" not in html
