@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b1120" />
+  <meta name="theme-color" content="#070a14" />
   <meta name="description" content="SnapNote AI turns confusing lecture screenshots into exam-ready study notes. Understand formulas, remember the key takeaways, revise in 30 seconds." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="SnapNote AI — Screenshot it. Understand it." />
+  <meta property="og:description" content="Turn any confusing lecture slide into a clean explanation, verified formulas, JEE PYQ practice and a 30-second revision sheet." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%238b5cf6'/%3E%3Cstop offset='1' stop-color='%23ec4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M36 10 18 35h11l-2 19 18-25H34l2-19Z' fill='white'/%3E%3C/svg%3E" />
   <title>SnapNote AI — Screenshot it. Understand it.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -490,78 +495,874 @@
     .jee-check-bad { color: #dc2626; font-weight: 700; }
     .jee-pnav { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
   </style>
+  <style id="ui-polish">
+    /* ── Design tokens ── */
+    :root {
+      --bg: #070a14; --bg-2: #0a0f1c;
+      --surface: #0f1628; --surface-2: #141d33; --surface-3: #1b2540;
+      --border: rgba(148,163,184,.13); --border-strong: rgba(148,163,184,.24);
+      --text: #f1f4ff; --muted: #9aa7c2; --muted-2: #6b7a99;
+      --accent: #8b5cf6; --accent-2: #a78bfa; --cyan: #22d3ee;
+      --green: #34d399; --amber: #fbbf24; --danger: #fb7185;
+      --grad: linear-gradient(135deg, #8b5cf6, #a855f7 52%, #ec4899);
+      --grad-text: linear-gradient(110deg, #c4b5fd, #e9d5ff 45%, #f9a8d4);
+      --grad-soft: linear-gradient(135deg, rgba(139,92,246,.14), rgba(236,72,153,.08));
+      --shadow: 0 30px 80px -30px rgba(0,0,0,.85);
+      --shadow-sm: 0 14px 34px -18px rgba(0,0,0,.7);
+      --radius: 18px; --radius-sm: 12px; --radius-lg: 26px;
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+    }
+    html { color-scheme: dark; }
+    body {
+      background: var(--bg); color: var(--text); font-size: 15px;
+      background-image:
+        radial-gradient(900px 520px at 12% -8%, rgba(139,92,246,.16), transparent 62%),
+        radial-gradient(760px 480px at 92% 4%, rgba(236,72,153,.10), transparent 60%),
+        radial-gradient(700px 520px at 50% 112%, rgba(34,211,238,.06), transparent 65%);
+      background-attachment: fixed;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(148,163,184,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148,163,184,.045) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 20%, transparent 80%);
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 20%, transparent 80%);
+    }
+    .bg-glow { opacity: .7; }
+    ::selection { background: rgba(139,92,246,.45); color: #fff; }
+    .container { max-width: 1240px; padding: 0 24px; }
+    .ic { width: 18px; height: 18px; flex: 0 0 auto; display: inline-block; vertical-align: -3px; }
+
+    /* ── Header ── */
+    header {
+      padding: 12px 0; margin-bottom: 0;
+      border-bottom: 1px solid rgba(148,163,184,.10);
+      background: rgba(7,10,20,.72);
+      backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+    }
+    .logo { gap: 11px; }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 11px; font-size: 0;
+      background: var(--grad); box-shadow: 0 8px 24px -8px rgba(139,92,246,.8), inset 0 1px 0 rgba(255,255,255,.25);
+    }
+    .logo-mark svg { width: 19px; height: 19px; color: #fff; }
+    header h1 { font-size: 18px; letter-spacing: -.3px; }
+    #credits-area { gap: 9px; }
+    #credits-badge {
+      background: rgba(15,22,40,.9); color: #d1fae5; padding: 7px 13px 7px 11px;
+      border: 1px solid rgba(52,211,153,.22); font-size: 12.5px; font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    #credits-badge::before {
+      content: ""; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 10px rgba(52,211,153,.9);
+    }
+    #buy-btn, .btn-primary {
+      position: relative; overflow: hidden;
+      box-shadow: 0 10px 26px -12px rgba(139,92,246,.9), inset 0 1px 0 rgba(255,255,255,.22);
+    }
+    #buy-btn { padding: 8px 15px; font-size: 12.5px; }
+    #buy-btn::after, .btn-primary::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.16), transparent 55%);
+      pointer-events: none;
+    }
+    #buy-btn:hover, .btn-primary:hover { transform: translateY(-1px); filter: brightness(1.06); }
+
+    .btn-login, .btn-signup {
+      font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+      padding: 8px 14px; border-radius: 999px; transition: all .18s;
+    }
+    .btn-login { background: transparent; border: 1px solid var(--border-strong); color: var(--text); }
+    .btn-login:hover { background: var(--surface-2); border-color: rgba(139,92,246,.5); }
+    .btn-signup { background: var(--grad); border: none; color: #fff; box-shadow: 0 8px 20px -10px rgba(139,92,246,.9); }
+    .btn-signup:hover { transform: translateY(-1px); filter: brightness(1.07); }
+
+    /* ── Hero ── */
+    .hero { padding: 68px 8px 44px; position: relative; }
+    .hero .eyebrow {
+      background: rgba(139,92,246,.1); border-color: rgba(139,92,246,.28); color: #c4b5fd;
+      padding: 7px 15px; letter-spacing: .2px; box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .hero h2 {
+      font-size: clamp(34px, 5.6vw, 58px); letter-spacing: -2px; line-height: 1.04;
+      text-wrap: balance;
+    }
+    .hero h2 .grad {
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 12px 40px rgba(139,92,246,.28));
+    }
+    .hero p.sub { font-size: 16.5px; max-width: 590px; margin-top: 20px; color: #a8b4cc; }
+    .hero .cta-row { margin-top: 32px; gap: 13px; }
+    .btn-primary { padding: 14px 28px; border-radius: 14px; font-size: 15px; }
+    .btn-ghost {
+      padding: 14px 24px; border-radius: 14px; background: rgba(15,22,40,.72);
+      border: 1px solid var(--border-strong); backdrop-filter: blur(8px);
+    }
+    .btn-ghost:hover { border-color: rgba(139,92,246,.55); background: var(--surface-2); }
+    .hero .trust { margin-top: 30px; gap: 10px; }
+    .hero .trust span {
+      background: rgba(148,163,184,.06); border: 1px solid rgba(148,163,184,.12);
+      padding: 6px 12px; border-radius: 999px; font-size: 12px; color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* ── How it works ── */
+    .how { gap: 16px; margin: 30px 0 10px; }
+    .how .step {
+      position: relative; text-align: left; padding: 22px 20px 20px;
+      background: linear-gradient(180deg, rgba(20,29,51,.75), rgba(15,22,40,.65));
+      border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    .how .step::after {
+      content: ""; position: absolute; inset: 0 0 auto; height: 2px; border-radius: var(--radius) var(--radius) 0 0;
+      background: var(--grad); opacity: 0; transition: opacity .2s;
+    }
+    .how .step:hover { transform: translateY(-3px); border-color: rgba(139,92,246,.4); background: linear-gradient(180deg, rgba(26,37,64,.8), rgba(15,22,40,.7)); }
+    .how .step:hover::after { opacity: 1; }
+    .how .step .num {
+      position: absolute; top: 16px; right: 16px; margin: 0;
+      width: 24px; height: 24px; border-radius: 8px;
+      background: rgba(139,92,246,.14); color: #c4b5fd; border: 1px solid rgba(139,92,246,.25);
+      font-size: 11.5px;
+    }
+    .how .step .ic { display: none; }
+    .step-icon {
+      width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center;
+      background: var(--grad-soft); border: 1px solid rgba(139,92,246,.25); color: #ddd6fe;
+      margin-bottom: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .step-icon svg { width: 21px; height: 21px; }
+    .how .step h4 { font-size: 15px; margin-bottom: 6px; }
+    .how .step p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    /* ── Live demo ── */
+    .demo { margin: 54px 0 12px; }
+    .demo-head h3 { font-size: 27px; letter-spacing: -.7px; }
+    .demo-head p { font-size: 14.5px; max-width: 560px; margin: 9px auto 0; }
+    .demo-tabs { gap: 7px; padding: 5px; background: rgba(15,22,40,.6); border: 1px solid var(--border); border-radius: 999px; width: fit-content; margin: 0 auto 16px; max-width: 100%; }
+    .demo-tab {
+      border: none; background: transparent; padding: 9px 16px; border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px;
+    }
+    .demo-tab .ic { width: 15px; height: 15px; }
+    .demo-tab:hover { transform: none; background: rgba(148,163,184,.08); }
+    .demo-tab.active { box-shadow: 0 8px 20px -10px rgba(139,92,246,.9), inset 0 1px 0 rgba(255,255,255,.2); }
+    .demo-stage {
+      position: relative; gap: 18px; padding: 20px; border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(20,29,51,.78), rgba(10,15,28,.9));
+      border: 1px solid rgba(148,163,184,.16); box-shadow: var(--shadow);
+    }
+    .demo-stage::before {
+      content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+      background: linear-gradient(135deg, rgba(139,92,246,.55), transparent 35%, transparent 65%, rgba(236,72,153,.4));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none;
+    }
+    .pane-label { font-size: 10.5px; letter-spacing: 1px; color: var(--muted-2); }
+    .demo-arrow {
+      width: 40px; height: 40px; align-self: center; border-radius: 50%;
+      background: var(--grad-soft); border: 1px solid rgba(139,92,246,.35); color: #c4b5fd;
+      font-size: 0; box-shadow: 0 8px 24px -12px rgba(139,92,246,.9);
+    }
+    .demo-arrow::after { content: "→"; font-size: 17px; font-weight: 800; }
+    .before-img { border-radius: 16px; border-color: rgba(148,163,184,.2); }
+    .before-img::after { right: 12px; top: 12px; border-radius: 999px; font-size: 10px; letter-spacing: .2px; box-shadow: 0 6px 18px rgba(0,0,0,.35); }
+    .demo-card {
+      border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+      background: rgba(20,29,51,.7); border: 1px solid var(--border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    .demo-card h5 { font-size: 12px; letter-spacing: .2px; }
+    .demo-card h5 .bar { width: 3px; height: 12px; }
+    .demo-card p, .demo-card li { color: #c4cee2; }
+    .demo-cta-row { margin-top: 24px; }
+
+    /* ── Mode toggle ── */
+    .mode-toggle {
+      gap: 6px; margin: 30px 0 12px; padding: 6px;
+      background: rgba(15,22,40,.75); border: 1px solid var(--border); border-radius: 16px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    .mode-toggle button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 11px; border-radius: 11px; font-size: 13.5px;
+    }
+    .mode-toggle button .ic { width: 16px; height: 16px; }
+    .mode-toggle button.active { background: var(--grad); box-shadow: 0 10px 24px -12px rgba(139,92,246,.9), inset 0 1px 0 rgba(255,255,255,.2); }
+    .mode-toggle .cost { font-size: 11.5px; opacity: .7; }
+
+    /* ── Drop zone ── */
+    #drop-zone {
+      padding: 62px 24px; border-radius: var(--radius-lg); border: 1.5px dashed rgba(148,163,184,.26);
+      background:
+        radial-gradient(520px 260px at 50% 0%, rgba(139,92,246,.10), transparent 70%),
+        linear-gradient(180deg, rgba(20,29,51,.6), rgba(10,15,28,.55));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    #drop-zone:hover, #drop-zone.dragover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    #drop-zone:hover::before, #drop-zone.dragover::before { opacity: 1; }
+    #drop-zone .icon { display: none; }
+    .drop-icon {
+      width: 66px; height: 66px; margin: 0 auto 16px; border-radius: 20px;
+      display: grid; place-items: center; color: #ddd6fe;
+      background: var(--grad-soft); border: 1px solid rgba(139,92,246,.3);
+      box-shadow: 0 18px 40px -20px rgba(139,92,246,.8), inset 0 1px 0 rgba(255,255,255,.08);
+      animation: bob 3.4s ease-in-out infinite;
+    }
+    .drop-icon svg { width: 30px; height: 30px; }
+    #drop-zone .drop-title { font-size: 16.5px; font-weight: 700; letter-spacing: -.2px; color: var(--text); }
+    #drop-zone .drop-title span { color: var(--accent-2); text-decoration: underline; text-decoration-color: rgba(167,139,250,.4); text-underline-offset: 3px; }
+    #drop-zone .drop-sub { margin-top: 7px; font-size: 12.5px; color: var(--muted-2); }
+    #drop-zone .shortcut { margin-top: 16px; padding: 6px 12px; border-radius: 9px; background: rgba(7,10,20,.55); }
+    #drop-zone .shortcut kbd {
+      background: var(--surface-3); padding: 2px 7px; border-radius: 5px;
+      border: 1px solid var(--border-strong); box-shadow: 0 1px 0 rgba(255,255,255,.06);
+    }
+    #drop-zone.has-image { padding: 12px; border-color: rgba(52,211,153,.4); background: rgba(7,10,20,.6); }
+    #drop-zone.has-image img { border-radius: 16px; }
+    .hint-chips { gap: 7px; margin-top: 14px; }
+    .hint-chips span {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11.5px; color: var(--muted); background: rgba(15,22,40,.6);
+      border: 1px solid var(--border); padding: 5px 11px;
+    }
+    .hint-chips .ic { width: 13px; height: 13px; color: var(--accent-2); }
+
+    #preview-actions { margin-top: 16px; }
+    #preview-actions button { border-radius: 12px; padding: 12px 28px; }
+    #clear-btn { background: rgba(15,22,40,.8); color: var(--muted); border: 1px solid var(--border-strong); }
+    #clear-btn:hover { border-color: rgba(251,113,133,.5); color: var(--danger); background: rgba(251,113,133,.06); }
+    #error-msg { border-radius: 14px; border-color: rgba(251,113,133,.3); background: rgba(251,113,133,.08); }
+
+    /* ── Processing overlay ── */
+    #processing-overlay { background: rgba(5,8,16,.82); }
+    .proc-card {
+      border-radius: 24px; padding: 36px 32px; max-width: 420px;
+      background: linear-gradient(180deg, rgba(20,29,51,.98), rgba(12,18,34,.98));
+      border: 1px solid rgba(148,163,184,.18); box-shadow: var(--shadow);
+    }
+    .proc-orb { width: 66px; height: 66px; margin-bottom: 20px; filter: drop-shadow(0 0 22px rgba(139,92,246,.5)); }
+    .proc-card h3 { font-size: 18px; letter-spacing: -.3px; }
+    .proc-card p.hint { margin-bottom: 22px; }
+    .proc-steps { gap: 11px; }
+    .proc-step { font-size: 13px; }
+    .proc-step .tick { width: 19px; height: 19px; }
+
+    /* ── History ── */
+    #history-section { margin-top: 30px; }
+    #history-section h3 { font-size: 11.5px; letter-spacing: 1px; color: var(--muted-2); }
+    .history-item {
+      border-radius: 14px; padding: 13px 15px;
+      background: rgba(15,22,40,.65); border: 1px solid var(--border);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.02);
+    }
+    .history-item:hover { transform: translateX(3px); border-color: rgba(139,92,246,.45); background: rgba(20,29,51,.8); }
+    .history-item .hic {
+      width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center;
+      background: var(--grad-soft); border: 1px solid rgba(139,92,246,.22); font-size: 0;
+    }
+    .history-item .hic svg { width: 16px; height: 16px; color: #c4b5fd; }
+    .history-item .h-title { font-size: 13px; }
+    .history-item .h-meta { font-size: 11px; }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border); margin-top: 56px; padding: 30px 20px 38px;
+      font-size: 12.5px; color: var(--muted-2);
+    }
+    .footer-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .footer-brand { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-weight: 700; }
+    .footer-brand .logo-mark { width: 24px; height: 24px; border-radius: 7px; box-shadow: none; }
+    .footer-brand .logo-mark svg { width: 13px; height: 13px; }
+    .footer-meta { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; color: var(--muted-2); }
+    .footer-meta span { display: inline-flex; align-items: center; gap: 5px; }
+    /* ── Result panel ── */
+    #result-panel { margin-top: 34px; }
+    #result-panel .result-header { margin-bottom: 14px; }
+    #result-panel .result-header .type-badge {
+      display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px;
+      font-size: 11.5px; letter-spacing: .6px; text-transform: uppercase;
+    }
+    #result-panel .tags { margin-bottom: 16px; gap: 7px; }
+    #result-panel .tags span {
+      background: rgba(139,92,246,.09); border-color: rgba(139,92,246,.22); color: #c4b5fd;
+      font-size: 11px; letter-spacing: .2px; padding: 4px 11px;
+    }
+    .note-card {
+      background: linear-gradient(180deg, rgba(20,29,51,.72), rgba(13,19,35,.82));
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 20px 22px; margin-bottom: 13px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+      transition: border-color .2s;
+    }
+    .note-card:hover { border-color: rgba(148,163,184,.24); }
+    .note-card h3 { font-size: 13.5px; letter-spacing: .1px; margin-bottom: 10px; gap: 9px; }
+    .note-card h3 .bar { display: none; }
+    .h-icon {
+      width: 27px; height: 27px; border-radius: 9px; display: inline-grid; place-items: center;
+      background: var(--grad-soft); border: 1px solid rgba(139,92,246,.28); color: #c4b5fd;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .h-icon svg { width: 15px; height: 15px; }
+    .h-icon.green { background: rgba(52,211,153,.09); border-color: rgba(52,211,153,.3); color: #6ee7b7; }
+    .h-icon.amber { background: rgba(251,191,36,.09); border-color: rgba(251,191,36,.3); color: #fcd34d; }
+    .h-icon.red { background: rgba(251,113,133,.09); border-color: rgba(251,113,133,.3); color: #fda4af; }
+    .h-icon.cyan { background: rgba(34,211,238,.09); border-color: rgba(34,211,238,.3); color: #67e8f9; }
+    .note-card p, .note-card li { font-size: 13.5px; line-height: 1.75; color: #c8d3e7; }
+    .note-card .muted { color: var(--muted-2); }
+    .note-card .formula {
+      position: relative; border-radius: 12px; padding: 12px 15px 12px 17px; margin: 9px 0;
+      background: rgba(139,92,246,.07); border: 1px solid rgba(139,92,246,.2);
+      font-size: 14.5px; overflow-x: auto;
+    }
+    .note-card .formula::before {
+      content: ""; position: absolute; left: 0; top: 10px; bottom: 10px; width: 3px;
+      border-radius: 0 3px 3px 0; background: var(--grad);
+    }
+    .note-card .formula .f-explain { color: var(--muted); font-size: 12.5px; }
+    .note-card.uncertain-symbols, .uncertain-symbols { color: #fcd34d; }
+    .note-card.takeaway-card { border-color: rgba(52,211,153,.28); background: linear-gradient(180deg, rgba(52,211,153,.07), rgba(13,19,35,.85)); }
+    .note-card.verify-card { border-color: rgba(251,113,133,.3); background: linear-gradient(180deg, rgba(251,113,133,.06), rgba(13,19,35,.85)); }
+    .note-card.uncertain-card { border-color: rgba(251,191,36,.28); background: linear-gradient(180deg, rgba(251,191,36,.05), rgba(13,19,35,.85)); }
+    .note-card.secondary { background: rgba(12,18,33,.6); border-radius: 13px; padding: 13px 17px; }
+    .note-card.secondary summary { font-size: 12.5px; }
+    .note-card.secondary summary::after { content: "+"; font-size: 15px; }
+    .note-card.diagram-card .diagram-wrap { border-radius: 14px; border-color: var(--border); background: rgba(7,10,20,.6); }
+    .note-card.diagram-card .diagram-wrap svg { border-radius: 12px; }
+    .visual-wrap svg, .visual-wrap img { border-radius: 14px; border-color: var(--border); }
+    .visual-trust { color: var(--muted-2); font-size: 11px; }
+    .explain-card { border-color: rgba(251,191,36,.3); background: linear-gradient(180deg, rgba(251,191,36,.05), rgba(13,19,35,.85)); }
+    .explain-card .explain-tagline { font-size: 12.5px; color: var(--muted-2); }
+    .explain-btn {
+      border-radius: 13px; padding: 14px 16px; font-size: 13.5px;
+      background: linear-gradient(135deg, rgba(251,191,36,.14), rgba(249,115,22,.10));
+      border-color: rgba(251,191,36,.4);
+    }
+    .explain-btn:hover { border-style: solid; box-shadow: 0 10px 26px -14px rgba(251,191,36,.5); }
+    #visual-download-btn {
+      display: inline-flex; align-items: center; gap: 6px; margin: 12px auto 0;
+      background: rgba(15,22,40,.8); border: 1px solid var(--border-strong); color: var(--muted);
+      padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    #visual-download-btn:hover { color: var(--text); border-color: var(--accent); }
+    .visual-context-line { color: var(--muted-2); font-size: 11.5px; }
+    #revise-btn {
+      border-radius: 16px; padding: 16px; margin: 8px 0 16px;
+      background: linear-gradient(135deg, rgba(139,92,246,.16), rgba(236,72,153,.10));
+      border: 1px dashed rgba(167,139,250,.6); font-size: 14.5px;
+    }
+    #revise-btn:hover { border-style: solid; box-shadow: 0 12px 30px -16px rgba(139,92,246,.7); }
+    #revision-cards .revision-header { color: #c4b5fd; letter-spacing: .3px; margin: 6px 0 12px; }
+    #raw-toggle-btn { border-radius: 10px; background: rgba(15,22,40,.6); }
+    #raw-markdown, #result-panel pre {
+      background: rgba(7,10,20,.65); border: 1px solid var(--border); border-radius: 14px;
+      font-size: 13px; color: #b9c5da;
+    }
+    #result-panel .btn-row { margin-top: 16px; gap: 9px; }
+    #result-panel .btn-row button { display: inline-flex; align-items: center; gap: 7px; border-radius: 11px; padding: 11px 18px; }
+    #copy-btn { background: rgba(15,22,40,.8); border: 1px solid var(--border-strong); }
+    #copy-btn:hover { border-color: var(--accent); background: var(--surface-2); }
+    #download-btn { box-shadow: 0 10px 24px -12px rgba(139,92,246,.8), inset 0 1px 0 rgba(255,255,255,.2); }
+    #result-panel .view-orig-btn { border-radius: 11px; background: rgba(15,22,40,.5); }
+    #result-panel .view-orig-btn:hover { border-color: rgba(139,92,246,.5); background: rgba(139,92,246,.06); }
+    /* ── Auth modal ── */
+    #auth-modal { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); background: rgba(4,7,14,.78) !important; }
+    .auth-card {
+      position: relative; width: 100%; max-width: 400px; padding: 32px 28px 24px;
+      border-radius: 24px; text-align: center;
+      background: linear-gradient(180deg, rgba(20,29,51,.99), rgba(11,17,31,.99));
+      border: 1px solid rgba(148,163,184,.18); box-shadow: var(--shadow);
+      animation: rise .3s ease both;
+    }
+    .auth-brand { display: flex; justify-content: center; margin-bottom: 16px; }
+    .auth-brand .logo-mark { width: 42px; height: 42px; border-radius: 13px; }
+    .auth-brand .logo-mark svg { width: 22px; height: 22px; }
+    .auth-card h3 { font-family: var(--font-display); font-size: 22px; letter-spacing: -.5px; color: #fff; margin-bottom: 7px; }
+    .auth-card .auth-sub { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+    .auth-close {
+      position: absolute; top: 14px; right: 14px; width: 30px; height: 30px;
+      border-radius: 50%; background: rgba(148,163,184,.06); border: 1px solid var(--border);
+      color: var(--muted); font-size: 15px; cursor: pointer; display: grid; place-items: center;
+      transition: all .18s;
+    }
+    .auth-close:hover { background: rgba(251,113,133,.1); border-color: rgba(251,113,133,.4); color: #fda4af; transform: rotate(90deg); }
+    #google-btn { width: 100%; margin-bottom: 4px; display: flex; justify-content: center; }
+    #google-btn iframe { border-radius: 999px !important; }
+    .auth-divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--muted-2); font-size: 10.5px; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700; }
+    .auth-divider::before, .auth-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+    .auth-field {
+      width: 100%; padding: 12px 14px; border-radius: 11px; border: 1px solid var(--border-strong);
+      background: rgba(7,10,20,.7); color: var(--text); margin-bottom: 9px;
+      font-family: inherit; font-size: 13.5px; transition: all .18s;
+    }
+    .auth-field::placeholder { color: var(--muted-2); }
+    .auth-field:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(139,92,246,.16); }
+    #auth-name { display: none; }
+    #auth-error { color: #fda4af; font-size: 12px; margin: 2px 0 10px; text-align: left; display: none; }
+    #auth-submit {
+      width: 100%; padding: 12px; border: none; border-radius: 999px;
+      background: #fff; color: #0b0f1c; font-family: inherit; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all .18s; box-shadow: 0 10px 24px -14px rgba(255,255,255,.4);
+    }
+    #auth-submit:hover { transform: translateY(-1px); background: #f1f5ff; }
+    #auth-submit:disabled { opacity: .6; cursor: wait; transform: none; }
+    .auth-switch { margin-top: 16px; font-size: 12.5px; color: var(--muted-2); }
+    .auth-switch a { color: #c4b5fd; font-weight: 700; text-decoration: none; }
+    .auth-switch a:hover { color: #e9d5ff; text-decoration: underline; text-underline-offset: 3px; }
+    .auth-perks {
+      margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border);
+      display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+      font-size: 10.5px; font-weight: 600; color: var(--muted-2); letter-spacing: .2px;
+    }
+    .auth-perks span { display: inline-flex; align-items: center; gap: 4px; }
+    .auth-perks .ic { width: 12px; height: 12px; color: var(--green); }
+
+    /* ── Avatar dropdown ── */
+    .avatar-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(148,163,184,.3); object-fit: cover; cursor: pointer; }
+    .avatar-initial {
+      width: 34px; height: 34px; border-radius: 50%; background: var(--grad); color: #fff;
+      display: grid; place-items: center; font-size: 13px; font-weight: 800; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.15); box-shadow: 0 6px 16px -8px rgba(139,92,246,.8);
+    }
+    .avatar-wrap { position: relative; display: flex; align-items: center; margin-left: 6px; }
+    .avatar-menu {
+      display: none; position: absolute; top: 44px; right: 0; min-width: 200px; padding: 8px; z-index: 200;
+      background: linear-gradient(180deg, rgba(20,29,51,.99), rgba(12,18,34,.99));
+      border: 1px solid rgba(148,163,184,.22); border-radius: 14px; box-shadow: var(--shadow);
+    }
+    .avatar-menu.open { display: block; }
+    .menu-user { padding: 7px 9px 9px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
+    .menu-user .menu-name { color: var(--text); font-size: 12.5px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .menu-user .menu-email { color: var(--muted-2); font-size: 10.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .menu-logout {
+      width: 100%; background: none; border: none; color: #fda4af; text-align: left;
+      padding: 8px 9px; border-radius: 8px; font-size: 12.5px; font-weight: 600; font-family: inherit; cursor: pointer;
+    }
+    .menu-logout:hover { background: rgba(251,113,133,.08); }
+
+    /* ── Buy modal ── */
+    .overlay { background: rgba(4,7,14,.76); backdrop-filter: blur(8px); }
+    .modal {
+      border-radius: 24px; padding: 28px; max-width: 430px;
+      background: linear-gradient(180deg, rgba(20,29,51,.99), rgba(11,17,31,.99));
+      border: 1px solid rgba(148,163,184,.18); box-shadow: var(--shadow);
+    }
+    .modal h2 { font-size: 22px; letter-spacing: -.5px; }
+    .modal .sub { font-size: 12.5px; line-height: 1.6; }
+    .packs { gap: 9px; margin-top: 16px; }
+    .pack {
+      position: relative; border-radius: 14px; padding: 15px 17px;
+      background: rgba(7,10,20,.6); border: 1px solid var(--border); transition: all .18s;
+    }
+    .pack:hover { border-color: rgba(139,92,246,.45); background: rgba(20,29,51,.75); }
+    .pack.selected { border-color: rgba(52,211,153,.55); background: rgba(52,211,153,.07); box-shadow: 0 0 0 1px rgba(52,211,153,.2) inset; }
+    .pack .credits { font-size: 15px; }
+    .pack .price strong { font-size: 16px; font-family: var(--font-display); }
+    .pack-badge {
+      display: inline-flex; align-items: center; gap: 4px; margin-left: 7px; padding: 2px 7px;
+      border-radius: 999px; font-size: 9.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase;
+      color: #6ee7b7; background: rgba(52,211,153,.1); border: 1px solid rgba(52,211,153,.28); vertical-align: 1px;
+    }
+    .modal .pay-btn {
+      border-radius: 999px; margin-top: 18px; font-size: 14px;
+      box-shadow: 0 12px 28px -14px rgba(139,92,246,.9), inset 0 1px 0 rgba(255,255,255,.2);
+    }
+    .modal .close-btn { border-radius: 50%; width: 30px; height: 30px; display: grid; place-items: center; background: rgba(148,163,184,.06); border: 1px solid var(--border); }
+    .modal .close-btn:hover { color: var(--danger); border-color: rgba(251,113,133,.4); }
+    .orig-modal img { border-radius: 14px; border: 1px solid var(--border); }
+    /* ── JEE hub ── */
+    .jee-card { position: relative; overflow: hidden; }
+    .jee-card::before {
+      content: ""; position: absolute; inset: 0 0 auto; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--accent), #ec4899);
+      opacity: .85;
+    }
+    .jee-hub { display: flex; flex-direction: column; gap: 14px; }
+    .jee-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; font-size: 12.5px; }
+    .jee-crumb-item {
+      display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 999px;
+      background: rgba(148,163,184,.07); border: 1px solid var(--border); color: var(--muted);
+      font-weight: 600; letter-spacing: .1px;
+    }
+    .jee-crumb-item.subject { color: #67e8f9; background: rgba(34,211,238,.08); border-color: rgba(34,211,238,.25); }
+    .jee-crumb-item.concept { color: #ddd6fe; background: rgba(139,92,246,.1); border-color: rgba(139,92,246,.3); }
+    .jee-crumb-sep { color: var(--muted-2); font-size: 11px; }
+    .jee-match-note { margin: 0; color: var(--muted-2); font-size: 12px; line-height: 1.6; }
+    .jee-syllabus {
+      display: flex; gap: 10px; align-items: flex-start; padding: 11px 13px;
+      background: rgba(34,211,238,.05); border: 1px solid rgba(34,211,238,.16);
+      border-radius: 12px; font-size: 12px; line-height: 1.65; color: #b8c6dd;
+    }
+    .jee-syllabus .ic { width: 15px; height: 15px; color: #67e8f9; margin-top: 2px; }
+    .jee-syllabus a, .jee-source a { color: #a5b4fc; text-decoration: none; border-bottom: 1px dashed rgba(165,180,252,.4); }
+    .jee-syllabus a:hover, .jee-source a:hover { color: #c7d2fe; border-bottom-style: solid; }
+    .jee-rel-row { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+    .jee-rel-label { font-size: 9.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-2); }
+    .jee-rel-chip {
+      padding: 3px 9px; border-radius: 999px; font-size: 11px; color: var(--muted);
+      background: rgba(148,163,184,.06); border: 1px solid var(--border);
+    }
+    .jee-overview { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+    .jee-stat {
+      display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border-radius: 13px;
+      background: linear-gradient(180deg, rgba(139,92,246,.08), rgba(139,92,246,.02));
+      border: 1px solid var(--border); box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+    }
+    .jee-stat-value { font-family: var(--font-display); font-size: 20px; font-weight: 700; letter-spacing: -.5px; color: #ede9fe; }
+    .jee-stat-label { font-size: 9.5px; font-weight: 800; letter-spacing: .9px; text-transform: uppercase; color: var(--muted-2); }
+    .jee-list-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+    .jee-list-head h4 { font-size: 14.5px; font-weight: 800; letter-spacing: -.2px; display: flex; align-items: center; gap: 8px; }
+    .jee-list-head h4 .ic { width: 16px; height: 16px; color: #c4b5fd; }
+    .jee-list-head p { margin: 4px 0 0; font-size: 11.5px; color: var(--muted-2); }
+    .jee-practice-all {
+      display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; border-radius: 10px;
+      background: var(--grad); border: none; color: #fff; font-family: inherit; font-size: 12px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 10px 22px -12px rgba(139,92,246,.9), inset 0 1px 0 rgba(255,255,255,.2);
+      transition: all .16s; white-space: nowrap;
+    }
+    .jee-practice-all:hover { filter: brightness(1.07); transform: translateY(-1px); }
+    .jee-practice-all .ic { width: 13px; height: 13px; }
+    .jee-filterbar {
+      display: flex; align-items: center; gap: 9px; flex-wrap: wrap; padding: 9px 10px;
+      background: rgba(7,10,20,.45); border: 1px solid var(--border); border-radius: 12px;
+    }
+    .jee-select-wrap {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 9.5px; font-weight: 800; letter-spacing: .9px; text-transform: uppercase; color: var(--muted-2);
+    }
+    .jee-select {
+      appearance: none; -webkit-appearance: none; cursor: pointer;
+      padding: 7px 28px 7px 10px; border-radius: 9px; border: 1px solid var(--border);
+      background: var(--surface-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239aa7c2' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 9px center;
+      color: var(--text); font-family: inherit; font-size: 12px; font-weight: 600;
+    }
+    .jee-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,92,246,.15); }
+    .jee-seg {
+      display: inline-flex; gap: 2px; padding: 3px; border-radius: 9px;
+      background: var(--surface-2); border: 1px solid var(--border);
+    }
+    .jee-seg-btn {
+      border: 0; background: transparent; color: var(--muted); font-family: inherit;
+      font-size: 11.5px; font-weight: 600; padding: 5px 11px; border-radius: 7px; cursor: pointer;
+      transition: all .15s; margin: 0;
+    }
+    .jee-seg-btn:hover { color: var(--text); }
+    .jee-seg-btn.active { background: var(--grad); color: #fff; box-shadow: 0 4px 12px -6px rgba(139,92,246,.9); }
+    .jee-progress-line { margin-left: auto; font-size: 11px; font-weight: 600; color: var(--muted-2); white-space: nowrap; }
+    .jee-pyq-list { display: flex; flex-direction: column; gap: 9px; }
+    .jee-pyq-card {
+      position: relative; padding: 14px 15px; border-radius: 14px;
+      background: linear-gradient(180deg, rgba(26,37,64,.45), rgba(13,19,35,.65));
+      border: 1px solid var(--border); transition: all .18s;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.02);
+    }
+    .jee-pyq-card:hover { border-color: rgba(139,92,246,.4); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .jee-pyq-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 7px; flex-wrap: wrap; }
+    .jee-tags { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+    .jee-tag {
+      display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px;
+      font-size: 10px; font-weight: 700; letter-spacing: .2px;
+      color: var(--muted); background: rgba(148,163,184,.06); border: 1px solid var(--border);
+    }
+    .jee-tag.year { color: #c4b5fd; background: rgba(139,92,246,.1); border-color: rgba(139,92,246,.3); }
+    .jee-tag.num { color: #6ee7b7; background: rgba(52,211,153,.08); border-color: rgba(52,211,153,.28); }
+    .jee-tag.mcq { color: #f9a8d4; background: rgba(236,72,153,.08); border-color: rgba(236,72,153,.28); }
+    .jee-tag.answer-ok { color: #6ee7b7; background: rgba(52,211,153,.08); border-color: rgba(52,211,153,.26); }
+    .jee-tag.answer-pending { color: #fcd34d; background: rgba(251,191,36,.08); border-color: rgba(251,191,36,.26); }
+    .jee-qnum { font-size: 10.5px; font-weight: 700; color: var(--muted-2); font-variant-numeric: tabular-nums; }
+    .jee-question { margin: 0; font-size: 13px; line-height: 1.62; color: #d3ddef; }
+    .jee-pyq-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 9px; flex-wrap: wrap; }
+    .jee-source { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 10.5px; color: var(--muted-2); }
+    .jee-source .ic { width: 12px; height: 12px; }
+    .jee-pbtn {
+      display: inline-flex; align-items: center; gap: 5px; margin: 0; padding: 7px 12px;
+      border-radius: 9px; border: 1px solid rgba(139,92,246,.4); background: rgba(139,92,246,.1);
+      color: #ddd6fe; font-family: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; transition: all .15s;
+    }
+    .jee-pbtn:hover { background: rgba(139,92,246,.2); border-color: rgba(139,92,246,.65); transform: translateY(-1px); }
+    .jee-pbtn .ic { width: 12px; height: 12px; }
+    .jee-toggle {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px; align-self: center;
+      margin: 2px auto 0; padding: 9px 16px; border-radius: 999px;
+      background: rgba(15,22,40,.8); border: 1px solid var(--border-strong); color: var(--muted);
+      font-family: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer; transition: all .16s;
+    }
+    .jee-toggle:hover { color: var(--text); border-color: var(--accent); background: rgba(139,92,246,.08); }
+    .jee-pattern {
+      padding: 13px 15px; border-radius: 12px; background: rgba(34,211,238,.04);
+      border: 1px solid rgba(34,211,238,.16);
+    }
+    .jee-pattern-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 5px; }
+    .jee-pattern-head .ic { width: 14px; height: 14px; color: #67e8f9; }
+    .jee-pattern-head strong { font-size: 12.5px; color: #cffafe; }
+    .jee-pattern-head span { font-size: 10px; color: var(--muted-2); padding: 2px 7px; border-radius: 999px; background: rgba(34,211,238,.08); border: 1px solid rgba(34,211,238,.18); }
+    .jee-pattern p { margin: 0; font-size: 11.5px; line-height: 1.6; color: var(--muted); }
+    .jee-pattern .jee-pattern-foot { margin-top: 6px; font-size: 10.5px; color: var(--muted-2); }
+    .jee-coverage { margin: 0; font-size: 10.5px; line-height: 1.6; color: var(--muted-2); border-top: 1px solid var(--border); padding-top: 10px; }
+    .jee-flag {
+      display: flex; align-items: center; gap: 8px; padding: 10px 13px; border-radius: 12px;
+      font-size: 12.5px; font-weight: 700; line-height: 1.5;
+    }
+    .jee-flag.ambiguous { color: #fcd34d; background: rgba(251,191,36,.07); border: 1px solid rgba(251,191,36,.24); }
+    .jee-flag .ic { width: 16px; height: 16px; }
+    .jee-empty { text-align: center; padding: 10px 6px 4px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .jee-empty-icon {
+      width: 48px; height: 48px; border-radius: 15px; display: grid; place-items: center;
+      background: var(--grad-soft); border: 1px solid rgba(139,92,246,.25); color: #c4b5fd; margin-bottom: 2px;
+    }
+    .jee-empty-icon .ic { width: 22px; height: 22px; }
+    .jee-empty-title { font-size: 14px; font-weight: 800; color: var(--text); }
+    .jee-empty .jee-hint { max-width: 480px; font-size: 11.5px; line-height: 1.65; color: var(--muted-2); }
+    .jee-empty .jee-select-wrap { margin-top: 6px; }
+    .jee-cand-grid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+    .jee-cand {
+      padding: 14px; border-radius: 13px; background: rgba(20,29,51,.5);
+      border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px;
+    }
+    .jee-cand-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .jee-cand-head strong { font-size: 12.5px; color: #e9d5ff; }
+    .jee-cand-head span { font-size: 10px; color: var(--muted-2); white-space: nowrap; }
+    .jee-cand .jee-hint { margin: 0; font-size: 10.5px; color: var(--muted-2); line-height: 1.55; }
+    .jee-minirow { padding: 8px 0; border-top: 1px dashed var(--border); font-size: 11px; color: var(--muted); line-height: 1.55; }
+    .jee-minirow:first-of-type { border-top: 0; }
+    .jee-cand .jee-pbtn { align-self: flex-start; margin-top: 2px; }
+    /* ── JEE practice ── */
+    .jee-practice {
+      display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 16px;
+      border-radius: 15px; border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(20,29,51,.55), rgba(11,17,31,.7));
+    }
+    .jee-practice-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .jee-backbtn {
+      display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 7px 11px;
+      border-radius: 9px; border: 1px solid var(--border); background: transparent;
+      color: var(--muted); font-family: inherit; font-size: 11.5px; font-weight: 600; cursor: pointer; transition: all .15s;
+    }
+    .jee-backbtn:hover { color: var(--text); background: var(--surface-2); border-color: var(--border-strong); }
+    .jee-backbtn .ic { width: 13px; height: 13px; }
+    .jee-practice-count { font-size: 10.5px; font-weight: 800; letter-spacing: .6px; text-transform: uppercase; color: var(--muted-2); }
+    .jee-progressbar { height: 6px; border-radius: 999px; background: rgba(148,163,184,.12); overflow: hidden; }
+    .jee-progressbar > div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #8b5cf6, #ec4899); transition: width .45s ease; }
+    .jee-practice-stats { display: flex; gap: 14px; flex-wrap: wrap; font-size: 10.5px; font-weight: 600; color: var(--muted-2); }
+    .jee-practice-stats b { color: var(--muted); }
+    .jee-qcard {
+      position: relative; padding: 16px 17px;
+      background: rgba(7,10,20,.55); border: 1px solid var(--border); border-radius: 14px;
+    }
+    .jee-qcard::before {
+      content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px;
+      border-radius: 0 3px 3px 0; background: var(--grad);
+    }
+    .jee-qcard .jee-question.big { margin-top: 9px; font-size: 15px; line-height: 1.66; color: var(--text); }
+    .jee-answer-panel {
+      padding: 14px; border-radius: 14px;
+      background: rgba(139,92,246,.06); border: 1px solid rgba(139,92,246,.18);
+    }
+    .jee-answer-label {
+      display: block; margin-bottom: 7px;
+      font-size: 9.5px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--muted-2);
+    }
+    .jee-answer-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .jee-answer-input {
+      flex: 1; min-width: 150px; width: auto; padding: 11px 13px; border-radius: 10px;
+      border: 1px solid var(--border-strong); background: rgba(7,10,20,.7); color: var(--text);
+      font-family: inherit; font-size: 14px; font-weight: 600; transition: all .15s;
+    }
+    .jee-answer-input::placeholder { color: var(--muted-2); font-weight: 400; }
+    .jee-answer-input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(139,92,246,.15); }
+    .jee-checkbtn {
+      display: inline-flex; align-items: center; gap: 7px; padding: 11px 18px; border: none; border-radius: 10px;
+      background: var(--grad); color: #fff; font-family: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
+      box-shadow: 0 10px 22px -12px rgba(139,92,246,.9), inset 0 1px 0 rgba(255,255,255,.2); transition: all .15s;
+    }
+    .jee-checkbtn:hover { filter: brightness(1.07); transform: translateY(-1px); }
+    .jee-checkbtn .ic { width: 14px; height: 14px; }
+    .jee-feedback { margin-top: 9px; font-size: 12px; font-weight: 600; line-height: 1.5; }
+    .jee-feedback:empty { display: none; }
+    .jee-feedback.jee-check-ok { color: #6ee7b7; }
+    .jee-feedback.jee-check-bad { color: #fda4af; }
+    .jee-feedback.muted { color: var(--muted-2); }
+    .jee-pnav { display: flex; gap: 8px; justify-content: space-between; }
+    .jee-navbtn {
+      display: inline-flex; align-items: center; gap: 6px; margin: 0; padding: 9px 15px;
+      border-radius: 10px; border: 1px solid var(--border); background: var(--surface);
+      color: var(--text); font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .15s;
+    }
+    .jee-navbtn:hover:not(:disabled) { border-color: var(--accent); background: var(--surface-2); transform: translateY(-1px); }
+    .jee-navbtn:disabled { opacity: .35; cursor: not-allowed; }
+    .jee-source-link { display: inline-flex; align-items: center; gap: 5px; color: #a5b4fc; text-decoration: none; border-bottom: 1px dashed rgba(165,180,252,.4); font-weight: 600; }
+    .jee-source-link:hover { color: #c7d2fe; border-bottom-style: solid; }
+    .jee-info {
+      display: flex; gap: 9px; align-items: flex-start; padding: 12px 13px;
+      border-radius: 12px; background: rgba(148,163,184,.05); border: 1px solid var(--border);
+      font-size: 11.5px; line-height: 1.6; color: var(--muted);
+    }
+    .jee-info .ic { width: 15px; height: 15px; color: var(--accent-2); margin-top: 1px; }
+    .jee-info a { color: #a5b4fc; text-decoration: none; border-bottom: 1px dashed rgba(165,180,252,.4); }
+
+    /* ── Responsive ── */
+    @media (max-width: 980px) {
+      .how { grid-template-columns: 1fr; }
+      .how .step { text-align: left; }
+      .demo-stage { grid-template-columns: 1fr; }
+      .demo-arrow { transform: rotate(90deg); }
+    }
+    @media (max-width: 720px) {
+      .container { padding: 0 16px; }
+      header { padding: 10px 0; }
+      header h1 { font-size: 16px; }
+      .logo-mark { width: 32px; height: 32px; border-radius: 9px; }
+      #credits-area { gap: 6px; }
+      #credits-badge { padding: 6px 10px; font-size: 11.5px; }
+      #buy-btn { padding: 7px 11px; font-size: 11.5px; }
+      .btn-login, .btn-signup { padding: 7px 11px; font-size: 12px; }
+      .hero { padding: 48px 0 34px; }
+      .hero h2 { letter-spacing: -1.2px; }
+      .hero p.sub { font-size: 15px; }
+      .hero .cta-row { flex-direction: column; align-items: stretch; }
+      .hero .cta-row button { justify-content: center; }
+      .hero .trust span { font-size: 11px; }
+      .how { margin-top: 24px; }
+      .demo { margin-top: 40px; }
+      .demo-tabs { width: 100%; border-radius: 16px; justify-content: center; }
+      .demo-tab { flex: 1 1 auto; justify-content: center; padding: 9px 10px; font-size: 11.5px; }
+      .demo-stage { padding: 14px; border-radius: 18px; }
+      .mode-toggle button { font-size: 12.5px; padding: 10px; }
+      #drop-zone { padding: 44px 16px; }
+      .note-card { padding: 17px 16px; border-radius: 15px; }
+      .note-card h3 { font-size: 13px; }
+      .jee-overview { grid-template-columns: 1fr 1fr; }
+      .jee-filterbar { gap: 7px; }
+      .jee-progress-line { margin-left: 0; width: 100%; }
+      .jee-list-head { align-items: flex-start; }
+      .jee-practice-all { width: 100%; justify-content: center; }
+      .jee-cand-grid { grid-template-columns: 1fr; }
+      .jee-crumb { font-size: 11.5px; }
+      .jee-pnav { flex-direction: column-reverse; }
+      .jee-navbtn { justify-content: center; }
+      .auth-card { padding: 26px 18px 20px; }
+      .modal { padding: 22px; }
+      footer { margin-top: 40px; }
+    }
+    @media (max-width: 420px) {
+      #buy-btn { display: none; }
+      .jee-overview { grid-template-columns: 1fr; }
+      .jee-practice-stats { gap: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .drop-icon { animation: none; }
+    }
+    .sum-label { display: inline-flex; align-items: center; gap: 8px; }
+    .sum-label .ic { width: 14px; height: 14px; color: #fcd34d; }
+    .demo-card h5 .ic { width: 13px; height: 13px; color: #c4b5fd; margin-right: 6px; }
+    #history-section h3 { display: flex; align-items: center; gap: 8px; }
+    #history-section h3 .ic { width: 15px; height: 15px; color: var(--accent-2); }
+    .trust span { display: inline-flex; align-items: center; gap: 5px; }
+    .trust .ic { width: 13px; height: 13px; color: var(--accent-2); }
+    #result-panel .btn-row .ic { width: 14px; height: 14px; }
+    .visual-trust .ic { width: 11px; height: 11px; vertical-align: -1px; color: #fcd34d; }
+    .explain-btn .ic, #revise-btn > span .ic { width: 16px; height: 16px; }
+    header h1 { white-space: nowrap; }
+    .logo { flex-shrink: 0; }
+    #credits-badge { white-space: nowrap; }
+    .pane-label { display: inline-flex; align-items: center; gap: 6px; }
+    .pane-label .ic { width: 12px; height: 12px; }
+    .btn-login, .btn-signup { white-space: nowrap; }
+    #auth-modal { overflow-y: auto; align-items: flex-start !important; }
+    #auth-modal .auth-card { margin: auto; }
+    @media (max-width: 720px) {
+      header h1 { font-size: 15px; }
+    }
+    @media (max-width: 430px) {
+      #credits-badge { padding: 5px 8px; font-size: 10.5px; }
+      .btn-login, .btn-signup { padding: 6px 9px; font-size: 11.5px; }
+      header h1 { font-size: 14.5px; }
+      #credits-area { gap: 6px; }
+      #auth-area { gap: 5px !important; }
+      .mode-toggle button { font-size: 11.5px; padding: 8px 6px; gap: 6px; }
+      .mode-toggle button .ic { width: 14px; height: 14px; }
+      .mode-toggle .cost { font-size: 10px; }
+    }
+    @media (min-width: 760px) {
+      .footer-inner { flex-direction: row; justify-content: space-between; }
+    }
+    /* UI-POLISH-END */
+  </style>
 </head>
 <body>
   <div class="bg-glow"></div>
   <div class="container">
     <header>
       <a class="logo" href="#" onclick="return false;">
-        <div class="logo-mark">⚡</div>
+        <div class="logo-mark"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/></svg></div>
         <h1>SnapNote <span>AI</span></h1>
       </a>
       <div id="credits-area">
         <span id="credits-badge">--</span>
         <button id="buy-btn">+ Buy Credits</button>
-        <span id="auth-area" style="display:flex;gap:8px;align-items:center;margin-left:8px"></span>
+        <span id="auth-area" style="display:flex;gap:8px;align-items:center;margin-left:6px"></span>
       </div>
     </header>
 
-    <div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center">
-      <div style="position:relative;background:#2f2f2f;border:1px solid #4a4a4a;border-radius:12px;padding:28px 24px;max-width:380px;width:90%;box-shadow:0 20px 60px -20px rgba(0,0,0,.8);text-align:center">
-        <button id="auth-close" style="position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;background:transparent;border:1px solid #8b5cf6;color:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center;transition:all .2s ease">✕</button>
-        <h3 id="auth-title" style="font-size:20px;font-weight:600;color:#fff;margin-bottom:8px">Log in or sign up</h3>
-        <p style="color:#b0b0b0;font-size:13px;line-height:1.5;margin-bottom:20px" id="auth-sub">You'll get smarter responses and can upload files, images, and more.</p>
-        <div id="google-btn" style="width:100%;margin-bottom:10px"></div>
-        <button id="apple-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;font-size:14px;transition:all .2s ease"> Apple</button>
-        <button id="phone-btn" style="width:100%;background:transparent;color:#fff;border:1px solid #565656;padding:12px;border-radius:24px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:16px;font-size:14px;transition:all .2s ease">📞 Continue with phone</button>
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><div style="flex:1;height:1px;background:#4a4a4a"></div><span style="color:#8a8a8a;font-size:12px;letter-spacing:1px">OR</span><div style="flex:1;height:1px;background:#4a4a4a"></div></div>
-        <input id="auth-name" placeholder="Name (for signup)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;display:none;font-size:14px;transition:border-color .2s ease" />
-        <input id="auth-email" type="email" placeholder="Email address" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:10px;font-size:14px;transition:border-color .2s ease" />
-        <input id="auth-pass" type="password" placeholder="Password (min 6)" style="width:100%;padding:12px 14px;border-radius:8px;border:1px solid #4a4a4a;background:#1a1a1a;color:#fff;margin-bottom:14px;font-size:14px;transition:border-color .2s ease" />
-        <div id="auth-error" style="color:#f87171;font-size:12px;margin-bottom:10px;display:none;text-align:left"></div>
-        <button id="auth-submit" style="width:100%;background:#fff;color:#000;border:none;padding:12px;border-radius:24px;font-weight:600;cursor:pointer;font-size:14px;transition:all .2s ease">Continue</button>
-        <p style="text-align:center;margin-top:14px;font-size:12px;color:#8a8a8a"><span id="auth-switch-text">Already have an account?</span> <a href="#" id="auth-switch" style="color:#fff;font-weight:600;text-decoration:underline;transition:color .2s ease">Log in</a></p>
+    <div id="auth-modal" style="display:none;position:fixed;inset:0;z-index:100;align-items:center;justify-content:center;padding:20px">
+      <div class="auth-card">
+        <button id="auth-close" class="auth-close" aria-label="Close">✕</button>
+        <div class="auth-brand"><div class="logo-mark"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/></svg></div></div>
+        <h3 id="auth-title">Log in or sign up</h3>
+        <p class="auth-sub" id="auth-sub">You'll get smarter responses and can upload files, images, and more.</p>
+        <div id="google-btn"></div>
+        <div class="auth-divider"><span>or use email</span></div>
+        <input id="auth-name" class="auth-field" placeholder="Name (for signup)" autocomplete="name" />
+        <input id="auth-email" class="auth-field" type="email" placeholder="Email address" autocomplete="email" />
+        <input id="auth-pass" class="auth-field" type="password" placeholder="Password (min 6)" autocomplete="current-password" />
+        <div id="auth-error"></div>
+        <button id="auth-submit">Continue</button>
+        <p class="auth-switch"><span id="auth-switch-text">Already have an account?</span> <a href="#" id="auth-switch">Log in</a></p>
+        <div class="auth-perks">
+          <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg>50 free credits</span>
+          <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg>No card required</span>
+          <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 4.5L19 7"/></svg>Credits never expire</span>
+        </div>
       </div>
     </div>
-    <style>
-      #google-btn:hover, #apple-btn:hover, #phone-btn:hover { background:#3a3a3a !important; border-color:#6b6b6b !important; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.3); }
-      #auth-submit:hover { background:#f0f0f0 !important; transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.2); }
-      #auth-close:hover { background:#3a3a3a !important; border-color:#a78bfa !important; color:#a78bfa !important; transform:rotate(90deg); }
-      #auth-switch:hover { color:#a78bfa !important; }
-      #auth-name:focus, #auth-email:focus, #auth-pass:focus { border-color:#8b5cf6 !important; outline:none; box-shadow:0 0 0 2px rgba(139,92,246,.2); }
-    </style>
 
     <section class="hero">
       <span class="eyebrow"><span class="dot"></span> Stuck on a lecture slide? Just screenshot it.</span>
       <h2>Turn confusion into<br /><span class="grad">exam-ready understanding.</span></h2>
       <p class="sub">Screenshot a confusing lecture moment. SnapNote explains it in plain language and turns it into a revision sheet you can actually study from.</p>
       <div class="cta-row">
-        <button class="btn-primary" id="hero-upload-btn">📸 Upload a screenshot</button>
-        <button class="btn-ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">See how it works</button>
+        <button class="btn-primary" id="hero-upload-btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg> Upload a screenshot</button>
+        <button class="btn-ghost" onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7z"/></svg> See how it works</button>
       </div>
       <div class="trust">
-        <span>⚡ 50 free credits</span>
-        <span>🔒 One free preview, then sign up</span>
-        <span>🧠 Built for students fed up with messy lecture notes</span>
+        <span><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/></svg>50 free credits</span>
+        <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>One free preview, then sign up</span>
+        <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a5 5 0 0 0-5 5c0 2.5 1.5 4 2.5 5.5V17h5v-3.5C15.5 12 17 10.5 17 8a5 5 0 0 0-5-5Z"/><path d="M9.5 20h5"/></svg>Built for students fed up with messy lecture notes</span>
       </div>
     </section>
 
     <section class="how" id="how">
       <div class="step">
         <div class="num">1</div>
-        <div class="ic">📸</div>
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
         <h4>Screenshot</h4>
         <p>Capture the moment that confused you.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
-        <div class="ic">🧠</div>
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a5 5 0 0 0-5 5c0 2.5 1.5 4 2.5 5.5V17h5v-3.5C15.5 12 17 10.5 17 8a5 5 0 0 0-5-5Z"/><path d="M9.5 20h5"/></svg></div>
         <h4>Understand</h4>
         <p>SnapNote turns it into a clear explanation.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
-        <div class="ic">⚡</div>
+        <div class="step-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/></svg></div>
         <h4>Remember</h4>
         <p>Get the formulas, common mistakes and 30-second revision.</p>
       </div>
@@ -575,19 +1376,19 @@
       </div>
 
       <div class="demo-tabs" id="demo-tabs">
-        <button class="demo-tab active" data-demo="physics">🔬 Physics — Handwritten Board</button>
-        <button class="demo-tab" data-demo="math">📐 Math — Board Derivation</button>
-        <button class="demo-tab" data-demo="engineering">⚙️ Engineering — Lecture Notes</button>
+        <button class="demo-tab active" data-demo="physics"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6l-5.2 9a1.8 1.8 0 0 0 1.6 2.7h11.2a1.8 1.8 0 0 0 1.6-2.7L14 9V3"/><path d="M7.5 15h9"/></svg>Physics — Handwritten Board</button>
+        <button class="demo-tab" data-demo="math"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4H6l6 8-6 8h12"/></svg>Math — Board Derivation</button>
+        <button class="demo-tab" data-demo="engineering"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z"/></svg>Engineering — Lecture Notes</button>
       </div>
 
       <div class="demo-stage">
         <div class="demo-pane demo-pane-before">
-          <div class="pane-label">📸 Your messy lecture screenshot</div>
+          <div class="pane-label"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg>Your messy lecture screenshot</div>
           <div class="pane-body before-img" id="demo-before-img"></div>
         </div>
         <div class="demo-arrow">→</div>
         <div class="demo-pane demo-pane-after">
-          <div class="pane-label">⚡ What SnapNote gives you</div>
+          <div class="pane-label"><svg class="ic" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/></svg>What SnapNote gives you</div>
           <div class="pane-body" id="demo-after"></div>
         </div>
       </div>
@@ -599,23 +1400,23 @@
     </section>
 
     <div class="mode-toggle">
-      <button id="mode-text" class="active" data-mode="text">Text / Table <span class="cost">(1 credit)</span></button>
-      <button id="mode-diagram" data-mode="diagram">Diagram <span class="cost">(5 credits)</span></button>
+      <button id="mode-text" class="active" data-mode="text"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/></svg>Text / Table <span class="cost">(1 credit)</span></button>
+      <button id="mode-diagram" data-mode="diagram"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="6" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/><path d="M10 6h5a2 2 0 0 1 2 2v7"/><path d="m15 13 2 2 2-2"/><path d="M6.5 9v4.5a2 2 0 0 0 2 2H12"/></svg>Diagram <span class="cost">(5 credits)</span></button>
     </div>
 
     <div id="drop-zone">
       <div id="drop-content">
-        <div class="icon">📷</div>
-        <p><strong>Drop image here</strong> or click to upload</p>
-        <p style="margin-top:6px;">Supports PNG, JPG, WEBP (max 10 MB)</p>
+        <div class="drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
+        <p class="drop-title">Drop image here or <span>browse</span></p>
+        <p class="drop-sub">PNG, JPG, WEBP · max 10 MB</p>
         <span class="shortcut">Press <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste from clipboard</span>
       </div>
       <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp" />
     </div>
     <div class="hint-chips">
-      <span>🧪 Works on handwritten slides</span>
-      <span>🧮 Reads formulas &amp; Greek symbols</span>
-      <span>📱 Lecture whiteboard photos OK</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6l-5.2 9a1.8 1.8 0 0 0 1.6 2.7h11.2a1.8 1.8 0 0 0 1.6-2.7L14 9V3"/><path d="M7.5 15h9"/></svg>Works on handwritten slides</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 4H6l6 8-6 8h12"/></svg>Reads formulas &amp; Greek symbols</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="15" rx="2"/><path d="M8 22h8"/><path d="M12 19v3"/></svg>Lecture whiteboard photos OK</span>
     </div>
 
     <div id="preview-actions">
@@ -626,7 +1427,7 @@
     <div id="error-msg"></div>
 
     <section id="history-section">
-      <h3>🕘 Your recent study sheets</h3>
+      <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Your recent study sheets</h3>
       <div class="history-list" id="history-list"></div>
     </section>
 
@@ -637,7 +1438,7 @@
       </div>
       <div id="tags-container" class="tags"></div>
       <button id="revise-btn" class="revise-btn">
-        <span>✨ Make This Revision-Ready</span>
+        <span>Make This Revision-Ready</span>
         <em>Turn this into exam-ready learning material (+1 credit)</em>
       </button>
       <div id="revision-cards"></div>
@@ -645,14 +1446,14 @@
       <button id="raw-toggle-btn">View extracted text</button>
       <pre id="raw-markdown"></pre>
       <div class="btn-row">
-        <button id="copy-btn">📋 Copy Notes</button>
-        <button id="download-btn">⬇️ Download .md</button>
+        <button id="copy-btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy Notes</button>
+        <button id="download-btn"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>Download .md</button>
       </div>
-      <button id="view-orig-btn" class="view-orig-btn" style="display:none;">📷 View original screenshot</button>
+      <button id="view-orig-btn" class="view-orig-btn" style="display:none;"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg>View original screenshot</button>
     </div>
   </div>
 
-  <footer>Made for students who'd rather <span class="brand">understand</span> than memorize. · Powered by EasyOCR + Gemini</footer>
+  <footer><div class="footer-inner"><span>Made for students who'd rather <span class="brand">understand</span> than memorize.</span><span class="footer-meta">Powered by RapidOCR + Gemini</span></div></footer>
 
   <div class="overlay" id="buy-modal">
     <div class="modal">
@@ -720,6 +1521,38 @@
     const historySection = document.getElementById("history-section");
     const historyList = document.getElementById("history-list");
 
+    const ICONS = {
+      copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+      download: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
+      camera: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/>',
+      bolt: '<path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/>',
+      brain: '<path d="M12 3a5 5 0 0 0-5 5c0 2.5 1.5 4 2.5 5.5V17h5v-3.5C15.5 12 17 10.5 17 8a5 5 0 0 0-5-5Z"/><path d="M9.5 20h5"/>',
+      check: '<path d="m5 12 4.5 4.5L19 7"/>',
+      book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>',
+      target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+      sigma: '<path d="M18 4H6l6 8-6 8h12"/>',
+      chart: '<path d="M3 3v18h18"/><path d="m7 15 4-5 3 3 5-7"/>',
+      shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/>',
+      alert: '<path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.6 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0Z"/>',
+      layers: '<path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/>',
+      link: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
+      arrowLeft: '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
+      arrowRight: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+      play: '<path d="m8 5 11 7-11 7V5Z"/>',
+      clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+      file: '<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Z"/><path d="M14 3v6h6"/>',
+      diagram: '<rect x="3" y="3" width="7" height="6" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/><path d="M10 6h5a2 2 0 0 1 2 2v7"/><path d="m15 13 2 2 2-2"/>',
+      sparkles: '<path d="m12 3 1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3Z"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"/>',
+      refresh: '<path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/>',
+      search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+      trash: '<path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M10 11v6M14 11v6"/>'
+    };
+    function ic(name) {
+      const body = ICONS[name] || "";
+      return `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
+    }
+    const dropIdleHtml = dropContent.innerHTML;
+
     // ── Device Auth ──
     async function initDevice() {
       // If logged in, show user credits instead of device credits
@@ -786,6 +1619,7 @@
       authSwitch.textContent = authMode === "signup" ? "Log in" : "Sign up";
       authError.style.display = "none";
       authModal.style.display = "flex";
+      initGoogleButton();
     }
     function hideAuth() { authModal.style.display = "none"; }
     authClose.addEventListener("click", hideAuth);
@@ -821,61 +1655,60 @@
     const GOOGLE_CLIENT_ID = "112530923487-6kjt4rvk765lekhd55fpeeu5fg1dh49e.apps.googleusercontent.com";
     let gsiInitialized = false;
     function initGoogleButton() {
-      if (gsiInitialized || typeof google === "undefined" || !google.accounts) return;
-      gsiInitialized = true;
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: async (response) => {
-          authError.style.display = "none";
-          try {
-            const idToken = response.credential;
-            // Decode the Google JWT payload to grab the profile picture.
-            let pic = "";
-            let gName = "";
+      if (typeof google === "undefined" || !google.accounts) return;
+      if (!gsiInitialized) {
+        gsiInitialized = true;
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: async (response) => {
+            authError.style.display = "none";
             try {
-              const parts = idToken.split(".");
-              const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
-              pic = payload.picture || "";
-              gName = payload.name || "";
-            } catch {}
-            const resp = await fetch(`${BASE}/api/auth/google`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken }) });
-            const data = await resp.json().catch(() => ({}));
-            if (!resp.ok) throw new Error(data.error || "Google sign-in failed");
-            setAuthToken(data.accessToken);
-            localStorage.setItem("snapnote_user_email", data.email || "");
-            localStorage.setItem("snapnote_user_name", data.name || gName);
-            localStorage.setItem("snapnote_user_picture", pic);
-            hideAuth();
-            await refreshAuthUI();
-          } catch (err) {
-            authError.textContent = err.message || "Google sign-in failed";
-            authError.style.display = "block";
+              const idToken = response.credential;
+              // Decode the Google JWT payload to grab the profile picture.
+              let pic = "";
+              let gName = "";
+              try {
+                const parts = idToken.split(".");
+                const payload = JSON.parse(atob(parts[1].replace(/-/g, "+").replace(/_/g, "/")));
+                pic = payload.picture || "";
+                gName = payload.name || "";
+              } catch {}
+              const resp = await fetch(`${BASE}/api/auth/google`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken }) });
+              const data = await resp.json().catch(() => ({}));
+              if (!resp.ok) throw new Error(data.error || "Google sign-in failed");
+              setAuthToken(data.accessToken);
+              localStorage.setItem("snapnote_user_email", data.email || "");
+              localStorage.setItem("snapnote_user_name", data.name || gName);
+              localStorage.setItem("snapnote_user_picture", pic);
+              hideAuth();
+              await refreshAuthUI();
+            } catch (err) {
+              authError.textContent = err.message || "Google sign-in failed";
+              authError.style.display = "block";
+            }
           }
-        }
-      });
-      google.accounts.id.renderButton(document.getElementById("google-btn"), {
-        theme: "outline",
+        });
+      }
+      const host = document.getElementById("google-btn");
+      if (!host) return;
+      host.innerHTML = "";
+      const avail = Math.max(220, Math.min(330, (host.parentElement.clientWidth || 330) - 8));
+      google.accounts.id.renderButton(host, {
+        theme: "filled_black",
         size: "large",
         shape: "pill",
         text: "continue_with",
-        width: 330
+        width: avail
       });
     }
     initGoogleButton();
     // Re-init if the modal opens before the script finishes
     setTimeout(initGoogleButton, 1500);
-    document.getElementById("apple-btn").addEventListener("click", () => {
-      authError.textContent = "Apple sign-in coming soon — please use Google or email for now.";
-      authError.style.display = "block";
-    });
-    document.getElementById("phone-btn").addEventListener("click", () => {
-      authError.textContent = "Phone sign-in coming soon — please use Google or email for now.";
-      authError.style.display = "block";
-    });
+    const loginButtonsHtml = `<button class="btn-login" onclick="showAuth('login')">Log in</button><button class="btn-signup" onclick="showAuth('signup')">Sign up</button>`;
     async function refreshAuthUI() {
       const token = getAuthToken();
       if (!token) {
-        authArea.innerHTML = `<button onclick="showAuth('login')" style="background:none;border:1px solid rgba(148,163,184,.2);color:#eef2ff;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer">Log in</button><button onclick="showAuth('signup')" style="background:var(--grad);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">Sign up</button>`;
+        authArea.innerHTML = loginButtonsHtml;
         return;
       }
       try {
@@ -888,23 +1721,23 @@
         if (data.picture) localStorage.setItem("snapnote_user_picture", data.picture);
         const initial = (name || "U").charAt(0).toUpperCase();
         const avatarHtml = pic
-          ? `<img src="${esc(pic)}" alt="" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(148,163,184,.3);object-fit:cover;cursor:pointer" id="avatar-img" />`
-          : `<div style="width:32px;height:32px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:700;cursor:pointer" id="avatar-img">${esc(initial)}</div>`;
+          ? `<img src="${esc(pic)}" alt="" class="avatar-btn" id="avatar-img" />`
+          : `<div class="avatar-initial" id="avatar-img">${esc(initial)}</div>`;
         authArea.innerHTML = `
-          <div style="position:relative;display:flex;align-items:center;margin-left:8px" id="avatar-wrap">
+          <div class="avatar-wrap" id="avatar-wrap">
             ${avatarHtml}
-            <div id="avatar-dropdown" style="display:none;position:absolute;top:40px;right:0;background:#151d31;border:1px solid rgba(148,163,184,.25);border-radius:12px;box-shadow:0 20px 60px -20px rgba(0,0,0,.6);min-width:180px;padding:10px;z-index:200">
-              <div style="padding:4px 8px;border-bottom:1px solid rgba(148,163,184,.15);margin-bottom:8px">
-                <div style="color:#eef2ff;font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(name)}</div>
-                <div style="color:#94a3b8;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(data.email || "")}</div>
+            <div class="avatar-menu" id="avatar-dropdown">
+              <div class="menu-user">
+                <div class="menu-name">${esc(name)}</div>
+                <div class="menu-email">${esc(data.email || "")}</div>
               </div>
-              <button id="logout-btn" style="width:100%;background:none;border:none;color:#f87171;text-align:left;padding:8px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer">Log out</button>
+              <button id="logout-btn" class="menu-logout">Log out</button>
             </div>
           </div>`;
         const avatarImg = document.getElementById("avatar-img");
         const dd = document.getElementById("avatar-dropdown");
-        avatarImg.addEventListener("click", (e) => { e.stopPropagation(); dd.style.display = dd.style.display === "none" ? "block" : "none"; });
-        document.addEventListener("click", () => { if (dd) dd.style.display = "none"; });
+        avatarImg.addEventListener("click", (e) => { e.stopPropagation(); dd.classList.toggle("open"); });
+        document.addEventListener("click", () => { if (dd) dd.classList.remove("open"); });
         document.getElementById("logout-btn").addEventListener("click", () => {
           setAuthToken(null);
           localStorage.removeItem("snapnote_user_email");
@@ -915,7 +1748,7 @@
         });
       } catch {
         setAuthToken(null);
-        authArea.innerHTML = `<button onclick="showAuth('login')" style="background:none;border:1px solid rgba(148,163,184,.2);color:#eef2ff;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer">Log in</button><button onclick="showAuth('signup')" style="background:var(--grad);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer">Sign up</button>`;
+        authArea.innerHTML = loginButtonsHtml;
       }
     }
 
@@ -946,15 +1779,14 @@
     buyModal.addEventListener("click", (e) => { if (e.target === buyModal) buyModal.classList.remove("open"); });
 
     function renderPacks(plans) {
-      const labels = { starter: "Starter", popular: "Popular", pro: "Pro", unlimited: "Unlimited" };
       packsContainer.innerHTML = plans.map((p) => {
         const per = (p.price_paise / p.credits / 100).toFixed(2);
-        const badge = p.slug === "popular" ? " <span style='font-size:11px;color:var(--green);font-weight:600;'>Best value</span>" : "";
+        const badge = p.slug === "popular" ? `<span class="pack-badge">${ic("sparkles")}Best value</span>` : "";
         return `
           <div class="pack" data-plan="${p.slug}">
             <div>
               <div class="credits">${p.credits} credits${badge}</div>
-              <div class="per-credit">₹${per}/credit</div>
+              <div class="per-credit">₹${per} per credit</div>
             </div>
             <div class="price"><strong>₹${Math.round(p.price_paise / 100)}</strong></div>
           </div>
@@ -1134,7 +1966,7 @@
         const typeClass = h.type === "diagram" ? "diagram" : "text";
         return `
           <button class="history-item" data-i="${i}">
-            <span class="hic">${h.type === "diagram" ? "📐" : "📝"}</span>
+            <span class="hic">${ic(h.type === "diagram" ? "diagram" : "file")}</span>
             <span class="h-title">${esc(h.topic || "Study sheet")}</span>
             <span class="type-badge small ${typeClass}">${h.type}</span>
             <span class="h-meta">${timeAgo(h.at)}</span>
@@ -1231,12 +2063,7 @@
     clearBtn.addEventListener("click", () => {
       currentBlob = null;
       dropZone.classList.remove("has-image");
-      dropContent.innerHTML = `
-        <div class="icon">📷</div>
-        <p><strong>Drop image here</strong> or click to upload</p>
-        <p style="margin-top:6px;">Supports PNG, JPG, WEBP (max 10 MB)</p>
-        <span class="shortcut">Press <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste from clipboard</span>
-      `;
+      dropContent.innerHTML = dropIdleHtml;
       previewActions.classList.remove("show");
       resultPanel.classList.remove("show");
       errorMsg.style.display = "none";
@@ -1410,21 +2237,21 @@
         showError(err.message || "Enhancement failed. Try again.");
       } finally {
         reviseBtn.disabled = false;
-        reviseBtn.innerHTML = '<span>✨ Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>';
+      reviseBtn.innerHTML = `<span>${ic("sparkles")}Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>`;
       }
     });
 
     function renderRevision(notes, creditsUsed) {
       if (!notes) return;
       const cards = [];
-      cards.push('<div class="revision-header">✨ Make This Revision-Ready</div>');
+      cards.push(`<div class="revision-header">${ic("sparkles")}Make This Revision-Ready</div>`);
 
       if (notes.topic && notes.topic.title) {
         const title = notes.topic.title.toUpperCase();
-        cards.push(`<div class="note-card" style="animation-delay:0ms"><h3><span class="bar"></span>🏷 ${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:0ms"><h3><span class="h-icon">${ic("book")}</span>${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
       }
       if (notes.what_you_should_remember) {
-        cards.push(`<div class="note-card takeaway-card" style="animation-delay:40ms"><h3><span class="bar"></span>🎯 What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
+        cards.push(`<div class="note-card takeaway-card" style="animation-delay:40ms"><h3><span class="h-icon green">${ic("target")}</span>What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
       }
       if (notes.key_formulas && notes.key_formulas.length) {
         const formulas = notes.key_formulas.map((f) => {
@@ -1439,28 +2266,28 @@
           if (f.confidence === "possible_extraction_issue") html += '<div class="uncertain-symbols">Possible extraction issue: the mathematical symbols are ambiguous. See Verify Before Studying below.</div>';
           return html + `</div>`;
         }).join("");
-        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="bar"></span>📦 Key Formulas</h3>${formulas}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="h-icon">${ic("sigma")}</span>Key Formulas</h3>${formulas}</div>`);
       }
       if (notes.understand_it && notes.understand_it.length) {
-        cards.push(`<div class="note-card" style="animation-delay:120ms"><h3><span class="bar"></span>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:120ms"><h3><span class="h-icon">${ic("brain")}</span>Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
       }
       if (notes.common_mistakes && notes.common_mistakes.length) {
-        cards.push(`<div class="note-card" style="animation-delay:160ms"><h3><span class="bar"></span>⚠️ Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:160ms"><h3><span class="h-icon amber">${ic("alert")}</span>Common Mistakes</h3><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div>`);
       }
       if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
-        cards.push(`<div class="note-card takeaway-card" style="animation-delay:200ms"><h3><span class="bar"></span>⏱️ 30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card takeaway-card" style="animation-delay:200ms"><h3><span class="h-icon green">${ic("clock")}</span>30-Second Revision</h3><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div>`);
       }
       if (notes.visual_context && notes.visual_context.present && notes.visual_context.summary) {
-        cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="bar"></span>🔎 Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:240ms"><h3><span class="h-icon cyan">${ic("diagram")}</span>Visual Context</h3><p>${esc(notes.visual_context.summary)}</p></div>`);
       }
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
-        cards.push(`<div class="note-card verify-card" style="animation-delay:280ms"><h3><span class="bar"></span>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card verify-card" style="animation-delay:280ms"><h3><span class="h-icon red">${ic("shield")}</span>Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
       }
       if (notes.uncertainties && notes.uncertainties.length) {
-        cards.push(`<div class="note-card uncertain-card" style="animation-delay:320ms"><h3><span class="bar"></span>⚠️ Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card uncertain-card" style="animation-delay:320ms"><h3><span class="h-icon amber">${ic("alert")}</span>Unclear</h3><ul>${notes.uncertainties.map((u) => `<li>${esc(u)}</li>`).join("")}</ul></div>`);
       }
       if (notes.analogy) {
-        cards.push(`<div class="note-card" style="animation-delay:360ms"><h3><span class="bar"></span>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:360ms"><h3><span class="h-icon">${ic("sparkles")}</span>Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
       }
 
       cards.push(`<p style="font-size:12px;color:var(--muted);margin-top:6px;">${creditsUsed} credit used</p>`);
@@ -1472,8 +2299,8 @@
       const cards = notesCards.querySelectorAll(".explain-card");
       const card = cards.length ? cards[cards.length - 1] : null;
       if (!card) { showError(msg); return; }
-      const head = `<h3><span class="bar"></span>✨ Explain Visually</h3><p class="explain-tagline">See the idea, not just the formula.</p>`;
-      card.innerHTML = `${head}<p class="muted">⚠️ ${esc(msg)} Your study notes above are unaffected.</p><button class="explain-btn" id="explain-btn"><span>↻ Try Again</span><em>Free — uses your existing diagram, no extra credits</em></button>`;
+      const head = `<h3><span class="h-icon amber">${ic("sparkles")}</span>Explain Visually</h3><p class="explain-tagline">See the idea, not just the formula.</p>`;
+      card.innerHTML = `${head}<p class="muted">${ic("alert")} ${esc(msg)} Your study notes above are unaffected.</p><button class="explain-btn" id="explain-btn"><span>${ic("refresh")}Try Again</span><em>Free — uses your existing diagram, no extra credits</em></button>`;
       const retry = document.getElementById("explain-btn");
       if (retry) retry.addEventListener("click", handleExplainVisual);
     }
@@ -1510,7 +2337,7 @@
           hideProcessing();
           showAuth("signup");
           showError(err.error || "Please sign up or log in to continue.");
-          if (btn) { btn.disabled = false; btn.innerHTML = '<span>✨ Explain Visually</span><em>Free — bundled with your diagram</em>'; }
+          if (btn) { btn.disabled = false; btn.innerHTML = `<span>${ic("sparkles")}Explain Visually</span><em>Free — bundled with your diagram</em>`; }
           return;
         }
         if (resp.status === 502) {
@@ -1571,17 +2398,17 @@
     const DEMO_SAMPLES = {
       physics: {
         image: "samples/physics-demo.jpg",
-        label: "🔬 Physics — Handwritten Board",
+        label: "Physics — Handwritten Board",
         notes: {"topic":{"title":"Rotational Mechanics and Impulse-Momentum","is_probable":false},"what_you_should_remember":"Torque is the rotational analogue of force, and the change in angular momentum equals the integral of torque over time (angular impulse).","key_formulas":[{"formula":"τ = r × F","explanation":"τ is torque, r is the position vector from the axis of rotation, F is force. It represents the rotational turning effect produced by a force.","uncertain_symbols":[],"confidence":"clear"},{"formula":"L = Iω","explanation":"L is angular momentum, I is moment of inertia, ω is angular velocity. It represents the rotational momentum of a rigid body.","uncertain_symbols":[],"confidence":"clear"},{"formula":"ΔL = ∫ τ dt","explanation":"ΔL is change in angular momentum, τ is torque, t is time. This represents the angular impulse-momentum theorem.","uncertain_symbols":[],"confidence":"clear"}],"understand_it":["This concept bridges linear dynamics to rotational dynamics, showing how torques change an object's angular momentum over time just as forces change linear momentum.","The visible equations demonstrate both instantaneous relationships (such as torque definitions and angular momentum in terms of moment of inertia) and cumulative effects through time via integration."],"common_mistakes":["Confusing linear velocity and angular velocity (ω) in rotational formulas.","Forgetting that torque depends on the perpendicular distance from the axis of rotation to the line of action of the force."]}
       },
       math: {
         image: "samples/math-demo.jpg",
-        label: "📐 Math — Board Derivation",
+        label: "Math — Board Derivation",
         notes: {"topic":{"title":"Double Integrals in Polar Coordinates","is_probable":true},"what_you_should_remember":"When evaluating double integrals over circular regions, converting from Cartesian to polar coordinates using x = r cos(θ), y = r sin(θ), and dA = r dr dθ simplifies the bounds and integration.","key_formulas":[{"formula":"∫∫ (r² cos²(θ) + r sin(θ)) r dr dθ","explanation":"r is the radial distance, θ is the polar angle, and r dr dθ is the area element in polar coordinates replacing dx dy.","uncertain_symbols":[],"confidence":"clear"}],"understand_it":["This derivation demonstrates evaluating a double integral by transforming it into polar coordinates.","The visible steps show setting up the limits of integration for r and θ, expanding the integrand, performing the inner integration with respect to r, and evaluating the resulting trigonometric expression with respect to θ."],"common_mistakes":["Forgetting to include the extra factor of r in the polar area element (writing dr dθ instead of r dr dθ).","Incorrectly converting the integration limits for the radial and angular components to match the circular or annular region."]}
       },
       engineering: {
         image: "samples/engineering-demo.jpg",
-        label: "⚙️ Engineering — Lecture Notes",
+        label: "Engineering — Lecture Notes",
         notes: {"topic":{"title":"Industrial Regulators and Conventional Controllers","is_probable":false},"what_you_should_remember":"An industrial regulator uses feedback loops and conventional controller types like proportional, integral, and derivative actions to minimize error and manage disturbances.","key_formulas":[{"formula":"e(t) = r(t) - b(t)","explanation":"e(t) represents the error signal, r(t) is the reference input, and b(t) is the feedback signal. It calculates the difference between desired and actual values.","uncertain_symbols":[],"confidence":"clear"},{"formula":"P(t) = Kp e(t)","explanation":"P(t) is the proportional controller output in the time domain, Kp is the proportional gain, and e(t) is the error signal.","uncertain_symbols":[],"confidence":"clear"},{"formula":"P(s) = Kp E(s)","explanation":"P(s) is the proportional controller output in the Laplace domain, Kp is the proportional gain, and E(s) is the error in the Laplace domain.","uncertain_symbols":[],"confidence":"clear"}],"understand_it":["The lecture introduces industrial regulators and block diagrams of control systems. A basic control loop takes a reference input, compares it with a feedback signal to compute an error, and passes that error through a controller and plant/process.","Conventional controllers are broken down into Proportional (P), Integral (I), Derivative (D), and composite combinations like PI, PD, and PID.","A proportional controller amplifies the error signal. The notes mention that providing attenuation to the signal requires a gain less than 1."],"common_mistakes":["Confusing the reference input r(t) with the feedback signal b(t) when calculating the error e(t)."]}
       },
     };
@@ -1595,10 +2422,10 @@
       const push = (html, delay) => cards.push(`<div class="demo-card" style="animation-delay:${delay}ms">${html}</div>`);
       let d = 0;
       if (notes.topic && notes.topic.title) {
-        push(`<h5><span class="bar"></span>🏷 ${esc(notes.topic.title.toUpperCase())}</h5>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}`, d += 40);
+        push(`<h5>${ic("book")}${esc(notes.topic.title.toUpperCase())}</h5>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}`, d += 40);
       }
       if (notes.what_you_should_remember) {
-        push(`<h5><span class="bar"></span>🎯 What You Should Remember</h5><p>${esc(notes.what_you_should_remember)}</p>`, d += 40);
+        push(`<h5>${ic("target")}What You Should Remember</h5><p>${esc(notes.what_you_should_remember)}</p>`, d += 40);
       }
       if (notes.key_formulas && notes.key_formulas.length) {
         const formulas = notes.key_formulas.slice(0, 2).map((f) => {
@@ -1606,13 +2433,13 @@
           if (f.explanation) html += `<div class="f-explain">${esc(f.explanation)}</div>`;
           return html + "</div>";
         }).join("");
-        push(`<h5><span class="bar"></span>📦 Key Formulas</h5>${formulas}`, d += 40);
+        push(`<h5>${ic("sigma")}Key Formulas</h5>${formulas}`, d += 40);
       }
       if (notes.understand_it && notes.understand_it.length) {
-        push(`<h5><span class="bar"></span>🧠 Understand It</h5>${notes.understand_it.slice(0, 1).map((p) => `<p>${esc(p)}</p>`).join("")}`, d += 40);
+        push(`<h5>${ic("brain")}Understand It</h5>${notes.understand_it.slice(0, 1).map((p) => `<p>${esc(p)}</p>`).join("")}`, d += 40);
       }
       if (notes.common_mistakes && notes.common_mistakes.length) {
-        push(`<h5><span class="bar"></span>⚠️ Watch Out</h5><ul>${notes.common_mistakes.slice(0, 1).map((m) => `<li>${esc(m)}</li>`).join("")}</ul>`, d += 40);
+        push(`<h5>${ic("alert")}Watch Out</h5><ul>${notes.common_mistakes.slice(0, 1).map((m) => `<li>${esc(m)}</li>`).join("")}</ul>`, d += 40);
       }
       return cards.join("");
     }
@@ -1634,6 +2461,9 @@
 
     function renderResult(result, fromHistory) {
       lastResult = result;
+      resultType.textContent = result.type ? result.type.charAt(0).toUpperCase() + result.type.slice(1) : "Text";
+      resultType.className = `type-badge ${result.type === "diagram" ? "diagram" : "text"}`;
+      if (result.creditsUsed) resultCredits.textContent = `${result.creditsUsed} credits used`;
       currentMarkdown = result.markdown || "";
       currentImageUrl = result.imageUrl || null;
       currentDiagramId = result.diagramId || null;
@@ -1647,7 +2477,7 @@
       const isText = result.type !== "diagram";
       reviseBtn.style.display = (isText && !fromHistory) ? "block" : "none";
       reviseBtn.disabled = false;
-      reviseBtn.innerHTML = '<span>✨ Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>';
+      reviseBtn.innerHTML = `<span>${ic("sparkles")}Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>`;
 
       const topic = (result.studyNotes && result.studyNotes.topic && result.studyNotes.topic.title) || "";
       currentContext = JSON.stringify({
@@ -1663,7 +2493,7 @@
       if (!notes) {
         const card = document.createElement("div");
         card.className = "note-card";
-        card.innerHTML = `<h3><span class="bar"></span>📄 Notes</h3><pre style="white-space:pre-wrap;font-size:14px;line-height:1.7;">${esc(currentMarkdown)}</pre>`;
+        card.innerHTML = `<h3><span class="h-icon">${ic("file")}</span>Notes</h3><pre style="white-space:pre-wrap;font-size:14px;line-height:1.7;">${esc(currentMarkdown)}</pre>`;
         notesCards.appendChild(card);
         return;
       }
@@ -1672,11 +2502,11 @@
 
       if (notes.topic && notes.topic.title) {
         const title = notes.topic.title.toUpperCase();
-        cards.push(`<div class="note-card" style="animation-delay:0ms"><h3><span class="bar"></span>🏷 ${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:0ms"><h3><span class="h-icon">${ic("book")}</span>${title}</h3>${notes.topic.is_probable ? '<p class="muted">Topic inferred from screenshot</p>' : ''}</div>`);
       }
 
       if (notes.what_you_should_remember) {
-        cards.push(`<div class="note-card takeaway-card" style="animation-delay:40ms"><h3><span class="bar"></span>🎯 What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
+        cards.push(`<div class="note-card takeaway-card" style="animation-delay:40ms"><h3><span class="h-icon green">${ic("target")}</span>What You Should Remember</h3><p>${esc(notes.what_you_should_remember)}</p></div>`);
       }
 
       if (notes.key_formulas && notes.key_formulas.length) {
@@ -1694,37 +2524,37 @@
           if (f.confidence === "possible_extraction_issue") html += '<div class="uncertain-symbols">Possible extraction issue: the mathematical symbols are ambiguous. See Verify Before Studying below.</div>';
           return html + `</div>`;
         }).join("");
-        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="bar"></span>📦 Key Formulas</h3>${formulas}${extraCount > 0 ? `<p class="muted">+${extraCount} more formula${extraCount > 1 ? "s" : ""} in the extracted text below.</p>` : ""}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="h-icon">${ic("sigma")}</span>Key Formulas</h3>${formulas}${extraCount > 0 ? `<p class="muted">+${extraCount} more formula${extraCount > 1 ? "s" : ""} in the extracted text below.</p>` : ""}</div>`);
       }
 
       if (notes.understand_it && notes.understand_it.length) {
-        cards.push(`<div class="note-card" style="animation-delay:120ms"><h3><span class="bar"></span>🧠 Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
+        cards.push(`<div class="note-card" style="animation-delay:120ms"><h3><span class="h-icon">${ic("brain")}</span>Understand It</h3>${notes.understand_it.map((p) => `<p>${esc(p)}</p>`).join("")}</div>`);
       }
 
       if (notes.diagram && notes.diagram.present && notes.diagram.svg && !notes.diagram.best_effort) {
-        cards.push(`<div class="note-card diagram-card" style="animation-delay:160ms"><h3><span class="bar"></span>📐 Diagram from your lecture</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p></div>`);
+        cards.push(`<div class="note-card diagram-card" style="animation-delay:160ms"><h3><span class="h-icon cyan">${ic("diagram")}</span>Diagram from your lecture</h3><div class="diagram-wrap">${notes.diagram.svg}</div><p class="muted">Rebuilt from your screenshot as a clean diagram.</p></div>`);
       }
 
       if (result.type === "diagram") {
         cards.push(`<div class="note-card explain-card" style="animation-delay:200ms">${explainSectionHtml()}</div>`);
-        cards.push(`<div class="note-card jee-card" style="animation-delay:220ms"><h3><span class="bar"></span>🗺️ JEE Context</h3><div id="jee-context-body"><p class="muted">Locating this concept in the JEE syllabus…</p></div></div>`);
+        cards.push(`<div class="note-card jee-card" style="animation-delay:220ms"><h3><span class="h-icon cyan">${ic("layers")}</span>JEE Context</h3><div id="jee-context-body"><p class="muted">Locating this concept in the JEE syllabus…</p></div></div>`);
       }
 
       if (notes.verify_before_studying && notes.verify_before_studying.length) {
-        cards.push(`<div class="note-card verify-card" style="animation-delay:240ms"><h3><span class="bar"></span>🛡️ Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
+        cards.push(`<div class="note-card verify-card" style="animation-delay:240ms"><h3><span class="h-icon red">${ic("shield")}</span>Verify Before Studying</h3><p>Some symbols or equations may be ambiguous because the handwriting or image is unclear. Verify these against the original lecture before memorizing them:</p><ul>${notes.verify_before_studying.map((v) => `<li>${esc(v)}</li>`).join("")}</ul></div>`);
       }
 
       if (notes.analogy) {
-        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="bar"></span>💡 Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
+        cards.push(`<div class="note-card" style="animation-delay:260ms"><h3><span class="h-icon">${ic("sparkles")}</span>Easy Analogy</h3><p>${esc(notes.analogy)}</p></div>`);
       }
 
       // ── Secondary (quieter, collapsible) ──
       let secondary = "";
       if (notes.common_mistakes && notes.common_mistakes.length) {
-        secondary += `<details class="note-card secondary" style="animation-delay:300ms"><summary>⚠️ Common Mistakes</summary><div class="inner"><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div></details>`;
+        secondary += `<details class="note-card secondary" style="animation-delay:300ms"><summary><span class="sum-label">${ic("alert")}Common Mistakes</span></summary><div class="inner"><ul>${notes.common_mistakes.map((m) => `<li>${esc(m)}</li>`).join("")}</ul></div></details>`;
       }
       if (notes.thirty_second_revision && notes.thirty_second_revision.length) {
-        secondary += `<details class="note-card secondary" style="animation-delay:320ms"><summary>⏱️ 30-Second Revision</summary><div class="inner"><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></details>`;
+        secondary += `<details class="note-card secondary" style="animation-delay:320ms"><summary><span class="sum-label">${ic("clock")}30-Second Revision</span></summary><div class="inner"><ul>${notes.thirty_second_revision.map((b) => `<li>${esc(b)}</li>`).join("")}</ul></div></details>`;
       }
       if (secondary) {
         cards.push(secondary);
@@ -1824,14 +2654,18 @@
             if (!resp.ok) throw new Error(`chapter lookup failed (${resp.status})`);
             renderJeeBody(scope, await resp.json());
           } catch (err) {
-            scope.innerHTML = `<p class="muted">Chapter lookup unavailable right now.</p>`;
+            scope.innerHTML = `<p class="jee-hint">Chapter lookup unavailable right now.</p>`;
           }
         });
       }
       const ySel = scope.querySelector("#jee-filter-year");
-      const tSel = scope.querySelector("#jee-filter-type");
       if (ySel) ySel.addEventListener("change", () => { jeeFilter.year = ySel.value; renderJeeBody(scope, jeeCtx); });
-      if (tSel) tSel.addEventListener("change", () => { jeeFilter.qtype = tSel.value; renderJeeBody(scope, jeeCtx); });
+      scope.querySelectorAll(".jee-seg-btn[data-jtype]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          jeeFilter.qtype = btn.dataset.jtype;
+          renderJeeBody(scope, jeeCtx);
+        });
+      });
       const line = scope.querySelector(".jee-progress-line");
       if (line && jeeCtx) line.textContent = jeeProgressLine();
       scope.querySelectorAll(".jee-pbtn[data-concept]").forEach((btn) => {
@@ -1841,11 +2675,11 @@
             if (!resp.ok) throw new Error(`chapter lookup failed (${resp.status})`);
             renderJeeBody(scope, await resp.json());
           } catch (err) {
-            scope.innerHTML = `<p class="muted">Chapter lookup unavailable right now.</p>`;
+            scope.innerHTML = `<p class="jee-hint">Chapter lookup unavailable right now.</p>`;
           }
         });
       });
-      scope.querySelectorAll(".jee-pbtn").forEach((btn) => {
+      scope.querySelectorAll(".jee-pbtn, .jee-practice-all").forEach((btn) => {
         btn.addEventListener("click", () => {
           const order = jeeFilteredOrder();
           let q = null;
@@ -1862,51 +2696,81 @@
       const pos = order.findIndex((x) => x.question_id === q.question_id);
       const canCheck = q.question_type === "Numerical" && q.answer_status === "confirmed" && q.answer_key != null;
       const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
-      const meta = `${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number} (${esc(q.question_type)}${q.marks != null ? `, ${q.marks} marks` : ""})`;
+      const p = jeeProgress();
+      const att = order.filter((x) => (p[x.question_id] || {}).a).length;
+      const ok = order.filter((x) => (p[x.question_id] || {}).c === 1).length;
+      const pct = order.length ? Math.round(100 * att / order.length) : 0;
+      const tags = `<div class="jee-tags">
+          <span class="jee-tag year">${esc(q.exam)} ${q.year}</span>
+          ${q.shift ? `<span class="jee-tag">${esc(q.shift)}</span>` : ""}
+          <span class="jee-tag ${q.question_type === "MCQ" ? "mcq" : ""}">${esc(q.question_type)}</span>
+          <span class="jee-tag num">Q${q.paper_question_number}${q.marks != null ? ` · ${q.marks} marks` : ""}</span>
+        </div>`;
+      const source = `<div class="jee-source">${ic("link")} Source: <a class="jee-source-link" href="${esc(q.source_url)}" target="_blank" rel="noopener">${prov}</a></div>`;
       let attempt = "";
       if (canCheck) {
-        attempt = `<div><input class="jee-answer-input" id="jee-ans" inputmode="decimal" placeholder="Your answer" aria-label="Your answer"> <button class="jee-checkbtn">Check answer</button> <span id="jee-feedback" class="muted"></span></div>`;
+        attempt = `<div class="jee-answer-panel">
+            <label class="jee-answer-label" for="jee-ans">Your answer</label>
+            <div class="jee-answer-row">
+              <input class="jee-answer-input" id="jee-ans" inputmode="decimal" placeholder="Type a number…" aria-label="Your answer" />
+              <button class="jee-checkbtn">${ic("check")}Check answer</button>
+            </div>
+            <div id="jee-feedback" class="jee-feedback" role="status"></div>
+          </div>`;
       } else if (q.question_type === "MCQ") {
-        attempt = `<p class="muted">Options live in the original source — <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>. The stored answer for this question is unconfirmed, so SnapNote will not grade options here.</p>`;
+        attempt = `<div class="jee-info">${ic("alert")}<div>Options live in the original source — <a href="${esc(q.source_url)}" target="_blank" rel="noopener">open source</a>. The stored answer for this question is unconfirmed, so SnapNote will not grade options here.</div></div>`;
       } else {
-        attempt = `<p class="muted">No confirmed answer stored — <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>.</p>`;
+        attempt = `<div class="jee-info">${ic("alert")}<div>No confirmed answer stored — <a href="${esc(q.source_url)}" target="_blank" rel="noopener">open source</a> to check the official key.</div></div>`;
       }
-      const prog = jeeProgressLine();
-      scope.innerHTML = `<div class="jee-practice"><button class="jee-backbtn">← Back to PYQ list</button>`
-        + `<p class="muted">Question ${pos + 1} of ${order.length} · ${esc(prog)}</p>`
-        + `<div class="jee-progress"><div style="width:${order.length ? Math.round(100 * order.filter((x) => (jeeProgress()[x.question_id] || {}).a).length / order.length) : 0}%"></div></div>`
-        + `<p><strong>${esc(meta)}</strong></p>`
-        + (q.question_summary ? `<p>${esc(q.question_summary)}</p>` : "")
-        + `<p class="muted">Source: ${prov}</p>` + attempt
-        + `<div class="jee-pnav"><button class="jee-navbtn" data-nav="-1"${pos <= 0 ? " disabled" : ""}>← Previous</button><button class="jee-navbtn" data-nav="1"${pos >= order.length - 1 ? " disabled" : ""}>Next →</button></div></div>`;
+      scope.innerHTML = `<div class="jee-hub"><div class="jee-practice">
+          <div class="jee-practice-top">
+            <button class="jee-backbtn">${ic("arrowLeft")}Back to PYQs</button>
+            <span class="jee-practice-count">Question ${pos + 1} of ${order.length}</span>
+          </div>
+          <div class="jee-progressbar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><div style="width:${pct}%"></div></div>
+          <div class="jee-practice-stats"><span>Attempted <b>${att}/${order.length}</b></span><span>Correct <b>${ok}</b></span></div>
+          <div class="jee-qcard">
+            ${tags}
+            <p class="jee-question big">${esc(q.question_summary || "Question summary not stored — open the source to read the full question.")}</p>
+            ${source}
+          </div>
+          ${attempt}
+          <div class="jee-pnav">
+            <button class="jee-navbtn" data-nav="-1"${pos <= 0 ? " disabled" : ""}>${ic("arrowLeft")}Previous</button>
+            <button class="jee-navbtn" data-nav="1"${pos >= order.length - 1 ? " disabled" : ""}>Next${ic("arrowRight")}</button>
+          </div>
+        </div></div>`;
       scope.querySelector(".jee-backbtn").addEventListener("click", () => renderJeeBody(scope, jeeCtx));
       scope.querySelectorAll(".jee-navbtn").forEach((b) => b.addEventListener("click", () => {
         const nq = order[pos + Number(b.dataset.nav)];
         if (nq) openPractice(scope, nq);
       }));
       const check = scope.querySelector(".jee-checkbtn");
-      if (check) check.addEventListener("click", () => {
-        const val = scope.querySelector("#jee-ans").value.trim();
-        const fb = scope.querySelector("#jee-feedback");
-        const num = Number(val);
-        if (!val || !isFinite(num)) { fb.textContent = "Enter a number first."; fb.className = "muted"; return; }
-        const ok = num === Number(q.answer_key);
-        jeeMarkAttempted(q.question_id, ok);
-        fb.textContent = ok ? "✓ Correct — matches the independently confirmed key." : "✗ Not matching the confirmed key — review the source solution.";
-        fb.className = ok ? "jee-check-ok" : "jee-check-bad";
-      });
+      if (check) {
+        const runCheck = () => {
+          const val = scope.querySelector("#jee-ans").value.trim();
+          const fb = scope.querySelector("#jee-feedback");
+          const num = Number(val);
+          if (!val || !isFinite(num)) { fb.textContent = "Enter a number first."; fb.className = "jee-feedback muted"; return; }
+          const isOk = num === Number(q.answer_key);
+          jeeMarkAttempted(q.question_id, isOk);
+          fb.textContent = isOk ? "Correct — matches the independently confirmed key." : "Not matching the confirmed key — review the source solution.";
+          fb.className = isOk ? "jee-feedback jee-check-ok" : "jee-feedback jee-check-bad";
+        };
+        check.addEventListener("click", runCheck);
+        scope.querySelector("#jee-ans").addEventListener("keydown", (e) => { if (e.key === "Enter") runCheck(); });
+      }
     }
     function wireJeeToggle(scope) {
       const btn = scope.querySelector(".jee-toggle");
       if (!btn) return;
       const items = Array.from(scope.querySelectorAll(".jee-pyq"));
-      const total = items.length;
       const apply = (expanded) => {
         items.forEach((el, i) => { el.style.display = (expanded || i < 5) ? "" : "none"; });
         btn.dataset.expanded = expanded ? "1" : "0";
         btn.textContent = expanded ? "Show fewer" : btn.dataset.label;
       };
-      btn.dataset.label = btn.textContent;
+      btn.dataset.label = btn.textContent.trim();
       btn.addEventListener("click", () => apply(btn.dataset.expanded !== "1"));
       apply(false);
     }
@@ -1914,95 +2778,143 @@
     function jeeContextHtml(ctx) {
       if (!ctx || (ctx.match_status !== "matched" && ctx.match_status !== "ambiguous")) {
         const why = (ctx && ctx.evidence && ctx.evidence.length)
-          ? ctx.evidence.map((e) => `<p class="muted">${esc(e)}</p>`).join("")
-          : `<p class="muted">The lecture did not match a supported JEE concept with enough evidence.</p>`;
-        return `<p><strong>No confident JEE match.</strong></p>${why}`
-          + `<p class="muted">If you know the chapter, pick it to browse its verified PYQs — this selects a chapter, it does not claim an exact-concept match.</p>`
-          + `<div class="jee-filters"><label>Chapter <select id="jee-chapter-pick"><option value="">Choose…</option></select></label></div>`;
+          ? ctx.evidence.map((e) => `<p class="jee-hint">${esc(e)}</p>`).join("")
+          : `<p class="jee-hint">The lecture did not match a supported JEE concept with enough evidence.</p>`;
+        return `<div class="jee-hub"><div class="jee-empty">
+          <div class="jee-empty-icon">${ic("search")}</div>
+          <p class="jee-empty-title">No confident JEE match yet</p>
+          ${why}
+          <label class="jee-select-wrap">Browse a chapter <select id="jee-chapter-pick" class="jee-select"><option value="">Choose…</option></select></label>
+          <p class="jee-hint">This selects a chapter to browse its verified PYQs — it does not claim an exact-concept match.</p>
+        </div></div>`;
       }
       if (ctx.match_status === "ambiguous") {
-        const cands = (ctx.candidates || []).map((c) => `<li>${esc(c.name)}</li>`).join("");
-        const ev = (ctx.evidence || []).map((e) => `<p class="muted">${esc(e)}</p>`).join("");
-        let groups = "";
-        for (const g of (ctx.candidate_results || [])) {
+        const ev = (ctx.evidence || []).map((e) => `<p class="jee-hint">${esc(e)}</p>`).join("");
+        const groups = (ctx.candidate_results || []).map((g) => {
           const rows = (g.pyqs || []).map((q) => {
-            const label = `${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number} (${esc(q.question_type)})`;
-            const answer = q.answer_status === "confirmed" && q.answer_key != null
-              ? `Answer: ${esc(q.answer_key)}` : "Answer unconfirmed";
             const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
-            const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>` : ` [${prov}]`;
-            return `<div class="formula jee-pyq">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">${answer} · Source:${link}</div></div>`;
+            const answer = q.answer_status === "confirmed" && q.answer_key != null ? `Answer: ${esc(q.answer_key)}` : "Answer unconfirmed";
+            const link = q.source_url ? ` · <a class="jee-source-link" href="${esc(q.source_url)}" target="_blank" rel="noopener">source</a>` : "";
+            return `<div class="jee-minirow"><strong>${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number}</strong> (${esc(q.question_type)})<br>${esc(q.question_summary || "")}${q.question_summary ? "<br>" : ""}${answer} · ${prov}${link}</div>`;
           }).join("");
-          groups += `<div class="jee-practice"><p><strong>Possible: ${esc(g.name)}</strong> (${g.pyq_count} related record(s))</p>`
-            + `<p class="muted">${esc(g.coverage_note)}</p>`
-            + (rows || `<p class="muted">No stored records for this candidate yet.</p>`)
-            + (g.pyqs_truncated ? `<p class="muted">Showing ${g.pyqs.length} of ${g.pyq_count} related records.</p>` : "")
-            + `<button class="jee-pbtn" data-concept="${esc(g.concept_id)}">Choose this chapter →</button></div>`;
-        }
-        return `<p><strong>JEE topic identified — chapter not yet certain.</strong></p><p class="muted">This lecture may belong to any of these chapters. Related stored questions from each are shown below; exact-subtopic relevance has not been confirmed.</p><ul>${cands}</ul>${ev}${groups}`;
+          return `<div class="jee-cand">
+            <div class="jee-cand-head"><strong>${esc(g.name)}</strong><span>${g.pyq_count} record${g.pyq_count === 1 ? "" : "s"}</span></div>
+            <p class="jee-hint">${esc(g.coverage_note)}</p>
+            ${rows || `<p class="jee-hint">No stored records for this candidate yet.</p>`}
+            ${g.pyqs_truncated && g.pyqs ? `<p class="jee-hint">Showing ${g.pyqs.length} of ${g.pyq_count} related records.</p>` : ""}
+            <button class="jee-pbtn" data-concept="${esc(g.concept_id)}">${ic("book")}Open chapter</button>
+          </div>`;
+        }).join("");
+        const names = (ctx.candidates || []).map((c) => esc(c.name)).filter(Boolean);
+        return `<div class="jee-hub">
+          <div class="jee-flag ambiguous">${ic("alert")}<span>JEE topic identified — chapter not yet certain.</span></div>
+          <p class="jee-match-note">This lecture may belong to any of these chapters. Related stored questions from each are shown below; exact-subtopic relevance has not been confirmed.</p>
+          ${ev}
+          ${names.length ? `<div class="jee-rel-row"><span class="jee-rel-label">Possible</span>${names.map((n) => `<span class="jee-rel-chip">${n}</span>`).join("")}</div>` : ""}
+          ${groups ? `<div class="jee-cand-grid">${groups}</div>` : ""}
+        </div>`;
       }
-      const crumb = [ctx.subject, ctx.chapter, ctx.canonical_name].filter(Boolean)
-        .map((s) => esc(s)).join(" → ");
-      let html = `<p><strong>${crumb}</strong></p>`;
+
+      const subject = esc(ctx.subject || "JEE");
+      const chapter = esc(ctx.chapter || "");
+      const concept = esc(ctx.canonical_name || "");
+      let html = `<div class="jee-hub">
+        <div class="jee-crumb">
+          <span class="jee-crumb-item subject">${subject}</span>
+          ${chapter ? `<span class="jee-crumb-sep">›</span><span class="jee-crumb-item">${chapter}</span>` : ""}
+          ${concept ? `<span class="jee-crumb-sep">›</span><span class="jee-crumb-item concept">${concept}</span>` : ""}
+        </div>`;
       if (ctx.match_granularity === "chapter") {
-        html += `<p class="muted">Chapter-level match — the exact sub-concept is not yet mapped. PYQs below are related chapter records.</p>`;
+        html += `<p class="jee-match-note">Chapter-level match — the exact sub-concept is not yet mapped. PYQs below are related chapter records.</p>`;
       }
       if (ctx.syllabus && ctx.syllabus.subtopic) {
-        const src = ctx.syllabus.source_url
-          ? ` (<a href="${esc(ctx.syllabus.source_url)}" target="_blank" rel="noopener">NTA syllabus</a>)`
-          : "";
-        html += `<p class="muted">In the official JEE syllabus (${esc(ctx.chapter)}) — ${esc(ctx.syllabus.subtopic)}${src}.</p>`;
+        const src = ctx.syllabus.source_url ? ` <a href="${esc(ctx.syllabus.source_url)}" target="_blank" rel="noopener">NTA syllabus</a>` : "";
+        html += `<div class="jee-syllabus">${ic("book")}<div>In the official JEE syllabus (${esc(ctx.chapter)}) — ${esc(ctx.syllabus.subtopic)}${src}.</div></div>`;
       }
-      const names = (list) => (list || []).map((c) => esc(c.name)).filter(Boolean);
+      const names = (list) => (list || []).map((c) => `<span class="jee-rel-chip">${esc(c.name)}</span>`).join("");
       if (ctx.prerequisites && ctx.prerequisites.length) {
-        html += `<p class="muted">Needs first: ${names(ctx.prerequisites).join(" · ")}</p>`;
+        html += `<div class="jee-rel-row"><span class="jee-rel-label">Needs first</span>${names(ctx.prerequisites)}</div>`;
       }
       if (ctx.related && ctx.related.length) {
-        html += `<p class="muted">Related: ${names(ctx.related).join(" · ")}</p>`;
+        html += `<div class="jee-rel-row"><span class="jee-rel-label">Related</span>${names(ctx.related)}</div>`;
       }
       if (ctx.pyqs && ctx.pyqs.length) {
-        const years = [...new Set(ctx.pyqs.map((q) => q.year))].sort((a, b) => b - a);
-        const yOpts = [`<option value="all">All years</option>`, ...years.map((y) => `<option value="${y}"${jeeFilter.year === String(y) ? " selected" : ""}>${y}</option>`)].join("");
-        const tOpts = `<option value="all">All types</option><option value="MCQ"${jeeFilter.qtype === "MCQ" ? " selected" : ""}>MCQ</option><option value="Numerical"${jeeFilter.qtype === "Numerical" ? " selected" : ""}>Numerical</option>`;
+        const years = [...new Set(ctx.pyqs.map((q) => String(q.year)))].sort((a, b) => b - a);
+        const yOpts = [`<option value="all">All years</option>`, ...years.map((y) => `<option value="${y}"${jeeFilter.year === y ? " selected" : ""}>${y}</option>`)].join("");
         const visible = ctx.pyqs.filter((q) =>
           (jeeFilter.year === "all" || String(q.year) === jeeFilter.year) &&
           (jeeFilter.qtype === "all" || q.question_type === jeeFilter.qtype));
+        const p = jeeProgress();
+        const att = ctx.pyqs.filter((q) => p[q.question_id] && p[q.question_id].a).length;
+        const ok = ctx.pyqs.filter((q) => p[q.question_id] && p[q.question_id].c === 1).length;
+        const seg = [["all", "All"], ["MCQ", "MCQ"], ["Numerical", "Numerical"]].map(([v, l]) =>
+          `<button type="button" class="jee-seg-btn${jeeFilter.qtype === v ? " active" : ""}" data-jtype="${v}">${l}</button>`).join("");
+        html += `<div class="jee-overview">
+          <div class="jee-stat"><span class="jee-stat-value">${ctx.pyq_count != null ? ctx.pyq_count : ctx.pyqs.length}</span><span class="jee-stat-label">Verified PYQs</span></div>
+          <div class="jee-stat"><span class="jee-stat-value">${years.length}</span><span class="jee-stat-label">Exam years</span></div>
+          <div class="jee-stat"><span class="jee-stat-value">${att}<span style="font-size:13px;color:var(--muted-2);">/${ctx.pyqs.length}</span></span><span class="jee-stat-label">Attempted · ${ok} correct</span></div>
+        </div>`;
+        html += `<div class="jee-list-head">
+          <div><h4>${ic("layers")}Verified PYQs${visible.length !== ctx.pyqs.length ? ` <span class="jee-tag">${visible.length} shown</span>` : ""}</h4><p>Every record links to its original source paper.</p></div>
+          <button class="jee-practice-all" data-qidx="first-visible">${ic("play")}Practice all</button>
+        </div>`;
+        html += `<div class="jee-filterbar">
+          <label class="jee-select-wrap">Year <select id="jee-filter-year" class="jee-select">${yOpts}</select></label>
+          <div class="jee-seg" role="group" aria-label="Question type">${seg}</div>
+          <span class="jee-progress-line"></span>
+        </div>`;
         const rows = visible.map((q) => {
           const qidx = ctx.pyqs.indexOf(q);
-          const label = `${esc(q.exam)} ${q.year}${q.shift ? ` · ${esc(q.shift)}` : ""} · Q${q.paper_question_number} (${esc(q.question_type)}${q.marks != null ? `, ${q.marks} marks` : ""})`;
-          const answer = q.answer_status === "confirmed" && q.answer_key != null
-            ? `Answer: ${esc(q.answer_key)}`
-            : "Answer unconfirmed";
-          const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
-          const link = q.source_url ? ` <a href="${esc(q.source_url)}" target="_blank" rel="noopener">Open source ↗ [${prov}]</a>` : ` [${prov}]`;
           const canPractice = q.question_type === "Numerical" && q.answer_status === "confirmed" && q.answer_key != null;
-          const action = canPractice
-            ? `<button class="jee-pbtn" data-qidx="${qidx}">Practice →</button>`
-            : `<span class="muted">Summary + source below</span>`;
-          return `<div class="formula jee-pyq" data-qidx="${qidx}">${esc(label)}${q.question_summary ? `<div class="f-explain">${esc(q.question_summary)}</div>` : ""}<div class="f-explain">${answer} · Source:${link}</div><div>${action}</div></div>`;
+          const prov = q.source_class === "OFFICIAL" ? "official NTA paper" : "third-party transcription";
+          const confirmed = q.answer_status === "confirmed" && q.answer_key != null;
+          const answer = confirmed ? `Answer ${esc(q.answer_key)}` : "Answer unconfirmed";
+          const link = q.source_url ? ` · <a class="jee-source-link" href="${esc(q.source_url)}" target="_blank" rel="noopener">source</a>` : "";
+          return `<div class="jee-pyq-card jee-pyq" data-qidx="${qidx}">
+            <div class="jee-pyq-top">
+              <div class="jee-tags">
+                <span class="jee-tag year">${esc(q.exam)} ${q.year}</span>
+                ${q.shift ? `<span class="jee-tag">${esc(q.shift)}</span>` : ""}
+                <span class="jee-tag ${q.question_type === "MCQ" ? "mcq" : ""}">${esc(q.question_type)}</span>
+                <span class="jee-tag ${confirmed ? "answer-ok" : "answer-pending"}">${answer}</span>
+              </div>
+              <span class="jee-qnum">Q${q.paper_question_number}${q.marks != null ? ` · ${q.marks}m` : ""}</span>
+            </div>
+            <p class="jee-question">${esc(q.question_summary || "Summary not stored — open the source to read the full question.")}</p>
+            <div class="jee-pyq-foot">
+              <div class="jee-source">${ic("link")}${prov}${link}</div>
+              <button class="jee-pbtn" data-qidx="${qidx}">${canPractice ? ic("play") + "Practice" : ic("file") + "Open"}</button>
+            </div>
+          </div>`;
         }).join("");
-        const shown = visible.length === ctx.pyqs.length ? "" : ` (filtered to ${visible.length})`;
-        html += `<p><strong>Verified PYQs (${ctx.pyq_count})${shown}</strong> <button class="jee-pbtn" data-qidx="first-visible">Practice all →</button></p>`;
-        html += `<div class="jee-filters"><label>Year <select id="jee-filter-year">${yOpts}</select></label><label>Type <select id="jee-filter-type">${tOpts}</select></label><span class="muted jee-progress-line"></span></div>`;
-        html += `<div class="jee-pyq-list">${rows || `<p class="muted">No questions match this filter.</p>`}</div>`;
+        html += `<div class="jee-pyq-list">${rows || `<p class="jee-hint">No questions match this filter.</p>`}</div>`;
         if (visible.length > 5) {
-          html += `<button class="jee-toggle" data-expanded="0">Show all ${visible.length} PYQs</button>`;
+          html += `<button class="jee-toggle">Show all ${visible.length} PYQs</button>`;
         }
         if (ctx.pyqs_truncated) {
-          html += `<p class="muted">Showing ${ctx.pyqs.length} of ${ctx.pyq_count} verified PYQs.</p>`;
+          html += `<p class="jee-coverage">Showing ${ctx.pyqs.length} of ${ctx.pyq_count} verified PYQs.</p>`;
         }
       } else {
-        html += `<p class="muted">No verified PYQs recorded for this concept yet.</p>`;
+        html += `<div class="jee-empty">
+          <div class="jee-empty-icon">${ic("file")}</div>
+          <p class="jee-empty-title">No verified PYQs yet</p>
+          <p class="jee-hint">No verified questions are recorded for this concept yet — the notes above still cover the lecture.</p>
+        </div>`;
       }
       if (ctx.patterns && ctx.patterns.length) {
+        html += `<div class="jee-list-head"><div><h4>${ic("chart")}Recurring patterns</h4><p>How this concept tends to appear in JEE papers.</p></div></div>`;
         for (const p of ctx.patterns) {
-          html += `<p><strong>Pattern: ${esc(p.name)}</strong> (${esc(p.sub_concept)})<br><span class="muted">${esc(p.method)}</span><br><span class="muted">Examples: ${esc((p.question_ids || []).join(", "))}</span><br><span class="muted">${esc(p.coverage_note)}</span></p>`;
+          html += `<div class="jee-pattern">
+            <div class="jee-pattern-head">${ic("target")}<strong>${esc(p.name)}</strong><span>${esc(p.sub_concept)}</span></div>
+            <p>${esc(p.method)}</p>
+            <div class="jee-pattern-foot">Examples: ${esc((p.question_ids || []).join(", "))} · ${esc(p.coverage_note)}</div>
+          </div>`;
         }
       }
       if (ctx.coverage_note) {
-        html += `<p class="muted">${esc(ctx.coverage_note)}</p>`;
+        html += `<p class="jee-coverage">${esc(ctx.coverage_note)}</p>`;
       }
-      return html;
+      return html + `</div>`;
     }
 
     function downloadVisual() {
@@ -2080,9 +2992,9 @@
       const vcLine = (lastVisualContext && lastVisualContext.present && lastVisualContext.summary)
         ? `<div class="visual-context-line"><strong>Why this visual matters:</strong> ${esc(lastVisualContext.summary)}</div>`
         : "";
-      const head = `<h3><span class="bar"></span>✨ Explain Visually</h3><p class="explain-tagline">See the idea, not just the formula.</p>`;
-      const dlBtn = `<button id="visual-download-btn" style="margin-top:10px;background:none;border:1px solid rgba(148,163,184,.3);color:#94a3b8;padding:8px 14px;border-radius:10px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .2s ease">⬇️ Download image</button>`;
-      const trust = `<p class="muted visual-trust">✨ AI-generated visual explanation — verify details against your notes.</p>`;
+      const head = `<h3><span class="h-icon amber">${ic("sparkles")}</span>Explain Visually</h3><p class="explain-tagline">See the idea, not just the formula.</p>`;
+      const dlBtn = `<button id="visual-download-btn">${ic("download")}Download image</button>`;
+      const trust = `<p class="muted visual-trust">${ic("sparkles")} AI-generated visual explanation — verify details against your notes.</p>`;
       if (currentVisualSvg) {
         return `${head}<div class="visual-wrap">${currentVisualSvg}</div>${trust}${vcLine}${dlBtn}`;
       }
@@ -2090,7 +3002,7 @@
         return `${head}<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /></div>${trust}${vcLine}${dlBtn}`;
       }
       if (canExplain) {
-        return `${head}<button class="explain-btn" id="explain-btn"><span>✨ Explain Visually</span><em>Free — bundled with your diagram</em></button>`;
+        return `${head}<button class="explain-btn" id="explain-btn"><span>${ic("sparkles")}Explain Visually</span><em>Free — bundled with your diagram</em></button>`;
       }
       return "";
     }
@@ -2105,9 +3017,9 @@
       if (!currentMarkdown) return;
       try {
         await navigator.clipboard.writeText(currentMarkdown);
-        copyBtn.textContent = "✓ Copied!";
+        copyBtn.innerHTML = `${ic("check")}Copied!`;
         copyBtn.classList.add("copied");
-        setTimeout(() => { copyBtn.textContent = "📋 Copy Notes"; copyBtn.classList.remove("copied"); }, 2000);
+        setTimeout(() => { copyBtn.innerHTML = `${ic("copy")}Copy Notes`; copyBtn.classList.remove("copied"); }, 2000);
       } catch {
         showError("Failed to copy.");
       }
