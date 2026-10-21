@@ -34,6 +34,13 @@ jobs:
             backend/requirements.txt
             backend/requirements-test.txt
 
+      # Typst composition uses DejaVu Sans; install it explicitly so CI does
+      # not depend on whatever fonts the runner image happens to ship.
+      - name: Install DejaVu fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends fonts-dejavu-core
+
       # Same pinned binary as the production Dockerfile; enables the
       # Typst-backed composition tests that skip on developer machines.
       - name: Install Typst 0.15.1

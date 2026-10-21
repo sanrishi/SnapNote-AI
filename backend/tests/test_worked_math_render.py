@@ -104,12 +104,22 @@ def test_renders_verified_structure():
     assert "DOMAIN \u2014 WHERE THE LOG IS DEFINED" in svg
     assert "CASE ANALYSIS" in svg
     assert "WHAT THE VISUAL SHOWS" in svg
-    assert "log_{x+3}(x\u00b2 \u2212 x) &lt; 1" in svg
+    assert "log\u2093\u208a\u2083(x\u00b2 \u2212 x) &lt; 1" in svg
     assert "(-1, 0) \u222a (1, 3)" in svg
     assert "x \u2208 (-3, -2)" in svg
     assert "If x + 3 &gt; 1:" in svg
     assert "If 0 &lt; x + 3 &lt; 1:" in svg
     assert "x \u2260 -2" in svg
+
+
+def test_interval_phrases_use_correct_direction():
+    svg = _svg(_regression_nl())
+    assert "x &lt; 0 or x &gt; 1" in svg
+    assert "x &gt; -3" in svg
+    assert "x &lt; -1 or x &gt; 3" in svg
+    assert "x &lt; 0 or x &lt; 1" not in svg
+    assert "x &lt; -3" not in svg
+    assert "x &lt; -1 or x &lt; 3" not in svg
 
 
 def test_open_and_closed_endpoints_drawn_exactly():
@@ -159,11 +169,11 @@ def test_content_fitted_height_no_fixed_stage():
     m = re.search(r'viewBox="0 0 800 (\d+)"', svg)
     assert m is not None
     height = int(m.group(1))
-    assert 320 <= height < 860
+    assert 320 <= height < 1600
     assert 'height="560"' not in svg  # no legacy fixed stage
-    ys = [int(y) for y in re.findall(r"<text[^>]* y=\"(\d+)\"", svg)]
+    ys = [float(y) for y in re.findall(r'<text[^>]* y="([\d.]+)"', svg)]
     assert ys and max(ys) <= height
-    xs = [float(x) for x in re.findall(r"<text[^>]* x=\"([\d.]+)\"", svg)]
+    xs = [float(x) for x in re.findall(r'<text[^>]* x="([\d.]+)"', svg)]
     assert xs and min(xs) >= 0 and max(xs) <= 800
 
 
@@ -207,7 +217,7 @@ def test_renderer_refuses_scene_that_fails_verification():
 
 
 def test_long_case_text_wraps_inside_canvas():
-    from app.utils.visual_renderer import _esc, _wrap
+    from app.utils.visual_renderer import _esc, _wm_math, _wrap
 
     # A long, exact zero literal: adds length without AST depth (an added
     # " + 0.0 - 0.0" chain trips the depth bound instead, correctly).
@@ -217,7 +227,7 @@ def test_long_case_text_wraps_inside_canvas():
     nl.cases[0].transformed = long_transformed
     assert validate_legacy_visual(_spec(nl)) == []  # still the exact rewrite
     svg = _svg(nl)
-    lines = _wrap(long_transformed, 74)
+    lines = _wrap(_wm_math(long_transformed), 68)
     assert len(lines) >= 2
     for line in lines:
         assert _esc(line) in svg

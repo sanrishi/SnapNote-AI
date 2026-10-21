@@ -22,7 +22,10 @@ from __future__ import annotations
 
 import logging
 import math
+import re
 from fractions import Fraction
+from typing import TYPE_CHECKING
+from xml.etree import ElementTree
 
 from app.models.schemas import (
     ComparisonPanel,
@@ -34,11 +37,17 @@ from app.models.schemas import (
     VisualComparison,
     VisualCurve,
     VisualGeneric,
+    VisualInterval,
+    VisualNumberLineTrack,
     VisualObject,
     VisualPlot,
     VisualScene,
     VisualVector,
 )
+
+if TYPE_CHECKING:
+    from app.utils.math_intervals import IntervalSet
+    from app.utils.math_verify import MathCase, SolveResult
 from app.utils.svg_safe import sanitize_svg
 
 logger = logging.getLogger(__name__)
@@ -797,13 +806,84 @@ def _boxes_overlap(a: tuple[float, float, float, float], b: tuple[float, float, 
     return not (ax + aw + pad <= bx or bx + bw + pad <= ax or ay + ah + pad <= by or by + bh + pad <= ay)
 
 
+def _fit_polyline_plot(plot: VisualPlot) -> tuple[float, float, float, float] | None:
+    """Tighten a data-only plot's window around its points.
+
+    Expression curves need their declared window (asymptotes, branch shape).
+    Polyline/marker plots (Argand squares, geometry constructions) do not, and
+    a fixed wide window leaves the actual figure stranded in one quadrant.
+    Origin stays visible; a small outward margin keeps labels off the border.
+    """
+    if any((curve.expr or "").strip() for curve in plot.curves):
+        return None
+    xs: list[float] = []
+    ys: list[float] = []
+    for curve in plot.curves:
+        for point in curve.points or []:
+            if len(point) < 2:
+                continue
+            px, py = float(point[0]), float(point[1])
+            if math.isfinite(px) and math.isfinite(py):
+                xs.append(px)
+                ys.append(py)
+    if not xs or not ys:
+        return None
+
+    def fit(values: list[float]) -> tuple[float, float]:
+        lo = min(0.0, min(values))
+        hi = max(0.0, max(values))
+        span = hi - lo
+        if span <= 0:
+            return -1.0, 1.0
+        pad = max(0.2, span * 0.04)
+        lo = lo - pad if lo < 0 else 0.0
+        hi = hi + pad if hi > 0 else 0.0
+        if hi <= lo:
+            hi = lo + 1.0
+        return lo, hi
+
+    x_lo, x_hi = fit(xs)
+    y_lo, y_hi = fit(ys)
+    return x_lo, x_hi, y_lo, y_hi
+
+
+def _axis_ticks(lo: float, hi: float) -> list[float]:
+    """Round tick values inside a window, aiming for 4-6 labels."""
+    span = hi - lo
+    if span <= 0:
+        return [lo]
+    raw = span / 5.0
+    base = 10.0 ** math.floor(math.log10(raw))
+    ticks: list[float] = []
+    for mult in (1.0, 2.0, 2.5, 5.0, 10.0):
+        step = mult * base
+        start = math.ceil(lo / step - 1e-9) * step
+        ticks = []
+        value = start
+        while value <= hi + 1e-9:
+            rounded = round(value, 10)
+            ticks.append(0.0 if abs(rounded) < 1e-9 else rounded)
+            value += step
+        if 3 <= len(ticks) <= 6:
+            return ticks
+    return ticks
+
+
+def _tick_text(value: float) -> str:
+    text = f"{value:.2f}".rstrip("0").rstrip(".")
+    return "0" if text in ("", "-0") else text
+
+
 def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     plot = scene.plot
     if plot is None or not plot.curves:
         return "", STAGE_Y + STAGE_H + 24, [], None
-    # sanitize ranges
-    x_min, x_max = float(plot.x_min), float(plot.x_max)
-    y_min, y_max = float(plot.y_min), float(plot.y_max)
+    fitted = _fit_polyline_plot(plot)
+    if fitted is not None:
+        x_min, x_max, y_min, y_max = fitted
+    else:
+        x_min, x_max = float(plot.x_min), float(plot.x_max)
+        y_min, y_max = float(plot.y_min), float(plot.y_max)
     if x_max <= x_min:
         x_min, x_max = 0.0, 5.0
     if y_max <= y_min:
@@ -840,15 +920,19 @@ def _render_plot(scene: VisualScene) -> tuple[str, int, list[str], object]:
     # axis labels + ticks
     parts.append(f'<text x="{_f(plot_x0+plot_w+8)}" y="{_f(x_axis_y+4)}" font-family="{_FONT}" font-size="16" fill="{MUTED}" text-anchor="start">{_esc(plot.x_label or "x")}</text>')
     parts.append(f'<text x="{_f(y_axis_x+6)}" y="{_f(plot_y0-6)}" font-family="{_FONT}" font-size="16" fill="{MUTED}" text-anchor="start">{_esc(plot.y_label or "y")}</text>')
-    # Origin tick dedupe (R5): when 0 sits inside both ranges the two mid
-    # ticks land on top of each other at the crossing — draw one "0" instead.
+    # Origin tick dedupe (R5): when 0 sits inside both ranges the two 0
+    # labels land on top of each other at the crossing - draw one instead.
     origin_inside = x_min < 0 < x_max and y_min < 0 < y_max
-    x_ticks = [x_min, x_max] if origin_inside else [x_min, (x_min + x_max) / 2, x_max]
-    y_ticks = [y_min, y_max] if origin_inside else [y_min, (y_min + y_max) / 2, y_max]
+    x_ticks = _axis_ticks(x_min, x_max)
+    y_ticks = _axis_ticks(y_min, y_max)
     for xv in x_ticks:
-        parts.append(f'<text x="{_f(map_x(xv))}" y="{_f(x_axis_y+18)}" font-family="{_FONT}" font-size="14" fill="{MUTED}" text-anchor="middle">{_f(xv)}</text>')
+        if origin_inside and abs(xv) < 1e-9:
+            continue
+        parts.append(f'<text x="{_f(map_x(xv))}" y="{_f(x_axis_y+18)}" font-family="{_FONT}" font-size="14" fill="{MUTED}" text-anchor="middle">{_tick_text(xv)}</text>')
     for yv in y_ticks:
-        parts.append(f'<text x="{_f(y_axis_x-10)}" y="{_f(map_y(yv)+3)}" font-family="{_FONT}" font-size="14" fill="{MUTED}" text-anchor="end">{_f(yv)}</text>')
+        if origin_inside and abs(yv) < 1e-9:
+            continue
+        parts.append(f'<text x="{_f(y_axis_x-10)}" y="{_f(map_y(yv)+3)}" font-family="{_FONT}" font-size="14" fill="{MUTED}" text-anchor="end">{_tick_text(yv)}</text>')
     if origin_inside:
         parts.append(f'<text x="{_f(y_axis_x-10)}" y="{_f(x_axis_y+18)}" font-family="{_FONT}" font-size="14" fill="{MUTED}" text-anchor="end">0</text>')
 
@@ -1293,7 +1377,582 @@ def _nl_label(value: Fraction) -> str:
     return f"{value.numerator}/{value.denominator}"
 
 
-def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
+# ── worked mathematics: study-sheet composition ────────────────────────────
+#
+# The visual is a teaching sheet, not a dump of cards: a dark question header,
+# numbered domain/case/answer sections, color-coded number lines, and a short
+# "why this works" strip. All mathematical strings come from the verifier
+# (SolveResult) or the verified claim; nothing is re-derived in the renderer.
+
+WM_NAVY = "#0f172a"
+WM_NAVY_LABEL = "#a5b4fc"
+WM_INDIGO = "#4f46e5"
+WM_INDIGO_TINT = "#eef2ff"
+WM_AMBER = "#b45309"
+WM_AMBER_TINT = "#fffbeb"
+WM_TEAL = "#0f766e"
+WM_TEAL_TINT = "#f0fdfa"
+WM_GREEN_TINT = "#f0fdf4"
+WM_LINE = "#e7e5e4"
+WM_SOFT = "#78716c"
+WM_CARD = "#ffffff"
+
+
+def _wm_num(text: str) -> str:
+    return text.replace("-inf", "\u2212\u221e").replace("inf", "\u221e").replace("-", "\u2212")
+
+
+def _wm_set_text(values: "IntervalSet") -> str:
+    """Canonical interval-set text with typographic minus/infinity."""
+    from app.utils.math_intervals import format_interval_set
+
+    return _wm_num(format_interval_set(values))
+
+
+_WM_SUBSCRIPTS = {
+    "0": "₀", "1": "₁", "2": "₂", "3": "₃", "4": "₄",
+    "5": "₅", "6": "₆", "7": "₇", "8": "₈", "9": "₉",
+    "+": "₊", "-": "₋", "=": "₌", "(": "₍", ")": "₎", "x": "ₓ",
+}
+
+
+def _wm_math(text: str) -> str:
+    """Display-only math typography; never changes the verified expression."""
+    text = text.replace("^2", "²").replace("^3", "³")
+    text = text.replace("*", "·")
+    return text.replace(" - ", " − ")
+
+
+def _wm_problem(text: str) -> str:
+    """Typeset a log base as a real subscript when every glyph is supported."""
+    text = _wm_math(text)
+
+    def _sub(match: re.Match[str]) -> str:
+        base = match.group(1).strip()
+        compact = base.replace(" ", "")
+        if compact and all(ch in _WM_SUBSCRIPTS for ch in compact):
+            return "log" + "".join(_WM_SUBSCRIPTS[ch] for ch in compact)
+        return f"log_({base})"
+
+    return re.sub(r"log_\{([^{}]+)\}", _sub, text)
+
+
+def _wm_phrase(values: "IntervalSet") -> str:
+    """Human sentence for a small union (x < -1 or x > 3)."""
+    from app.utils.math_intervals import format_bound
+
+    parts: list[str] = []
+    for iv in values.normalized().intervals:
+        lo = format_bound(iv.lo, minus_side=True)
+        hi = format_bound(iv.hi, minus_side=False)
+        lo_inf = iv.lo is None
+        hi_inf = iv.hi is None
+        lower = "≤" if iv.lo_closed else "<"
+        upper = "≤" if iv.hi_closed else "<"
+        beyond = "≥" if iv.lo_closed else ">"
+        if lo_inf and hi_inf:
+            parts.append("all real x")
+        elif lo_inf:
+            parts.append(f"x {upper} {hi}")
+        elif hi_inf:
+            parts.append(f"x {beyond} {lo}")
+        elif lo == hi and iv.lo_closed and iv.hi_closed:
+            parts.append(f"x = {lo}")
+        else:
+            parts.append(f"{lo} {lower} x {upper} {hi}")
+    if not parts:
+        return "no real x"
+    if len(parts) > 3:
+        return _wm_set_text(values)
+    return " or ".join(parts)
+
+
+def _wm_track_from_set(values: "IntervalSet") -> VisualNumberLineTrack:
+    from app.utils.math_intervals import format_bound
+
+    return VisualNumberLineTrack(
+        intervals=[
+            VisualInterval(
+                lo=format_bound(iv.lo, minus_side=True),
+                hi=format_bound(iv.hi, minus_side=False),
+                lo_closed=iv.lo_closed,
+                hi_closed=iv.hi_closed,
+            )
+            for iv in values.normalized().intervals
+        ]
+    )
+
+
+def _wm_text(
+    x: float,
+    y: float,
+    text: str,
+    size: float = 14,
+    fill: str = INK,
+    weight: str = "400",
+    anchor: str = "start",
+    spacing: float | None = None,
+) -> str:
+    extra = f' letter-spacing="{spacing}"' if spacing is not None else ""
+    return (
+        f'<text x="{_f(x)}" y="{_f(y)}" font-family="{_FONT}" font-size="{size}" '
+        f'font-weight="{weight}" fill="{fill}" text-anchor="{anchor}"{extra}>{_esc(text)}</text>'
+    )
+
+
+def _wm_rect(
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    rx: float,
+    fill: str,
+    stroke: str = "none",
+    stroke_width: float = 0,
+) -> str:
+    stroke_attr = f' stroke="{stroke}" stroke-width="{stroke_width}"' if stroke != "none" else ""
+    return f'<rect x="{_f(x)}" y="{_f(y)}" width="{_f(w)}" height="{_f(h)}" rx="{_f(rx)}" fill="{fill}"{stroke_attr}/>'
+
+
+def _wm_section(y: int, number: str, label: str, color: str = WM_INDIGO) -> tuple[str, int]:
+    parts = [
+        _wm_rect(MARGIN, y, 26, 26, 7, color),
+        _wm_text(MARGIN + 13, y + 18, number, 10.5, "#ffffff", "700", "middle"),
+        _wm_text(MARGIN + 38, y + 18, label, 11, color, "700", "start", 1.2),
+        f'<line x1="{MARGIN + 38}" y1="{y + 30}" x2="{VIEW_W - MARGIN}" y2="{y + 30}" stroke="{WM_LINE}" stroke-width="1"/>',
+    ]
+    return "".join(parts), y + 42
+
+
+def _wm_header(y: int, title: str, problem: str, key_idea: str) -> tuple[str, int]:
+    title_lines = _wrap(title, 44)[:2]
+    band_h = 104 + (len(title_lines) - 1) * 30
+    band_top = y
+    band_bottom = y + band_h
+    parts = [_wm_rect(32, band_top, VIEW_W - 64, band_h, 18, WM_NAVY)]
+    # Thin accent rule at the top of the dark band.
+    parts.append(
+        f'<line x1="54" y1="{band_top + 14}" x2="{VIEW_W - 54}" y2="{band_top + 14}" '
+        f'stroke="{WM_NAVY_LABEL}" stroke-width="1" opacity="0.35"/>'
+    )
+    parts.append(_wm_text(56, band_top + 38, "WORKED MATHEMATICS  ·  VERIFIED SOLUTION", 9, WM_NAVY_LABEL, "700", "start", 1.4))
+    ty = band_top + 70
+    for line in title_lines:
+        parts.append(_wm_text(56, ty, line, 26, "#ffffff", "700"))
+        ty += 30
+
+    problem_lines = _wrap(problem, 58)
+    problem_h = 22 + 27 * len(problem_lines)
+    problem_top = band_bottom - 14
+    parts.append(_wm_rect(56, problem_top, VIEW_W - 112, problem_h, 12, WM_CARD))
+    parts.append(_wm_text(74, problem_top + 18, "QUESTION", 8.5, WM_INDIGO, "700", "start", 1.2))
+    py = problem_top + 44
+    for line in problem_lines:
+        parts.append(_wm_text(74, py, line, 21, INK, "700"))
+        py += 27
+    y = problem_top + problem_h + 18
+
+    if key_idea.strip():
+        parts.append(_wm_rect(MARGIN, y - 9, 3, 3, 1.5, WM_AMBER))
+        lines = _wrap(key_idea.strip(), 104)
+        for line in lines:
+            parts.append(_wm_text(MARGIN + 12, y + 4, line, 12.5, WM_SOFT))
+            y += 18
+        y += 2
+    return "".join(parts), y + 8
+
+
+def _wm_domain(y: int, solved: "SolveResult", nl, lo: float, hi: float) -> tuple[str, int]:
+    is_log = bool(solved.base_display)
+    header_text = (
+        "DOMAIN — WHERE THE LOG IS DEFINED"
+        if is_log
+        else "DOMAIN — WHERE THE EXPRESSION IS DEFINED"
+    )
+    header, y = _wm_section(y, "01", header_text)
+    parts = [header]
+
+    intro = (
+        "Every restriction must hold at once. The logarithm needs a positive argument, "
+        "a positive base, and a base different from 1."
+        if is_log
+        else "The expression is undefined wherever a denominator is zero."
+    )
+    for line in _wrap(intro, 108):
+        parts.append(_wm_text(MARGIN, y, line, 12.5, WM_SOFT))
+        y += 18
+    y += 10
+
+    cards: list[tuple[str, str, str, str]] = []
+    if is_log:
+        cards.append(
+            (
+                "ARGUMENT > 0",
+                solved.arg_display,
+                _wm_phrase(solved.arg_positive) if solved.arg_positive is not None else "positive",
+                WM_INDIGO,
+            )
+        )
+        if not solved.constant_base:
+            cards.append(
+                (
+                    "BASE > 0",
+                    solved.base_display,
+                    _wm_phrase(solved.base_positive) if solved.base_positive is not None else "positive",
+                    WM_INDIGO,
+                )
+            )
+            exclude = ", ".join(_nl_label(p) for p in solved.excluded_points)
+            cards.append(
+                (
+                    "BASE ≠ 1",
+                    f"{solved.base_display} ≠ 1",
+                    f"exclude x = {exclude}" if exclude else "base stays valid",
+                    RED,
+                )
+            )
+    else:
+        exclude = ", ".join(_nl_label(p) for p in solved.excluded_points)
+        cards.append(("DENOMINATOR ≠ 0", f"x ≠ {exclude}", "excluded from the domain", RED))
+
+    if cards:
+        cols = len(cards) if len(cards) <= 3 else 3
+        gutter = 10
+        cw = (CONTENT_W - gutter * (cols - 1)) / cols
+        ch = 82
+        for i, (label, expr, consequence, color) in enumerate(cards):
+            cx = MARGIN + i * (cw + gutter)
+            parts.append(_wm_rect(cx, y, cw, ch, 11, WM_CARD, WM_LINE, 1))
+            parts.append(_wm_rect(cx, y, 4, ch, 2, color))
+            parts.append(_wm_text(cx + 14, y + 20, label, 8.5, color, "700", "start", 1.1))
+            parts.append(_wm_text(cx + 14, y + 44, expr, 13, INK, "700"))
+            for j, line in enumerate(_wrap(consequence, 30)[:2]):
+                parts.append(_wm_text(cx + 14, y + 62 + j * 14, line, 11, WM_SOFT if color != RED else RED))
+        y += ch + 12
+
+    domain_text = _wm_set_text(solved.domain) if solved.domain is not None else "all real x"
+    parts.append(_wm_text(MARGIN, y + 4, "Together:", 11, WM_SOFT, "700"))
+    parts.append(_wm_text(MARGIN + 60, y + 4, domain_text, 12, WM_INDIGO, "700"))
+    y += 18
+
+    card_top = y
+    track_html, track_y = _nl_track_svg(
+        nl.domain,
+        card_top + 44,
+        lo,
+        hi,
+        ACCENT,
+        empty_text="The domain is empty — no real x is defined",
+    )
+    card_h = track_y - card_top + 8
+    parts.append(_wm_rect(MARGIN, card_top, CONTENT_W, card_h, 12, WM_INDIGO_TINT))
+    parts.append(_wm_text(MARGIN + 16, card_top + 18, "DOMAIN ON THE NUMBER LINE", 8.5, WM_INDIGO, "700", "start", 1.1))
+    parts.append(track_html)
+    y = track_y + 10
+    return "".join(parts), y
+
+
+def _wm_case_track(
+    raw: "IntervalSet",
+    final: "IntervalSet",
+    domain: "IntervalSet | None",
+    y: int,
+    lo: float,
+    hi: float,
+    color: str,
+) -> tuple[str, int]:
+    """Raw transformation vs domain-intersected branch on one number line."""
+    parts = [_wm_rect(MARGIN + 18, y - 6, CONTENT_W - 36, 96, 10, "#fafaf9")]
+
+    def span(iv) -> tuple[float, float]:
+        from app.utils.math_intervals import format_bound
+
+        lo_b = format_bound(iv.lo, minus_side=True)
+        hi_b = format_bound(iv.hi, minus_side=False)
+        x1 = _nl_x(float(lo_b), lo, hi) if lo_b not in ("-inf", "inf") else _nl_x(lo, lo, hi)
+        x2 = _nl_x(float(hi_b), lo, hi) if hi_b not in ("-inf", "inf") else _nl_x(hi, lo, hi)
+        return x1, x2
+
+    if domain is not None:
+        for iv in domain.normalized().intervals:
+            x1, x2 = span(iv)
+            if x2 - x1 >= 1:
+                parts.append(
+                    f'<rect x="{_f(x1)}" y="{_f(y + 12)}" width="{_f(x2 - x1)}" height="42" '
+                    f'fill="{WM_INDIGO}" opacity="0.08"/>'
+                )
+
+    same = raw.equals(final)
+    if not same and raw.normalized().intervals:
+        for iv in raw.normalized().intervals:
+            x1, x2 = span(iv)
+            if x2 - x1 >= 1:
+                parts.append(
+                    f'<rect x="{_f(x1)}" y="{_f(y + 10)}" width="{_f(x2 - x1)}" height="7" '
+                    f'rx="3.5" fill="{color}" opacity="0.30"/>'
+                )
+        parts.append(_wm_text(MARGIN + 34, y + 6, f"from the transformation: {_wm_phrase(raw)}", 10, WM_SOFT))
+        parts.append(_wm_text(VIEW_W - MARGIN - 20, y + 6, "shade = domain", 9, WM_SOFT, "400", "end"))
+    else:
+        parts.append(_wm_text(MARGIN + 34, y + 6, "already inside the domain", 10, WM_SOFT))
+
+    final_track = _wm_track_from_set(final)
+    track_html, track_y = _nl_track_svg(
+        final_track,
+        y + 34,
+        lo,
+        hi,
+        color,
+        empty_text="No part of this branch survives",
+    )
+    parts.append(track_html)
+    return "".join(parts), track_y + 6
+
+
+def _wm_cases(y: int, solved: "SolveResult", nl, lo: float, hi: float) -> tuple[str, int]:
+    header, y = _wm_section(y, "02", "CASE ANALYSIS")
+    parts = [header]
+    intro = "The base regime decides whether the inequality keeps its direction or reverses it."
+    for line in _wrap(intro, 108):
+        parts.append(_wm_text(MARGIN, y, line, 12.5, WM_SOFT))
+        y += 18
+    y += 12
+
+    from app.utils.math_intervals import parse_interval_set
+
+    used: set[int] = set()
+    for idx, model_case in enumerate(nl.cases):
+        solver_case: MathCase | None = None
+        cond = model_case.condition.strip()
+        want = "<1" if cond.startswith("0 <") or "0 <" in cond else ">1"
+        for candidate in solved.cases:
+            if id(candidate) not in used and candidate.regime_kind == want:
+                solver_case = candidate
+                break
+        if solver_case is None:
+            parsed = parse_interval_set(model_case.solution)
+            if not isinstance(parsed, str):
+                for candidate in solved.cases:
+                    if id(candidate) not in used and candidate.solution.equals(parsed):
+                        solver_case = candidate
+                        break
+        if solver_case is None and idx < len(solved.cases):
+            solver_case = solved.cases[idx]
+        if solver_case is not None:
+            used.add(id(solver_case))
+
+        color = (WM_AMBER, WM_AMBER_TINT) if idx == 0 else (WM_TEAL, WM_TEAL_TINT)
+        accent, tint = color
+        card_top = y
+        body: list[str] = []
+        body.append(_wm_rect(MARGIN, card_top, CONTENT_W, 10, 10, tint))  # replaced below after height known
+
+        body.append(_wm_rect(MARGIN + 18, card_top + 14, 58, 20, 5, accent))
+        body.append(_wm_text(MARGIN + 47, card_top + 28, f"CASE {idx + 1}", 9, "#ffffff", "700", "middle"))
+        condition = f"If {cond}:" if cond else "This branch"
+        for j, line in enumerate(_wrap(condition, 54)[:2]):
+            body.append(_wm_text(MARGIN + 88, card_top + 28 + j * 18, line, 15, INK, "700"))
+        direction = (
+            "base > 1 → keep direction"
+            if solver_case is not None and solver_case.regime_kind == ">1"
+            else "0 < base < 1 → flip direction"
+        )
+        if solver_case is not None and solved.base_display:
+            body.append(_wm_text(VIEW_W - MARGIN - 18, card_top + 28, direction, 10.5, accent, "700", "end"))
+            body.append(
+                _wm_text(
+                    VIEW_W - MARGIN - 18,
+                    card_top + 48,
+                    f"x ∈ {model_case.solution.strip()}",
+                    11.5,
+                    accent,
+                    "700",
+                    "end",
+                )
+            )
+
+        ty = card_top + 64
+        for j, line in enumerate(_wrap(_wm_math(model_case.transformed.strip()), 68)):
+            if j == 0:
+                body.append(_wm_text(MARGIN + 18, ty, "TRANSFORM", 8, WM_SOFT, "700", "start", 1.0))
+            body.append(_wm_text(MARGIN + 94, ty, line, 14, INK, "600"))
+            ty += 20
+
+        if solver_case is not None:
+            from app.utils.math_verify import _factored_display, display_relation
+
+            simplified = display_relation(solver_case.transformed_num, solver_case.transformed_rel)
+            factored = _factored_display(solver_case.transformed_num)
+            if factored:
+                simplified = f"{simplified}   →   {factored} {_wm_rel(solver_case.transformed_rel)} 0"
+            ty += 4
+            for j, line in enumerate(_wrap(simplified, 68)):
+                if j == 0:
+                    body.append(_wm_text(MARGIN + 18, ty, "SIMPLIFY", 8, WM_SOFT, "700", "start", 1.0))
+                body.append(_wm_text(MARGIN + 94, ty, line, 13, accent, "700"))
+                ty += 18
+            ty += 8
+
+        raw = solver_case.raw_solution if solver_case is not None and solver_case.raw_solution is not None else None
+        final = solver_case.solution if solver_case is not None else None
+        if raw is not None and final is not None:
+            track_html, next_y = _wm_case_track(raw, final, solved.domain, ty, lo, hi, accent)
+            body.append(track_html)
+        else:
+            next_y = ty + 36
+        card_h = next_y - card_top + 12
+        body[0] = _wm_rect(MARGIN, card_top, CONTENT_W, card_h, 12, WM_CARD, WM_LINE, 1)
+        body.insert(1, _wm_rect(MARGIN, card_top, 5, card_h, 2.5, accent))
+        parts.append("".join(body))
+        y = card_top + card_h + 14
+    return "".join(parts), y
+
+
+def _wm_rel(rel: str) -> str:
+    return {"<=": "≤", ">=": "≥"}.get(rel, rel)
+
+
+def _wm_scales(solved: "SolveResult", nl) -> tuple[float, float]:
+    values = _nl_numbers(nl)
+    for case in solved.cases:
+        for track in (case.raw_solution, case.solution):
+            if track is None:
+                continue
+            for iv in track.normalized().intervals:
+                for bound in (iv.lo, iv.hi):
+                    if bound is not None:
+                        values.append(float(bound))
+    for point in solved.critical_points:
+        values.append(float(point))
+    if not values:
+        return -1.0, 1.0
+    lo, hi = min(values) - 1.0, max(values) + 1.0
+    if hi - lo < 1.0:
+        mid = (lo + hi) / 2
+        lo, hi = mid - 1.0, mid + 1.0
+    return lo, hi
+
+
+def _wm_solve(y: int, solved: "SolveResult", number: str, lo: float, hi: float) -> tuple[str, int]:
+    header, y = _wm_section(y, number, "SOLVE — CRITICAL POINTS", WM_AMBER)
+    parts = [header]
+    intro = (
+        "These points split the number line into intervals. The expression can change "
+        "sign only at a critical point; the verified solution is drawn below."
+    )
+    for line in _wrap(intro, 108):
+        parts.append(_wm_text(MARGIN, y, line, 12.5, WM_SOFT))
+        y += 18
+    y += 12
+
+    card_top = y
+    axis_y = card_top + 44
+    x_left = _nl_x(lo, lo, hi)
+    x_right = _nl_x(hi, lo, hi)
+    excluded = set(solved.excluded_points)
+    labels: list[tuple[float, str, str, bool]] = []
+    for point in solved.critical_points:
+        px = _nl_x(float(point), lo, hi)
+        color = RED if point in excluded else WM_AMBER
+        labels.append((px, _nl_label(point), color, point in excluded))
+    rows: list[float] = []
+    placements: list[tuple[float, str, str, bool, int]] = []
+    for px, text, color, is_excluded in sorted(labels):
+        row = 0
+        while row < len(rows) and px - rows[row] < 46:
+            row += 1
+        if row == len(rows):
+            rows.append(px)
+        else:
+            rows[row] = px
+        placements.append((px, text, color, is_excluded, row))
+    card_h = 44 + 30 + max(0, len(rows) - 1) * 17 + 12
+    parts.append(_wm_rect(MARGIN, card_top, CONTENT_W, card_h, 12, WM_AMBER_TINT))
+    parts.append(
+        f'<line x1="{_f(x_left)}" y1="{_f(axis_y)}" x2="{_f(x_right)}" y2="{_f(axis_y)}" '
+        f'stroke="{SOFT}" stroke-width="2"/>'
+    )
+    for px, text, color, is_excluded, row in placements:
+        fill = "white" if is_excluded else color
+        parts.append(
+            f'<circle cx="{_f(px)}" cy="{_f(axis_y)}" r="6" fill="{fill}" '
+            f'stroke="{color}" stroke-width="2.5"/>'
+        )
+        parts.append(_wm_text(px, axis_y + 26 + row * 17, f"x = {text}", 11, color, "700", "middle"))
+    if excluded:
+        parts.append(
+            _wm_text(VIEW_W - MARGIN - 16, card_top + 18, "hollow red = excluded by the domain", 9, RED, "400", "end")
+        )
+    y = card_top + card_h
+    return "".join(parts), y + 10
+
+
+def _wm_final(y: int, solved: "SolveResult", nl, lo: float, hi: float, number: str = "03") -> tuple[str, int]:
+    header, y = _wm_section(y, number, "FINAL ANSWER — MATHEMATICALLY VERIFIED", GREEN)
+    parts = [header]
+    answer = _wm_set_text(solved.solution) if solved.solution is not None else "∅"
+    empty = solved.solution is not None and not solved.solution.normalized().intervals
+    card_h = 78
+    parts.append(_wm_rect(MARGIN, y, CONTENT_W, card_h, 14, WM_GREEN_TINT, "#86efac", 1.5))
+    parts.append(_wm_rect(MARGIN, y, 6, card_h, 3, GREEN))
+    parts.append(_wm_text(MARGIN + 20, y + 24, "SOLUTION SET", 9, GREEN, "700", "start", 1.2))
+    if empty:
+        parts.append(_wm_text(MARGIN + 20, y + 52, "No real solutions — the inequality is never true", 17, INK, "700"))
+    else:
+        parts.append(_wm_text(MARGIN + 20, y + 52, f"x ∈ {answer}", 20, "#14532d", "700"))
+    badge_w = 92
+    parts.append(_wm_rect(VIEW_W - MARGIN - badge_w - 16, y + 22, badge_w, 26, 13, "#dcfce7"))
+    parts.append(_wm_text(VIEW_W - MARGIN - badge_w / 2 - 16, y + 39, "✓ VERIFIED", 9, GREEN, "700", "middle", 0.8))
+    y += card_h + 16
+
+    if not empty:
+        card_top = y
+        track_html, track_y = _nl_track_svg(nl.solution, card_top + 44, lo, hi, GREEN)
+        card_h = track_y - card_top + 8
+        parts.append(_wm_rect(MARGIN, card_top, CONTENT_W, card_h, 12, WM_GREEN_TINT))
+        parts.append(_wm_text(MARGIN + 16, card_top + 18, "SOLUTION ON THE NUMBER LINE", 8.5, GREEN, "700", "start", 1.1))
+        parts.append(track_html)
+        y = track_y + 10
+    return "".join(parts), y
+
+
+def _wm_key_ideas(y: int, solved: "SolveResult", number: str = "04") -> tuple[str, int]:
+    header, y = _wm_section(y, number, "WHY THIS WORKS", WM_INDIGO)
+    parts = [header]
+    is_log = bool(solved.base_display)
+    if is_log and not solved.constant_base:
+        ideas = [
+            ("01", "Domain first", "The logarithm needs argument > 0, base > 0, and base ≠ 1.", WM_INDIGO),
+            ("02", "Base decides", "base > 1 keeps the sign; 0 < base < 1 reverses the inequality.", WM_AMBER),
+            ("03", "Intersect, then union", "Keep only the parts inside the domain, then combine the branches.", WM_TEAL),
+        ]
+    elif is_log:
+        ideas = [
+            ("01", "Domain first", "The fixed base still needs a positive argument and a valid base.", WM_INDIGO),
+            ("02", "Direction is fixed", "A constant base never flips the inequality direction.", WM_AMBER),
+            ("03", "Then solve", "Solve the transformed inequality and intersect with the domain.", WM_TEAL),
+        ]
+    else:
+        ideas = [
+            ("01", "Critical points", "Roots of the numerator and denominator split the number line.", WM_INDIGO),
+            ("02", "Test each interval", "One test point per interval decides where the inequality holds.", WM_AMBER),
+            ("03", "Endpoint rule", "Use filled dots for ≤ / ≥ and hollow dots for < / >.", WM_TEAL),
+        ]
+    gutter = 10
+    cw = (CONTENT_W - 2 * gutter) / 3
+    ch = 88
+    for i, (num, title, body_text, color) in enumerate(ideas):
+        cx = MARGIN + i * (cw + gutter)
+        parts.append(_wm_rect(cx, y, cw, ch, 11, WM_CARD, WM_LINE, 1))
+        parts.append(_wm_rect(cx, y, 4, ch, 2, color))
+        parts.append(_wm_text(cx + 14, y + 21, num, 9, color, "700", "start", 1.2))
+        parts.append(_wm_text(cx + 14, y + 41, title, 12, INK, "700"))
+        for j, line in enumerate(_wrap(body_text, 32)[:3]):
+            parts.append(_wm_text(cx + 14, y + 58 + j * 14, line, 10, WM_SOFT))
+    return "".join(parts), y + ch + 14
+
+
+def _render_number_line_scene(spec: DeterministicVisual, scene: VisualScene, y: int) -> tuple[str, int]:
     """Worked-math layout: title already drawn; problem card, domain track,
     case rows, verified final answer. Content-fitted height, no fixed stage."""
     nl = scene.number_line
@@ -1301,117 +1960,77 @@ def _render_number_line_scene(scene: VisualScene, y: int) -> tuple[str, int]:
     # Defense in depth: this layout carries the "MATHEMATICALLY VERIFIED"
     # claim, so it re-runs the exact verifier itself. A scene that no longer
     # verifies can never be drawn as verified, regardless of caller mistakes.
-    from app.utils.math_verify import verify_number_line
+    from app.utils.math_verify import solve_problem, verify_number_line
 
     if verify_number_line(nl):
         logger.warning(
             "number_line scene failed re-verification at render time; refusing to draw"
         )
         return "", y
+    solved = solve_problem(nl.problem)
+    if not solved.supported or solved.solution is None:
+        logger.warning("number_line re-solve failed at render time; refusing to draw")
+        return "", y
+
+    lo, hi = _wm_scales(solved, nl)
     parts: list[str] = []
-    lo, hi = _nl_scale(nl)
+    title = (spec.title or scene.title or "Worked Mathematics").strip()
+    is_log = bool(solved.base_display)
 
-    problem_lines = _wrap(nl.problem.strip(), 60)
-    card_h = 22 + 32 * len(problem_lines)
-    parts.append(
-        f'<rect x="{MARGIN}" y="{y}" width="{CONTENT_W}" height="{card_h}" rx="12" '
-        f'fill="{CARD_FILL}" stroke="{CARD_STROKE}" stroke-width="1.5"/>'
-    )
-    py = y + 34
-    for line in problem_lines:
-        parts.append(
-            f'<text x="{VIEW_W / 2:.0f}" y="{py}" font-family="{_FONT}" font-size="22" '
-            f'font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
+    if is_log and not solved.constant_base:
+        key_idea = (
+            "A variable base changes the inequality direction: solve base > 1 and "
+            "0 < base < 1 separately, then intersect each branch with the domain."
         )
-        py += 32
-    y = py + 14
-
-    if nl.domain is not None and (nl.domain.intervals or nl.domain.points):
-        domain_context = f"{nl.problem} {nl.domain.label}".casefold()
-        domain_header = (
-            "DOMAIN — WHERE THE LOG IS DEFINED"
-            if "log" in domain_context
-            else "DOMAIN — WHERE THE EXPRESSION IS DEFINED"
+    elif is_log:
+        key_idea = "The base is fixed, so the direction is fixed: solve, then keep only the domain."
+    else:
+        key_idea = (
+            "Roots split the number line into intervals; test each interval and "
+            "include an endpoint only when the inequality is non-strict."
         )
-        header, y = _section_header(y, domain_header)
-        parts.append(header)
-        label = nl.domain.label.strip()
-        if label:
-            for line in _wrap(label, 92):
-                parts.append(
-                    f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="15" '
-                    f'fill="{MUTED}" text-anchor="start">{_esc(line)}</text>'
-                )
-                y += 20
-            y += 4
-        html, y = _nl_track_svg(
-            nl.domain,
-            y + 12,
-            lo,
-            hi,
-            ACCENT,
-            empty_text="The domain is empty — no real x satisfies the restrictions",
-        )
-        parts.append(html)
-
-    if nl.cases:
-        header, y = _section_header(y, "CASE ANALYSIS")
-        parts.append(header)
-        for case in nl.cases:
-            row_lines: list[tuple[str, int, str, str]] = []
-            cond = case.condition.strip()
-            if cond:
-                for line in _wrap(f"If {cond}:", 74):
-                    row_lines.append((line, 17, INK, "700"))
-            if case.transformed.strip():
-                for line in _wrap(case.transformed.strip(), 74):
-                    row_lines.append((line, 17, INK, "400"))
-            if case.solution.strip():
-                for line in _wrap(f"x ∈ {case.solution.strip()}", 74):
-                    row_lines.append((line, 17, GREEN, "700"))
-            if not row_lines:
-                continue
-            cards: list[str] = []
-            row_h = 18 + 24 * len(row_lines)
-            cards.append(
-                f'<rect x="{MARGIN}" y="{y}" width="{CONTENT_W}" height="{row_h}" rx="10" '
-                f'fill="white" stroke="{CARD_STROKE}" stroke-width="1.5"/>'
-            )
-            cards.append(
-                f'<rect x="{MARGIN}" y="{y}" width="5" height="{row_h}" rx="2.5" fill="{ACCENT}"/>'
-            )
-            ty = y + 26
-            for text, size, color, weight in row_lines:
-                cards.append(
-                    f'<text x="{MARGIN + 18}" y="{ty}" font-family="{_FONT}" font-size="{size}" '
-                    f'font-weight="{weight}" fill="{color}" text-anchor="start">{_esc(text)}</text>'
-                )
-                ty += 24
-            parts.append("".join(cards))
-            y = ty + 8
-
-    header, y = _section_header(y, "FINAL ANSWER — MATHEMATICALLY VERIFIED")
-    parts.append(header)
-    html, y = _nl_track_svg(
-        nl.solution,
-        y + 12,
-        lo,
-        hi,
-        GREEN,
-        empty_text="No real solutions — the inequality is never true",
-    )
+    html, y = _wm_header(y, title, _wm_problem(nl.problem), key_idea)
     parts.append(html)
 
+    from app.utils.math_intervals import Interval
+    from app.utils.math_intervals import IntervalSet as _IntervalSet
+
+    whole_line = _IntervalSet.of(Interval(None, None, False, False))
+    needs_domain = solved.domain is not None and not solved.domain.equals(whole_line)
+    section_no = 1
+    if needs_domain:
+        html, y = _wm_domain(y, solved, nl, lo, hi)
+        parts.append(html)
+        section_no += 1
+
+    if nl.cases and solved.cases:
+        html, y = _wm_cases(y, solved, nl, lo, hi)
+        parts.append(html)
+        section_no += 1
+    elif not is_log and solved.critical_points:
+        html, y = _wm_solve(y, solved, f"{section_no:02d}", lo, hi)
+        parts.append(html)
+        section_no += 1
+
+    html, y = _wm_final(y, solved, nl, lo, hi, f"{section_no:02d}")
+    parts.append(html)
+    section_no += 1
+    html, y = _wm_key_ideas(y, solved, f"{section_no:02d}")
+    parts.append(html)
+    section_no += 1
+
     if scene.caption.strip():
-        cap_html, y = _section_header(y, "WHAT THE VISUAL SHOWS")
+        cap_html, y = _wm_section(y, f"{section_no:02d}", "WHAT THE VISUAL SHOWS", WM_SOFT)
         parts.append(cap_html)
-        for line in _wrap(scene.caption.strip(), 90):
-            parts.append(
-                f'<text x="{MARGIN}" y="{y}" font-family="{_FONT}" font-size="{TYPE_AXIS}" '
-                f'fill="{INK}" text-anchor="start">{_esc(line)}</text>'
-            )
-            y += 22
-        y += 6
+        for line in _wrap(scene.caption.strip(), 92):
+            parts.append(_wm_text(MARGIN, y, line, 13, INK))
+            y += 19
+        y += 4
+
+    line_y = y + 4
+    parts.append(f'<line x1="{MARGIN}" y1="{line_y}" x2="{VIEW_W - MARGIN}" y2="{line_y}" stroke="{WM_LINE}" stroke-width="1"/>')
+    parts.append(_wm_text(MARGIN, line_y + 18, "Exact interval algebra  ·  verified at render time", 9.5, WM_SOFT, "400", "start", 0.4))
+    y = line_y + 28
     return "".join(parts), y
 
 
@@ -1494,24 +2113,24 @@ def render_deterministic_visual(spec: DeterministicVisual) -> str:
     if not meaningful:
         return ""
 
-    y = 56
-    title = (spec.title or "Key concept").strip()
-    html, y = _title(y, title)
-    parts.append(html)
-
-    # Worked mathematics: compact content-fitted layout, no fixed stage and no
-    # minimum canvas height (the legacy 860px floor left huge empty margins on
-    # short solutions). Rendered only after math verification upstream.
+    # Worked mathematics owns its full study-sheet header (title, question,
+    # key idea), so dispatch it BEFORE the generic centered title. It is still
+    # content-fitted: the height is computed from the verified sections.
     if (
         spec.scene is not None
         and spec.scene.scene_kind == "number_line"
         and spec.scene.number_line is not None
     ):
-        html, y = _render_number_line_scene(spec.scene, y)
+        html, y = _render_number_line_scene(spec, spec.scene, 16)
         if not html.strip():
             return ""
         parts.append(html)
-        return _assemble_svg(parts, max(320, y + 32))
+        return _assemble_svg(parts, max(320, y + 8))
+
+    y = 56
+    title = (spec.title or "Key concept").strip()
+    html, y = _title(y, title)
+    parts.append(html)
 
     scene_rendered = False
     if spec.scene is not None:
@@ -1604,6 +2223,68 @@ def _assemble_svg(parts: list[str], height: int) -> str:
     return svg
 
 
+def _hero_diagram_bbox(diagram: str) -> tuple[float, float, float, float] | None:
+    """Approximate the drawn content bounds so a wide, short hero can be cropped.
+
+    The stage is a fixed 736x592 frame; a process-flow diagram only occupies a
+    horizontal band in the middle, leaving large blank top/bottom margins when
+    composed. Text bounds are estimated from font size (deterministic; no font
+    measurement). Paths are skipped - axes/lines already establish plot bounds.
+    """
+    try:
+        root = ElementTree.fromstring(f"<g>{diagram}</g>")
+    except ElementTree.ParseError:
+        return None
+
+    xs: list[float] = []
+    ys: list[float] = []
+
+    def add(x0: float, y0: float, x1: float, y1: float) -> None:
+        xs.extend((x0, x1))
+        ys.extend((y0, y1))
+
+    for elem in root.iter():
+        tag = elem.tag.rsplit("}", 1)[-1]
+        attrs = elem.attrib
+        try:
+            if tag == "rect":
+                x, y = float(attrs["x"]), float(attrs["y"])
+                add(x, y, x + float(attrs["width"]), y + float(attrs["height"]))
+            elif tag == "circle":
+                cx, cy, r = float(attrs["cx"]), float(attrs["cy"]), float(attrs["r"])
+                add(cx - r, cy - r, cx + r, cy + r)
+            elif tag == "ellipse":
+                cx, cy = float(attrs["cx"]), float(attrs["cy"])
+                rx, ry = float(attrs["rx"]), float(attrs["ry"])
+                add(cx - rx, cy - ry, cx + rx, cy + ry)
+            elif tag in ("line",):
+                add(
+                    float(attrs["x1"]), float(attrs["y1"]),
+                    float(attrs["x2"]), float(attrs["y2"]),
+                )
+            elif tag in ("polygon", "polyline"):
+                points = [float(v) for v in attrs.get("points", "").split()]
+                for i in range(0, len(points) - 1, 2):
+                    add(points[i], points[i + 1], points[i], points[i + 1])
+            elif tag == "text":
+                x, y = float(attrs["x"]), float(attrs["y"])
+                size = float(attrs.get("font-size", 12))
+                text = "".join(elem.itertext())
+                width = max(size * 0.62 * len(text), size)
+                anchor = attrs.get("text-anchor", "start")
+                if anchor == "middle":
+                    x -= width / 2
+                elif anchor == "end":
+                    x -= width
+                add(x, y - size, x + width, y + size * 0.25)
+        except (KeyError, ValueError, TypeError):
+            continue
+
+    if not xs or not ys:
+        return None
+    return min(xs), min(ys), max(xs) - min(xs), max(ys) - min(ys)
+
+
 def render_hero_geometry(spec: DeterministicVisual) -> str:
     """Geometry-only hero for composition engines (e.g. Typst).
 
@@ -1633,6 +2314,14 @@ def render_hero_geometry(spec: DeterministicVisual) -> str:
     pad = 16
     vx, vy = STAGE_X - pad, STAGE_Y - pad
     vw, vh = STAGE_W + 2 * pad, STAGE_H + 2 * pad
+    bbox = _hero_diagram_bbox(diagram)
+    if bbox is not None:
+        _, by, bw, bh = bbox
+        if bw >= STAGE_W * 0.5 and bh < STAGE_H * 0.72:
+            top = max(vy, by - 18)
+            bottom = min(vy + vh, by + bh + 18)
+            if bottom - top > 80:
+                vy, vh = top, bottom - top
     svg = (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vx} {vy} {vw} {vh}" width="100%">'
         f'<rect x="{vx}" y="{vy}" width="{vw}" height="{vh}" rx="14" fill="white"/>'

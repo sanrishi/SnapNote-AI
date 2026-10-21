@@ -666,6 +666,7 @@ class LessonContent:
     hero_kind: str = ""
     callouts: list[LessonCallout] = field(default_factory=list)
     reasoning: str = ""
+    reasoning_steps: list[tuple[str, str]] = field(default_factory=list)
     result_text: str = ""
     takeaway: str = ""
 
@@ -1052,6 +1053,11 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             (f"{s.expression.strip()} — {_clean(s.explanation)}" if _clean(s.explanation) else s.expression.strip())
             for s in comp.reasoning
         )
+        v3_steps = [
+            (s.expression.strip(), _clean(s.explanation))
+            for s in comp.reasoning
+            if s.expression.strip()
+        ]
         return LessonContent(
             title=_clean(comp.title) or _clean(det.title) or "Key concept",
             subtitle=_clean(comp.framing) or _clean(spec.concept),
@@ -1059,6 +1065,7 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             hero_kind=family,
             callouts=v3_callouts,
             reasoning=v3_reasoning,
+            reasoning_steps=v3_steps,
             result_text=(comp.result.expression.strip() if comp.result is not None else ""),
             takeaway=_clean(comp.takeaway) or _clean(scene.caption),
         )
@@ -1160,62 +1167,192 @@ def _typst_esc(text: str) -> str:
 
 def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") -> str:
     """Render the composition as Typst source. Deterministic: same content in,
-    same source out. No pixels, no subject branches — layout driven by counts.
+    same source out. No pixels, no subject branches - layout driven by counts.
     """
-    n = len(content.callouts)
-    cols = f"({'1fr, ' * max(n - 1, 0)}1fr)" if n else "(1fr)"
-    chips = "\n".join(
-        f'  rect(width: 100%, fill: rgb("#f8fafc"), stroke: rgb("#e2e8f0"), radius: 6pt, inset: 6pt)'
-        f'[#align(center)[#text(weight: "bold")[{_typst_esc(c.heading)}]'
-        + (f' \\ {_typst_esc(c.body)}' if c.body else '')
-        + ']],'
-        for c in content.callouts
-    )
-    reasoning_block = ""
-    if content.reasoning:
-        reasoning_block = (
-            '#v(8pt)\n#rect(width: 100%, fill: rgb("#fef9c3"), stroke: rgb("#facc15"), '
-            f'radius: 6pt, inset: 8pt)[#text(weight: "bold")[Reasoning:] {_typst_esc(content.reasoning)}]\n'
-        )
-    result_block = ""
-    if content.result_text:
-        result_block = (
-            '#v(6pt)\n#align(center)[#rect(fill: rgb("#facc15"), stroke: none, radius: 6pt, inset: 8pt)'
-            f'[#text(weight: "bold", size: 13pt)[{_typst_esc(content.result_text)}]]]\n'
-        )
-    takeaway_block = ""
-    if content.takeaway:
-        takeaway_block = f'#align(left)[#text(size: 9pt, fill: rgb("#64748b"))[{_typst_esc(content.takeaway)}]]\n'
-    # Dedup: subtitle identical to the title adds nothing — drop it.
+    nl = chr(10)
     subtitle = content.subtitle
     if subtitle and " ".join(subtitle.split()).casefold() == " ".join(content.title.split()).casefold():
         subtitle = ""
+
+    number = 0
+
+    def section(label: str) -> str:
+        nonlocal number
+        number += 1
+        return nl.join([f'#sec("{number:02d}", "{label}")', '#v(6pt)'])
+
+    accents = ["#4f46e5", "#b45309", "#0f766e", "#047857", "#7c3aed", "#be123c"]
+    callout_cards = [(c, accents[i % len(accents)]) for i, c in enumerate(content.callouts)]
+
+    def fact(heading: str, body: str, accent: str) -> str:
+        body_arg = f'[{_typst_esc(body)}]' if body else "none"
+        return f'#fact([{_typst_esc(heading)}], {body_arg}, rgb("{accent}"))'
+
+    side_by_side = (
+        2 <= len(callout_cards) <= 4
+        and content.hero_kind in ("vector", "coordinate")
+    )
+
+    hero = (
+        '#rect(width: 100%, fill: rgb("#f8fafc"), stroke: 0.7pt + rgb("#e2e8f0"), '
+        f'radius: 10pt, inset: 0pt)[#image("{hero_filename}", width: 100%)]'
+    )
+    if side_by_side:
+        side = (nl + "#v(7pt)" + nl).join(
+            fact(c.heading, c.body, accent) for c, accent in callout_cards
+        )
+        hero_block = nl.join([
+            '#sec("01", "THE VISUAL")',
+            '#v(6pt)',
+            '#grid(columns: (3fr, 2fr), column-gutter: 14pt,',
+            f'  [{hero}],',
+            '  [',
+            '    #text(size: 8pt, weight: "bold", fill: rgb("#64748b"), tracking: 1pt)[WHAT TO NOTICE]',
+            '    #v(5pt)',
+            f'    {side}',
+            '  ],',
+            ')',
+        ])
+        number = 1
+        callouts_block = ""
+    else:
+        hero_block = nl.join(['#sec("01", "THE VISUAL")', '#v(6pt)', hero])
+        number = 1
+        callouts_block = ""
+        if callout_cards:
+            cols = 3 if len(callout_cards) >= 5 else (2 if len(callout_cards) >= 4 else len(callout_cards))
+            cells = ("," + nl).join(
+                f'  [{fact(c.heading, c.body, accent)}]'
+                for c, accent in callout_cards
+            ) + ","
+            callouts_block = nl.join([
+                section("WHAT TO NOTICE"),
+                f'#grid(columns: ({", ".join(["1fr"] * cols)}), gutter: 8pt,',
+                cells,
+                ')',
+                '#v(4pt)',
+            ])
+
+    reasoning_block = ""
+    if content.reasoning_steps:
+        cells: list[str] = []
+        for i, (eq, explanation) in enumerate(content.reasoning_steps, 1):
+            cells.append(
+                '  [#rect(width: 22pt, height: 22pt, radius: 11pt, fill: rgb("#4f46e5"), '
+                f'inset: 0pt)[#align(center + horizon)[#text(size: 8pt, weight: "bold", fill: white)[{i}]]]],'
+            )
+            body_lines = [f'#text(size: 13pt, weight: "bold")[{_typst_esc(eq)}]']
+            if explanation:
+                body_lines.extend([
+                    '    #v(2pt)',
+                    f'    #text(size: 9pt, fill: rgb("#64748b"))[{_typst_esc(explanation)}]',
+                ])
+            cells.append('  [' + nl.join(body_lines) + '],')
+        reasoning_block = nl.join([
+            section("HOW IT WORKS"),
+            '#grid(columns: (22pt, 1fr), column-gutter: 9pt, row-gutter: 10pt,',
+            *cells,
+            ')',
+            '#v(4pt)',
+        ])
+    elif content.reasoning:
+        reasoning_block = nl.join([
+            section("HOW IT WORKS"),
+            '#rect(width: 100%, fill: rgb("#eef2ff"), stroke: 0.7pt + rgb("#c7d2fe"), '
+            'radius: 8pt, inset: 12pt)[',
+            '  #text(size: 8pt, weight: "bold", fill: rgb("#4f46e5"), tracking: 0.8pt)[REASONING]',
+            '  #v(4pt)',
+            f'  #text(size: 10pt, fill: rgb("#334155"))[{_typst_esc(content.reasoning)}]',
+            ']',
+        ])
+
+    result_block = ""
+    if content.result_text:
+        result_block = nl.join([
+            section("THE RESULT"),
+            '#rect(width: 100%, fill: rgb("#0f172a"), radius: 10pt, inset: (x: 20pt, y: 16pt))[',
+            '  #grid(columns: (1fr, auto), align: horizon,',
+            '    [',
+            '      #text(size: 8pt, fill: rgb("#a5b4fc"), weight: "bold", tracking: 1pt)[KEY RESULT]',
+            '      #v(4pt)',
+            f'      #text(size: 20pt, weight: "bold", fill: white)[{_typst_esc(content.result_text)}]',
+            '    ],',
+            '    [#text(size: 8pt, fill: rgb("#86efac"), weight: "bold", tracking: 0.6pt)[DETERMINISTIC]],',
+            '  )',
+            ']',
+        ])
+
+    takeaway_block = ""
+    if content.takeaway:
+        takeaway_block = nl.join([
+            section("REMEMBER THIS"),
+            '#rect(width: 100%, fill: rgb("#ecfdf5"), stroke: 0.7pt + rgb("#a7f3d0"), '
+            'radius: 8pt, inset: 12pt)[',
+            f'  #text(size: 10.5pt, fill: rgb("#065f46"))[{_typst_esc(content.takeaway)}]',
+            ']',
+        ])
+
     subtitle_block = ""
     if subtitle:
-        subtitle_block = f'#v(4pt)\n#align(center)[#text(size: 10pt, fill: rgb("#64748b"))[{_typst_esc(subtitle)}]]\n#v(6pt)\n'
-    callouts_block = ""
-    if content.callouts:
-        callouts_block = f"#grid(columns: {cols}, gutter: 8pt,\n{chips}\n)\n"
-    # Dedup: the figure caption used to repeat the takeaway verbatim
-    # ("Figure 1: X" + gray "X"). Caption now frames the hero (subtitle);
-    # with no subtitle the figure stands captionless and the takeaway below
-    # carries the lesson alone.
-    figure_block = f'#figure(\n  image("{hero_filename}", width: 68%),\n'
-    if subtitle:
-        figure_block += f'  caption: [{_typst_esc(subtitle)}],\n'
-    figure_block += ') <lesson-hero>\n\n'
-    return (
-        '#set page(width: 800pt, height: auto, margin: 18pt)\n'
-        '#set text(size: 10pt)\n\n'
-        f'#align(center)[#text(size: 18pt, weight: "bold")[{_typst_esc(content.title)}]]\n'
-        f'{subtitle_block}'
-        '#v(6pt)\n'
-        f'{figure_block}'
-        f'{callouts_block}'
-        f'{reasoning_block}'
-        f'{result_block}'
-        f'{takeaway_block}'
-    )
+        subtitle_block = nl.join([
+            '  #v(5pt)',
+            f'  #text(size: 11pt, fill: rgb("#cbd5e1"))[{_typst_esc(subtitle)}]',
+        ])
+
+    header = nl.join([
+        '#rect(width: 100%, fill: rgb("#0f172a"), inset: (x: 44pt, y: 34pt))[',
+        '  #text(size: 8pt, fill: rgb("#a5b4fc"), weight: "bold", tracking: 1.4pt)[DETERMINISTIC VISUAL LESSON]',
+        '  #v(7pt)',
+        f'  #text(size: 26pt, weight: "bold", fill: white)[{_typst_esc(content.title)}]',
+        subtitle_block,
+        ']',
+    ])
+
+    footer = nl.join([
+        '#v(8pt)',
+        '#text(size: 7.5pt, fill: rgb("#94a3b8"))[Deterministic composition · source values unchanged]',
+    ])
+
+    prelude = nl.join([
+        '#set page(width: 800pt, height: auto, margin: 0pt, fill: white)',
+        '#set text(font: "DejaVu Sans", size: 10pt, fill: rgb("#0f172a"))',
+        '#set par(leading: 0.7em)',
+        '',
+        '#let indigo = rgb("#4f46e5")',
+        '#let rule = rgb("#e2e8f0")',
+        '#let sec(num, label) = block(width: 100%)[',
+        '  #grid(columns: (24pt, 1fr), column-gutter: 10pt, align: horizon,',
+        '    rect(width: 24pt, height: 24pt, radius: 6pt, fill: indigo)'
+        '[#align(center + horizon)[#text(fill: white, size: 9pt, weight: "bold")[#num]]],',
+        '    text(size: 9.5pt, weight: "bold", fill: indigo, tracking: 1pt)[#label],',
+        '  )',
+        '  #v(3pt)',
+        '  #line(length: 100%, stroke: 0.6pt + rule)',
+        ']',
+        '#let fact(heading, body, accent) = rect(width: 100%, fill: white, '
+        'stroke: 0.7pt + rule, radius: 8pt, inset: 11pt)[',
+        '  #text(size: 16pt, weight: "bold", fill: accent)[#heading]',
+        '  #if body != none [',
+        '    #v(3pt)',
+        '    #text(size: 9pt, fill: rgb("#64748b"))[#body]',
+        '  ]',
+        ']',
+        '',
+    ])
+
+    body = nl.join([
+        header,
+        '#pad(x: 44pt, top: 22pt, bottom: 28pt)[',
+        hero_block,
+        '#v(14pt)',
+        callouts_block,
+        reasoning_block,
+        result_block,
+        takeaway_block,
+        footer,
+        ']',
+    ])
+    return prelude + body + nl
 
 
 @functools.lru_cache(maxsize=1)

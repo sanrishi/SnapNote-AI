@@ -220,7 +220,7 @@ def test_compile_roundtrip_when_available():
     content = extract_lesson_content(_torque(), hero_svg="<svg/>")
     src = build_lesson_typst(content)
     # template without hero image compiles (hero file added by caller)
-    src_noimg = src.replace('image("hero.svg", width: 68%),', '"[hero]",')
+    src_noimg = src.replace('#image("hero.svg", width: 100%)', '#text("[hero]")')
     data = compile_typst(src_noimg, "pdf")
     assert data[:5] == b"%PDF-"
 

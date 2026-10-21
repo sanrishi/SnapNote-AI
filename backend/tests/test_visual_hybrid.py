@@ -759,6 +759,40 @@ def test_argand_labels_stay_in_canvas():
         assert float(m.group(1)) <= 800, m.group(0)
 
 
+def test_argand_plot_auto_fits_data_window():
+    """Data-only plots shrink to their points instead of keeping a wide window."""
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_argand_square_spec())
+    labels = set(re.findall(r"<text[^>]*>([^<]+)</text>", svg))
+    assert "-5" not in labels and "5" not in labels
+    assert "-2" in labels and "2" in labels
+
+
+def test_expression_plot_keeps_declared_window():
+    """Expression curves still use the spec window (asymptotes/branch shape)."""
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    spec = DeterministicVisual(
+        title="Sine",
+        scene=VisualScene(
+            scene_kind="plot",
+            plot=VisualPlot(
+                x_label="x",
+                y_label="y",
+                x_min=0,
+                x_max=6,
+                y_min=-1,
+                y_max=1,
+                curves=[VisualCurve(label="sin x", expr="sin(x)")],
+            ),
+        ),
+    )
+    svg = render_deterministic_visual(spec)
+    labels = set(re.findall(r"<text[^>]*>([^<]+)</text>", svg))
+    assert "6" in labels and "-1" in labels and "1" in labels
+
+
 def test_closed_loop_label_clears_vertex_labels():
     import re
     from app.utils.visual_renderer import render_deterministic_visual
