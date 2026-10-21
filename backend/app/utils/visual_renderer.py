@@ -29,6 +29,7 @@ from xml.etree import ElementTree
 
 from app.models.schemas import (
     ComparisonPanel,
+    ComparisonPoint,
     DeterministicVisual,
     FlowConnector,
     FlowNode,
@@ -80,10 +81,21 @@ TYPE_SECONDARY = 14  # legend/caption/notes/connector labels
 TYPE_CURVE = 16  # long curve/vertex labels
 
 
-def _halo(x: float, y: float, w: float, h: float) -> str:
-    """Opaque label background so text over geometry stays readable."""
+def _halo(x: float, y: float, w: float, h: float, align: str = "center") -> str:
+    """Opaque label background so text over geometry stays readable.
+
+    `align` matches the text anchor: a start-anchored label begins at x, so
+    its halo must begin there too (centering the halo would paint over the
+    vector line or the zero-velocity dot it is supposed to annotate).
+    """
+    if align == "start":
+        x0 = x - 7
+    elif align == "end":
+        x0 = x - w + 7
+    else:
+        x0 = x - w / 2
     return (
-        f'<rect x="{_f(x - w / 2)}" y="{_f(y - h / 2)}" width="{_f(w)}" height="{_f(h)}" rx="7" '
+        f'<rect x="{_f(x0)}" y="{_f(y - h / 2)}" width="{_f(w)}" height="{_f(h)}" rx="7" '
         f'fill="white" opacity="0.88"/>'
     )
 
@@ -271,33 +283,90 @@ def _render_vector(
     tail: tuple[float, float],
     color: str,
     length_scale: float = 1.0,
+    font_size: float = TYPE_LABEL,
+    label_perp: float = 14.0,
+    label_mode: str = "mid",
+    max_length: float = 1.6,
 ) -> str:
-    """Draw one vector: line + arrowhead + label at its midpoint."""
+    """Draw one vector: line + arrowhead + label at its midpoint.
+
+    A zero-length vector is a *value*, not missing geometry: it renders a
+    filled point marker with the label (e.g. ``v = 0`` at the contact point)
+    and never an arrowhead. Drawing a minimum-length arrow here would print
+    motion where the physics says there is none.
+
+    ``max_length`` caps the arrow so a head-mounted long claim remains inside
+    the stage; comparison panels use a slightly smaller cap for long equations.
+    """
+    if v.length <= 0.0:
+        parts = [f'<circle cx="{_f(tail[0])}" cy="{_f(tail[1])}" r="5" fill="{color}"/>']
+        if v.label:
+            lx, ly = tail[0] + 14, tail[1] + 5
+            parts.append(
+                _halo(
+                    lx,
+                    ly - font_size * 0.55,
+                    len(v.label) * font_size * 0.62 + 14,
+                    font_size + 8,
+                    align="start",
+                )
+            )
+            parts.append(
+                f'<text x="{_f(lx)}" y="{_f(ly)}" font-family="{_FONT}" font-size="{_f(font_size)}" '
+                f'font-weight="700" fill="{color}" text-anchor="start">{_esc(v.label)}</text>'
+            )
+        return "".join(parts)
+
     deg = _vector_deg(v)
-    length = BASE_LEN * max(0.4, min(1.6, v.length)) * length_scale
+    length = BASE_LEN * max(0.4, min(max_length, v.length)) * length_scale
     head = _polar(tail[0], tail[1], length, deg)
     mid = _polar(tail[0], tail[1], length * 0.52, deg)
-    # Label sits to the left of travel direction (perpendicular offset).
+    # Label sits beside the midpoint, or beyond the arrowhead for long claims
+    # (a centered "v = v_CM + Rω = 2v_CM" would cover the P' point label).
     rad = math.radians(deg)
-    lx, ly = mid[0] + 14 * math.sin(rad), mid[1] + 14 * math.cos(rad)
+    lx, ly = mid[0] + label_perp * math.sin(rad), mid[1] + label_perp * math.cos(rad)
+    anchor = "middle"
+    if label_mode == "head" and abs(math.cos(rad)) >= 0.3:
+        if math.cos(rad) > 0:
+            lx, anchor = head[0] + 10, "start"
+        else:
+            lx, anchor = head[0] - 10, "end"
+        ly = head[1] + font_size * 0.35
     parts = [
         _line(tail[0], tail[1], head[0], head[1], color, width=3.2),
         _arrowhead(head[0], head[1], deg),
     ]
     if v.label:
-        parts.append(_halo(lx, ly - 6, len(v.label) * 12.0 + 14, 26))
         parts.append(
-            f'<text x="{_f(lx)}" y="{_f(ly)}" font-family="{_FONT}" font-size="{TYPE_LABEL}" '
-            f'font-weight="700" fill="{color}" text-anchor="middle">{_esc(v.label)}</text>'
+            _halo(
+                lx,
+                ly - font_size * 0.28,
+                len(v.label) * font_size * 0.62 + 14,
+                font_size + 8,
+                align=anchor,
+            )
+        )
+        parts.append(
+            f'<text x="{_f(lx)}" y="{_f(ly)}" font-family="{_FONT}" font-size="{_f(font_size)}" '
+            f'font-weight="700" fill="{color}" text-anchor="{anchor}">{_esc(v.label)}</text>'
         )
     return "".join(parts)
 
 
-def _render_object(obj: VisualObject, x: float, y: float) -> str:
+def _render_object(
+    obj: VisualObject,
+    x: float,
+    y: float,
+    label_side: str = "below",
+    radius: float = 52.0,
+) -> str:
     kind = obj.kind
     parts: list[str] = []
     if kind == "disk":
-        parts.append(f'<circle cx="{_f(x)}" cy="{_f(y)}" r="52" fill="none" stroke="{INK}" stroke-width="2.5"/>')
+        parts.append(
+            f'<circle cx="{_f(x)}" cy="{_f(y)}" r="{_f(radius)}" fill="none" '
+            f'stroke="{INK}" stroke-width="2.5"/>'
+        )
         parts.append(f'<circle cx="{_f(x)}" cy="{_f(y)}" r="6" fill="{INK}"/>')
     elif kind == "pivot":
         parts.append(f'<circle cx="{_f(x)}" cy="{_f(y)}" r="9" fill="{INK}"/>')
@@ -310,9 +379,13 @@ def _render_object(obj: VisualObject, x: float, y: float) -> str:
     else:  # point
         parts.append(f'<circle cx="{_f(x)}" cy="{_f(y)}" r="6" fill="{INK}"/>')
     if obj.label:
+        if label_side == "left":
+            tx, ty, anchor = x - 16, y + 5, "end"
+        else:
+            tx, ty, anchor = x, y + 38, "middle"
         parts.append(
-            f'<text x="{_f(x)}" y="{_f(y + 38)}" font-family="{_FONT}" font-size="16" '
-            f'font-weight="700" fill="{INK}" text-anchor="middle">{_esc(obj.label)}</text>'
+            f'<text x="{_f(tx)}" y="{_f(ty)}" font-family="{_FONT}" font-size="16" '
+            f'font-weight="700" fill="{INK}" text-anchor="{anchor}">{_esc(obj.label)}</text>'
         )
     return "".join(parts)
 
@@ -354,7 +427,12 @@ def _angle_arc(
     return "".join(parts)
 
 
-def _rotation_arc(arc: VisualArc, around: tuple[float, float], label_deg: float | None = None) -> str:
+def _rotation_arc(
+    arc: VisualArc,
+    around: tuple[float, float],
+    label_deg: float | None = None,
+    show_label: bool = True,
+) -> str:
     """Curved rotation arrow around a point (e.g. torque ↻)."""
     r = 30.0
     start = 220.0 if arc.direction == "ccw" else -40.0
@@ -368,7 +446,7 @@ def _rotation_arc(arc: VisualArc, around: tuple[float, float], label_deg: float 
         _polyline(pts, GREEN, width=2.6),
         _arrowhead(tip[0], tip[1], tip_deg, 11),
     ]
-    if arc.label:
+    if arc.label and show_label:
         # Label sits OUTSIDE the arc ring (radius r+24 along the arc midpoint),
         # never on top of the arc line itself.
         lpos = _polar(around[0], around[1], r + 24, mid_deg)
@@ -1133,14 +1211,60 @@ def _render_generic(scene: VisualScene, fallback_title: str = "") -> tuple[str, 
     return "".join(parts), STAGE_Y + STAGE_H + 18, [], None
 
 
-def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]:
-    """Render a side-by-side comparison: 2-3 labeled panels, each with its own
-    object, chained labeled vectors, and rotation arcs around the panel object.
+def _comparison_anchor(
+    center: tuple[float, float],
+    at: str,
+    radius: float,
+) -> tuple[float, float]:
+    """Resolve a comparison-panel anchor (P'/CM/P) to a drawn point."""
+    cx, cy = center
+    if at == "top":
+        return (cx, cy - radius)
+    if at == "bottom":
+        return (cx, cy + radius)
+    if at == "left":
+        return (cx - radius, cy)
+    if at == "right":
+        return (cx + radius, cy)
+    return center
 
-    Column geometry is code-owned; the spec only names primitives. Panels with
-    no label are dropped; fewer than 2 labeled panels render nothing (the
-    caller then falls back to the generic explanatory diagram honestly).
-    Returns (svg, next_y, legend_lines, relation).
+
+def _comparison_point(
+    point: ComparisonPoint,
+    center: tuple[float, float],
+    radius: float,
+) -> str:
+    """Draw one labeled material point on a comparison body."""
+    if not point.label.strip():
+        return ""
+    x, y = _comparison_anchor(center, point.at, radius)
+    if point.at == "top":
+        tx, ty, anchor = x, y - 12, "middle"
+    elif point.at == "bottom":
+        tx, ty, anchor = x, y + 22, "middle"
+    elif point.at == "left":
+        tx, ty, anchor = x - 12, y + 5, "end"
+    elif point.at == "right":
+        tx, ty, anchor = x + 12, y + 5, "start"
+    else:
+        tx, ty, anchor = x - 14, y + 5, "end"
+    parts = [f'<circle cx="{_f(x)}" cy="{_f(y)}" r="5" fill="{INK}"/>']
+    parts.append(
+        f'<text x="{_f(tx)}" y="{_f(ty)}" font-family="{_FONT}" font-size="15" '
+        f'font-weight="700" fill="{INK}" text-anchor="{anchor}">{_esc(point.label)}</text>'
+    )
+    return "".join(parts)
+
+
+def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]:
+    """Render a 2-3 panel comparison with code-owned geometry.
+
+    Two panels sit side by side; three panels use a 2+1 grid that mirrors the
+    canonical physics-board layout (translation | rotation, then combined).
+    Each panel supports labeled material points and vectors anchored at
+    ``at`` (top = P', center = CM, bottom = P). A zero-length vector is a real
+    physical value (v = 0 at the rolling contact / pure-rotation CM) and is
+    drawn as a point + label, never as a minimum-length arrow.
     """
     comparison: VisualComparison | None = scene.comparison
     legend: list[str] = []
@@ -1152,67 +1276,97 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
 
     parts: list[str] = []
     n = len(panels)
-    col_w = STAGE_W / n
-    label_y = STAGE_Y + 34
-    obj_y = STAGE_Y + 270
-    note_y = STAGE_Y + 470
+    top_radius = 62.0 if n == 3 else 72.0
+    if n == 3:
+        col_w = STAGE_W / 2
+        positions = [
+            (STAGE_X + col_w * 0.5, STAGE_Y + 152),
+            (STAGE_X + col_w * 1.5, STAGE_Y + 152),
+            (STAGE_X + STAGE_W * 0.5, STAGE_Y + 452),
+        ]
+        label_ys = [STAGE_Y + 30, STAGE_Y + 30, STAGE_Y + 336]
+        note_ys = [STAGE_Y + 264, STAGE_Y + 264, STAGE_Y + 554]
+        note_widths = [30, 30, 48]
+        note_caps = [2, 2, 1]
+        parts.append(
+            f'<line x1="{_f(STAGE_X + 12)}" y1="{_f(STAGE_Y + 306)}" '
+            f'x2="{_f(STAGE_X + STAGE_W - 12)}" y2="{_f(STAGE_Y + 306)}" '
+            f'stroke="{STAGE_STROKE}" stroke-width="1.5" stroke-dasharray="5 5"/>'
+        )
+        divider_ys = [(STAGE_Y + 12, STAGE_Y + 306)]
+    else:
+        col_w = STAGE_W / n
+        positions = [(STAGE_X + col_w * (i + 0.5), STAGE_Y + 234) for i in range(n)]
+        label_ys = [STAGE_Y + 34 for _ in range(n)]
+        note_ys = [STAGE_Y + 404 for _ in range(n)]
+        note_widths = [34 for _ in range(n)]
+        note_caps = [4 for _ in range(n)]
+        divider_ys = [(STAGE_Y + 12, STAGE_Y + STAGE_H - 12)]
+
     for i, panel in enumerate(panels):
-        cx = STAGE_X + col_w * (i + 0.5)
-        if i > 0:
-            x_div = STAGE_X + col_w * i
+        cx, obj_y = positions[i]
+        radius = top_radius
+        center = (cx, obj_y)
+        if n == 3 and i == 1:
+            x_div = STAGE_X + col_w
+            y0, y1 = divider_ys[0]
             parts.append(
-                f'<line x1="{_f(x_div)}" y1="{_f(STAGE_Y + 12)}" x2="{_f(x_div)}" '
-                f'y2="{_f(STAGE_Y + STAGE_H - 12)}" stroke="{STAGE_STROKE}" stroke-width="1.5" '
+                f'<line x1="{_f(x_div)}" y1="{_f(y0)}" x2="{_f(x_div)}" '
+                f'y2="{_f(y1)}" stroke="{STAGE_STROKE}" stroke-width="1.5" '
                 f'stroke-dasharray="5 5"/>'
             )
-        for j, line in enumerate(_wrap(panel.label.strip(), 22)):
+        elif n == 2 and i == 1:
+            x_div = STAGE_X + col_w
+            y0, y1 = divider_ys[0]
+            parts.append(
+                f'<line x1="{_f(x_div)}" y1="{_f(y0)}" x2="{_f(x_div)}" '
+                f'y2="{_f(y1)}" stroke="{STAGE_STROKE}" stroke-width="1.5" '
+                f'stroke-dasharray="5 5"/>'
+            )
+        for j, line in enumerate(_wrap(panel.label.strip(), 22 if n == 3 and i < 2 else 30)):
             if j >= 2:
                 break
             parts.append(
-                f'<text x="{_f(cx)}" y="{_f(label_y + j * 26)}" font-family="{_FONT}" font-size="22" '
-                f'font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
+                f'<text x="{_f(cx)}" y="{_f(label_ys[i] + j * 26)}" font-family="{_FONT}" '
+                f'font-size="20" font-weight="700" fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
             )
-        center = (cx, obj_y)
-        parts.append(_render_object(panel.object, cx, obj_y))
-        heads: dict[str, tuple[float, float]] = {}
-        label_pts: list[tuple[float, float]] = []
+        parts.append(_render_object(panel.object, cx, obj_y, label_side="left", radius=radius))
+        for point in panel.points:
+            parts.append(_comparison_point(point, center, radius))
         for v in panel.vectors:
             if not v.label.strip():
                 continue
             color = _VECTOR_COLORS.get(v.color, INK)
-            if v.tail.strip() and v.tail.strip() in heads:
-                tail = heads[v.tail.strip()]
-            else:
-                tail = center
-            head = _polar(tail[0], tail[1], BASE_LEN * max(0.4, min(1.6, v.length)) * 0.55, _vector_deg(v))
-            heads[v.label.strip()] = head
-            # _render_vector recomputes the same head from tail; length_scale
-            # keeps arrows inside the panel column.
-            parts.append(_render_vector(v, tail, color, length_scale=0.55))
-            _vrad = math.radians(_vector_deg(v))
-            _vlen = BASE_LEN * max(0.4, min(1.6, v.length)) * 0.55
-            _vmid = _polar(tail[0], tail[1], _vlen * 0.52, _vector_deg(v))
-            label_pts.append((_vmid[0] + 14 * math.sin(_vrad), _vmid[1] + 14 * math.cos(_vrad)))
+            tail = _comparison_anchor(center, v.at, radius)
+            long_claim = len(v.label) > 12
+            parts.append(
+                _render_vector(
+                    v,
+                    tail,
+                    color,
+                    length_scale=0.55,
+                    font_size=13 if long_claim else 15,
+                    label_perp=-14.0,
+                    label_mode="head" if long_claim else "mid",
+                    # A head-mounted long claim (v = v_CM + Rω = 2v_CM) must
+                    # finish inside the 704px stage; 1.15 leaves ~6px margin
+                    # while still reading longer than the 1.0 centre vector.
+                    max_length=1.15 if long_claim else 1.6,
+                )
+            )
         for arc in panel.arcs:
-            arc_deg = None
-            if arc.label.strip() and label_pts:
-                if arc.direction == "ccw":
-                    _default = 220.0 + 240.0 * 0.5
-                else:
-                    _default = -40.0 - 240.0 * 0.5
-                _cand = _polar(center[0], center[1], 54.0, _default)
-                if min(math.hypot(_cand[0] - lx, _cand[1] - ly) for lx, ly in label_pts) < 36:
-                    arc_deg = _default + 180.0
-            parts.append(_rotation_arc(arc, center, label_deg=arc_deg))
+            parts.append(_rotation_arc(arc, center, show_label=False))
             if arc.caption.strip():
                 legend.append(f"{arc.label.strip()} — {arc.caption.strip()}")
-        # Full note up to the stage floor (4 wrapped lines at 14px); the old
-        # [:2] cap cut every note mid-sentence (observed: biology comparison).
-        note_lines = _wrap(panel.note.strip(), 26)[:4] if panel.note.strip() else []
+        note_lines = (
+            _wrap(panel.note.strip(), note_widths[i])[: note_caps[i]]
+            if panel.note.strip()
+            else []
+        )
         for k, line in enumerate(note_lines):
             parts.append(
-                f'<text x="{_f(cx)}" y="{_f(note_y + k * 22)}" font-family="{_FONT}" font-size="14" '
-                f'fill="{MUTED}" text-anchor="middle">{_esc(line)}</text>'
+                f'<text x="{_f(cx)}" y="{_f(note_ys[i] + k * 22)}" font-family="{_FONT}" '
+                f'font-size="14" fill="{MUTED}" text-anchor="middle">{_esc(line)}</text>'
             )
     return "".join(parts), STAGE_Y + STAGE_H + 24, legend, comparison.relation
 

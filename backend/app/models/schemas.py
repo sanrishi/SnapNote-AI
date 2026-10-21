@@ -250,8 +250,21 @@ class VisualVector(BaseModel):
     angle_deg: int = 0
     length: float = 1.0
     tail: str = ""
+    # Comparison panels only: where the vector is anchored on the object.
+    # `tail` stays the force-diagram chaining mechanism; `at` is a physical
+    # point on the panel body (top = P', bottom = P, center = CM). A zero
+    # length is a real value: it renders a point marker + label, never an
+    # arrow (pure rotation at the CM, rolling at the contact point).
+    at: Literal["center", "top", "bottom", "left", "right"] = "center"
     color: str = ""
     caption: str = ""
+
+
+class ComparisonPoint(BaseModel):
+    """A labeled material point on a comparison panel body."""
+
+    label: str = ""
+    at: Literal["center", "top", "bottom", "left", "right"] = "center"
 
 
 class VisualAngle(BaseModel):
@@ -408,6 +421,7 @@ class ComparisonPanel(BaseModel):
 
     label: str = ""
     object: VisualObject = VisualObject()
+    points: list[ComparisonPoint] = []
     vectors: list[VisualVector] = []
     arcs: list[VisualArc] = []
     note: str = ""  # one short caption line under the panel

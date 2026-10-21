@@ -186,6 +186,8 @@ def _scene_text(scene: VisualScene, generic_cap: int | None = None) -> str:
         for p in scene.comparison.panels or []:
             bits.append((p.label or "") + " " + (p.note or ""))
             bits.append((p.object.label or ""))
+            for point in p.points:
+                bits.append(point.label or "")
             for v in p.vectors:
                 bits.append(v.label or "")
             for a in p.arcs:
@@ -268,6 +270,9 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
         tokens.add("panels")
         for p in scene.comparison.panels or []:
             tokens.add(str(p.object.kind or "").casefold())
+            if p.points:
+                tokens.add("point")
+                tokens.add("points")
             if p.vectors:
                 tokens.add("vector")
                 tokens.add("vectors")
@@ -557,11 +562,21 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
         # verbatim-strict via exact_claims below — math fidelity lives there.
         if not any(w in hay_tokens for w in need):
             errors.append(f"required element unsatisfied by scene: {element!r}")
+    # A comparison's claims describe what each variant's body actually does
+    # (v = 0 at the rolling contact, v = 2v_CM at the top). They must be
+    # attached to a panel/vector, not merely printed in a composition callout:
+    # otherwise a two-panel scene can pass the gate while missing the combined
+    # variant entirely.
+    claim_haystack = (
+        _scene_text(scene).casefold()
+        if scene.scene_kind == "comparison"
+        else haystack
+    )
     for claim in task.exact_claims:
         norm = " ".join(str(claim).split())
         if not norm:
             continue
-        if norm.casefold() in haystack or _claim_key(norm) in _claim_key(haystack):
+        if norm.casefold() in claim_haystack or _claim_key(norm) in _claim_key(claim_haystack):
             continue
         if scene.scene_kind == "number_line" and _number_line_claim_matches(
             norm, scene, haystack
@@ -846,7 +861,11 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
             labeled = [v for v in p.vectors if (v.label or "").strip()]
             if not labeled and not p.arcs:
                 errors.append(f"comparison panel {p.label!r} has no vectors or arcs")
-            known = {(p.object.label or "").strip(), *(v.label.strip() for v in labeled)}
+            known = {
+                (p.object.label or "").strip(),
+                *((point.label or "").strip() for point in p.points),
+                *(v.label.strip() for v in labeled),
+            }
             for v in labeled:
                 _finite(v.angle_deg, f"vector {v.label!r} angle_deg", errors)
                 _finite(v.length, f"vector {v.label!r} length", errors)
