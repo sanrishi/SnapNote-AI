@@ -594,6 +594,7 @@ def test_build_visual_spec_contradiction_persists_refuses(monkeypatch):
 def _rotational_comparison_spec():
     from app.models.schemas import (
         ComparisonPanel,
+        ComparisonPoint,
         DeterministicVisual,
         VisualArc,
         VisualComparison,
@@ -603,38 +604,90 @@ def _rotational_comparison_spec():
         VisualVector,
     )
 
+    points = [
+        ComparisonPoint(label="P'", at="top"),
+        ComparisonPoint(label="P", at="bottom"),
+    ]
+
+    def panel(label: str, vectors, arcs, note: str) -> ComparisonPanel:
+        return ComparisonPanel(
+            label=label,
+            object=VisualObject(kind="disk", label="CM"),
+            points=list(points),
+            vectors=vectors,
+            arcs=arcs,
+            note=note,
+        )
+
     return DeterministicVisual(
-        title="Angular Speed of a Rigid Body",
+        title="Rolling Motion",
         scene=VisualScene(
             scene_kind="comparison",
-            caption="Translation moves every point together; rotation turns points about an axis; rolling combines both.",
+            caption=(
+                "Rolling combines translation and rotation: the contact point is "
+                "instantaneously at rest while the top point moves at twice the "
+                "centre speed."
+            ),
             comparison=VisualComparison(
                 panels=[
-                    ComparisonPanel(
-                        label="Pure translation",
-                        object=VisualObject(kind="block"),
-                        vectors=[VisualVector(label="v", angle_deg=0, length=1.0)],
-                        arcs=[],
-                        note="all points share v",
+                    panel(
+                        "Pure translation",
+                        [
+                            VisualVector(label="v_CM", angle_deg=0, length=1.0, at="top", color="red"),
+                            VisualVector(label="v_CM", angle_deg=0, length=1.0, at="center", color="red"),
+                            VisualVector(label="v_CM", angle_deg=0, length=1.0, at="bottom", color="red"),
+                        ],
+                        [],
+                        "all points share v_CM",
                     ),
-                    ComparisonPanel(
-                        label="Pure rotation",
-                        object=VisualObject(kind="disk"),
-                        vectors=[],
-                        arcs=[VisualArc(label="ω", direction="ccw")],
-                        note="points circle the axis",
+                    panel(
+                        "Pure rotation",
+                        [
+                            VisualVector(label="v = Rω", angle_deg=0, length=1.0, at="top", color="red"),
+                            VisualVector(label="v = 0", angle_deg=0, length=0.0, at="center", color="red"),
+                            VisualVector(label="v = Rω", angle_deg=180, length=1.0, at="bottom", color="red"),
+                        ],
+                        [VisualArc(label="ω", direction="ccw")],
+                        "CM is instantaneously at rest",
                     ),
-                    ComparisonPanel(
-                        label="Combined motion",
-                        object=VisualObject(kind="disk"),
-                        vectors=[VisualVector(label="v", angle_deg=0, length=1.0)],
-                        arcs=[VisualArc(label="ω", direction="ccw")],
-                        note="rolling: v = ωr",
+                    panel(
+                        "Combined rolling motion",
+                        [
+                            VisualVector(
+                                label="v = v_CM + Rω = 2v_CM",
+                                angle_deg=0,
+                                length=1.6,
+                                at="top",
+                                color="red",
+                            ),
+                            VisualVector(label="v = v_CM", angle_deg=0, length=1.0, at="center", color="red"),
+                            VisualVector(label="v = 0", angle_deg=0, length=0.0, at="bottom", color="red"),
+                        ],
+                        [VisualArc(label="ω", direction="ccw")],
+                        "rolling without slipping",
                     ),
                 ],
-                relation=VisualRelation(expression="ω = dθ/dt", caption="angular speed"),
+                relation=VisualRelation(expression="v = v_CM + Rω", caption="rolling without slipping"),
             ),
         ),
+    )
+
+
+def _rolling_visual_spec():
+    from app.models.schemas import VisualRenderMode, VisualTask
+
+    det = _rotational_comparison_spec()
+    det.task = VisualTask(
+        task_type="compare_variants",
+        learning_outcome="Explain translation, rotation, and rolling as one motion.",
+        required_elements=["Pure translation", "Pure rotation", "Combined rolling motion"],
+        exact_claims=["v = v_CM + Rω = 2v_CM", "v = v_CM", "v = 0"],
+        acceptable_families=["comparison"],
+    )
+    return VisualSpec(
+        concept="Rolling motion",
+        render_mode=VisualRenderMode.DETERMINISTIC,
+        deterministic=det,
     )
 
 
@@ -645,13 +698,39 @@ def test_comparison_renders_three_labeled_panels():
     assert svg
     assert "Pure translation" in svg
     assert "Pure rotation" in svg
-    assert "Combined motion" in svg
-    # Rotation arcs only where the variant rotates (panels 2-3, not panel 1).
-    assert svg.count("ω") >= 2
-    # Grounded formulas from the notes pass through byte-identical.
-    assert "ω = dθ/dt" in svg
-    assert "Angular Speed of a Rigid Body" in svg
+    assert "Combined rolling motion" in svg
+    # Material points are rendered on every panel: P' top, CM object, P bottom.
+    assert svg.count(">P'<") == 3
+    assert svg.count(">P<") == 3
+    assert svg.count(">CM<") == 3
+    # Exact motion claims are attached to the panels, not just a caption.
+    assert "v = v_CM + Rω = 2v_CM" in svg
+    assert "v = Rω" in svg and svg.count("v = Rω") == 2
+    assert svg.count("v = 0") == 2
+    assert "v = v_CM" in svg
+    assert "ω" in svg
+    assert "?" not in svg
+    assert "Rolling Motion" in svg
     assert "<script" not in svg
+    # Seven moving vectors (3 translation + 2 rotation + 2 combined); the two
+    # zero-velocity endpoints must be dots, never arrows.
+    assert svg.count('stroke="#dc2626"') == 7
+    assert len(re.findall(r'<circle[^>]*r="5" fill="#dc2626"\s*/>', svg)) == 2
+
+
+def test_comparison_long_claim_stays_inside_stage():
+    from app.utils.visual_renderer import STAGE_W, STAGE_X, render_deterministic_visual
+
+    svg = render_deterministic_visual(_rotational_comparison_spec())
+    label = "v = v_CM + Rω = 2v_CM"
+    match = re.search(
+        rf'<text x="([\d.]+)"[^>]*font-size="13.0"[^>]*>{re.escape(label)}</text>',
+        svg,
+    )
+    assert match is not None
+    x = float(match.group(1))
+    estimated_width = len(label) * 13.0 * 0.62 + 14
+    assert x + estimated_width <= STAGE_X + STAGE_W + 1
 
 
 def test_comparison_arrows_are_standalone_polygons():
@@ -682,16 +761,44 @@ def test_comparison_needs_two_labeled_panels():
     assert svg == ""
 
 
-def test_comparison_arc_label_clears_vector_labels():
-    import re
+def test_comparison_hides_arc_label_to_avoid_vector_collision():
     from app.utils.visual_renderer import render_deterministic_visual
 
     svg = render_deterministic_visual(_rotational_comparison_spec())
-    # Panel 3 ("Combined motion") has a v arrow to the right: its ω arc
-    # label must flip to the left of the disk centre (panel cx ≈ 634.7).
-    omegas = [float(m.group(1)) for m in re.finditer(r'<text x="([\d.]+)"[^>]*>ω</text>', svg)]
-    assert len(omegas) == 2
-    assert min(omegas) < 600
+    # The rotation arc is still drawn, but its standalone ω label is
+    # suppressed in comparison panels: it would collide with the centre
+    # velocity label / zero marker. ω remains visible in the exact vector
+    # labels (v = Rω) and the relation.
+    assert ">ω</text>" not in svg
+    assert "v = Rω" in svg
+    assert "v = v_CM + Rω" in svg
+
+
+def test_rolling_comparison_semantic_gate_accepts_complete_scene():
+    from app.utils.visual_lesson import validate_lesson_spec
+
+    assert validate_lesson_spec(_rolling_visual_spec()) == []
+
+
+def test_rolling_comparison_gate_rejects_claim_only_in_composition():
+    from app.models.schemas import CompositionCallout, LessonComposition
+    from app.utils.visual_lesson import validate_lesson_spec
+
+    spec = _rolling_visual_spec()
+    comparison = spec.deterministic.scene.comparison
+    assert comparison is not None
+    claim = "v = v_CM + Rω = 2v_CM"
+    spec.deterministic.task.exact_claims = [claim]
+    # Drop the combined panel: the claim is now only in a composition chip.
+    # A comparison claim must be attached to a panel/vector, so the gate must
+    # fail instead of accepting a two-panel visual with the claim off to the side.
+    comparison.panels = comparison.panels[:2]
+    spec.deterministic.composition = LessonComposition(
+        callouts=[CompositionCallout(id="claim-1", label="combined", value=claim)]
+    )
+
+    errors = validate_lesson_spec(spec)
+    assert any("exact claim missing from scene" in e for e in errors), errors
 
 
 # ── Argand-plane regression (production bug: vertex labels omitted/clipped,
@@ -757,6 +864,40 @@ def test_argand_labels_stay_in_canvas():
     svg = render_deterministic_visual(_argand_square_spec())
     for m in re.finditer(r'<text x="([\d.]+)"', svg):
         assert float(m.group(1)) <= 800, m.group(0)
+
+
+def test_argand_plot_auto_fits_data_window():
+    """Data-only plots shrink to their points instead of keeping a wide window."""
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    svg = render_deterministic_visual(_argand_square_spec())
+    labels = set(re.findall(r"<text[^>]*>([^<]+)</text>", svg))
+    assert "-5" not in labels and "5" not in labels
+    assert "-2" in labels and "2" in labels
+
+
+def test_expression_plot_keeps_declared_window():
+    """Expression curves still use the spec window (asymptotes/branch shape)."""
+    from app.utils.visual_renderer import render_deterministic_visual
+
+    spec = DeterministicVisual(
+        title="Sine",
+        scene=VisualScene(
+            scene_kind="plot",
+            plot=VisualPlot(
+                x_label="x",
+                y_label="y",
+                x_min=0,
+                x_max=6,
+                y_min=-1,
+                y_max=1,
+                curves=[VisualCurve(label="sin x", expr="sin(x)")],
+            ),
+        ),
+    )
+    svg = render_deterministic_visual(spec)
+    labels = set(re.findall(r"<text[^>]*>([^<]+)</text>", svg))
+    assert "6" in labels and "-1" in labels and "1" in labels
 
 
 def test_closed_loop_label_clears_vertex_labels():

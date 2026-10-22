@@ -114,6 +114,8 @@ class MathCase:
     transformed_num: sympy.Expr  # numerator of (lhs - rhs) for the branch
     solution: IntervalSet
     transformed_rel: str = ""  # relation of the derived transformation
+    raw_solution: IntervalSet | None = None  # before regime/domain intersection
+    regime_kind: str = ""  # ">1" or "<1" for variable-base logs
 
 
 @dataclass
@@ -126,6 +128,19 @@ class SolveResult:
     cases: tuple[MathCase, ...] = ()
     solution: IntervalSet | None = None
     constant_base: bool = False
+    # Display/explanation data (never used for verification decisions). These
+    # let the renderer explain a VERIFIED result without re-deriving anything:
+    # which restrictions define the domain, which branch produced which raw
+    # interval set, and which critical points split the line.
+    base_text: str = ""
+    arg_text: str = ""
+    base_display: str = ""
+    arg_display: str = ""
+    relation: str = ""
+    constant: int = 0
+    base_positive: IntervalSet | None = None
+    arg_positive: IntervalSet | None = None
+    critical_points: tuple[Fraction, ...] = ()
 
 
 # ── text preparation ───────────────────────────────────────────────────────
@@ -411,6 +426,54 @@ def _restriction_zeros(restrictions: tuple[sympy.Expr, ...]) -> list[Fraction] |
     return sorted(roots)
 
 
+def display_expr(expr: sympy.Expr) -> str:
+    """Plain-text display form of a verified expression (presentation only).
+
+    Never used to make verification decisions. SymPy is the single source of
+    the algebra so the label cannot drift from the computed expression.
+    """
+    text = sympy.sstr(expr)
+    for power, glyph in (("**2", "\u00b2"), ("**3", "\u00b3"), ("**4", "\u2074")):
+        text = text.replace(power, glyph)
+    text = text.replace("**", "^")
+    text = text.replace("*", "\u00b7")
+    text = text.replace(") \u00b7 (", ")(").replace("\u00b7(", "(")
+    text = re.sub(r"(?<=\d)\u00b7(?=x)", "", text)
+    text = text.replace(" - ", " \u2212 ")
+    if text.startswith("-"):
+        text = "\u2212" + text[1:]
+    return text
+
+
+def _pretty_rel(rel: str) -> str:
+    return {"<=": "\u2264", ">=": "\u2265"}.get(rel, rel)
+
+
+def display_relation(expr: sympy.Expr, rel: str, rhs: str = "0") -> str:
+    """Display form of `expr rel rhs` (e.g. `x² − 2x − 3 < 0`)."""
+    return f"{display_expr(expr)} {_pretty_rel(rel)} {rhs}"
+
+
+def _factored_display(expr: sympy.Expr) -> str:
+    """Compact factored display when it is clean enough to teach with.
+
+    Only quadratics are used: cubic/rational factorisations can produce
+    fractions and nested forms that are less readable than the expanded form.
+    """
+    poly = _poly(expr)
+    if poly is None or poly.degree() != 2:
+        return ""
+    try:
+        factored = sympy.factor(expr)
+    except Exception as e:  # sympy can raise on exotic coefficients
+        logger.debug("factor failed for %s: %s", expr, e)
+        return ""
+    text = display_expr(factored)
+    if len(text) > 48 or "/" in text:
+        return ""
+    return text
+
+
 def _sympy_rational(value: Fraction) -> sympy.Rational:
     return sympy.Rational(value.numerator, value.denominator)
 
@@ -651,6 +714,8 @@ def _solve_log(text: str) -> SolveResult:
                 transformed_num=num_t,
                 solution=case_solution,
                 transformed_rel=rel_t,
+                raw_solution=solved,
+                regime_kind=regime_kind,
             )
         )
         final = final.union(case_solution)
@@ -662,6 +727,14 @@ def _solve_log(text: str) -> SolveResult:
         cases=tuple(cases),
         solution=final.normalized(),
         constant_base=constant_base,
+        base_text=base_str,
+        arg_text=arg_text.strip(),
+        base_display=display_expr(base_expr),
+        arg_display=display_expr(arg_expr),
+        relation=rel,
+        constant=c,
+        base_positive=base_pos,
+        arg_positive=arg_pos,
     )
 
 
@@ -715,6 +788,9 @@ def _solve_poly_problem(text: str) -> SolveResult:
     excluded = sorted(set(restriction_roots) | set(den_roots))
     whole = IntervalSet.of(Interval(None, None, False, False))
     domain = whole.without_points(excluded) if excluded else whole
+    num_poly = _poly(num)
+    num_roots = _rational_roots(num_poly) if num_poly is not None else []
+    critical = sorted(set(num_roots or []) | set(den_roots))
     return SolveResult(
         supported=True,
         problem=text,
@@ -722,6 +798,8 @@ def _solve_poly_problem(text: str) -> SolveResult:
         excluded_points=tuple(excluded),
         cases=(),
         solution=solved.intersect(domain).normalized(),
+        relation=rel,
+        critical_points=tuple(critical),
     )
 
 

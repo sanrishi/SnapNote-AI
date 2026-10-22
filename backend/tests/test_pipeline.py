@@ -40,6 +40,16 @@ async def test_health():
         assert body[key] is None or body[key] > 0
     assert isinstance(body["uptime_s"], int)
     assert body["uptime_s"] >= 0
+    assert body["git_commit"] is None or isinstance(body["git_commit"], str)
+
+
+@pytest.mark.asyncio
+async def test_health_reports_render_commit(monkeypatch):
+    monkeypatch.setenv("RENDER_GIT_COMMIT", "deadbeef")
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        resp = await client.get("/health")
+    assert resp.status_code == 200
+    assert resp.json()["git_commit"] == "deadbeef"
 
 
 # ── Fixture 1: Clean text extraction ──
