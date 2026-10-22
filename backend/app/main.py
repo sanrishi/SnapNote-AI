@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
@@ -89,6 +90,7 @@ async def health():
     return {
         "status": "ok",
         "version": settings.APP_VERSION,
+        "git_commit": os.environ.get("RENDER_GIT_COMMIT") or os.environ.get("GIT_COMMIT"),
         "typst_available": ts["available"],
         "typst_version": ts["version"],
         "explain_visually_v3": settings.EXPLAIN_VISUALLY_V3,

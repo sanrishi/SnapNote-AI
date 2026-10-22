@@ -1,9 +1,10 @@
 name: Backend tests
 
 # Permanent CI gate for the backend: the full pytest suite, the JEE corpus
-# tests, and the corpus coverage audit. Runs on every PR to master (and on
-# master itself for post-merge verification). No secrets are used: all settings
-# have empty-string defaults and every external API is mocked in tests.
+# tests, the corpus coverage audit, and the production Docker image contract.
+# Runs on every PR to master (and on master itself for post-merge verification).
+# No secrets are used: all settings have empty-string defaults and every
+# external API is mocked in tests.
 on:
   pull_request:
     branches: [master]
@@ -69,3 +70,26 @@ jobs:
 
       - name: Corpus coverage audit
         run: python docs/jee-pyq-corpus/coverage/audit_corpus.py
+
+  docker-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      # Same production Dockerfile Render builds. This makes the image itself
+      # part of the merge gate: a broken Typst install or missing DejaVu fonts
+      # fails CI before merge instead of silently degrading production v3.
+      - name: Build production image
+        run: docker build -t snapnote-ai:ci .
+
+      - name: Verify Typst and DejaVu fonts inside the image
+        run: |
+          docker run --rm snapnote-ai:ci test -f /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+          docker run --rm snapnote-ai:ci test -f /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
+          docker run --rm snapnote-ai:ci typst --version | grep -q "0.15.1"
+          docker run --rm snapnote-ai:ci typst fonts | grep -qi "DejaVu Sans"
+          mkdir -p /tmp/snapnote-font-check
+          printf '%s\n' '#set text(font: "DejaVu Sans")' 'Rolling check: v = v_CM + Rw = 2v_CM' > /tmp/snapnote-font-check/font-check.typ
+          docker run --rm -v /tmp/snapnote-font-check:/check snapnote-ai:ci typst compile /check/font-check.typ /check/font-check.png
+          test -s /tmp/snapnote-font-check/font-check.png
