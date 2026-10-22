@@ -26,6 +26,17 @@ _MIRROR = json.load(open(os.path.join(
     _REPO, "docs", "jee-chapter-taxonomy", "data", "mirror_topic_map.json"),
     encoding="utf-8"))
 
+
+def _corpus_records(concept_id):
+    import glob
+    records = []
+    for path in glob.glob(os.path.join(
+            _REPO, "docs", "jee-pyq-corpus", "data", "*-pyq.json")):
+        for record in json.load(open(path, encoding="utf-8")):
+            if concept_id in record.get("concept_ids", []):
+                records.append(record)
+    return records
+
 # Labels whose correct resolution is a more precise sub-concept (or honest
 # ambiguity) rather than the coarse mapped chapter. Everything else must hit
 # its mapped chapter exactly.
@@ -45,7 +56,7 @@ CURATED = [
     ("Logarithmic Inequality with Variable Base",
      ["log base x+3 of (x squared minus x) less than 1",
       "domain: base positive not equal 1"],
-     "jee-mathematics-limit-continuity-and-differentiability-chapter"),
+     "jee-mathematics-sets-relations-and-functions-chapter"),
     ("Torque", ["torque"],
      "jee-physics-rotational-motion-concept-005"),
     ("Rotational Dynamics and Angular Speed",
@@ -107,15 +118,33 @@ def test_chapter_match_retrieves_chapter_records():
     ctx = map_concept_to_jee("Logarithmic Inequality with Variable Base",
                              ["logarithmic inequality"])
     assert ctx.match_status == "matched"
+    assert ctx.concept_id == "jee-mathematics-sets-relations-and-functions-chapter"
     assert ctx.pyq_count >= 1
-    import glob
-    have = set()
-    for path in glob.glob(os.path.join(_REPO, "docs", "jee-pyq-corpus", "data", "*-pyq.json")):
-        for record in json.load(open(path, encoding="utf-8")):
-            if ctx.concept_id in record.get("concept_ids", []):
-                have.add(record["question_id"])
+    have = {record["question_id"] for record in _corpus_records(ctx.concept_id)}
     assert {p.question_id for p in ctx.pyqs} <= have
     assert ctx.match_granularity == "chapter"
+
+
+def test_log_inequality_never_maps_to_limits():
+    """Production regression: a logarithmic inequality is a functions/domain
+    topic, never Limit/Continuity. The LCD chapter previously carried
+    'logarithm' aliases, attaching 111 unrelated limit PYQs."""
+    ctx = map_concept_to_jee(
+        "Solving Logarithmic Inequalities",
+        ["Always establish the domain restrictions before solving any logarithmic inequality.",
+         "log is the logarithm function; x + 3 is the base and x^2 - x is the argument.",
+         "base greater than 1 keeps the inequality direction; base between 0 and 1 flips it."],
+    )
+    assert ctx.match_status == "matched"
+    assert ctx.concept_id == "jee-mathematics-sets-relations-and-functions-chapter"
+    assert ctx.canonical_name == "Sets, Relations and Functions"
+    assert ctx.concept_id != LCD_ID
+    assert ctx.pyqs
+    sets_ids = {record["question_id"] for record in _corpus_records(ctx.concept_id)}
+    lcd_ids = {record["question_id"] for record in _corpus_records(LCD_ID)}
+    returned = {p.question_id for p in ctx.pyqs}
+    assert returned <= sets_ids
+    assert not returned & lcd_ids
 
 
 # ── ambiguous tie returns per-candidate question groups (never zero help) ──
