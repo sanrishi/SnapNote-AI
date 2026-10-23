@@ -1061,12 +1061,13 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             for c in comp.callouts
         ]
         # The generic scene IS a callout box set (central label + satellite
-        # boxes) — rendering the composition callouts again as a chip grid
-        # below it duplicates the same labels verbatim (observed: case-10
-        # formula sheet showed every formula twice). The hero carries the
-        # callout set for this family; the composition still contributes
-        # framing, reasoning, result and takeaway.
-        if scene.scene_kind == "generic":
+        # boxes), and a comparison hero already carries every panel label and
+        # note. Rendering those same labels again as a chip grid duplicates
+        # the visual verbatim (observed: case-10 formula sheet showed every
+        # formula twice; rolling motion repeated its three panels as cards).
+        # The hero carries the callout set for these families; the composition
+        # still contributes framing, reasoning, result and takeaway.
+        if scene.scene_kind in ("generic", "comparison"):
             v3_callouts = []
         v3_reasoning = "; ".join(
             (f"{s.expression.strip()} — {_clean(s.explanation)}" if _clean(s.explanation) else s.expression.strip())
@@ -1142,14 +1143,9 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
     elif family == "comparison":
         compa = scene.comparison
         assert compa is not None
-        for p in (compa.panels or [])[:3]:
-            if (p.label or "").strip():
-                callouts.append(LessonCallout(heading=p.label.strip(), body=_clean(p.note)))
-        for p in (compa.panels or [])[:3]:
-            for arc in p.arcs:
-                if (arc.label or "").strip():
-                    reasoning_bits.append(
-                        _clean(arc.caption) or f"{arc.label.strip()} rotation ({arc.direction})")
+        # The comparison hero already renders each panel label and note, so
+        # repeating them as callout cards below the visual is duplication,
+        # not explanation. Arc labels are visual marks, not prose reasoning.
         if compa.relation is not None and (compa.relation.expression or "").strip():
             result_text = compa.relation.expression.strip()
             if (compa.relation.caption or "").strip():
@@ -1212,10 +1208,9 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
         and content.hero_kind in ("vector", "coordinate")
     )
 
-    hero = (
-        '#rect(width: 100%, fill: rgb("#f8fafc"), stroke: 0.7pt + rgb("#e2e8f0"), '
-        f'radius: 10pt, inset: 0pt)[#image("{hero_filename}", width: 100%)]'
-    )
+    # The hero SVG already draws its own framed stage on white; wrapping it in
+    # a second bordered card produced a double frame around every visual.
+    hero = f'#image("{hero_filename}", width: 100%)'
     if side_by_side:
         side = (nl + "#v(7pt)" + nl).join(
             fact(c.heading, c.body, accent) for c, accent in callout_cards
@@ -1289,14 +1284,15 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
     if content.result_text:
         result_block = nl.join([
             section("THE RESULT"),
-            '#rect(width: 100%, fill: rgb("#0f172a"), radius: 10pt, inset: (x: 20pt, y: 16pt))[',
+            '#rect(width: 100%, fill: rgb("#ecfdf5"), stroke: 0.7pt + rgb("#a7f3d0"), '
+            'radius: 10pt, inset: (x: 20pt, y: 16pt))[',
             '  #grid(columns: (1fr, auto), align: horizon,',
             '    [',
-            '      #text(size: 8pt, fill: rgb("#a5b4fc"), weight: "bold", tracking: 1pt)[KEY RESULT]',
+            '      #text(size: 8pt, fill: rgb("#047857"), weight: "bold", tracking: 1pt)[KEY RESULT]',
             '      #v(4pt)',
-            f'      #text(size: 20pt, weight: "bold", fill: white)[{_typst_esc(content.result_text)}]',
+            f'      #text(size: 20pt, weight: "bold", fill: rgb("#065f46"))[{_typst_esc(content.result_text)}]',
             '    ],',
-            '    [#text(size: 8pt, fill: rgb("#86efac"), weight: "bold", tracking: 0.6pt)[DETERMINISTIC]],',
+            '    [#text(size: 8pt, fill: rgb("#047857"), weight: "bold", tracking: 0.6pt)[DETERMINISTIC]],',
             '  )',
             ']',
         ])
@@ -1315,14 +1311,14 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
     if subtitle:
         subtitle_block = nl.join([
             '  #v(5pt)',
-            f'  #text(size: 11pt, fill: rgb("#cbd5e1"))[{_typst_esc(subtitle)}]',
+            f'  #text(size: 11pt, fill: rgb("#475569"))[{_typst_esc(subtitle)}]',
         ])
 
     header = nl.join([
-        '#rect(width: 100%, fill: rgb("#0f172a"), inset: (x: 44pt, y: 34pt))[',
-        '  #text(size: 8pt, fill: rgb("#a5b4fc"), weight: "bold", tracking: 1.4pt)[DETERMINISTIC VISUAL LESSON]',
+        '#rect(width: 100%, fill: rgb("#eef7ff"), inset: (x: 44pt, y: 32pt))[',
+        '  #text(size: 8pt, fill: rgb("#4f46e5"), weight: "bold", tracking: 1.4pt)[DETERMINISTIC VISUAL LESSON]',
         '  #v(7pt)',
-        f'  #text(size: 26pt, weight: "bold", fill: white)[{_typst_esc(content.title)}]',
+        f'  #text(size: 28pt, weight: "bold", fill: rgb("#0f172a"))[{_typst_esc(content.title)}]',
         subtitle_block,
         ']',
     ])
@@ -1340,12 +1336,12 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
         '#let indigo = rgb("#4f46e5")',
         '#let rule = rgb("#e2e8f0")',
         '#let sec(num, label) = block(width: 100%)[',
-        '  #grid(columns: (24pt, 1fr), column-gutter: 10pt, align: horizon,',
-        '    rect(width: 24pt, height: 24pt, radius: 6pt, fill: indigo)'
-        '[#align(center + horizon)[#text(fill: white, size: 9pt, weight: "bold")[#num]]],',
-        '    text(size: 9.5pt, weight: "bold", fill: indigo, tracking: 1pt)[#label],',
+        '  #grid(columns: (3pt, auto, 1fr), column-gutter: 8pt, align: horizon,',
+        '    rect(width: 3pt, height: 22pt, fill: indigo),',
+        '    text(size: 8.5pt, weight: "bold", fill: indigo, tracking: 1.2pt)[#num],',
+        '    text(size: 10pt, weight: "bold", fill: indigo, tracking: 1pt)[#label],',
         '  )',
-        '  #v(3pt)',
+        '  #v(4pt)',
         '  #line(length: 100%, stroke: 0.6pt + rule)',
         ']',
         '#let fact(heading, body, accent) = rect(width: 100%, fill: white, '
