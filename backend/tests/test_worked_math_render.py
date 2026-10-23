@@ -100,6 +100,10 @@ def _svg(nl: VisualNumberLine) -> str:
 
 def test_renders_verified_structure():
     svg = _svg(_regression_nl())
+    assert "SOLUTION MAP" in svg
+    assert "light = before domain" in svg
+    assert svg.count("FINAL ANSWER \u2014 MATHEMATICALLY VERIFIED") == 1
+    assert "SOLUTION ON THE NUMBER LINE" not in svg
     assert "FINAL ANSWER \u2014 MATHEMATICALLY VERIFIED" in svg
     assert "DOMAIN \u2014 WHERE THE LOG IS DEFINED" in svg
     assert "CASE ANALYSIS" in svg

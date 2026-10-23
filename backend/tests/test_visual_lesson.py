@@ -1010,6 +1010,25 @@ def test_validate_accepts_comparison():
     assert validate_lesson_spec(_comparison_spec()) == []
 
 
+def test_comparison_hero_owns_panel_content():
+    """The panels already show every label and note; don't repeat them as
+    callout cards or echo arc marks as prose reasoning."""
+    content = extract_lesson_content(_comparison_spec())
+    assert content.callouts == []
+    assert content.reasoning == "rolling link"
+    assert "rotation (ccw)" not in content.reasoning
+
+
+def test_v3_comparison_callouts_deduplicated():
+    spec = _comparison_spec()
+    spec.deterministic.composition = LessonComposition(
+        title="Angular Speed of a Rigid Body",
+        callouts=[CompositionCallout(id="p1", label="Pure translation", value="all points share v")],
+    )
+    content = extract_lesson_content(spec, hero_svg="<svg/>")
+    assert content.callouts == []
+
+
 def test_validate_rejects_thin_comparison():
     spec = _comparison_spec()
     assert spec.deterministic.scene is not None and spec.deterministic.scene.comparison is not None
