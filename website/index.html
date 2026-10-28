@@ -407,10 +407,59 @@
     .explain-btn:disabled { opacity: .55; cursor: not-allowed; }
     .explain-btn .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.25); border-top-color: var(--amber); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 6px; vertical-align: -2px; }
 
-    .visual-wrap { margin-top: 12px; max-width: 100%; margin-left: auto; margin-right: auto; }
+    .visual-wrap { margin-top: 12px; max-width: 100%; margin-left: auto; margin-right: auto; position: relative; }
     .visual-wrap img { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--border); }
     .visual-wrap svg { display: block; width: 100%; height: auto; border-radius: 10px; border: 1px solid var(--border); background: #fff; }
+    .visual-actions { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .visual-actions button {
+      display: inline-flex; align-items: center; gap: 6px; margin: 0;
+      background: rgba(15,22,40,.8); border: 1px solid var(--border-strong); color: var(--muted);
+      padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 600; cursor: pointer;
+    }
+    .visual-actions button:hover { color: var(--text); border-color: var(--accent); }
+    .visual-actions #visual-download-btn, .visual-actions #visual-expand-btn { display: inline-flex; margin: 0; }
+    .visual-wrap, .visual-wrap svg, .visual-wrap img { cursor: zoom-in; }
+    .visual-modal-shell {
+      width: min(96vw, 1500px); height: min(92vh, 1100px);
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow);
+      animation: rise .25s ease both;
+    }
+    .visual-modal-bar {
+      display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+      border-bottom: 1px solid var(--border); background: var(--surface-2);
+    }
+    .visual-modal-title { font-size: 13px; font-weight: 700; color: var(--text); }
+    .visual-zoom-controls { display: flex; align-items: center; gap: 5px; margin-left: auto; }
+    .visual-zoom-controls button {
+      min-width: 32px; height: 30px; padding: 0 9px; border-radius: 8px;
+      background: rgba(15,22,40,.75); border: 1px solid var(--border); color: var(--text);
+      font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .visual-zoom-controls button:hover { border-color: var(--accent); }
+    #visual-zoom-label { min-width: 44px; text-align: center; font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .visual-modal-scroll {
+      flex: 1; overflow: auto; -webkit-overflow-scrolling: touch; background: var(--bg);
+      padding: 14px; overscroll-behavior: contain;
+    }
+    .visual-modal-stage { width: 1536px; max-width: none; }
+    .visual-modal-stage svg, .visual-modal-stage img {
+      display: block; width: 100%; height: auto; border-radius: 10px; background: #fff;
+      border: 1px solid var(--border);
+    }
+    .visual-modal-hint { padding: 8px 14px; border-top: 1px solid var(--border); font-size: 11.5px; color: var(--muted-2); text-align: center; }
+    @media (max-width: 720px) {
+      .visual-actions { flex-direction: column; align-items: stretch; }
+      .visual-actions button { width: 100%; justify-content: center; }
+      .visual-modal-shell { width: 100vw; height: 100vh; height: 100dvh; border: 0; border-radius: 0; }
+      .visual-modal-scroll { padding: 8px; }
+      .visual-modal-title { font-size: 12.5px; }
+    }
     .visual-trust { font-size: 11.5px; color: var(--muted-2); margin-top: 8px; display: flex; align-items: center; gap: 6px; max-width: 720px; margin-left: auto; margin-right: auto; }
+    .visual-mobile-note { display: none; margin: 8px auto 0; max-width: 720px; font-size: 11.5px; color: var(--muted-2); text-align: center; }
+    @media (max-width: 720px) {
+      .visual-mobile-note { display: block; }
+    }
     .visual-context-line { max-width: 720px; margin-left: auto; margin-right: auto; }
     #visual-download-btn { display: block; margin: 10px auto 0; }
     .explain-card { border: 1px solid rgba(251,191,36,.4); background: linear-gradient(180deg, rgba(251,191,36,.06), rgba(255,255,255,0) 60%); }
@@ -1472,6 +1521,26 @@
     </div>
   </div>
 
+  <div class="overlay" id="visual-modal">
+    <div class="visual-modal-shell" role="dialog" aria-modal="true" aria-label="Full-size visual explanation">
+      <div class="visual-modal-bar">
+        <span class="visual-modal-title">Visual explanation</span>
+        <div class="visual-zoom-controls">
+          <button id="visual-zoom-out" aria-label="Zoom out">&minus;</button>
+          <span id="visual-zoom-label">100%</span>
+          <button id="visual-zoom-in" aria-label="Zoom in">+</button>
+          <button id="visual-zoom-fit">Fit</button>
+          <button id="visual-zoom-reset">Reset</button>
+          <button class="close-btn" id="visual-modal-close" aria-label="Close">&times;</button>
+        </div>
+      </div>
+      <div class="visual-modal-scroll" id="visual-modal-scroll">
+        <div class="visual-modal-stage" id="visual-modal-stage"></div>
+      </div>
+      <p class="visual-modal-hint">Pinch to zoom, drag to pan &middot; Fit shows the whole poster</p>
+    </div>
+  </div>
+
   <div id="processing-overlay">
     <div class="proc-card">
       <div class="proc-orb"></div>
@@ -1513,6 +1582,15 @@
     const origModal = document.getElementById("orig-modal");
     const origModalClose = document.getElementById("orig-modal-close");
     const origImg = document.getElementById("orig-img");
+    const visualModal = document.getElementById("visual-modal");
+    const visualModalClose = document.getElementById("visual-modal-close");
+    const visualModalScroll = document.getElementById("visual-modal-scroll");
+    const visualModalStage = document.getElementById("visual-modal-stage");
+    const visualZoomLabel = document.getElementById("visual-zoom-label");
+    const visualZoomIn = document.getElementById("visual-zoom-in");
+    const visualZoomOut = document.getElementById("visual-zoom-out");
+    const visualZoomFit = document.getElementById("visual-zoom-fit");
+    const visualZoomReset = document.getElementById("visual-zoom-reset");
     const creditsBadge = document.getElementById("credits-badge");
     const heroUploadBtn = document.getElementById("hero-upload-btn");
     const processingOverlay = document.getElementById("processing-overlay");
@@ -1524,6 +1602,7 @@
     const ICONS = {
       copy: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
       download: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
+      maximize: '<path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>',
       camera: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/>',
       bolt: '<path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12L13 2Z"/>',
       brain: '<path d="M12 3a5 5 0 0 0-5 5c0 2.5 1.5 4 2.5 5.5V17h5v-3.5C15.5 12 17 10.5 17 8a5 5 0 0 0-5-5Z"/><path d="M9.5 20h5"/>',
@@ -2387,6 +2466,9 @@
     let currentVisualSvg = null;
     let canExplain = false;
     let lastVisualContext = null;
+    let visualStageWidth = 1536;
+    let visualBaseWidth = 1536;
+    const VISUAL_NATIVE_WIDTH = 1536;
 
     function esc(s) {
       const div = document.createElement("div");
@@ -2566,6 +2648,13 @@
       if (explainBtn) explainBtn.addEventListener("click", handleExplainVisual);
       const visualDlBtn = document.getElementById("visual-download-btn");
       if (visualDlBtn) visualDlBtn.addEventListener("click", downloadVisual);
+      const visualExpandBtn = document.getElementById("visual-expand-btn");
+      if (visualExpandBtn) visualExpandBtn.addEventListener("click", openVisualModal);
+      const visualWrap = document.querySelector(".visual-wrap");
+      if (visualWrap) {
+        visualWrap.title = "Open full-size visual";
+        visualWrap.addEventListener("click", openVisualModal);
+      }
       if (result.type === "diagram" && notes && notes.topic) {
         if (result.jee && (result.jee.match_status === "matched" || result.jee.match_status === "ambiguous")) {
           const jd = document.getElementById("jee-context-body");
@@ -2919,20 +3008,23 @@
 
     function downloadVisual() {
       if (currentVisualSvg) {
-        // Convert the rendered SVG to PNG. The inline SVG uses width="100%",
-        // so we read its actual rendered box and stamp an explicit pixel
-        // width/height before rasterizing (otherwise naturalWidth is 0).
+        // Rasterize at the SVG's native viewBox size, not the preview's CSS
+        // box: a landscape poster in a narrow mobile panel must still download
+        // readable at full resolution.
+        const m = currentVisualSvg.match(/viewBox="[\d.]+ [\d.]+ ([\d.]+) ([\d.]+)"/);
+        let w = m ? Math.round(parseFloat(m[1])) : 0;
+        let h = m ? Math.round(parseFloat(m[2])) : 0;
         const svgEl = document.querySelector(".visual-wrap svg");
-        let w = 0, h = 0;
-        if (svgEl) {
-          const rect = svgEl.getBoundingClientRect();
-          w = Math.round(rect.width);
-          h = Math.round(rect.height);
+        if (!w || !h) {
+          if (svgEl) {
+            const rect = svgEl.getBoundingClientRect();
+            w = Math.round(rect.width);
+            h = Math.round(rect.height);
+          }
         }
         if (!w || !h) {
-          const m = currentVisualSvg.match(/viewBox="[\d.]+ [\d.]+ ([\d.]+) ([\d.]+)"/);
-          w = m ? Math.round(parseFloat(m[1]) * 2) : 900;
-          h = m ? Math.round(parseFloat(m[2]) * 2) : 1200;
+          w = 900;
+          h = 1200;
         }
         const clone = svgEl ? svgEl.cloneNode(true) : null;
         let svgMarkup = currentVisualSvg;
@@ -2988,18 +3080,101 @@
       }
     }
 
+    function setVisualStageWidth(width) {
+      visualStageWidth = Math.max(320, Math.min(3072, Math.round(width)));
+      if (visualModalStage) visualModalStage.style.width = `${visualStageWidth}px`;
+      if (visualZoomLabel) {
+        visualZoomLabel.textContent = `${Math.round((visualStageWidth / VISUAL_NATIVE_WIDTH) * 100)}%`;
+      }
+    }
+
+    function visualAspect() {
+      if (currentVisualSvg) {
+        const m = currentVisualSvg.match(/viewBox="[\d.]+ [\d.]+ ([\d.]+) ([\d.]+)"/);
+        if (m) return parseFloat(m[1]) / parseFloat(m[2]);
+      }
+      const img = visualModalStage ? visualModalStage.querySelector("img") : null;
+      if (img && img.naturalWidth && img.naturalHeight) {
+        return img.naturalWidth / img.naturalHeight;
+      }
+      return VISUAL_NATIVE_WIDTH / 1024;
+    }
+
+    function fitVisualToViewport() {
+      const availW = (visualModalScroll ? visualModalScroll.clientWidth : window.innerWidth) - 32;
+      const availH = (visualModalScroll ? visualModalScroll.clientHeight : window.innerHeight) - 32;
+      setVisualStageWidth(Math.min(VISUAL_NATIVE_WIDTH, availW, availH * visualAspect()));
+    }
+
+    function openVisualModal() {
+      if (!currentVisualSvg && !currentVisualUrl) return;
+      if (visualModalStage) {
+        visualModalStage.innerHTML = currentVisualSvg
+          ? currentVisualSvg
+          : `<img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" />`;
+      }
+      // On a phone the point of the modal is readable type, so start at the
+      // native 1536px width and let the student pan; desktop opens fitted to
+      // the whole poster.
+      const viewport = window.innerWidth || 1280;
+      if (visualModal) visualModal.classList.add("open");
+      document.body.style.overflow = "hidden";
+      if (viewport <= 720) {
+        visualBaseWidth = VISUAL_NATIVE_WIDTH;
+        setVisualStageWidth(visualBaseWidth);
+      } else {
+        fitVisualToViewport();
+        visualBaseWidth = visualStageWidth;
+      }
+      if (visualModalScroll) {
+        visualModalScroll.scrollTop = 0;
+        visualModalScroll.scrollLeft = 0;
+      }
+    }
+
+    function closeVisualModal() {
+      if (visualModal) visualModal.classList.remove("open");
+      document.body.style.overflow = "";
+      if (visualModalStage) visualModalStage.innerHTML = "";
+    }
+
+    if (visualModalClose) visualModalClose.addEventListener("click", closeVisualModal);
+    if (visualModal) {
+      visualModal.addEventListener("click", (e) => {
+        if (e.target === visualModal) closeVisualModal();
+      });
+    }
+    if (visualZoomIn) {
+      visualZoomIn.addEventListener("click", () => setVisualStageWidth(visualStageWidth * 1.25));
+    }
+    if (visualZoomOut) {
+      visualZoomOut.addEventListener("click", () => setVisualStageWidth(visualStageWidth / 1.25));
+    }
+    if (visualZoomFit) {
+      visualZoomFit.addEventListener("click", fitVisualToViewport);
+    }
+    if (visualZoomReset) {
+      visualZoomReset.addEventListener("click", () => setVisualStageWidth(visualBaseWidth));
+    }
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && visualModal && visualModal.classList.contains("open")) {
+        closeVisualModal();
+      }
+    });
+
     function explainSectionHtml() {
       const vcLine = (lastVisualContext && lastVisualContext.present && lastVisualContext.summary)
         ? `<div class="visual-context-line"><strong>Why this visual matters:</strong> ${esc(lastVisualContext.summary)}</div>`
         : "";
       const head = `<h3><span class="h-icon amber">${ic("sparkles")}</span>Explain Visually</h3><p class="explain-tagline">See the idea, not just the formula.</p>`;
-      const dlBtn = `<button id="visual-download-btn">${ic("download")}Download image</button>`;
+      const actions = `<div class="visual-actions"><button id="visual-expand-btn">${ic("maximize")}View full size</button><button id="visual-download-btn">${ic("download")}Download image</button></div>`;
+      const mobileHint = `<p class="visual-mobile-note">Tap the visual to open full size, then pinch or use + / &minus;.</p>`;
       const trust = `<p class="muted visual-trust">${ic("sparkles")} AI-generated visual explanation — verify details against your notes.</p>`;
       if (currentVisualSvg) {
-        return `${head}<div class="visual-wrap">${currentVisualSvg}</div>${trust}${vcLine}${dlBtn}`;
+        return `${head}<div class="visual-wrap">${currentVisualSvg}</div>${mobileHint}${trust}${vcLine}${actions}`;
       }
       if (currentVisualUrl) {
-        return `${head}<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /></div>${trust}${vcLine}${dlBtn}`;
+        return `${head}<div class="visual-wrap"><img src="${esc(currentVisualUrl)}" alt="AI-generated visual explanation" loading="lazy" /></div>${mobileHint}${trust}${vcLine}${actions}`;
       }
       if (canExplain) {
         return `${head}<button class="explain-btn" id="explain-btn"><span>${ic("sparkles")}Explain Visually</span><em>Free — bundled with your diagram</em></button>`;

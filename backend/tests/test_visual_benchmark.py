@@ -279,7 +279,7 @@ def test_13_worked_math_number_line_verified_holdout():
     assert select_family(spec) == "worked_math"
     svg = render_deterministic_visual(spec.deterministic)
     assert svg.strip().startswith("<svg")
-    assert "x \u2208 (-1, 0) \u222a (1, 3)" in svg
+    assert "x \u2208 (\u22121, 0) \u222a (1, 3)" in svg
 
     wrong = _number_line_lesson()
     scene = wrong.deterministic.scene
