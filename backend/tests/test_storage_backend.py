@@ -1117,7 +1117,7 @@ def test_visual_route_repairs_wrong_math_and_renders_verified(
     assert body["renderMode"] == "deterministic"
     svg = body["imageSvg"]
     assert "FINAL ANSWER \u2014 MATHEMATICALLY VERIFIED" in svg
-    assert "x \u2208 (-1, 0) \u222a (1, 3)" in svg
+    assert "x \u2208 (\u22121, 0) \u222a (1, 3)" in svg
     # The repaired 3-interval final track renders 6 open endpoint dots; the
     # wrong 2-interval track would render 4. Geometry proves which track won.
     assert svg.count('fill="white" stroke="#16a34a"') == 6
