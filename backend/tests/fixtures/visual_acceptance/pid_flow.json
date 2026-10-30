@@ -1,0 +1,214 @@
+{
+  "concept": "PID Controller Flow and Structure",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "PID Controller Flow",
+    "task": {
+      "task_type": "connected_process",
+      "learning_outcome": "Students will be able to trace how an error signal is split into proportional, integral, and derivative paths before being summed and fed into the plant.",
+      "required_elements": [
+        "Set Point r(t)",
+        "Error e(t)",
+        "Proportional Kp × e(t)",
+        "Integral Ki × ∫ e(t) dt",
+        "Derivative Kd × de/dt",
+        "Σ",
+        "Plant G(s)",
+        "Output y(t)"
+      ],
+      "required_relationships": [
+        "Set Point feeds into Error",
+        "Error splits into Proportional, Integral, and Derivative paths",
+        "All three paths combine at Summation S",
+        "Summation feeds Plant G(s)",
+        "Plant produces Output y(t) with feedback loop"
+      ],
+      "exact_claims": [
+        "Set Point r(t)",
+        "Error e(t)",
+        "Proportional Kp × e(t)",
+        "Integral Ki × ∫ e(t) dt",
+        "Derivative Kd × de/dt",
+        "Σ",
+        "Plant G(s)",
+        "Output y(t)"
+      ],
+      "acceptable_families": [
+        "process_flow"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "process_flow",
+      "title": "",
+      "caption": "The error signal is processed in parallel through proportional, integral, and derivative actions before being summed and applied to the plant.",
+      "force": null,
+      "flow": {
+        "nodes": [
+          {
+            "label": "Set Point r(t)"
+          },
+          {
+            "label": "Error e(t)"
+          },
+          {
+            "label": "Proportional Kp × e(t)"
+          },
+          {
+            "label": "Integral Ki × ∫ e(t) dt"
+          },
+          {
+            "label": "Derivative Kd × de/dt"
+          },
+          {
+            "label": "Σ"
+          },
+          {
+            "label": "Plant G(s)"
+          },
+          {
+            "label": "Output y(t)"
+          }
+        ],
+        "connectors": [
+          {
+            "source": 0,
+            "target": 1,
+            "label": "r(t)",
+            "feedback": false
+          },
+          {
+            "source": 1,
+            "target": 2,
+            "label": "e(t)",
+            "feedback": false
+          },
+          {
+            "source": 1,
+            "target": 3,
+            "label": "e(t)",
+            "feedback": false
+          },
+          {
+            "source": 1,
+            "target": 4,
+            "label": "e(t)",
+            "feedback": false
+          },
+          {
+            "source": 2,
+            "target": 5,
+            "label": "",
+            "feedback": false
+          },
+          {
+            "source": 3,
+            "target": 5,
+            "label": "",
+            "feedback": false
+          },
+          {
+            "source": 4,
+            "target": 5,
+            "label": "",
+            "feedback": false
+          },
+          {
+            "source": 5,
+            "target": 6,
+            "label": "",
+            "feedback": false
+          },
+          {
+            "source": 6,
+            "target": 7,
+            "label": "u(t)",
+            "feedback": false
+          },
+          {
+            "source": 7,
+            "target": 1,
+            "label": "feedback",
+            "feedback": true
+          }
+        ],
+        "relation": {
+          "expression": "u(t) = Kp·e(t) + Ki·∫e(t)dt + Kd·de/dt",
+          "caption": "Combined control signal output"
+        }
+      },
+      "plot": null,
+      "generic": null,
+      "comparison": null,
+      "concept_map": null,
+      "number_line": null
+    },
+    "equations": [],
+    "steps": [],
+    "points": [],
+    "composition": {
+      "title": "PID Controller Flow and Structure",
+      "framing": "The system processes error through three parallel paths to correct current, past, and future errors.",
+      "callouts": [
+        {
+          "id": "node-p",
+          "label": "Proportional",
+          "value": "Kp × e(t)"
+        },
+        {
+          "id": "node-i",
+          "label": "Integral",
+          "value": "Ki × ∫ e(t) dt"
+        },
+        {
+          "id": "node-d",
+          "label": "Derivative",
+          "value": "Kd × de/dt"
+        }
+      ],
+      "reasoning": [
+        {
+          "id": "rs-1",
+          "expression": "e(t) = r(t) - y(t)",
+          "explanation": "Error calculation from set point and output."
+        },
+        {
+          "id": "rs-2",
+          "expression": "u(t) = Kp·e(t) + Ki·∫e(t)dt + Kd·de/dt",
+          "explanation": "Summation of the three distinct control actions."
+        }
+      ],
+      "result": {
+        "expression": "u(t) = Kp·e(t) + Ki·∫e(t)dt + Kd·de/dt",
+        "emphasis": true
+      },
+      "takeaway": "Combining proportional, integral, and derivative control terms allows precise dampening and elimination of steady-state errors."
+    }
+  },
+  "visual_form": "process flow diagram",
+  "key_elements": [
+    "Set Point r(t)",
+    "Error e(t)",
+    "Proportional Kp × e(t)",
+    "Integral Ki × ∫ e(t) dt",
+    "Derivative Kd × de/dt",
+    "Summation S",
+    "Plant G(s)",
+    "Output y(t)"
+  ],
+  "key_relationships": [
+    "Error feeds into parallel P, I, and D terms",
+    "All three terms converge at the Summation block",
+    "Summation output drives Plant G(s) and produces y(t)"
+  ],
+  "must_show": [
+    "Parallel branching of error signal into P, I, and D",
+    "Feedback loop returning from output to error calculation"
+  ],
+  "avoid": [
+    "Isolating terms without summation",
+    "Omitting feedback path"
+  ]
+}

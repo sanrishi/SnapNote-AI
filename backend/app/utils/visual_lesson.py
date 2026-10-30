@@ -35,15 +35,23 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from app.models.schemas import (
+    ComparisonTable,
     CompositionCallout,
     DeterministicVisual,
+    MapNode,
     StudyNotes,
+    VisualComparison,
+    VisualConceptMap,
     VisualRenderMode,
     VisualScene,
     VisualSpec,
     VisualTask,
 )
-from app.utils.visual_renderer import GENERIC_SATELLITE_CAP, render_hero_geometry
+from app.utils.visual_renderer import (
+    GENERIC_SATELLITE_CAP,
+    concept_map_is_horizontal,
+    render_hero_geometry,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -54,6 +62,7 @@ SUPPORTED_FAMILIES: dict[str, str] = {
     "process_flow": "flow",
     "generic": "generic",
     "comparison": "comparison",
+    "concept_map": "concept_map",
     "number_line": "worked_math",
 }
 
@@ -83,9 +92,25 @@ FAMILY_CAPABILITIES: dict[str, dict[str, object]] = {
         "cannot": ["vectors", "curves", "points", "processes", "comparisons", "dimensions"],
     },
     "comparison": {
-        "represents": ["2-3 labeled variant panels with own objects/vectors/arcs"],
-        "requires": "at least 2 labeled panels, each with vectors or arcs",
+        "represents": [
+            "2-3 labeled variant panels with own objects/vectors/arcs",
+            "2-3 alternative feature columns compared row by row",
+        ],
+        "requires": "at least 2 labeled panels with geometry, or a 2-3 column feature table",
         "cannot": ["plotted functions", "process steps", "circuits"],
+    },
+    "concept_map": {
+        "represents": [
+            "hierarchies and classifications (parent/child)",
+            "cyclic processes (ordered repeating stages)",
+            "chronologies and timelines (ordered events)",
+            "labeled cross-relationships between concepts",
+        ],
+        "requires": "3-12 labeled nodes with valid relationships",
+        "cannot": [
+            "quantitative curves", "force vectors", "worked interval mathematics",
+            "precise molecular geometry",
+        ],
     },
     "number_line": {
         "represents": ["interval sets on number lines", "open/closed endpoints", "excluded values", "domain constraints", "case branches", "final solution sets"],
@@ -105,8 +130,11 @@ TASK_FAMILIES: dict[str, list[str]] = {
     "vector_arrangement": ["force_diagram"],
     "connected_process": ["process_flow"],
     "coordinate_construction": ["plot"],
-    "definition_overview": ["force_diagram", "plot", "process_flow", "generic", "comparison"],
+    "definition_overview": ["force_diagram", "plot", "process_flow", "generic", "comparison", "concept_map"],
     "interval_solution": ["number_line"],
+    "hierarchy_structure": ["concept_map"],
+    "cyclic_process": ["concept_map"],
+    "chronology": ["concept_map"],
 }
 
 _TASK_STOPWORDS = frozenset({
@@ -126,15 +154,16 @@ def _claim_key(text: str) -> str:
     """Presentation-insensitive key for exact-claim containment.
 
     Claims must still appear with the same symbols and values — this only
-    ignores whitespace and the multiplication glyph (×, ·, *) which the
-    planner writes inconsistently around the same printed expression
-    (observed: claim "f(z) = (1/√(2π)) × exp(-z²/2)" vs rendered
-    "f(z) = (1/√(2π))exp(-z²/2)"). Different numbers, variables, powers or
-    operators still fail.
+    ignores whitespace, label punctuation (``:``) and the multiplication glyph
+    (×, ·, *) which the planner writes inconsistently around the same printed
+    expression (observed: claim "f(z) = (1/√(2π)) × exp(-z²/2)" vs rendered
+    "f(z) = (1/√(2π))exp(-z²/2)"; claim "Worst-case: O(n)" vs the visible
+    "Worst-case" label plus "O(n)" detail). Different numbers, variables,
+    powers or operators still fail.
     """
     import re
 
-    return re.sub(r"[\s×·*]+", "", text).casefold()
+    return re.sub(r"[\s×·*:]+", "", text).casefold()
 
 
 def _distinctive(text: str) -> set[str]:
@@ -192,9 +221,28 @@ def _scene_text(scene: VisualScene, generic_cap: int | None = None) -> str:
                 bits.append(v.label or "")
             for a in p.arcs:
                 bits.append((a.label or "") + " " + (a.caption or ""))
+        table = scene.comparison.table
+        if table is not None:
+            bits.append(table.verdict or "")
+            for row in table.rows:
+                bits.append(row.label or "")
+            for column in table.columns:
+                bits.append(column.label or "")
+                bits += [value or "" for value in column.values]
         if scene.comparison.relation is not None:
             bits.append((scene.comparison.relation.expression or "") + " "
                         + (scene.comparison.relation.caption or ""))
+    elif kind == "concept_map" and scene.concept_map is not None:
+        cmap = scene.concept_map
+        visible_detail_ids = _visible_map_detail_ids(cmap)
+        for node in cmap.nodes:
+            node_id = (node.id or "").strip()
+            detail = node.detail if node_id in visible_detail_ids else ""
+            bits.append((node.label or "") + " " + (detail or "") + " " + (node.marker or ""))
+        for edge in cmap.edges:
+            bits.append(edge.label or "")
+        if cmap.relation is not None:
+            bits.append((cmap.relation.expression or "") + " " + (cmap.relation.caption or ""))
     elif kind == "number_line" and scene.number_line is not None:
         nl = scene.number_line
         bits.append(nl.problem or "")
@@ -266,6 +314,8 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
         tokens.add("callout")
         tokens.add("callouts")
     elif kind == "comparison" and scene.comparison is not None:
+        if scene.comparison.table is not None:
+            tokens.update({"table", "tables", "column", "columns", "row", "rows", "comparison"})
         tokens.add("panel")
         tokens.add("panels")
         for p in scene.comparison.panels or []:
@@ -279,6 +329,18 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
             if p.arcs:
                 tokens.add("arc")
                 tokens.add("arcs")
+    elif kind == "concept_map" and scene.concept_map is not None:
+        cmap = scene.concept_map
+        tokens.update({"node", "nodes", "concept", "concepts", "map", "relationship", "relationships"})
+        tokens.add(cmap.layout)
+        if cmap.layout == "tree":
+            tokens.update({"tree", "hierarchy", "parent", "child", "children", "branch", "branches"})
+        elif cmap.layout == "cycle":
+            tokens.update({"cycle", "cyclic", "stage", "stages", "loop", "feedback"})
+        elif cmap.layout == "timeline":
+            tokens.update({"timeline", "chronology", "event", "events", "date", "dates", "phase", "phases"})
+        if cmap.edges:
+            tokens.update({"edge", "edges", "link", "links", "connector", "connectors"})
     elif kind == "number_line" and scene.number_line is not None:
         tokens.update(
             {
@@ -290,19 +352,32 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
     return {t for t in tokens if t}
 
 
-def _composition_callouts(det, scene_kind: str = "") -> list[tuple[str, str]]:
+def _composition_callouts(
+    det: DeterministicVisual, scene: VisualScene | None
+) -> list[tuple[str, str]]:
     """(heading, body) pairs the composed lesson ACTUALLY renders.
 
-    Generic scenes drop composition callouts from the chip grid (the hero
-    already carries the callout set, so repeating them duplicates labels
-    verbatim), so they are excluded for that family.
+    The chip grid drops composition callouts for families whose hero already
+    prints the same content (generic satellites, comparison panels/table,
+    horizontal/timeline maps) — repeating them would duplicate labels
+    verbatim. Promoted equation claims are the exception: they exist nowhere
+    in the hero, so they always render. Validation must mirror this, or a
+    hidden chip could satisfy a required element that the student never sees.
     """
     comp = det.composition
     if comp is None:
         return []
+    scene_kind = scene.scene_kind if scene is not None else ""
+    suppress_duplicate_chips = scene_kind in ("generic", "comparison")
+    if scene_kind == "concept_map" and scene is not None and scene.concept_map is not None:
+        cmap = scene.concept_map
+        if cmap.layout == "timeline" or concept_map_is_horizontal(cmap):
+            suppress_duplicate_chips = True
     pairs: list[tuple[str, str]] = []
-    if scene_kind != "generic":
-        pairs += [(c.label or "", c.value or "") for c in (comp.callouts or [])]
+    for callout in comp.callouts or []:
+        if suppress_duplicate_chips and not (callout.id or "").startswith("promoted-claim-"):
+            continue
+        pairs.append((callout.label or "", callout.value or ""))
     pairs += [(r.expression or "", r.explanation or "") for r in (comp.reasoning or [])]
     if comp.result is not None:
         pairs.append((comp.result.expression or "", ""))
@@ -346,6 +421,7 @@ def derive_task_from_source(study_notes: StudyNotes | None, scene_kind: str) -> 
         "force_diagram": "vector_arrangement",
         "process_flow": "connected_process",
         "comparison": "compare_variants",
+        "concept_map": "hierarchy_structure",
         "generic": "definition_overview",
         "number_line": "interval_solution",
     }
@@ -408,6 +484,14 @@ def derive_task_from_scene(spec: VisualSpec) -> VisualTask | None:
         task_type, families = "connected_process", ["process_flow"]
     elif kind == "comparison":
         task_type, families = "compare_variants", ["comparison"]
+    elif kind == "concept_map":
+        layout = scene.concept_map.layout if scene.concept_map is not None else "tree"
+        task_type = {
+            "tree": "hierarchy_structure",
+            "cycle": "cyclic_process",
+            "timeline": "chronology",
+        }.get(layout, "hierarchy_structure")
+        families = ["concept_map"]
     elif kind == "number_line":
         task_type, families = "interval_solution", ["number_line"]
     else:
@@ -548,20 +632,9 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
         det.title, getattr(det, "caption", "") or "",
         (comp.title if comp is not None else "") or "",
         _scene_text(scene, generic_cap=GENERIC_SATELLITE_CAP),
-        " ".join(heading + " " + body for heading, body in _composition_callouts(det, scene.scene_kind)),
+        " ".join(heading + " " + body for heading, body in _composition_callouts(det, scene)),
     ]).casefold()
     hay_tokens = _tokens(haystack) | _scene_structural_tokens(scene)
-    for element in task.required_elements:
-        need = _distinctive(element)
-        if not need:
-            continue
-        # Any-token match: free-text explanations paraphrase freely
-        # ("torque equals r cross F" vs symbols τ/r/F), so demanding half
-        # the tokens would refuse honest visuals. Zero shared tokens still
-        # fails ("unicorn levitation field"). Exact formulas/values stay
-        # verbatim-strict via exact_claims below — math fidelity lives there.
-        if not any(w in hay_tokens for w in need):
-            errors.append(f"required element unsatisfied by scene: {element!r}")
     # A comparison's claims describe what each variant's body actually does
     # (v = 0 at the rolling contact, v = 2v_CM at the top). They must be
     # attached to a panel/vector, not merely printed in a composition callout:
@@ -572,6 +645,7 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
         if scene.scene_kind == "comparison"
         else haystack
     )
+    claim_errors: list[str] = []
     for claim in task.exact_claims:
         norm = " ".join(str(claim).split())
         if not norm:
@@ -582,7 +656,27 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
             norm, scene, haystack
         ):
             continue
-        errors.append(f"exact claim missing from scene: {claim!r}")
+        claim_errors.append(f"exact claim missing from scene: {claim!r}")
+    # A taxonomy may name a category "Series Sum" while the planner's contract
+    # calls it "Summation Notation". A zero-token heading synonym is not a
+    # missing concept when every exact formula/claim is visibly printed (the
+    # stronger, verbatim contract). Restrict the relaxation to concept maps so
+    # geometric families still fail when a required entity is absent.
+    claims_complete = bool(task.exact_claims) and not claim_errors
+    for element in task.required_elements:
+        need = _distinctive(element)
+        if not need:
+            continue
+        # Any-token match: free-text explanations paraphrase freely
+        # ("torque equals r cross F" vs symbols τ/r/F), so demanding half
+        # the tokens would refuse honest visuals. Zero shared tokens still
+        # fails ("unicorn levitation field"). Exact formulas/values stay
+        # verbatim-strict via exact_claims below — math fidelity lives there.
+        if not any(w in hay_tokens for w in need):
+            if kind == "concept_map" and claims_complete:
+                continue
+            errors.append(f"required element unsatisfied by scene: {element!r}")
+    errors.extend(claim_errors)
     return errors
 
 
@@ -679,6 +773,7 @@ class LessonContent:
     subtitle: str = ""
     hero_svg: str = ""
     hero_kind: str = ""
+    layout: str = ""
     callouts: list[LessonCallout] = field(default_factory=list)
     reasoning: str = ""
     reasoning_steps: list[tuple[str, str]] = field(default_factory=list)
@@ -722,7 +817,7 @@ def _finite(value: object, what: str, errors: list[str]) -> float | None:
     return number
 
 
-_RELATION_OPERATORS = ("=", "<", ">", "\u2264", "\u2265", "\u2260", "\u2248", "\u221d")
+_RELATION_OPERATORS = ("=", "<", ">", "\u2264", "\u2265", "\u2260", "\u2248", "\u221d", "\u2192", "\u27f6")
 
 
 def _relation_errors(relation: object) -> list[str]:
@@ -760,6 +855,100 @@ def validate_legacy_visual(spec: VisualSpec) -> list[str]:
     if (det.title or "").strip() and any([det.equations, det.steps, det.points]):
         return []
     return ["legacy card has no title or card content"]
+
+
+def _validate_comparison_table(table: ComparisonTable | None) -> list[str]:
+    """Validate a feature comparison matrix (2-3 columns x 2-6 rows)."""
+    errors: list[str] = []
+    if table is None:
+        return ["comparison table payload is missing"]
+    matrix = table
+    rows = [r for r in matrix.rows if (r.label or "").strip()]
+    columns = [c for c in matrix.columns if (c.label or "").strip()]
+    if len(rows) < 2:
+        errors.append("comparison table needs at least 2 labeled rows")
+    if len(columns) < 2:
+        errors.append("comparison table needs at least 2 labeled columns")
+    for column in columns:
+        if len(column.values) != len(rows):
+            errors.append(
+                f"comparison column {column.label!r} has {len(column.values)} values "
+                f"for {len(rows)} rows"
+            )
+            continue
+        for index, value in enumerate(column.values):
+            if not (value or "").strip():
+                errors.append(
+                    f"comparison cell {column.label!r}/{rows[index].label!r} is empty"
+                )
+            elif len(value) > 80:
+                errors.append(
+                    f"comparison cell {column.label!r}/{rows[index].label!r} exceeds 80 chars"
+                )
+    return errors
+
+
+def _validate_concept_map(cmap: VisualConceptMap) -> list[str]:
+    """Validate a hierarchy/cycle/timeline map without inventing structure."""
+    errors: list[str] = []
+    nodes = [n for n in cmap.nodes if (n.label or "").strip()]
+    if len(nodes) < 3:
+        errors.append("concept_map needs at least 3 labeled nodes")
+        return errors
+    if cmap.layout in ("cycle", "timeline") and len(nodes) > 6:
+        errors.append(f"concept_map {cmap.layout} supports at most 6 stages/events")
+    ids = [(n.id or "").strip() for n in nodes]
+    if any(not node_id for node_id in ids):
+        errors.append("concept_map nodes need non-empty ids")
+    duplicates = {node_id for node_id in ids if node_id and ids.count(node_id) > 1}
+    if duplicates:
+        errors.append(f"concept_map node ids are duplicated: {sorted(duplicates)}")
+    known = {node_id for node_id in ids if node_id}
+    for edge in cmap.edges:
+        source = (edge.source or "").strip()
+        target = (edge.target or "").strip()
+        if source not in known or target not in known:
+            errors.append(f"concept_map edge references unknown node: {source!r}->{target!r}")
+        if source and source == target:
+            errors.append(f"concept_map edge is self-referential: {source!r}")
+    if cmap.layout == "tree":
+        roots = [n for n in nodes if not (n.parent or "").strip()]
+        if len(roots) != 1:
+            errors.append(f"concept_map tree needs exactly one root, found {len(roots)}")
+            return errors
+        parents: dict[str, str] = {}
+        for node in nodes:
+            node_id = (node.id or "").strip()
+            parent = (node.parent or "").strip()
+            if parent:
+                if parent not in known:
+                    errors.append(f"concept_map node {node_id!r} has unknown parent {parent!r}")
+                else:
+                    parents[node_id] = parent
+        # Cycle and depth checks: every chain must terminate at the root.
+        root_id = (roots[0].id or "").strip()
+        for node in nodes:
+            node_id = (node.id or "").strip()
+            seen = {node_id}
+            current = parents.get(node_id, "")
+            depth = 0
+            while current:
+                depth += 1
+                if depth > 6:
+                    errors.append(f"concept_map parent chain for {node_id!r} is too deep")
+                    break
+                if current in seen:
+                    errors.append(f"concept_map parent chain for {node_id!r} contains a cycle")
+                    break
+                seen.add(current)
+                current = parents.get(current, "")
+            if current == "" and node_id != root_id and node_id not in parents:
+                errors.append(
+                    f"concept_map node {node_id!r} is disconnected (no parent and not the root)"
+                )
+            if depth > 4:
+                errors.append(f"concept_map node {node_id!r} exceeds depth 4")
+    return errors
 
 
 def validate_lesson_spec(spec: VisualSpec) -> list[str]:
@@ -853,25 +1042,37 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
         if comp is None:
             errors.append("comparison has no comparison payload")
             return errors
-        panels = [p for p in (comp.panels or []) if (p.label or "").strip()][:3]
-        if len(panels) < 2:
-            errors.append("comparison needs at least 2 labeled panels")
+        table_used = comp.table is not None
+        if table_used:
+            errors.extend(_validate_comparison_table(comp.table))
+        if not table_used:
+            panels = [p for p in (comp.panels or []) if (p.label or "").strip()][:3]
+            if len(panels) < 2:
+                errors.append("comparison needs at least 2 labeled panels or a feature table")
+                return errors
+            for p in panels:
+                labeled = [v for v in p.vectors if (v.label or "").strip()]
+                if not labeled and not p.arcs:
+                    errors.append(f"comparison panel {p.label!r} has no vectors or arcs")
+                known = {
+                    (p.object.label or "").strip(),
+                    *((point.label or "").strip() for point in p.points),
+                    *(v.label.strip() for v in labeled),
+                }
+                for v in labeled:
+                    _finite(v.angle_deg, f"vector {v.label!r} angle_deg", errors)
+                    _finite(v.length, f"vector {v.label!r} length", errors)
+                    tail = (v.tail or "").strip()
+                    if tail and tail not in known:
+                        errors.append(f"vector {v.label!r} tails on unknown {tail!r}")
+        errors.extend(_relation_errors(comp.relation))
+    elif kind == "concept_map":
+        cmap = scene.concept_map
+        if cmap is None:
+            errors.append("concept_map has no concept_map payload")
             return errors
-        for p in panels:
-            labeled = [v for v in p.vectors if (v.label or "").strip()]
-            if not labeled and not p.arcs:
-                errors.append(f"comparison panel {p.label!r} has no vectors or arcs")
-            known = {
-                (p.object.label or "").strip(),
-                *((point.label or "").strip() for point in p.points),
-                *(v.label.strip() for v in labeled),
-            }
-            for v in labeled:
-                _finite(v.angle_deg, f"vector {v.label!r} angle_deg", errors)
-                _finite(v.length, f"vector {v.label!r} length", errors)
-                tail = (v.tail or "").strip()
-                if tail and tail not in known:
-                    errors.append(f"vector {v.label!r} tails on unknown {tail!r}")
+        errors.extend(_validate_concept_map(cmap))
+        errors.extend(_relation_errors(cmap.relation))
     elif kind == "number_line":
         nl = scene.number_line
         if nl is None:
@@ -947,8 +1148,21 @@ def spec_needs_repair(spec: VisualSpec) -> str | None:
             return "process_flow has fewer than 2 labeled nodes"
     elif kind == "comparison":
         comp = scene.comparison
-        if comp is None or len([p for p in (comp.panels or []) if (p.label or "").strip()]) < 2:
-            return "comparison has fewer than 2 labeled panels"
+        has_table = (
+            comp is not None
+            and comp.table is not None
+            and len([c for c in comp.table.columns if (c.label or "").strip()]) >= 2
+            and len([r for r in comp.table.rows if (r.label or "").strip()]) >= 2
+        )
+        if not has_table and (
+            comp is None
+            or len([p for p in (comp.panels or []) if (p.label or "").strip()]) < 2
+        ):
+            return "comparison has fewer than 2 labeled panels or a usable feature table"
+    elif kind == "concept_map":
+        cmap = scene.concept_map
+        if cmap is None or len([n for n in cmap.nodes if (n.label or "").strip()]) < 3:
+            return "concept_map has fewer than 3 labeled nodes"
     elif kind == "number_line":
         # Worked math is never repaired by adding geometry: correctness is
         # judged by the math verifier, and a thin-looking solution is a
@@ -968,6 +1182,8 @@ def _scene_relation_expression(scene) -> str:
             rel = scene.flow.relation
         elif scene.scene_kind == "comparison" and scene.comparison is not None:
             rel = scene.comparison.relation
+        elif scene.scene_kind == "concept_map" and scene.concept_map is not None:
+            rel = scene.concept_map.relation
         else:
             return ""
         return (rel.expression if rel is not None else "") or ""
@@ -1043,6 +1259,88 @@ def _clean(text: str) -> str:
     return " ".join((text or "").split())
 
 
+MAP_DETAIL_CARD_CAP = 8
+
+
+def _visible_map_detail_ids(cmap: VisualConceptMap) -> set[str]:
+    """Ids whose node detail is actually printed somewhere on the page.
+
+    Horizontal/timeline heroes print details inside cards; a tall tree prints
+    header details in the hero and leaf details in the callout grid; a cycle
+    prints every stage detail in the grid. Validation must use this exact set,
+    otherwise a hidden detail can satisfy an exact claim while the student
+    never sees it.
+    """
+    nodes = [n for n in cmap.nodes if (n.label or "").strip()]
+    all_ids = {(n.id or "").strip() for n in nodes}
+    if cmap.layout == "timeline" or concept_map_is_horizontal(cmap):
+        return all_ids
+    if cmap.layout == "cycle":
+        return all_ids
+    parent_ids = {
+        (n.parent or "").strip()
+        for n in nodes
+        if (n.parent or "").strip()
+    }
+    leaves = [
+        (n.id or "").strip()
+        for n in _map_nodes_deepest_first(cmap)
+        if (n.id or "").strip() not in parent_ids
+    ]
+    return parent_ids | set(leaves[:MAP_DETAIL_CARD_CAP])
+
+
+def _map_nodes_deepest_first(cmap: VisualConceptMap) -> list[MapNode]:
+    """Order map nodes so leaf teaching details are printed before headers.
+
+    Used by the composer when the hero draws labels only (tall tree/cycle):
+    a formula on a leaf matters more than a category subtitle, and the callout
+    grid is capped, so depth-first order keeps the strongest content visible.
+    """
+    nodes = [n for n in cmap.nodes if (n.label or "").strip()]
+    by_id = {(n.id or "").strip(): n for n in nodes}
+    depth: dict[str, int] = {}
+
+    def resolve(node: MapNode, guard: int = 0) -> int:
+        node_id = (node.id or "").strip()
+        if node_id in depth:
+            return depth[node_id]
+        parent = (node.parent or "").strip()
+        if not parent or parent not in by_id or guard > len(by_id):
+            depth[node_id] = 0
+            return 0
+        depth[node_id] = resolve(by_id[parent], guard + 1) + 1
+        return depth[node_id]
+
+    for node in nodes:
+        resolve(node)
+    indexed = list(enumerate(nodes))
+    indexed.sort(key=lambda pair: (-depth.get((pair[1].id or "").strip(), 0), pair[0]))
+    return [node for _, node in indexed]
+
+
+def _layout_for(family: str, scene: VisualScene | None) -> str:
+    """Choose a composition layout from the visual structure, never the subject.
+
+    The hero is the same validated geometry; only the page architecture changes:
+    annotated scenes put notes beside the visual, process bands put the sequence
+    under it, comparisons give the matrix the full width, and maps lead with the
+    relational structure. This is what stops every topic collapsing into one
+    universal card stack.
+    """
+    if family in ("vector", "coordinate"):
+        return "annotated"
+    if family == "flow":
+        return "band"
+    if family == "comparison":
+        return "compare"
+    if family == "concept_map":
+        if scene is not None and scene.concept_map is not None:
+            return f"map_{scene.concept_map.layout}"
+        return "map_tree"
+    return "focus"
+
+
 def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonContent:
     """Pull structured lesson content from the spec WITHOUT rewriting values.
 
@@ -1056,10 +1354,6 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
     if comp is not None:
         # v3 explicit composition: prefer it over derivation. Values pass
         # through byte-identical; order kept; no markdown parsing, no LLM.
-        v3_callouts = [
-            LessonCallout(heading=c.label.strip(), body=_clean(c.value))
-            for c in comp.callouts
-        ]
         # The generic scene IS a callout box set (central label + satellite
         # boxes), and a comparison hero already carries every panel label and
         # note. Rendering those same labels again as a chip grid duplicates
@@ -1067,10 +1361,60 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
         # formula twice; rolling motion repeated its three panels as cards).
         # The hero carries the callout set for these families; the composition
         # still contributes framing, reasoning, result and takeaway.
-        if scene.scene_kind in ("generic", "comparison"):
-            v3_callouts = []
+        # EXCEPTION: an equation promoted by promote_equation_claims() is
+        # intentionally NOT in the hero (that is why it was promoted). Hiding
+        # it here would pass validation while making the claim invisible.
+        suppress_duplicate_chips = scene.scene_kind in ("generic", "comparison")
+        map_detail_chips: list[LessonCallout] = []
+        if scene.scene_kind == "concept_map" and scene.concept_map is not None:
+            cmap = scene.concept_map
+            details_in_hero = cmap.layout == "timeline" or concept_map_is_horizontal(cmap)
+            if details_in_hero:
+                # These heroes print each node's detail inside the node card, so
+                # repeating the same text as a callout grid is pure duplication.
+                suppress_duplicate_chips = True
+            else:
+                # A tall tree and a cycle draw labels only. Their details are
+                # real teaching content (formulas, dates, roles) and would
+                # otherwise be invisible; print them as cards, deepest first.
+                ordered = _map_nodes_deepest_first(cmap)
+                # The tall-tree hero prints non-leaf details inside the node
+                # box; only leaf details need cards. A cycle hero draws labels
+                # only, so every stage detail is card-worthy.
+                parent_ids = {
+                    (n.parent or "").strip()
+                    for n in cmap.nodes
+                    if (n.parent or "").strip()
+                }
+                visible_detail_ids = _visible_map_detail_ids(cmap)
+                seen_details: set[tuple[str, str]] = set()
+                for node in ordered:
+                    node_id = (node.id or "").strip()
+                    if node_id not in visible_detail_ids:
+                        continue
+                    if cmap.layout == "tree" and node_id in parent_ids:
+                        continue
+                    detail = _clean(node.detail)
+                    label = _clean(node.label)
+                    if not detail:
+                        continue
+                    pair = (label, detail)
+                    if pair in seen_details:
+                        continue
+                    seen_details.add(pair)
+                    map_detail_chips.append(LessonCallout(heading=label, body=detail))
+                    if len(map_detail_chips) >= MAP_DETAIL_CARD_CAP:
+                        break
+        v3_callouts = map_detail_chips + [
+            LessonCallout(heading=c.label.strip(), body=_clean(c.value))
+            for c in comp.callouts
+            if not suppress_duplicate_chips or c.id.startswith("promoted-claim-")
+        ]
+        # CompositionCallout caps a single chip at 24/80 chars; the composer's
+        # own card grid is bounded per page, so cap here too.
+        v3_callouts = v3_callouts[:MAP_DETAIL_CARD_CAP]
         v3_reasoning = "; ".join(
-            (f"{s.expression.strip()} — {_clean(s.explanation)}" if _clean(s.explanation) else s.expression.strip())
+            (f"{s.expression.strip()} - {_clean(s.explanation)}" if _clean(s.explanation) else s.expression.strip())
             for s in comp.reasoning
         )
         v3_steps = [
@@ -1078,15 +1422,35 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             for s in comp.reasoning
             if s.expression.strip()
         ]
+        if (
+            scene.scene_kind == "comparison"
+            and scene.comparison is not None
+            and scene.comparison.table is not None
+        ):
+            # The matrix already states every condition/outcome pair; a
+            # reasoning block below it repeats the same two rows verbatim.
+            v3_reasoning = ""
+            v3_steps = []
+        result_text = comp.result.expression.strip() if comp.result is not None else ""
+        if (
+            scene.scene_kind == "comparison"
+            and scene.comparison is not None
+            and scene.comparison.table is not None
+            and (scene.comparison.table.verdict or "").strip()
+        ):
+            # The table's verdict is the synthesis of the comparison; prefer
+            # it over a terse equilibrium condition as the key result.
+            result_text = scene.comparison.table.verdict.strip()
         return LessonContent(
             title=_clean(comp.title) or _clean(det.title) or "Key concept",
             subtitle=_clean(comp.framing) or _clean(spec.concept),
             hero_svg=hero_svg,
             hero_kind=family,
+            layout=_layout_for(family, scene),
             callouts=v3_callouts,
             reasoning=v3_reasoning,
             reasoning_steps=v3_steps,
-            result_text=(comp.result.expression.strip() if comp.result is not None else ""),
+            result_text=result_text,
             takeaway=_clean(comp.takeaway) or _clean(scene.caption),
         )
     callouts: list[LessonCallout] = []
@@ -1143,13 +1507,50 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
     elif family == "comparison":
         compa = scene.comparison
         assert compa is not None
-        # The comparison hero already renders each panel label and note, so
-        # repeating them as callout cards below the visual is duplication,
-        # not explanation. Arc labels are visual marks, not prose reasoning.
+        # The comparison hero already renders each panel label, table cell and
+        # note, so repeating them as callout cards below the visual is
+        # duplication, not explanation. Arc labels are visual marks, not prose.
         if compa.relation is not None and (compa.relation.expression or "").strip():
             result_text = compa.relation.expression.strip()
             if (compa.relation.caption or "").strip():
                 reasoning_bits.append(compa.relation.caption.strip())
+        elif compa.table is not None and (compa.table.verdict or "").strip():
+            result_text = compa.table.verdict.strip()
+    elif family == "concept_map":
+        cmap = scene.concept_map
+        assert cmap is not None
+        # The hero carries node labels and the relational layout. Only use
+        # details as supporting notes (never repeat the label verbatim).
+        # Timeline cards already print their detail inside the hero; repeating
+        # them as a callout grid would duplicate every line.
+        if cmap.layout != "timeline" and not concept_map_is_horizontal(cmap):
+            parent_ids = {
+                (n.parent or "").strip()
+                for n in cmap.nodes
+                if (n.parent or "").strip()
+            }
+            visible_detail_ids = _visible_map_detail_ids(cmap)
+            for node in cmap.nodes:
+                node_id = (node.id or "").strip()
+                # Tall-tree headers print their detail inside the hero box;
+                # only leaf details still need a card. Cycle stages print
+                # labels only, so every detail is card-worthy.
+                if node_id not in visible_detail_ids:
+                    continue
+                if cmap.layout == "tree" and node_id in parent_ids:
+                    continue
+                if (node.detail or "").strip():
+                    callouts.append(LessonCallout(heading=node.label.strip(), body=_clean(node.detail)))
+        for edge in cmap.edges:
+            label = (edge.label or "").strip()
+            # Same echo filter as flow: bare words ("type", "includes") only
+            # restate the connector, while symbolic labels ("ΔH < 0") teach.
+            if label and any(not (ch.isalpha() or ch.isspace() or ch == "-") for ch in label):
+                reasoning_bits.append(label)
+        if cmap.relation is not None and (cmap.relation.expression or "").strip():
+            result_text = cmap.relation.expression.strip()
+            if (cmap.relation.caption or "").strip():
+                reasoning_bits.append(cmap.relation.caption.strip())
     elif family == "worked_math":
         raise LessonValidationError(
             "worked math renders through the deterministic number-line path; "
@@ -1157,13 +1558,15 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
         )
     else:
         raise LessonValidationError(f"unsupported family for content extraction: {family!r}")
-    callouts = callouts[:MAX_CALLOUTS]
+    callout_cap = MAP_DETAIL_CARD_CAP if family == "concept_map" else MAX_CALLOUTS
+    callouts = callouts[:callout_cap]
     reasoning = "; ".join(b for b in reasoning_bits if b)
     return LessonContent(
         title=_clean(det.title) or "Key concept",
         subtitle=_clean(spec.concept),
         hero_svg=hero_svg,
         hero_kind=family,
+        layout=_layout_for(family, scene),
         callouts=callouts,
         reasoning=reasoning,
         result_text=result_text,
@@ -1181,13 +1584,38 @@ def _typst_esc(text: str) -> str:
 
 
 def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") -> str:
-    """Render the composition as Typst source. Deterministic: same content in,
-    same source out. No pixels, no subject branches - layout driven by counts.
+    """Render a content-selected lesson architecture as Typst source.
+
+    Deterministic: same content in, same source out. The scene family picks
+    the page architecture (annotated scene, process band, comparison matrix,
+    hierarchy, cycle, timeline or focus sheet) and its accent palette; the
+    planner's content decides which sections exist. No pixels, no subject-name
+    branches: two topics with the same information structure share a layout.
     """
     nl = chr(10)
     subtitle = content.subtitle
     if subtitle and " ".join(subtitle.split()).casefold() == " ".join(content.title.split()).casefold():
         subtitle = ""
+
+    layout = content.layout or {
+        "vector": "annotated",
+        "coordinate": "annotated",
+        "flow": "band",
+        "comparison": "compare",
+        "concept_map": "map_tree",
+        "generic": "focus",
+    }.get(content.hero_kind, "focus")
+
+    style = {
+        "annotated": ("#4f46e5", "#eef2ff", "ANNOTATED SCENE"),
+        "band": ("#7c3aed", "#f5f3ff", "PROCESS BAND"),
+        "compare": ("#b45309", "#fff7ed", "COMPARISON MATRIX"),
+        "map_tree": ("#15803d", "#f0fdf4", "CONCEPT HIERARCHY"),
+        "map_cycle": ("#0e7490", "#ecfeff", "CYCLE MAP"),
+        "map_timeline": ("#be123c", "#fff1f2", "TIMELINE"),
+        "focus": ("#4f46e5", "#eef7ff", "CONCEPT FOCUS"),
+    }
+    accent, header_fill, layout_label = style.get(layout, style["focus"])
 
     number = 0
 
@@ -1196,16 +1624,16 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
         number += 1
         return nl.join([f'#sec("{number:02d}", "{label}")', '#v(6pt)'])
 
-    accents = ["#4f46e5", "#b45309", "#0f766e", "#047857", "#7c3aed", "#be123c"]
+    accents = [accent, "#b45309", "#0f766e", "#047857", "#7c3aed", "#be123c"]
     callout_cards = [(c, accents[i % len(accents)]) for i, c in enumerate(content.callouts)]
 
-    def fact(heading: str, body: str, accent: str) -> str:
+    def fact(heading: str, body: str, accent_value: str) -> str:
         body_arg = f'[{_typst_esc(body)}]' if body else "none"
-        return f'#fact([{_typst_esc(heading)}], {body_arg}, rgb("{accent}"))'
+        return f'#fact([{_typst_esc(heading)}], {body_arg}, rgb("{accent_value}"))'
 
     side_by_side = (
         2 <= len(callout_cards) <= 4
-        and content.hero_kind in ("vector", "coordinate")
+        and (content.hero_kind in ("vector", "coordinate") or layout == "map_cycle")
     )
 
     # The hero SVG already draws its own framed stage on white; wrapping it in
@@ -1252,7 +1680,7 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
         cells: list[str] = []
         for i, (eq, explanation) in enumerate(content.reasoning_steps, 1):
             cells.append(
-                '  [#rect(width: 22pt, height: 22pt, radius: 11pt, fill: rgb("#4f46e5"), '
+                f'  [#rect(width: 22pt, height: 22pt, radius: 11pt, fill: rgb("{accent}"), '
                 f'inset: 0pt)[#align(center + horizon)[#text(size: 8pt, weight: "bold", fill: white)[{i}]]]],'
             )
             body_lines = [f'#text(size: 13pt, weight: "bold")[{_typst_esc(eq)}]']
@@ -1272,9 +1700,9 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
     elif content.reasoning:
         reasoning_block = nl.join([
             section("HOW IT WORKS"),
-            '#rect(width: 100%, fill: rgb("#eef2ff"), stroke: 0.7pt + rgb("#c7d2fe"), '
+            f'#rect(width: 100%, fill: rgb("{header_fill}"), stroke: 0.7pt + rgb("{accent}"), '
             'radius: 8pt, inset: 12pt)[',
-            '  #text(size: 8pt, weight: "bold", fill: rgb("#4f46e5"), tracking: 0.8pt)[REASONING]',
+            f'  #text(size: 8pt, weight: "bold", fill: rgb("{accent}"), tracking: 0.8pt)[REASONING]',
             '  #v(4pt)',
             f'  #text(size: 10pt, fill: rgb("#334155"))[{_typst_esc(content.reasoning)}]',
             ']',
@@ -1315,11 +1743,17 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
         ])
 
     header = nl.join([
-        '#rect(width: 100%, fill: rgb("#eef7ff"), inset: (x: 44pt, y: 32pt))[',
-        '  #text(size: 8pt, fill: rgb("#4f46e5"), weight: "bold", tracking: 1.4pt)[DETERMINISTIC VISUAL LESSON]',
-        '  #v(7pt)',
-        f'  #text(size: 28pt, weight: "bold", fill: rgb("#0f172a"))[{_typst_esc(content.title)}]',
+        f'#rect(width: 100%, fill: rgb("{header_fill}"))[',
+        f'  #rect(width: 100%, height: 3pt, fill: rgb("{accent}"))',
+        '  #pad(x: 44pt, top: 26pt, bottom: 28pt)[',
+        '    #grid(columns: (1fr, auto), align: horizon,',
+        f'      [#text(size: 8pt, fill: rgb("{accent}"), weight: "bold", tracking: 1.4pt)[DETERMINISTIC VISUAL LESSON]],',
+        f'      [#text(size: 8pt, fill: rgb("#64748b"), weight: "bold", tracking: 1pt)[{layout_label}]],',
+        '    )',
+        '    #v(8pt)',
+        f'    #text(size: 28pt, weight: "bold", fill: rgb("#0f172a"))[{_typst_esc(content.title)}]',
         subtitle_block,
+        '  ]',
         ']',
     ])
 
@@ -1333,7 +1767,7 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
         '#set text(font: "DejaVu Sans", size: 10pt, fill: rgb("#0f172a"))',
         '#set par(leading: 0.7em)',
         '',
-        '#let indigo = rgb("#4f46e5")',
+        '#let indigo = rgb("' + accent + '")',
         '#let rule = rgb("#e2e8f0")',
         '#let sec(num, label) = block(width: 100%)[',
         '  #grid(columns: (3pt, auto, 1fr), column-gutter: 8pt, align: horizon,',
@@ -1349,24 +1783,39 @@ def build_lesson_typst(content: LessonContent, hero_filename: str = "hero.svg") 
         '  #text(size: 16pt, weight: "bold", fill: accent)[#heading]',
         '  #if body != none [',
         '    #v(3pt)',
-        '    #text(size: 9pt, fill: rgb("#64748b"))[#body]',
+        '    #text(size: 10.5pt, fill: rgb("#475569"))[#body]',
         '  ]',
         ']',
         '',
     ])
 
+    if layout == "compare":
+        blocks = [hero_block, result_block, callouts_block, reasoning_block, takeaway_block]
+    elif layout == "band":
+        blocks = [hero_block, reasoning_block, callouts_block, result_block, takeaway_block]
+    elif layout in ("map_tree", "map_timeline"):
+        blocks = [hero_block, callouts_block, reasoning_block, result_block, takeaway_block]
+    else:
+        blocks = [hero_block, callouts_block, reasoning_block, result_block, takeaway_block]
     body = nl.join([
         header,
         '#pad(x: 44pt, top: 22pt, bottom: 28pt)[',
-        hero_block,
+        *[block for block in blocks if block],
         '#v(14pt)',
-        callouts_block,
-        reasoning_block,
-        result_block,
-        takeaway_block,
         footer,
         ']',
     ])
+    # Section numbers are allocated while blocks are BUILT, but layouts emit
+    # them in a different order (compare puts the result before reasoning).
+    # Renumber in final reading order so the page never says 03 before 02.
+    section_seq = 0
+
+    def _next_section(match: re.Match[str]) -> str:
+        nonlocal section_seq
+        section_seq += 1
+        return f'#sec("{section_seq:02d}", "'
+
+    body = re.sub(r'#sec\("\d{2}", "', _next_section, body)
     return prelude + body + nl
 
 

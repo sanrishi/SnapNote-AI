@@ -410,6 +410,88 @@ class VisualGeneric(BaseModel):
         return coerced
 
 
+class MapNode(BaseModel):
+    """One semantic node of a concept map.
+
+    The planner supplies meaning only: a stable id, a short label, and (for
+    tree layouts) the id of the parent node. The renderer owns every pixel,
+    spacing decision and connector. ``detail`` is a short teaching note that
+    the composition layer may print; it is never used to invent geometry.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(default="", max_length=40)
+    label: str = Field(default="", max_length=48)
+    detail: str = Field(default="", max_length=90)
+    parent: str = Field(default="", max_length=40)
+    marker: str = Field(default="", max_length=18)  # timeline date/phase marker
+    color: str = ""  # ""|accent|red|green|amber|violet
+
+
+class MapEdge(BaseModel):
+    """One labeled relationship/cross-link between map nodes."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    source: str = Field(default="", max_length=40)
+    target: str = Field(default="", max_length=40)
+    label: str = Field(default="", max_length=32)
+
+
+class VisualConceptMap(BaseModel):
+    """A real relational grammar for non-geometric subjects.
+
+    ``tree`` renders a parent/child hierarchy (classification, taxonomies,
+    tree data structures, whole/part relationships). ``cycle`` renders
+    repeating stages in a ring (biological/chemical cycles, feedback loops).
+    ``timeline`` renders ordered chronology (history, evolution, phases).
+    Layout remains code-owned; the spec only declares semantic relationships.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    layout: Literal["tree", "cycle", "timeline"] = "tree"
+    nodes: list[MapNode] = Field(default_factory=list, max_length=12)
+    edges: list[MapEdge] = Field(default_factory=list, max_length=12)
+    relation: VisualRelation | None = None
+
+
+class ComparisonColumn(BaseModel):
+    """One alternative in a feature-comparison table."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    label: str = Field(default="", max_length=40)
+    values: list[str] = Field(default_factory=list, max_length=6)
+
+
+class ComparisonRow(BaseModel):
+    """One shared feature/dimension compared across columns."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    label: str = Field(default="", max_length=40)
+
+
+class ComparisonTable(BaseModel):
+    """Feature matrix for conceptual subjects that are not motion diagrams.
+
+    Used for chemistry (SN1 vs SN2), biology (prokaryote vs eukaryote),
+    economics (market structures), CS (array vs linked list), etc. Every cell
+    is exact planner text; the renderer only decides geometry and typography.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    rows: list[ComparisonRow] = Field(default_factory=list, max_length=6)
+    columns: list[ComparisonColumn] = Field(default_factory=list, max_length=3)
+    # Top-left header. Rows can be features (default) or alternatives when a
+    # wide source is transposed, so the axis name must come from the planner.
+    corner: str = Field(default="FEATURE", max_length=20)
+    verdict: str = Field(default="", max_length=120)
+
+
 class ComparisonPanel(BaseModel):
     """One panel of a side-by-side comparison (2-3 panels per scene).
 
@@ -428,7 +510,8 @@ class ComparisonPanel(BaseModel):
 
 
 class VisualComparison(BaseModel):
-    panels: list[ComparisonPanel] = []  # 2-3
+    panels: list[ComparisonPanel] = []  # 2-3 motion panels
+    table: ComparisonTable | None = None  # feature matrix alternative
     relation: VisualRelation | None = None
 
 
@@ -514,7 +597,7 @@ class VisualNumberLine(BaseModel):
 
 
 class VisualScene(BaseModel):
-    scene_kind: Literal["force_diagram", "process_flow", "plot", "generic", "comparison", "number_line"] = "force_diagram"
+    scene_kind: Literal["force_diagram", "process_flow", "plot", "generic", "comparison", "concept_map", "number_line"] = "force_diagram"
     title: str = ""
     caption: str = ""
     force: ForceDiagram | None = None
@@ -522,6 +605,7 @@ class VisualScene(BaseModel):
     plot: VisualPlot | None = None
     generic: VisualGeneric | None = None
     comparison: VisualComparison | None = None
+    concept_map: VisualConceptMap | None = None
     number_line: VisualNumberLine | None = None
 
 
@@ -594,6 +678,9 @@ class VisualTask(BaseModel):
         "coordinate_construction",
         "definition_overview",
         "interval_solution",
+        "hierarchy_structure",
+        "cyclic_process",
+        "chronology",
     ] = "definition_overview"
     learning_outcome: str = ""
     required_elements: list[str] = []

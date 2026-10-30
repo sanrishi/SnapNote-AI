@@ -1,0 +1,162 @@
+{
+  "concept": "Rotational Mechanics and Torque",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "Rotational Mechanics: Torque & Angular Momentum",
+    "task": {
+      "task_type": "vector_arrangement",
+      "learning_outcome": "Students will be able to calculate torque using position vector r and force F, and relate it to angular momentum L = Iω.",
+      "required_elements": [
+        "O",
+        "r",
+        "F",
+        "θ",
+        "τ",
+        "L = Iω"
+      ],
+      "required_relationships": [
+        "Torque is the cross product of position and force",
+        "Angular momentum is burner product of moment of inertia and angular velocity"
+      ],
+      "exact_claims": [
+        "τ = r × F",
+        "L = Iω",
+        "ΔL = ∫ τ dt"
+      ],
+      "acceptable_families": [
+        "force_diagram"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "force_diagram",
+      "title": "",
+      "caption": "Torque τ is defined as the cross product of the position vector r and force F about a pivot O.",
+      "force": {
+        "object": {
+          "kind": "pivot",
+          "label": "O",
+          "caption": "Axis of rotation"
+        },
+        "vectors": [
+          {
+            "label": "r",
+            "angle_deg": 45,
+            "length": 1.0,
+            "tail": "",
+            "at": "center",
+            "color": "accent",
+            "caption": "Position vector"
+          },
+          {
+            "label": "F",
+            "angle_deg": 90,
+            "length": 1.0,
+            "tail": "r",
+            "at": "center",
+            "color": "red",
+            "caption": "Applied force"
+          }
+        ],
+        "angles": [
+          {
+            "label": "θ",
+            "between": [
+              "r",
+              "F"
+            ],
+            "caption": "Angle between r and F"
+          }
+        ],
+        "arcs": [
+          {
+            "label": "τ",
+            "around": "O",
+            "direction": "ccw",
+            "caption": "Rotation direction"
+          }
+        ],
+        "relation": {
+          "expression": "τ = r × F",
+          "caption": "Torque definition"
+        },
+        "ground": false
+      },
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": null,
+      "concept_map": null,
+      "number_line": null
+    },
+    "equations": [
+      {
+        "expression": "τ = r × F",
+        "meaning": "Torque equals position vector crossed with force"
+      },
+      {
+        "expression": "L = Iω",
+        "meaning": "Angular momentum equals moment of inertia times angular velocity"
+      },
+      {
+        "expression": "ΔL = ∫ τ dt",
+        "meaning": "Change in angular momentum equals angular impulse"
+      }
+    ],
+    "steps": [
+      "Identify the pivot point O and position vector r",
+      "Determine the applied force F and its line of action",
+      "Calculate torque using τ = r × F",
+      "Relate torque to angular momentum change via time integral"
+    ],
+    "points": [
+      "Torque governs rotational acceleration just as force governs linear acceleration",
+      "Angular momentum L = Iω links mass distribution and rotational speed"
+    ],
+    "composition": {
+      "title": "Rotational Mechanics",
+      "framing": "Relating force and position to rotational dynamics and angular momentum.",
+      "callouts": [
+        {
+          "id": "vec-r",
+          "label": "r",
+          "value": "position vector"
+        },
+        {
+          "id": "vec-f",
+          "label": "F",
+          "value": "applied force"
+        },
+        {
+          "id": "promoted-claim-1",
+          "label": "ΔL = ∫ τ dt",
+          "value": "Change in angular momentum equals angular impulse"
+        }
+      ],
+      "reasoning": [
+        {
+          "id": "rs-tau",
+          "expression": "τ = r × F",
+          "explanation": "Cross product defines rotational turning effect"
+        },
+        {
+          "id": "rs-l",
+          "expression": "L = Iω",
+          "explanation": "Angular momentum representation"
+        }
+      ],
+      "result": {
+        "expression": "τ = r × F",
+        "emphasis": true
+      },
+      "takeaway": "Net torque over a time interval produces a direct change in angular momentum."
+    }
+  },
+  "visual_form": "",
+  "key_elements": [],
+  "key_relationships": [],
+  "must_show": [],
+  "avoid": []
+}

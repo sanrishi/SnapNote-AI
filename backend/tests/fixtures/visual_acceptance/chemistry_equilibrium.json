@@ -1,0 +1,128 @@
+{
+  "concept": "Chemical Equilibrium and Reaction Quotient Comparison",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "Reaction Quotient vs Equilibrium Constant",
+    "task": {
+      "task_type": "compare_variants",
+      "learning_outcome": "Students will be able to determine whether a chemical system shifts forward or backward by comparing the reaction quotient Qc to the equilibrium constant Kc.",
+      "required_elements": [
+        "Qc < Kc",
+        "Qc > Kc",
+        "forward",
+        "backward"
+      ],
+      "required_relationships": [
+        "Qc < Kc drives forward shift",
+        "Qc > Kc drives backward shift"
+      ],
+      "exact_claims": [
+        "Qc < Kc",
+        "Qc > Kc",
+        "forward",
+        "backward"
+      ],
+      "acceptable_families": [
+        "comparison"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "comparison",
+      "title": "",
+      "caption": "Comparing Qc and Kc reveals the direction in which a disturbed chemical system must shift to reach equilibrium.",
+      "force": null,
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": {
+        "panels": [],
+        "table": {
+          "rows": [
+            {
+              "label": "Condition"
+            },
+            {
+              "label": "Reaction Direction"
+            }
+          ],
+          "columns": [
+            {
+              "label": "Qc < Kc",
+              "values": [
+                "excess reactants",
+                "forward"
+              ]
+            },
+            {
+              "label": "Qc > Kc",
+              "values": [
+                "excess products",
+                "backward"
+              ]
+            }
+          ],
+          "verdict": "Systems adjust to reestablish equilibrium when Qc ≠ Kc."
+        },
+        "relation": null
+      },
+      "concept_map": null,
+      "number_line": null
+    },
+    "equations": [],
+    "steps": [],
+    "points": [],
+    "composition": {
+      "title": "Reaction Direction Rules",
+      "framing": "Comparing the instantaneous reaction quotient Qc with the equilibrium constant Kc determines reaction shift.",
+      "callouts": [
+        {
+          "id": "qc-lt",
+          "label": "Qc < Kc",
+          "value": "proceeds forward"
+        },
+        {
+          "id": "qc-gt",
+          "label": "Qc > Kc",
+          "value": "proceeds backward"
+        }
+      ],
+      "reasoning": [
+        {
+          "id": "rs-1",
+          "expression": "Qc < Kc",
+          "explanation": "Reaction proceeds forward to produce more products."
+        },
+        {
+          "id": "rs-2",
+          "expression": "Qc > Kc",
+          "explanation": "Reaction proceeds backward to produce more reactants."
+        }
+      ],
+      "result": {
+        "expression": "Qc = Kc",
+        "emphasis": true
+      },
+      "takeaway": "The system shifts to counteract disturbances and re-establish equilibrium."
+    }
+  },
+  "visual_form": "feature comparison matrix table",
+  "key_elements": [
+    "Qc < Kc",
+    "Qc > Kc",
+    "forward",
+    "backward"
+  ],
+  "key_relationships": [
+    "Qc < Kc implies forward reaction",
+    "Qc > Kc implies backward reaction"
+  ],
+  "must_show": [
+    "comparison table contrasting Qc < Kc and Qc > Kc conditions and their corresponding shifts"
+  ],
+  "avoid": [
+    "unsupported formulas or non-equilibrium constants"
+  ]
+}
