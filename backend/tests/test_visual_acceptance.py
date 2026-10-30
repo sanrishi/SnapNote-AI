@@ -15,6 +15,7 @@ from pathlib import Path
 import pytest
 
 from app.models.schemas import VisualSpec
+from app.utils.table_quality import normalize_visual_spec
 from app.utils.visual_lesson import (
     concept_map_is_horizontal,
     extract_lesson_content,
@@ -29,12 +30,15 @@ FIXTURES = Path(__file__).parent / "fixtures" / "visual_acceptance"
 
 CASES = [
     ("chemistry_equilibrium.json", "comparison", "compare"),
+    ("chemistry_equilibrium_repaired.json", "comparison", "compare"),
     ("biology_cell.json", "concept_map", "map_tree"),
     ("cs_bst.json", "concept_map", "map_tree"),
     ("engineering_math.json", "concept_map", "map_tree"),
     ("stats_distributions.json", "comparison", "compare"),
     ("physics_torque.json", "vector", "annotated"),
     ("pid_flow.json", "flow", "band"),
+    ("cycle_krebs.json", "concept_map", "map_cycle"),
+    ("timeline_vaccines.json", "concept_map", "map_timeline"),
 ]
 
 
@@ -46,6 +50,10 @@ def _load(name: str) -> VisualSpec:
 
 def _accepted(name: str) -> tuple[VisualSpec, object]:
     spec = _load(name)
+    # Apply the same deterministic quality gate the route applies before
+    # validation/composition. A legacy fixture with an unverifiable verdict
+    # must be tested as the product would render it (verdict dropped).
+    spec, _ = normalize_visual_spec(spec)
     errors = validate_legacy_visual(spec)
     promote_equation_claims(spec, errors)
     errors = validate_legacy_visual(spec)
@@ -86,7 +94,38 @@ def test_chemistry_matrix_is_a_real_feature_table() -> None:
     assert len(table.columns) == 2
     assert {column.label for column in table.columns} == {"Qc < Kc", "Qc > Kc"}
     assert [row.label for row in table.rows] == ["Condition", "Reaction Direction"]
-    assert "equilibrium" in content.result_text.casefold()
+    # The saved spec predates verdict_basis and its generic synthesis cannot
+    # be traced to two cell outcomes, so the gate drops it. The correct
+    # equilibrium condition from the composition remains as the key result.
+    assert table.verdict == ""
+    assert content.result_text == "Qc = Kc"
+    assert "equilibrium" in content.takeaway.casefold()
+
+
+def test_legacy_unverifiable_verdict_is_dropped_not_displayed() -> None:
+    spec = _load("chemistry_equilibrium.json")
+    gated, report = normalize_visual_spec(spec)
+    assert report.dropped_verdict
+    assert "does not state outcomes" in report.verdict_reason
+    table = gated.deterministic.scene.comparison.table  # type: ignore[union-attr]
+    assert table is not None and table.verdict == ""
+
+
+def test_repaired_chemistry_spec_puts_each_claim_into_a_visible_cell() -> None:
+    # Second planner pass + one bounded repair (real Gemini output): the
+    # prose claims that failed the exact gate are now table cells, and the
+    # table renders them verbatim. corner="STATE" is inferred as
+    # feature-rows (columns are the alternatives).
+    spec, _ = _accepted("chemistry_equilibrium_repaired.json")
+    table = spec.deterministic.scene.comparison.table  # type: ignore[union-attr]
+    assert table is not None
+    # The planner wrote corner="STATE" over rows Condition/Direction; the
+    # deterministic gate corrects it to the truthful "FEATURE".
+    assert table.corner == "FEATURE"
+    assert table.verdict == ""
+    values = [value for column in table.columns for value in column.values]
+    assert "reaction proceeds forward" in values
+    assert "reaction proceeds backward" in values
 
 
 def test_stats_matrix_is_transposed_for_four_alternatives() -> None:
@@ -100,6 +139,36 @@ def test_stats_matrix_is_transposed_for_four_alternatives() -> None:
     assert [column.label for column in table.columns] == [
         "Mean (u)", "Variance (s²)", "MGF"
     ]
+
+
+def test_krebs_cycle_renders_every_stage_and_its_teaching_detail() -> None:
+    spec, content = _accepted("cycle_krebs.json")
+    cmap = spec.deterministic.scene.concept_map  # type: ignore[union-attr]
+    assert cmap is not None and cmap.layout == "cycle"
+    labels = [node.label for node in cmap.nodes]
+    assert len(labels) == 8
+    for label in labels:
+        assert label in content.hero_svg
+    # Cycle heroes draw labels only; the details must survive as composed cards.
+    assert content.callouts
+    assert any("acetyl CoA" in callout.body for callout in content.callouts)
+    assert any("FADH2" in callout.body for callout in content.callouts)
+
+
+def test_vaccine_timeline_renders_six_dated_events_in_order() -> None:
+    spec, content = _accepted("timeline_vaccines.json")
+    cmap = spec.deterministic.scene.concept_map  # type: ignore[union-attr]
+    assert cmap is not None and cmap.layout == "timeline"
+    assert [node.marker for node in cmap.nodes] == [
+        "1796", "1974", "1995", "1998", "2006", "2020"
+    ]
+    for marker in ("1796", "2020"):
+        assert marker in content.hero_svg
+    for label in ("Smallpox Vaccine", "COVID-19 Vaccine"):
+        assert label in content.hero_svg
+    # Timeline heroes print details inside the cards; repeating them as chips
+    # would duplicate the page verbatim.
+    assert content.callouts == []
 
 
 def test_biology_tree_stays_horizontal_and_does_not_repeat_details() -> None:

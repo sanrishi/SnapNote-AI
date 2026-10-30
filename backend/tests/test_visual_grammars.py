@@ -302,9 +302,9 @@ def test_tree_rejects_too_few_nodes_and_too_many_cycle_stages() -> None:
     cycle = _cycle_map()
     cycle_map = cycle.deterministic.scene.concept_map  # type: ignore[union-attr]
     cycle_map.nodes = [
-        MapNode(id=f"n{i}", label=f"Stage {i}") for i in range(7)
+        MapNode(id=f"n{i}", label=f"Stage {i}") for i in range(9)
     ]
-    assert any("at most 6" in error for error in validate_lesson_spec(cycle))
+    assert any("at most 8" in error for error in validate_lesson_spec(cycle))
 
 
 def test_feature_table_renders_every_cell_verbatim() -> None:

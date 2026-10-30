@@ -51,6 +51,11 @@ from app.utils.visual_renderer import (
     GENERIC_SATELLITE_CAP,
     concept_map_is_horizontal,
     render_hero_geometry,
+    rendered_scene_text,
+)
+from app.utils.table_quality import (
+    normalize_visual_spec,
+    table_quality_errors,
 )
 
 logger = logging.getLogger(__name__)
@@ -352,37 +357,42 @@ def _scene_structural_tokens(scene: VisualScene) -> set[str]:
     return {t for t in tokens if t}
 
 
-def _composition_callouts(
-    det: DeterministicVisual, scene: VisualScene | None
-) -> list[tuple[str, str]]:
-    """(heading, body) pairs the composed lesson ACTUALLY renders.
+def _map_detail_chip_pairs(cmap: VisualConceptMap) -> list[tuple[str, str]]:
+    """(heading, body) pairs the composer prints as map detail cards.
 
-    The chip grid drops composition callouts for families whose hero already
-    prints the same content (generic satellites, comparison panels/table,
-    horizontal/timeline maps) — repeating them would duplicate labels
-    verbatim. Promoted equation claims are the exception: they exist nowhere
-    in the hero, so they always render. Validation must mirror this, or a
-    hidden chip could satisfy a required element that the student never sees.
+    Mirrors ``extract_lesson_content`` exactly: horizontal trees and timelines
+    print details inside the hero (no chips), tall trees print leaf details as
+    cards (deepest first), cycles print every stage detail. Validation must use
+    this same list; a detail that never reaches a card or the hero is invisible.
     """
-    comp = det.composition
-    if comp is None:
+    if cmap.layout == "timeline" or concept_map_is_horizontal(cmap):
         return []
-    scene_kind = scene.scene_kind if scene is not None else ""
-    suppress_duplicate_chips = scene_kind in ("generic", "comparison")
-    if scene_kind == "concept_map" and scene is not None and scene.concept_map is not None:
-        cmap = scene.concept_map
-        if cmap.layout == "timeline" or concept_map_is_horizontal(cmap):
-            suppress_duplicate_chips = True
+    ordered = _map_nodes_deepest_first(cmap)
+    parent_ids = {
+        (n.parent or "").strip()
+        for n in cmap.nodes
+        if (n.parent or "").strip()
+    }
+    visible_detail_ids = _visible_map_detail_ids(cmap)
     pairs: list[tuple[str, str]] = []
-    for callout in comp.callouts or []:
-        if suppress_duplicate_chips and not (callout.id or "").startswith("promoted-claim-"):
+    seen: set[tuple[str, str]] = set()
+    for node in ordered:
+        node_id = (node.id or "").strip()
+        if node_id not in visible_detail_ids:
             continue
-        pairs.append((callout.label or "", callout.value or ""))
-    pairs += [(r.expression or "", r.explanation or "") for r in (comp.reasoning or [])]
-    if comp.result is not None:
-        pairs.append((comp.result.expression or "", ""))
-    pairs.append((comp.takeaway or "", ""))
-    pairs.append((comp.framing or "", ""))
+        if cmap.layout == "tree" and node_id in parent_ids:
+            continue
+        detail = _clean(node.detail)
+        label = _clean(node.label)
+        if not detail:
+            continue
+        pair = (label, detail)
+        if pair in seen:
+            continue
+        seen.add(pair)
+        pairs.append(pair)
+        if len(pairs) >= MAP_DETAIL_CARD_CAP:
+            break
     return pairs
 
 
@@ -627,24 +637,56 @@ def validate_task_link(spec: VisualSpec) -> list[str]:
     # is promoted verbatim into a visible callout by
     # promote_equation_claims() before this gate runs. Generic satellites are
     # capped by the hero, so callouts beyond the cap are not visible either.
-    comp = det.composition
-    haystack = " ".join([
-        det.title, getattr(det, "caption", "") or "",
-        (comp.title if comp is not None else "") or "",
-        _scene_text(scene, generic_cap=GENERIC_SATELLITE_CAP),
-        " ".join(heading + " " + body for heading, body in _composition_callouts(det, scene)),
-    ]).casefold()
+    hero_text = ""
+    composed_text = ""
+    if scene.scene_kind == "number_line":
+        # number_line renders through its own deterministic path; its scene
+        # fields (problem/domain/cases/solution) are the rendered material.
+        hero_text = _scene_text(scene, generic_cap=GENERIC_SATELLITE_CAP)
+    else:
+        # Visibility is exact: read the text nodes that the SAME hero renderer
+        # actually paints. Spec strings that were wrapped into an ellipsis,
+        # sliced away by a card cap, or never drawn cannot satisfy a claim.
+        # Invalid geometry may make the renderer raise; validation reports the
+        # structural error separately and the claim fails honestly.
+        try:
+            hero_text = rendered_scene_text(det)
+        except Exception:
+            hero_text = ""
+        # The composition layer (Typst) owns every non-hero word. Ask the SAME
+        # content extractor the renderer uses, so a detail capped into a card,
+        # a suppressed duplicate chip, or an echo-filtered edge label is
+        # counted only when the composed page truly prints it.
+        try:
+            content = extract_lesson_content(spec)
+            composed_parts = [
+                content.title,
+                content.subtitle,
+                content.reasoning,
+                content.result_text,
+                content.takeaway,
+            ]
+            for callout in content.callouts:
+                composed_parts.extend([callout.heading, callout.body])
+            composed_text = " ".join(part for part in composed_parts if part)
+        except Exception:
+            composed_text = ""
+    haystack = " ".join([hero_text, composed_text]).casefold()
     hay_tokens = _tokens(haystack) | _scene_structural_tokens(scene)
-    # A comparison's claims describe what each variant's body actually does
-    # (v = 0 at the rolling contact, v = 2v_CM at the top). They must be
-    # attached to a panel/vector, not merely printed in a composition callout:
-    # otherwise a two-panel scene can pass the gate while missing the combined
-    # variant entirely.
-    claim_haystack = (
-        _scene_text(scene).casefold()
-        if scene.scene_kind == "comparison"
-        else haystack
-    )
+    # A comparison's motion-panel claims describe what each variant's body
+    # actually does (v = 0 at the rolling contact, v = 2v_CM at the top). They
+    # must be attached to a panel/vector, not merely printed in a composition
+    # callout: otherwise a two-panel scene can pass the gate while missing the
+    # combined variant entirely. A TABLE is different: its hero prints the
+    # matrix and its composition result IS the table verdict, so the whole
+    # composed page is an honest place for a printed claim (the verdict is
+    # separately evidence-gated by table_quality).
+    claim_haystack = haystack
+    if scene.scene_kind == "comparison":
+        comparison = scene.comparison
+        table_only = comparison is not None and comparison.table is not None
+        if not table_only:
+            claim_haystack = hero_text.casefold()
     claim_errors: list[str] = []
     for claim in task.exact_claims:
         norm = " ".join(str(claim).split())
@@ -895,8 +937,11 @@ def _validate_concept_map(cmap: VisualConceptMap) -> list[str]:
     if len(nodes) < 3:
         errors.append("concept_map needs at least 3 labeled nodes")
         return errors
-    if cmap.layout in ("cycle", "timeline") and len(nodes) > 6:
-        errors.append(f"concept_map {cmap.layout} supports at most 6 stages/events")
+    limit = 8 if cmap.layout == "cycle" else 6
+    if cmap.layout in ("cycle", "timeline") and len(nodes) > limit:
+        errors.append(
+            f"concept_map {cmap.layout} supports at most {limit} stages/events"
+        )
     ids = [(n.id or "").strip() for n in nodes]
     if any(not node_id for node_id in ids):
         errors.append("concept_map nodes need non-empty ids")
@@ -954,6 +999,11 @@ def _validate_concept_map(cmap: VisualConceptMap) -> list[str]:
 def validate_lesson_spec(spec: VisualSpec) -> list[str]:
     """Return a list of semantic errors (empty == valid). Pure, no I/O."""
     errors: list[str] = []
+    # Quality-gate the comparison table on a copy first: redundant axes and
+    # untraceable verdicts must never satisfy a claim that the student cannot
+    # actually see. The render path applies the identical normalization.
+    gated, _ = normalize_visual_spec(spec)
+    spec = gated
     det: DeterministicVisual = spec.deterministic
     if not (det.title or "").strip():
         errors.append("deterministic.title is empty")
@@ -1045,6 +1095,7 @@ def validate_lesson_spec(spec: VisualSpec) -> list[str]:
         table_used = comp.table is not None
         if table_used:
             errors.extend(_validate_comparison_table(comp.table))
+        errors.extend(table_quality_errors(comp.table))
         if not table_used:
             panels = [p for p in (comp.panels or []) if (p.label or "").strip()][:3]
             if len(panels) < 2:
@@ -1377,34 +1428,11 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
                 # A tall tree and a cycle draw labels only. Their details are
                 # real teaching content (formulas, dates, roles) and would
                 # otherwise be invisible; print them as cards, deepest first.
-                ordered = _map_nodes_deepest_first(cmap)
-                # The tall-tree hero prints non-leaf details inside the node
-                # box; only leaf details need cards. A cycle hero draws labels
-                # only, so every stage detail is card-worthy.
-                parent_ids = {
-                    (n.parent or "").strip()
-                    for n in cmap.nodes
-                    if (n.parent or "").strip()
-                }
-                visible_detail_ids = _visible_map_detail_ids(cmap)
-                seen_details: set[tuple[str, str]] = set()
-                for node in ordered:
-                    node_id = (node.id or "").strip()
-                    if node_id not in visible_detail_ids:
-                        continue
-                    if cmap.layout == "tree" and node_id in parent_ids:
-                        continue
-                    detail = _clean(node.detail)
-                    label = _clean(node.label)
-                    if not detail:
-                        continue
-                    pair = (label, detail)
-                    if pair in seen_details:
-                        continue
-                    seen_details.add(pair)
-                    map_detail_chips.append(LessonCallout(heading=label, body=detail))
-                    if len(map_detail_chips) >= MAP_DETAIL_CARD_CAP:
-                        break
+                # This is the exact list validation treats as visible.
+                map_detail_chips = [
+                    LessonCallout(heading=label, body=detail)
+                    for label, detail in _map_detail_chip_pairs(cmap)
+                ]
         v3_callouts = map_detail_chips + [
             LessonCallout(heading=c.label.strip(), body=_clean(c.value))
             for c in comp.callouts
@@ -1886,6 +1914,18 @@ def render_visual_lesson(spec: VisualSpec, out_format: str = "pdf") -> RenderedL
     hero SVG (honest, never fake) when Typst is unavailable or fails.
     """
     t0 = time.perf_counter()
+    spec, table_report = normalize_visual_spec(spec)
+    if table_report.dropped_columns:
+        logger.info(
+            "visual_lesson removed redundant table column(s): %s",
+            ", ".join(table_report.dropped_columns),
+        )
+    if table_report.dropped_verdict:
+        logger.info(
+            "visual_lesson dropped untraceable table verdict (%s): %r",
+            table_report.verdict_reason,
+            table_report.dropped_verdict,
+        )
     errors = validate_lesson_spec(spec)
     if errors:
         raise LessonValidationError("; ".join(errors))

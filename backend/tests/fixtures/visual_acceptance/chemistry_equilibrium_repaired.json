@@ -1,0 +1,130 @@
+{
+  "concept": "Chemical Equilibrium and Le Chatelier's Principle",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "Chemical Equilibrium & Reaction Quotient",
+    "task": {
+      "task_type": "compare_variants",
+      "learning_outcome": "Students will be able to determine the direction of a reaction shift by comparing the reaction quotient Qc to the equilibrium constant Kc.",
+      "required_elements": [
+        "Qc < Kc",
+        "Qc > Kc",
+        "reaction proceeds forward",
+        "reaction proceeds backward"
+      ],
+      "required_relationships": [
+        "Qc < Kc leads to reaction proceeds forward",
+        "Qc > Kc leads to reaction proceeds backward"
+      ],
+      "exact_claims": [
+        "Qc < Kc",
+        "Qc > Kc",
+        "reaction proceeds forward",
+        "reaction proceeds backward"
+      ],
+      "acceptable_families": [
+        "comparison"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "comparison",
+      "title": "",
+      "caption": "Comparing Qc and Kc determines whether the reaction proceeds forward or backward.",
+      "force": null,
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": {
+        "panels": [],
+        "table": {
+          "rows": [
+            {
+              "label": "Condition"
+            },
+            {
+              "label": "Direction"
+            }
+          ],
+          "columns": [
+            {
+              "label": "Qc < Kc",
+              "values": [
+                "excess reactants",
+                "reaction proceeds forward"
+              ]
+            },
+            {
+              "label": "Qc > Kc",
+              "values": [
+                "excess products",
+                "reaction proceeds backward"
+              ]
+            }
+          ],
+          "corner": "STATE",
+          "verdict": "",
+          "verdict_basis": []
+        },
+        "relation": null
+      },
+      "concept_map": null,
+      "number_line": null
+    },
+    "equations": [],
+    "steps": [],
+    "points": [],
+    "composition": {
+      "title": "Chemical Equilibrium Shift",
+      "framing": "Predicting reaction direction using Qc and Kc.",
+      "callouts": [
+        {
+          "id": "qccrit",
+          "label": "Qc < Kc",
+          "value": "reaction proceeds forward"
+        },
+        {
+          "id": "qkgt",
+          "label": "Qc > Kc",
+          "value": "reaction proceeds backward"
+        }
+      ],
+      "reasoning": [
+        {
+          "id": "rs-1",
+          "expression": "Qc < Kc",
+          "explanation": "Reactant concentration is higher; reaction proceeds forward."
+        },
+        {
+          "id": "rs-2",
+          "expression": "Qc > Kc",
+          "explanation": "Product concentration is higher; reaction proceeds backward."
+        }
+      ],
+      "result": {
+        "expression": "Kc = [C]ᶜ [D]ᵈ / [A]ᵃ [B]ᵇ",
+        "emphasis": true
+      },
+      "takeaway": "The system shifts to counteract any disturbance and re-establish equilibrium."
+    }
+  },
+  "visual_form": "feature comparison table",
+  "key_elements": [
+    "Qc < Kc",
+    "Qc > Kc",
+    "reaction proceeds forward",
+    "reaction proceeds backward"
+  ],
+  "key_relationships": [
+    "Qc < Kc drives reaction proceeds forward",
+    "Qc > Kc drives reaction proceeds backward"
+  ],
+  "must_show": [
+    "Comparison between Qc < Kc and Qc > Kc conditions and their corresponding reaction directions"
+  ],
+  "avoid": [
+    "Irrelevant derivations or extra thermodynamic formulas"
+  ]
+}

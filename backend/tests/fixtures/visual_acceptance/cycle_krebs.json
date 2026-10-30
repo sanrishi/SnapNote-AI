@@ -1,0 +1,157 @@
+{
+  "concept": "Citric acid cycle and pyruvate decarboxylation",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "The Krebs/Citric Acid Cycle",
+    "task": {
+      "task_type": "cyclic_process",
+      "learning_outcome": "Trace the cyclic sequence of metabolic intermediates, coenzyme outputs, and carbon transformations in the citric acid cycle starting from acetyl CoA.",
+      "required_elements": [
+        "Oxaloacetate",
+        "Citrate",
+        "Isocitrate",
+        "a-Ketoglutarate",
+        "Succinyl CoA",
+        "Succinate",
+        "Fumarate",
+        "Malate"
+      ],
+      "required_relationships": [
+        "Oxaloacetate combines with Acetyl CoA to form Citrate",
+        "Citrate converts to Isocitrate",
+        "Isocitrate produces a-Ketoglutarate and CO2",
+        "a-Ketoglutarate produces Succinyl CoA and CO2",
+        "Succinyl CoA produces Succinate and GTP",
+        "Succinate produces Fumarate and FADH2",
+        "Fumarate produces Malate",
+        "Malate regenerates Oxaloacetate and NADH"
+      ],
+      "exact_claims": [
+        "Oxaloacetate",
+        "Citrate",
+        "Isocitrate",
+        "a-Ketoglutarate",
+        "Succinyl CoA",
+        "Succinate",
+        "Fumarate",
+        "Malate",
+        "Acetyl CoA"
+      ],
+      "acceptable_families": [
+        "concept_map"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "concept_map",
+      "title": "",
+      "caption": "The citric acid cycle oxidizes acetyl groups to CO2, capturing energy in NADH, FADH2, and GTP.",
+      "force": null,
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": null,
+      "concept_map": {
+        "layout": "cycle",
+        "nodes": [
+          {
+            "id": "oxaloacetate",
+            "label": "Oxaloacetate",
+            "detail": "C4 compound",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "citrate",
+            "label": "Citrate",
+            "detail": "C6 compound formed with acetyl CoA",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "isocitrate",
+            "label": "Isocitrate",
+            "detail": "C6 isomer",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "ketoglutarate",
+            "label": "a-Ketoglutarate",
+            "detail": "C5 compound, releases CO2",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "succinyl_coa",
+            "label": "Succinyl CoA",
+            "detail": "C4 compound, releases CO2",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "succinate",
+            "label": "Succinate",
+            "detail": "C4 compound, generates GTP",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "fumarate",
+            "label": "Fumarate",
+            "detail": "C4 compound, generates FADH2",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "malate",
+            "label": "Malate",
+            "detail": "C4 compound, generates NADH",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          }
+        ],
+        "edges": [],
+        "relation": null
+      },
+      "number_line": null
+    },
+    "equations": [],
+    "steps": [],
+    "points": [],
+    "composition": null
+  },
+  "visual_form": "cyclic metabolic pathway flowchart",
+  "key_elements": [
+    "Oxaloacetate",
+    "Citrate",
+    "Isocitrate",
+    "a-Ketoglutarate",
+    "Succinyl CoA",
+    "Succinate",
+    "Fumarate",
+    "Malate",
+    "Acetyl CoA"
+  ],
+  "key_relationships": [
+    "Cyclic series of enzyme-catalyzed reactions operating in the mitochondrial matrix",
+    "Coupling of acetyl group entry to carrier regeneration"
+  ],
+  "must_show": [
+    "Cyclic ordering of all 8 primary intermediates",
+    "Positions of carbon loss (CO2) and energy carrier generation (NADH, FADH2, GTP)"
+  ],
+  "avoid": [
+    "Extraneous biochemical structures not present in the primary cycle diagram"
+  ]
+}
