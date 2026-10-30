@@ -30,12 +30,15 @@ from xml.etree import ElementTree
 from app.models.schemas import (
     ComparisonPanel,
     ComparisonPoint,
+    ComparisonTable,
     DeterministicVisual,
     FlowConnector,
     FlowNode,
     ForceDiagram,
+    MapNode,
     VisualAngle,
     VisualComparison,
+    VisualConceptMap,
     VisualCurve,
     VisualGeneric,
     VisualInterval,
@@ -67,6 +70,18 @@ GREEN = "#16a34a"
 RED = "#dc2626"
 BG_STAGE = "#f8fafc"
 STAGE_STROKE = "#e2e8f0"
+
+# Semantic palette for relational scenes. Each entry is (fill, stroke, text):
+# a light surface, a saturated accent, and a dark readable ink. Colour is
+# chosen by depth/position, never by subject, so the palette stays consistent.
+MAP_PALETTE = [
+    ("#eef2ff", "#4f46e5", "#312e81"),
+    ("#ecfeff", "#0891b2", "#155e75"),
+    ("#f0fdf4", "#16a34a", "#166534"),
+    ("#fff7ed", "#ea580c", "#9a3412"),
+    ("#fdf2f8", "#db2777", "#831843"),
+    ("#f5f3ff", "#7c3aed", "#4c1d95"),
+]
 
 # Visual design tokens (readability contract — enforced by the min-font and
 # density regression tests). Sizes are final-rendered px at 800px width.
@@ -1270,6 +1285,11 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
     legend: list[str] = []
     if comparison is None:
         return "", STAGE_Y + STAGE_H + 24, legend, None
+    if comparison.table is not None:
+        table_html, table_bottom = _render_comparison_table(comparison.table)
+        if table_html:
+            return table_html, table_bottom, legend, comparison.relation
+        return "", STAGE_Y + STAGE_H + 24, legend, comparison.relation
     panels = [p for p in comparison.panels if p.label.strip()][:3]
     if len(panels) < 2:
         return "", STAGE_Y + STAGE_H + 24, legend, None
@@ -1369,6 +1389,741 @@ def _render_comparison(scene: VisualScene) -> tuple[str, int, list[str], object]
                 f'font-size="14" fill="{MUTED}" text-anchor="middle">{_esc(line)}</text>'
             )
     return "".join(parts), STAGE_Y + STAGE_H + 24, legend, comparison.relation
+
+
+# ── relational grammars: hierarchy / cycle / timeline / feature matrix ──────
+#
+# These are the non-geometric visual structures the engine needs for
+# classification, processes, chronology and conceptual comparison. As with
+# every other scene, the planner supplies semantics only (labels, parents,
+# order, cells) and this module owns all coordinates, wrapping and arrows.
+
+def _map_box(
+    cx: float,
+    cy: float,
+    w: float,
+    h: float,
+    lines: list[str],
+    fill: str,
+    stroke: str,
+    text_color: str,
+    font_size: int,
+    weight: str = "700",
+    radius: float = 12.0,
+    badge: str = "",
+    detail: str = "",
+    detail_size: int = 11,
+    detail_lines: int = 2,
+    detail_color: str = MUTED,
+) -> str:
+    """Draw one rounded map node with vertically centred, wrapped text."""
+    line_h = font_size + 4
+    detail_wrapped: list[str] = []
+    if detail:
+        max_chars = max(8, int((w - 22) / (detail_size * 0.55)))
+        all_detail = _wrap(detail, max_chars)
+        detail_wrapped = all_detail[:detail_lines]
+        if len(all_detail) > detail_lines and detail_wrapped:
+            detail_wrapped[-1] = detail_wrapped[-1].rstrip(" .,;:") + "…"
+    gap = 4 if detail_wrapped else 0
+    detail_h = len(detail_wrapped) * (detail_size + 3)
+    total_h = len(lines) * line_h + gap + detail_h
+    start = cy - total_h / 2 + font_size * 0.8
+    parts = [
+        f'<rect x="{_f(cx - w / 2)}" y="{_f(cy - h / 2)}" width="{_f(w)}" '
+        f'height="{_f(h)}" rx="{_f(radius)}" fill="{fill}" stroke="{stroke}" '
+        f'stroke-width="1.8"/>'
+    ]
+    for index, line in enumerate(lines):
+        parts.append(
+            f'<text x="{_f(cx)}" y="{_f(start + index * line_h)}" font-family="{_FONT}" '
+            f'font-size="{font_size}" font-weight="{weight}" fill="{text_color}" '
+            f'text-anchor="middle">{_esc(line)}</text>'
+        )
+    detail_start = start + max(0, len(lines) - 1) * line_h + gap + detail_size + 1
+    for index, line in enumerate(detail_wrapped):
+        parts.append(
+            f'<text x="{_f(cx)}" y="{_f(detail_start + index * (detail_size + 3))}" '
+            f'font-family="{_FONT}" font-size="{detail_size}" font-weight="400" '
+            f'fill="{detail_color}" text-anchor="middle">{_esc(line)}</text>'
+        )
+    if badge:
+        bx, by = cx - w / 2 + 14, cy - h / 2 + 14
+        parts.append(f'<circle cx="{_f(bx)}" cy="{_f(by)}" r="10" fill="{stroke}"/>')
+        parts.append(
+            f'<text x="{_f(bx)}" y="{_f(by + 3.5)}" font-family="{_FONT}" font-size="9" '
+            f'font-weight="700" fill="white" text-anchor="middle">{_esc(badge)}</text>'
+        )
+    return "".join(parts)
+
+
+def _map_label_lines(label: str, width: float, font_size: int, max_lines: int = 0) -> list[str]:
+    # Word-wrap only. Splitting "Statistical" into "Statistica" + "l" makes a
+    # clean concept node look like OCR garbage; a rare over-long token may
+    # overflow by a character instead.
+    max_chars = max(6, int((width - 18) / (font_size * 0.58)))
+    lines = _wrap(label, max_chars, break_long_words=False)
+    if max_lines and len(lines) > max_lines:
+        # Presentation only: keep every word by shrinking the font once.
+        size = max(11, font_size - 2)
+        max_chars = max(6, int((width - 18) / (size * 0.58)))
+        lines = _wrap(label, max_chars, break_long_words=False)
+    return lines
+
+
+def concept_map_is_horizontal(cmap: VisualConceptMap) -> bool:
+    """True when a tree is a shallow root-plus-alternatives classification.
+
+    Shared by the renderer (which switches to a left-to-right layout) and the
+    lesson composer (which must not repeat node details that the horizontal
+    hero already prints inside each card).
+    """
+    nodes = [n for n in cmap.nodes if (n.label or "").strip()]
+    by_id = {(n.id or "").strip(): n for n in nodes}
+    children: dict[str, list[str]] = {node_id: [] for node_id in by_id}
+    roots: list[str] = []
+    for node in nodes:
+        node_id = (node.id or "").strip()
+        parent = (node.parent or "").strip()
+        if parent and parent in children:
+            children[parent].append(node_id)
+        else:
+            roots.append(node_id)
+    if len(roots) != 1:
+        return False
+    root = roots[0]
+    child_ids = children.get(root, [])
+    if not (2 <= len(child_ids) <= 5):
+        return False
+    if any(children.get(child_id) for child_id in child_ids):
+        return False
+    hierarchy_pairs = {
+        (parent_id, child_id)
+        for parent_id, kids in children.items()
+        for child_id in kids
+    }
+    for edge in cmap.edges:
+        source = (edge.source or "").strip()
+        target = (edge.target or "").strip()
+        if source and target and source != target and (source, target) not in hierarchy_pairs:
+            return False
+    return True
+
+
+def _render_tree_horizontal(
+    cmap: VisualConceptMap,
+    nodes: list[MapNode],
+    children: dict[str, list[str]],
+    root: str,
+) -> str:
+    """Shallow taxonomy as root -> alternatives, using the page's width.
+
+    A one-level tree (root plus 2-5 types) is a classification, not a deep
+    hierarchy. Stacking it top-to-bottom leaves most of the stage empty and
+    shrinks every label; laying it out left-to-right keeps the reading order
+    and lets each alternative carry its teaching detail.
+    """
+    by_id = {(n.id or "").strip(): n for n in nodes}
+    child_ids = children.get(root, [])[:5]
+    if len(child_ids) < 2:
+        return ""
+    root_node = by_id.get(root)
+    if root_node is None:
+        return ""
+    root_w, child_w = 196.0, 286.0
+    left_cx = STAGE_X + 26.0 + root_w / 2
+    right_cx = STAGE_X + STAGE_W - 26.0 - child_w / 2
+    top = STAGE_Y + 72.0
+    bottom = STAGE_Y + STAGE_H - 72.0
+    n = len(child_ids)
+    if n == 1:
+        child_cy = [(top + bottom) / 2]
+    else:
+        child_cy = [top + index * (bottom - top) / (n - 1) for index in range(n)]
+    root_cy = (top + bottom) / 2
+    detail_lines = 2 if n <= 3 else 1
+
+    def measure(label: str, detail: str, width: float, font: int) -> tuple[list[str], int]:
+        lines = _map_label_lines(label, width, font)
+        d_lines: list[str] = []
+        if (detail or "").strip():
+            max_chars = max(8, int((width - 22) / (11 * 0.55)))
+            d_lines = _wrap(detail, max_chars)[:detail_lines]
+        height = 16.0 + len(lines) * (font + 4)
+        if d_lines:
+            height += 4.0 + len(d_lines) * 14.0
+        return lines, max(56.0, height)
+
+    root_lines, root_h = measure(root_node.label, root_node.detail, root_w, 16)
+    child_data: list[tuple[str, list[str], float]] = []
+    for child_id in child_ids:
+        node = by_id.get(child_id)
+        if node is None:
+            return ""
+        lines, height = measure(node.label, node.detail, child_w, 15)
+        child_data.append((child_id, lines, height))
+
+    parts: list[str] = []
+    edge_labels = {
+        ((edge.source or "").strip(), (edge.target or "").strip()): (edge.label or "").strip()
+        for edge in cmap.edges
+        if (edge.label or "").strip()
+    }
+    start_x = left_cx + root_w / 2
+    end_x = right_cx - child_w / 2
+    for (child_id, _, _), cy in zip(child_data, child_cy):
+        if abs(root_cy - cy) < 0.5:
+            path = f"M {_f(start_x)} {_f(root_cy)} H {_f(end_x)}"
+        else:
+            span = end_x - start_x
+            c1x = start_x + span * 0.45
+            c2x = end_x - span * 0.45
+            path = (
+                f"M {_f(start_x)} {_f(root_cy)} "
+                f"C {_f(c1x)} {_f(root_cy)}, {_f(c2x)} {_f(cy)}, {_f(end_x)} {_f(cy)}"
+            )
+        parts.append(
+            f'<path d="{path}" fill="none" stroke="#cbd5e1" stroke-width="1.8"/>'
+        )
+        label = edge_labels.get((root, child_id), "")
+        if label:
+            lx, ly = (start_x + end_x) / 2, (root_cy + cy) / 2
+            parts.append(_halo(lx, ly - 2, len(label) * 6.6, 15, align="center"))
+            parts.append(
+                f'<text x="{_f(lx)}" y="{_f(ly + 3)}" font-family="{_FONT}" '
+                f'font-size="11" fill="{MUTED}" text-anchor="middle">{_esc(label)}</text>'
+            )
+
+    parts.append(
+        _map_box(
+            left_cx, root_cy, root_w, root_h, root_lines,
+            "#4f46e5", "#4338ca", "#ffffff", 16, detail=root_node.detail,
+            detail_lines=detail_lines, detail_color="#e0e7ff",
+        )
+    )
+    for index, (child_id, lines, height) in enumerate(child_data):
+        node = by_id[child_id]
+        fill, stroke, ink = MAP_PALETTE[index % len(MAP_PALETTE)]
+        parts.append(
+            _map_box(
+                right_cx, child_cy[index], child_w, height, lines,
+                fill, stroke, ink, 15, detail=node.detail,
+                detail_lines=detail_lines,
+            )
+        )
+    return "".join(parts)
+
+
+def _render_tree(cmap: VisualConceptMap) -> str:
+    """Tidy parent/child hierarchy: leaves evenly spaced, parents centred."""
+    nodes = [n for n in cmap.nodes if (n.label or "").strip()]
+    by_id = {(n.id or "").strip(): n for n in nodes}
+    children: dict[str, list[str]] = {node_id: [] for node_id in by_id}
+    roots: list[str] = []
+    for node in nodes:
+        node_id = (node.id or "").strip()
+        parent = (node.parent or "").strip()
+        if parent and parent in children:
+            children[parent].append(node_id)
+        else:
+            roots.append(node_id)
+    if len(roots) != 1:
+        return ""
+    root = roots[0]
+    depth: dict[str, int] = {}
+
+    def walk(node_id: str, level: int) -> None:
+        depth[node_id] = level
+        for child in children.get(node_id, []):
+            walk(child, level + 1)
+
+    walk(root, 0)
+    leaves = [node_id for node_id in by_id if not children.get(node_id)]
+    if not leaves:
+        return ""
+    max_depth = max(depth.values()) if depth else 0
+    if concept_map_is_horizontal(cmap):
+        horizontal = _render_tree_horizontal(cmap, nodes, children, root)
+        if horizontal:
+            return horizontal
+    hierarchy_pairs = {
+        (parent_id, child_id)
+        for parent_id, kids in children.items()
+        for child_id in kids
+    }
+    # Size leaf boxes from the space they actually occupy. Dividing by
+    # (leaves - 1) (the old formula) let three boxes of width 210 sit only
+    # 217px apart, so rounded borders touched. Compute from n boxes + gaps.
+    n_leaves = len(leaves)
+    side_pad = 20.0
+    gap = 20.0 if n_leaves <= 5 else 14.0
+    usable = STAGE_W - 2 * side_pad
+    base_w = min(210.0, (usable - gap * (n_leaves - 1)) / n_leaves)
+    base_w = max(62.0, base_w)
+    left = STAGE_X + side_pad + base_w / 2
+    right = STAGE_X + STAGE_W - side_pad - base_w / 2
+    if n_leaves == 1:
+        x_of = {leaves[0]: (left + right) / 2}
+    else:
+        slot = base_w + gap
+        span = slot * (n_leaves - 1)
+        x_of = {leaf: (left + right) / 2 - span / 2 + index * slot for index, leaf in enumerate(leaves)}
+
+    def place(node_id: str) -> float:
+        if node_id in x_of:
+            return x_of[node_id]
+        kids = children.get(node_id, [])
+        if not kids:
+            x_of[node_id] = (left + right) / 2
+            return x_of[node_id]
+        xs = [place(child) for child in kids]
+        x_of[node_id] = (xs[0] + xs[-1]) / 2
+        return x_of[node_id]
+
+    place(root)
+    top = STAGE_Y + 52.0
+    bottom = STAGE_Y + STAGE_H - 58.0
+    row_h = (bottom - top) / max_depth if max_depth else 0.0
+    boxes: dict[str, dict[str, float | str | list[str]]] = {}
+    for node in nodes:
+        node_id = (node.id or "").strip()
+        level = depth.get(node_id, 0)
+        cy = top + level * row_h
+        width = min(244.0, STAGE_W - 80.0) if node_id == root else base_w
+        font = 15 if width >= 110 else 12
+        lines = _map_label_lines(node.label, width, font)
+        # Non-leaf nodes get their short teaching note inside the hero. Leaf
+        # details (formulas, dates) are printed as cards by the composer when
+        # the card would be too small to hold them legibly.
+        detail = (node.detail or "").strip() if level < max_depth else ""
+        max_box_h = (row_h - 18.0) if max_depth else 92.0
+        detail_h = 26.0 if detail else 0.0
+        while font > 10 and 14.0 + (font + 4) * len(lines) + detail_h > max_box_h:
+            font -= 1
+            lines = _map_label_lines(node.label, width, font)
+        if 14.0 + (font + 4) * len(lines) + detail_h > max_box_h:
+            keep = max(1, int((max_box_h - 14.0 - detail_h) / (font + 4)))
+            lines = lines[:keep]
+            if lines:
+                lines[-1] = lines[-1].rstrip(" .,;:") + "…"
+        line_h = font + 4
+        height = max(48.0, 14.0 + line_h * len(lines) + detail_h)
+        boxes[node_id] = {
+            "x": x_of[node_id], "cy": cy, "w": width, "h": height,
+            "lines": lines, "font": font, "level": level, "detail": detail,
+        }
+
+    parts: list[str] = []
+    edge_labels = {
+        ((edge.source or "").strip(), (edge.target or "").strip()): (edge.label or "").strip()
+        for edge in cmap.edges
+        if (edge.label or "").strip()
+    }
+    for parent_id, kids in children.items():
+        if not kids or parent_id not in boxes:
+            continue
+        parent = boxes[parent_id]
+        parent_bottom = float(parent["cy"]) + float(parent["h"]) / 2
+        for child_id in kids:
+            child = boxes.get(child_id)
+            if child is None:
+                continue
+            child_top = float(child["cy"]) - float(child["h"]) / 2
+            px = float(parent["x"])
+            cx = float(child["x"])
+            if abs(px - cx) < 0.5:
+                path = f'M {_f(px)} {_f(parent_bottom)} V {_f(child_top)}'
+            else:
+                # One smooth curve per child. A shared elbow spine made every
+                # sibling look connected to every other sibling's parent.
+                dy = child_top - parent_bottom
+                c1y = parent_bottom + dy * 0.55
+                c2y = child_top - dy * 0.55
+                path = (
+                    f'M {_f(px)} {_f(parent_bottom)} '
+                    f'C {_f(px)} {_f(c1y)}, {_f(cx)} {_f(c2y)}, {_f(cx)} {_f(child_top)}'
+                )
+            parts.append(
+                f'<path d="{path}" fill="none" stroke="#cbd5e1" stroke-width="1.8"/>'
+            )
+            label = edge_labels.get((parent_id, child_id), "")
+            if label:
+                mid = (parent_bottom + child_top) / 2
+                lx = (px + cx) / 2 if abs(px - cx) > 20 else px + 10
+                parts.append(_halo(lx, mid - 2, len(label) * 6.6, 15, align="center"))
+                parts.append(
+                    f'<text x="{_f(lx)}" y="{_f(mid + 3)}" font-family="{_FONT}" '
+                    f'font-size="11" fill="{MUTED}" text-anchor="middle">{_esc(label)}</text>'
+                )
+
+    # Meaningful cross-links (non-hierarchy edges) are part of the planned
+    # structure; silently dropping them would hide a stated relationship.
+    cross_labels: list[str] = []
+    for edge in cmap.edges:
+        source = (edge.source or "").strip()
+        target = (edge.target or "").strip()
+        if not source or not target or source == target:
+            continue
+        if (source, target) in hierarchy_pairs:
+            continue
+        source_box, target_box = boxes.get(source), boxes.get(target)
+        if source_box is None or target_box is None:
+            continue
+        sx, sy = float(source_box["x"]), float(source_box["cy"])
+        tx, ty = float(target_box["x"]), float(target_box["cy"])
+        source_w = float(source_box["w"])
+        target_w = float(target_box["w"])
+        rightward = tx >= sx
+        start_x = sx + source_w / 2 if rightward else sx - source_w / 2
+        end_x = tx - target_w / 2 if rightward else tx + target_w / 2
+        c1x = start_x + (end_x - start_x) * 0.45
+        c2x = end_x - (end_x - start_x) * 0.45
+        path = (
+            f'M {_f(start_x)} {_f(sy)} '
+            f'C {_f(c1x)} {_f(sy)}, {_f(c2x)} {_f(ty)}, {_f(end_x)} {_f(ty)}'
+        )
+        parts.append(
+            f'<path d="{path}" fill="none" stroke="#94a3b8" stroke-width="1.5" '
+            f'stroke-dasharray="5 4"/>'
+        )
+        parts.append(_arrowhead(end_x, ty, 180 if rightward else 0, 8))
+        label = (edge.label or "").strip()
+        if label:
+            lx, ly = (start_x + end_x) / 2, (sy + ty) / 2
+            cross_labels.append(_halo(lx, ly - 2, len(label) * 6.6, 15, align="center"))
+            cross_labels.append(
+                f'<text x="{_f(lx)}" y="{_f(ly + 3)}" font-family="{_FONT}" '
+                f'font-size="11" fill="{MUTED}" text-anchor="middle">{_esc(label)}</text>'
+            )
+    for node in nodes:
+        node_id = (node.id or "").strip()
+        box = boxes.get(node_id)
+        if box is None:
+            continue
+        level = int(box["level"])
+        fill, stroke, ink = MAP_PALETTE[level % len(MAP_PALETTE)]
+        if level == 0:
+            fill, stroke, ink = "#4f46e5", "#4338ca", "#ffffff"
+        parts.append(
+            _map_box(
+                float(box["x"]), float(box["cy"]), float(box["w"]), float(box["h"]),
+                list(box["lines"]), fill, stroke, ink, int(box["font"]),
+                detail=str(box.get("detail") or ""),
+                detail_size=10,
+                detail_lines=2,
+                detail_color="#e0e7ff" if level == 0 else MUTED,
+            )
+        )
+    parts.extend(cross_labels)
+    return "".join(parts)
+
+
+def _render_cycle(cmap: VisualConceptMap) -> tuple[str, object]:
+    """Stages arranged on an ellipse with clockwise arrows."""
+    nodes = [n for n in cmap.nodes if (n.label or "").strip()][:6]
+    if len(nodes) < 3:
+        return "", None
+    cx, cy = VIEW_W / 2, STAGE_Y + 288
+    rx, ry = 244.0, 182.0
+    n = len(nodes)
+    centers: list[tuple[float, float]] = []
+    for index in range(n):
+        angle = math.radians(-90 + index * 360 / n)
+        centers.append((cx + rx * math.cos(angle), cy + ry * math.sin(angle)))
+    w, h = (190.0, 64.0) if n <= 4 else (168.0, 56.0)
+    node_font = 15 if n <= 4 else 13
+    parts: list[str] = []
+    for index in range(n):
+        a = centers[index]
+        b = centers[(index + 1) % n]
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        length = math.hypot(dx, dy) or 1.0
+        ux, uy = dx / length, dy / length
+        # Rectangle boundary offset (not a fixed radius): keeps arrows outside
+        # the stage boxes even on steep diagonal steps.
+        ox = (w / 2 + 8) / abs(ux) if abs(ux) > 1e-6 else 1e6
+        oy = (h / 2 + 8) / abs(uy) if abs(uy) > 1e-6 else 1e6
+        offset = min(ox, oy)
+        sx, sy = a[0] + ux * offset, a[1] + uy * offset
+        ex, ey = b[0] - ux * offset, b[1] - uy * offset
+        mx, my = (sx + ex) / 2, (sy + ey) / 2
+        # Bow the connector away from the ring centre.
+        vx, vy = mx - cx, my - cy
+        vlen = math.hypot(vx, vy) or 1.0
+        qx, qy = mx + vx / vlen * 26, my + vy / vlen * 26
+        color = MAP_PALETTE[index % len(MAP_PALETTE)][1]
+        parts.append(
+            f'<path d="M {_f(sx)} {_f(sy)} Q {_f(qx)} {_f(qy)} {_f(ex)} {_f(ey)}" '
+            f'fill="none" stroke="{color}" stroke-width="2.1"/>'
+        )
+        parts.append(_arrowhead(ex, ey, math.degrees(math.atan2(ey - qy, ex - qx)), 10))
+    relation = cmap.relation
+    center_expr = (relation.expression or "").strip() if relation is not None else ""
+    if center_expr and len(center_expr) <= 34:
+        pill_w = min(250.0, max(120.0, len(center_expr) * 7.6 + 26))
+        parts.append(
+            f'<rect x="{_f(cx - pill_w / 2)}" y="{_f(cy - 22)}" width="{_f(pill_w)}" '
+            f'height="44" rx="22" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1.5"/>'
+        )
+        parts.append(
+            f'<text x="{_f(cx)}" y="{_f(cy + 5)}" font-family="{_FONT}" font-size="14" '
+            f'font-weight="700" fill="#4338ca" text-anchor="middle">{_esc(center_expr)}</text>'
+        )
+    for index, node in enumerate(nodes):
+        fill, stroke, ink = MAP_PALETTE[index % len(MAP_PALETTE)]
+        lines = _map_label_lines(node.label, w, node_font, max_lines=3)
+        parts.append(
+            _map_box(
+                centers[index][0], centers[index][1], w, h, lines,
+                fill, stroke, ink, node_font, badge=f"{index + 1}",
+            )
+        )
+    return "".join(parts), (None if center_expr else relation)
+
+
+def _render_timeline(cmap: VisualConceptMap) -> str:
+    """Chronology: horizontal for 3-4 events, vertical for 5-6."""
+    nodes = [n for n in cmap.nodes if (n.label or "").strip()][:6]
+    if len(nodes) < 3:
+        return ""
+    parts: list[str] = []
+    n = len(nodes)
+    if n <= 4:
+        axis_y = STAGE_Y + 300.0
+        side_pad = 48.0
+        card_w = min(194.0, (STAGE_W - 2 * side_pad) / (n - 1) - 16.0)
+        x0 = STAGE_X + side_pad + card_w / 2
+        x1 = STAGE_X + STAGE_W - side_pad - card_w / 2
+        spacing = (x1 - x0) / (n - 1)
+        card_h = 132.0
+        parts.append(
+            f'<line x1="{_f(x0 - 22)}" y1="{_f(axis_y)}" x2="{_f(x1 + 26)}" '
+            f'y2="{_f(axis_y)}" stroke="#cbd5e1" stroke-width="2.2"/>'
+        )
+        parts.append(_arrowhead(x1 + 30, axis_y, 0, 11))
+        for index, node in enumerate(nodes):
+            x = x0 + index * spacing
+            above = index % 2 == 0
+            card_cy = axis_y - 104 if above else axis_y + 104
+            fill, stroke, ink = MAP_PALETTE[index % len(MAP_PALETTE)]
+            card_top = card_cy - card_h / 2
+            line_y = card_top + card_h if above else card_top
+            parts.append(
+                f'<line x1="{_f(x)}" y1="{_f(line_y)}" x2="{_f(x)}" y2="{_f(axis_y)}" '
+                f'stroke="{stroke}" stroke-width="1.6" stroke-dasharray="4 3"/>'
+            )
+            parts.append(f'<circle cx="{_f(x)}" cy="{_f(axis_y)}" r="7" fill="{stroke}"/>')
+            parts.append(
+                f'<rect x="{_f(x - card_w / 2)}" y="{_f(card_top)}" width="{_f(card_w)}" '
+                f'height="{_f(card_h)}" rx="12" fill="{fill}" stroke="{stroke}" stroke-width="1.5"/>'
+            )
+            marker = (node.marker or f"{index + 1:02d}").strip()
+            tag_w = min(card_w - 20, max(48.0, len(marker) * 7.0 + 18))
+            parts.append(
+                f'<rect x="{_f(x - tag_w / 2)}" y="{_f(card_top + 10)}" width="{_f(tag_w)}" '
+                f'height="22" rx="11" fill="{stroke}"/>'
+            )
+            parts.append(
+                f'<text x="{_f(x)}" y="{_f(card_top + 25)}" font-family="{_FONT}" font-size="11" '
+                f'font-weight="700" fill="white" text-anchor="middle">{_esc(marker)}</text>'
+            )
+            label_lines = _map_label_lines(node.label, card_w, 15, max_lines=3)
+            ly = card_top + 48
+            for line in label_lines[:3]:
+                parts.append(
+                    f'<text x="{_f(x)}" y="{_f(ly)}" font-family="{_FONT}" font-size="15" '
+                    f'font-weight="700" fill="{ink}" text-anchor="middle">{_esc(line)}</text>'
+                )
+                ly += 18
+            detail_lines = _map_label_lines(node.detail, card_w, 11, max_lines=2) if (node.detail or "").strip() else []
+            for line in detail_lines[:2]:
+                parts.append(
+                    f'<text x="{_f(x)}" y="{_f(ly + 2)}" font-family="{_FONT}" font-size="11" '
+                    f'fill="{MUTED}" text-anchor="middle">{_esc(line)}</text>'
+                )
+                ly += 14
+    else:
+        axis_x = STAGE_X + 104.0
+        y0, y1 = STAGE_Y + 46.0, STAGE_Y + STAGE_H - 44.0
+        spacing = (y1 - y0) / (n - 1)
+        card_x = axis_x + 50.0
+        card_w = STAGE_X + STAGE_W - card_x - 22.0
+        card_h = min(84.0, spacing - 8.0)
+        parts.append(
+            f'<line x1="{_f(axis_x)}" y1="{_f(y0 - 18)}" x2="{_f(axis_x)}" '
+            f'y2="{_f(y1 + 22)}" stroke="#cbd5e1" stroke-width="2.2"/>'
+        )
+        parts.append(_arrowhead(axis_x, y1 + 26, 90, 11))
+        for index, node in enumerate(nodes):
+            y = y0 + index * spacing
+            fill, stroke, ink = MAP_PALETTE[index % len(MAP_PALETTE)]
+            parts.append(f'<circle cx="{_f(axis_x)}" cy="{_f(y)}" r="7" fill="{stroke}"/>')
+            parts.append(
+                f'<line x1="{_f(axis_x + 7)}" y1="{_f(y)}" x2="{_f(card_x)}" y2="{_f(y)}" '
+                f'stroke="{stroke}" stroke-width="1.6" stroke-dasharray="4 3"/>'
+            )
+            parts.append(
+                f'<rect x="{_f(card_x)}" y="{_f(y - card_h / 2)}" width="{_f(card_w)}" '
+                f'height="{_f(card_h)}" rx="12" fill="{fill}" stroke="{stroke}" stroke-width="1.5"/>'
+            )
+            marker = (node.marker or f"{index + 1:02d}").strip()
+            tag_w = min(84.0, max(46.0, len(marker) * 7.0 + 18))
+            parts.append(
+                f'<rect x="{_f(card_x + 12)}" y="{_f(y - 11)}" width="{_f(tag_w)}" '
+                f'height="22" rx="11" fill="{stroke}"/>'
+            )
+            parts.append(
+                f'<text x="{_f(card_x + 12 + tag_w / 2)}" y="{_f(y + 4)}" font-family="{_FONT}" '
+                f'font-size="11" font-weight="700" fill="white" text-anchor="middle">{_esc(marker)}</text>'
+            )
+            text_x = card_x + 12 + tag_w + 12
+            text_w = card_w - (text_x - card_x) - 12
+            label_lines = _map_label_lines(node.label, text_w, 14, max_lines=1)
+            parts.append(
+                f'<text x="{_f(text_x)}" y="{_f(y - 2)}" font-family="{_FONT}" font-size="14" '
+                f'font-weight="700" fill="{ink}" text-anchor="start">{_esc(label_lines[0])}</text>'
+            )
+            if (node.detail or "").strip():
+                detail = _map_label_lines(node.detail, text_w, 11, max_lines=1)
+                parts.append(
+                    f'<text x="{_f(text_x)}" y="{_f(y + 17)}" font-family="{_FONT}" font-size="11" '
+                    f'fill="{MUTED}" text-anchor="start">{_esc(detail[0])}</text>'
+                )
+    return "".join(parts)
+
+
+def _render_concept_map(scene: VisualScene) -> tuple[str, int, list[str], object]:
+    """Dispatch the relational grammar: hierarchy, cycle, or timeline."""
+    cmap = scene.concept_map
+    if cmap is None:
+        return "", STAGE_Y + STAGE_H + 24, [], None
+    relation = cmap.relation
+    if cmap.layout == "tree":
+        diagram = _render_tree(cmap)
+    elif cmap.layout == "cycle":
+        diagram, relation = _render_cycle(cmap)
+    elif cmap.layout == "timeline":
+        diagram = _render_timeline(cmap)
+    else:
+        diagram = ""
+    if not diagram.strip():
+        return "", STAGE_Y + STAGE_H + 24, [], None
+    return diagram, STAGE_Y + STAGE_H + 24, [], relation
+
+
+def _render_comparison_table(table: ComparisonTable) -> tuple[str, int]:
+    """Render a feature matrix with code-owned columns, rows and wrapping.
+
+    Returns (svg, bottom): the canvas is content-fitted to the actual row
+    count so a four-row matrix does not leave half a stage of dead white
+    space under the table.
+    """
+    rows = [r for r in table.rows if (r.label or "").strip()]
+    columns = [c for c in table.columns if (c.label or "").strip()][:3]
+    if len(rows) < 2 or len(columns) < 2:
+        return "", STAGE_Y + STAGE_H + 24
+    x0 = STAGE_X + 20.0
+    x1 = STAGE_X + STAGE_W - 20.0
+    total_w = x1 - x0
+    label_w = 148.0 if len(columns) == 3 else 168.0
+    col_w = (total_w - label_w) / len(columns)
+    y0 = STAGE_Y + 38.0
+    header_h = 52.0
+    row_area = STAGE_Y + STAGE_H - 42.0 - (y0 + header_h)
+    font = 13 if len(rows) <= 5 else 12
+    line_h = font + 4
+    max_lines = 3
+    row_h = max(52.0, line_h * max_lines + 16.0)
+    if row_h * len(rows) > row_area:
+        font = 12
+        line_h = font + 3
+        max_lines = 3
+        row_h = max(46.0, line_h * max_lines + 14.0)
+    if row_h * len(rows) > row_area:
+        font = 11
+        line_h = font + 2
+        max_lines = 3
+        row_h = max(40.0, line_h * max_lines + 12.0)
+    if row_h * len(rows) > row_area:
+        row_h = row_area / len(rows)
+        max_lines = max(1, int((row_h - 10) / line_h))
+    parts: list[str] = []
+    # Outer frame + header band.
+    parts.append(
+        f'<rect x="{_f(x0)}" y="{_f(y0)}" width="{_f(total_w)}" '
+        f'height="{_f(header_h + row_h * len(rows))}" rx="14" fill="white" '
+        f'stroke="#cbd5e1" stroke-width="1.6"/>'
+    )
+    parts.append(
+        f'<rect x="{_f(x0)}" y="{_f(y0)}" width="{_f(total_w)}" height="{_f(header_h)}" '
+        f'rx="14" fill="#eef2ff"/>'
+    )
+    parts.append(
+        f'<rect x="{_f(x0)}" y="{_f(y0 + header_h - 12)}" width="{_f(total_w)}" '
+        f'height="12" fill="#eef2ff"/>'
+    )
+    corner = _esc((table.corner or "FEATURE").strip().upper())
+    parts.append(
+        f'<text x="{_f(x0 + 16)}" y="{_f(y0 + 32)}" font-family="{_FONT}" '
+        f'font-size="11" font-weight="700" fill="{MUTED}" text-anchor="start">{corner}</text>'
+    )
+    for index, column in enumerate(columns):
+        cx = x0 + label_w + col_w * (index + 0.5)
+        fill, stroke, ink = MAP_PALETTE[index % len(MAP_PALETTE)]
+        header_lines = _wrap(column.label, max(8, int((col_w - 24) / (14 * 0.58))))
+        hy = y0 + 32 - (len(header_lines) - 1) * 9
+        for line in header_lines[:2]:
+            parts.append(
+                f'<text x="{_f(cx)}" y="{_f(hy)}" font-family="{_FONT}" font-size="14" '
+                f'font-weight="700" fill="{ink}" text-anchor="middle">{_esc(line)}</text>'
+            )
+            hy += 18
+    # Row bands, labels and cells.
+    for row_index, row in enumerate(rows):
+        ry = y0 + header_h + row_index * row_h
+        if row_index % 2 == 1:
+            parts.append(
+                f'<rect x="{_f(x0)}" y="{_f(ry)}" width="{_f(total_w)}" '
+                f'height="{_f(row_h)}" fill="#f8fafc"/>'
+            )
+        parts.append(
+            f'<line x1="{_f(x0)}" y1="{_f(ry)}" x2="{_f(x1)}" y2="{_f(ry)}" '
+            f'stroke="#e2e8f0" stroke-width="1"/>'
+        )
+        label_lines = _wrap(row.label, max(7, int((label_w - 24) / (font * 0.58))))
+        ly = ry + (row_h - (len(label_lines) - 1) * line_h) / 2 + font * 0.34
+        for line in label_lines[:max_lines]:
+            parts.append(
+                f'<text x="{_f(x0 + 16)}" y="{_f(ly)}" font-family="{_FONT}" font-size="{font}" '
+                f'font-weight="700" fill="{INK}" text-anchor="start">{_esc(line)}</text>'
+            )
+            ly += line_h
+        for col_index, column in enumerate(columns):
+            cx = x0 + label_w + col_w * (col_index + 0.5)
+            if col_index % 1 == 0 and col_index > 0:
+                pass
+            value = column.values[row_index] if row_index < len(column.values) else ""
+            cell_lines = _wrap(value, max(8, int((col_w - 22) / (font * 0.55))))
+            cy = ry + (row_h - (len(cell_lines) - 1) * line_h) / 2 + font * 0.34
+            for line in cell_lines[:max_lines]:
+                parts.append(
+                    f'<text x="{_f(cx)}" y="{_f(cy)}" font-family="{_FONT}" font-size="{font}" '
+                    f'fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
+                )
+                cy += line_h
+    # Column rules.
+    for index in range(1, len(columns)):
+        x = x0 + label_w + col_w * index
+        parts.append(
+            f'<line x1="{_f(x)}" y1="{_f(y0 + 8)}" x2="{_f(x)}" '
+            f'y2="{_f(y0 + header_h + row_h * len(rows) - 8)}" stroke="#e2e8f0" stroke-width="1"/>'
+        )
+    parts.append(
+        f'<line x1="{_f(x0 + label_w)}" y1="{_f(y0 + 8)}" x2="{_f(x0 + label_w)}" '
+        f'y2="{_f(y0 + header_h + row_h * len(rows) - 8)}" stroke="#cbd5e1" stroke-width="1.2"/>'
+    )
+    bottom = int(math.ceil(y0 + header_h + row_h * len(rows) + 26.0))
+    return "".join(parts), bottom
 
 
 # ── worked mathematics: number-line family ─────────────────────────────────
@@ -2305,6 +3060,8 @@ def _render_scene(scene: VisualScene) -> tuple[str, int]:
         diagram, y_after, legend, relation = _render_plot(scene)
     elif scene.scene_kind == "comparison":
         diagram, y_after, legend, relation = _render_comparison(scene)
+    elif scene.scene_kind == "concept_map":
+        diagram, y_after, legend, relation = _render_concept_map(scene)
     elif scene.scene_kind == "generic":
         diagram, y_after, legend, relation = _render_generic(scene, fallback_title="")
     else:
@@ -2576,6 +3333,8 @@ def render_hero_geometry(spec: DeterministicVisual) -> str:
         diagram, _, _, _ = _render_generic(scene, fallback_title="")
     elif scene.scene_kind == "comparison":
         diagram, _, _, _ = _render_comparison(scene)
+    elif scene.scene_kind == "concept_map":
+        diagram, _, _, _ = _render_concept_map(scene)
     else:
         return ""
     if not diagram.strip():

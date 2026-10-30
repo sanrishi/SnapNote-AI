@@ -1,0 +1,189 @@
+{
+  "concept": "Engineering Mathematics Reference",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "Engineering Mathematics Toolbox",
+    "task": {
+      "task_type": "hierarchy_structure",
+      "learning_outcome": "Identify and categorize core mathematical tools for engineering analysis including algebra, calculus, and statistics.",
+      "required_elements": [
+        "Quadratic Formula",
+        "Summation Notation",
+        "Standard Normal Distribution",
+        "Taylor Series Expansion",
+        "Fourier Transform"
+      ],
+      "required_relationships": [
+        "Categorization of formulas into mathematical domains"
+      ],
+      "exact_claims": [
+        "x = (-b ± √(b² - 4ac)) / (2a)",
+        "Σ i = n(n+1)/2",
+        "f(z) = (1/√(2π)) e^(-z²/2)",
+        "f(x) = Σ (fⁿ(a)/n!) (x-a)ⁿ",
+        "F(ω) = ∫ f(t) e^(-jωt) dt"
+      ],
+      "acceptable_families": [
+        "concept_map"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "concept_map",
+      "title": "",
+      "caption": "A structured overview of foundational engineering mathematics across algebra, calculus, statistics, and signal processing.",
+      "force": null,
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": null,
+      "concept_map": {
+        "layout": "tree",
+        "nodes": [
+          {
+            "id": "root",
+            "label": "Engineering Math",
+            "detail": "Core Analytical Tools",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "cat-alg",
+            "label": "Algebra & Series",
+            "detail": "Roots and Summations",
+            "parent": "root",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "cat-calc",
+            "label": "Calc & Analysis",
+            "detail": "Approximation and Transforms",
+            "parent": "root",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "cat-stats",
+            "label": "Statistics",
+            "detail": "Distribution and Symbols",
+            "parent": "root",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "node-quad",
+            "label": "Quadratic Formula",
+            "detail": "x = (-b ± √(b² - 4ac)) / (2a)",
+            "parent": "cat-alg",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "node-sum",
+            "label": "Series Sum",
+            "detail": "Σ i = n(n+1)/2",
+            "parent": "cat-alg",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "node-taylor",
+            "label": "Taylor Series",
+            "detail": "f(x) = Σ (fⁿ(a)/n!) (x-a)ⁿ",
+            "parent": "cat-calc",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "node-fourier",
+            "label": "Fourier Transform",
+            "detail": "F(ω) = ∫ f(t) e^(-jωt) dt",
+            "parent": "cat-calc",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "node-norm",
+            "label": "Normal Dist.",
+            "detail": "f(z) = (1/√(2π)) e^(-z²/2)",
+            "parent": "cat-stats",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "node-greek",
+            "label": "Statistical Symbols",
+            "detail": "u=mean, s=std dev, r=corr",
+            "parent": "cat-stats",
+            "marker": "",
+            "color": ""
+          }
+        ],
+        "edges": [],
+        "relation": null
+      },
+      "number_line": null
+    },
+    "equations": [],
+    "steps": [],
+    "points": [],
+    "composition": {
+      "title": "Essential Engineering Formulas",
+      "framing": "This guide classifies fundamental mathematical tools used to solve complex engineering problems.",
+      "callouts": [
+        {
+          "id": "node-quad",
+          "label": "Roots",
+          "value": "Finds zeros of ax² + bx + c = 0"
+        },
+        {
+          "id": "node-fourier",
+          "label": "Frequency",
+          "value": "Moves time signals to frequency domain"
+        }
+      ],
+      "reasoning": [
+        {
+          "id": "rs-taylor",
+          "expression": "f(x) ≈ P(x)",
+          "explanation": "Approximates complex functions using an infinite sum of derivatives."
+        },
+        {
+          "id": "rs-norm",
+          "expression": "∫ f(z) dz = 1",
+          "explanation": "The area under the standard normal curve represents total probability."
+        }
+      ],
+      "result": {
+        "expression": "F(ω) = ∫ f(t) e^(-jωt) dt",
+        "emphasis": true
+      },
+      "takeaway": "Categorizing these formulas by domain—Algebra, Calculus, and Statistics—helps in selecting the right tool for physical system modeling."
+    }
+  },
+  "visual_form": "hierarchical concept map",
+  "key_elements": [
+    "Quadratic formula x = (-b ± √(b²-4ac))/2a",
+    "Summation formula n(n+1)/2",
+    "Taylor Series Expansion",
+    "Fourier Transform integral",
+    "Standard Normal Distribution PDF",
+    "Categorization branches: Algebra, Calculus, Statistics"
+  ],
+  "key_relationships": [
+    "Mathematical topics as categories",
+    "Specific formulas as instances of those topics"
+  ],
+  "must_show": [
+    "The 5 main formulas verbatim",
+    "The mapping of Greek symbols used in statistics"
+  ],
+  "avoid": [
+    "Re-simplifying the Fourier or Taylor formulas",
+    "Using LaTeX backslashes"
+  ]
+}

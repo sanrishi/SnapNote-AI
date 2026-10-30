@@ -9,7 +9,13 @@ from PIL import Image
 
 from app.config import settings
 from app.exceptions import UpstreamError
-from app.models.schemas import DiagramRep, DiagramSpec, StudyNotes, VisualSpec
+from app.models.schemas import (
+    DiagramRep,
+    DiagramSpec,
+    StudyNotes,
+    VisualComparison,
+    VisualSpec,
+)
 from app.utils.diagram_validation import SUPPORTED_DIAGRAM_TYPES, validate_diagram_spec
 from app.utils.diagram_renderer import render_polar_region
 from app.utils.latex_clean import latex_to_unicode
@@ -538,18 +544,54 @@ If in doubt, choose "deterministic". A physics topic like "what is angular momen
 
 TASK PLANNING (do this FIRST, before choosing any scene):
 Decide the teaching job in a "task" object. The task determines the representation — our validator rejects any scene that cannot do the task's job, so plan honestly:
-   - "task_type": exactly one of "compare_variants" (lesson contrasts 2-3 cases: translation vs rotation, cases of a piecewise solution), "multi_step_solution" (domain/cases/steps combining into one conclusion), "graph_relationship" (a plotted relationship IS the lesson), "vector_arrangement" (bodies, forces/velocities, angles, pivots), "connected_process" (ordered steps with dependencies/feedback), "coordinate_construction" (points/polygons/dimensions placed on axes), "interval_solution" (worked inequality or domain problem whose answer is a union of intervals — ALWAYS when the lesson solves an inequality), "definition_overview" (only when nothing structural is drawable — last resort, never for comparable/graphable/vector content).
+   - "task_type": exactly one of "compare_variants" (lesson contrasts 2-3 alternatives across shared features — motion variants, cell types, reaction mechanisms, market structures), "multi_step_solution" (ordered solution steps combining into one conclusion), "graph_relationship" (a plotted relationship IS the lesson), "vector_arrangement" (bodies, forces/velocities, angles, pivots), "connected_process" (ordered causal/process chain with dependencies/feedback), "coordinate_construction" (points/polygons/dimensions placed on axes), "interval_solution" (worked inequality or domain problem whose answer is a union of intervals — ALWAYS when the lesson solves an inequality), "hierarchy_structure" (whole/part, classification, taxonomy, parent/child or tree structure), "cyclic_process" (repeating stages or a loop), "chronology" (events/phases in time order), "definition_overview" (only when nothing structural fits — last resort, never for comparable/hierarchical/cyclic/chronological/graphable/vector content).
    - "learning_outcome": one sentence stating what the student will be able to do after seeing the visual.
    - "required_elements": every entity the visual MUST show (bodies, points, axes, steps, variants), written as CONCRETE grounded strings — the actual symbols/values/names the scene will render ("x² − x", "F", "domain x > −3", "lens with F and F′"), never placeholder slot nouns ("problem", "domain", "solution", "diagram", "concept"). A required element is a content claim the validator checks against the rendered visual: a placeholder noun that appears nowhere in the scene fails the whole spec. Each must be satisfiable by the chosen family's primitives — do not list what no family can draw.
    - "required_relationships": the connections/transformations/constraints between them.
-   - "exact_claims": verbatim equations/values/labels from the image or notes that MUST appear (e.g. domain restrictions, final results). Copy them character-for-character; the validator checks their presence. Only declare claims you will actually PRINT in the visual (scene relation, equations, composition result/callouts) — do not copy every formula from the notes. Keep these to equations, values, and SHORT labels — never whole prose sentences: a sentence-length claim can only be satisfied by printing that sentence verbatim in the visual, which a clean diagram should not do. For a prose/definition lesson use the term labels instead ("Cell Theory", "Prokaryotic cells").
-   - "acceptable_families": SCENE KINDS allowed for this task, chosen ONLY from this registry — compare_variants: ["comparison"]; multi_step_solution: ["process_flow"]; graph_relationship: ["plot"]; vector_arrangement: ["force_diagram"]; connected_process: ["process_flow"]; coordinate_construction: ["plot"]; interval_solution: ["number_line"]; definition_overview: any family. These entries are scene_kind values ("force_diagram" | "process_flow" | "plot" | "generic" | "comparison" | "number_line") — NEVER task_type names like "definition_overview". Your "scene.scene_kind" MUST appear in acceptable_families, and acceptable_families must never contradict the registry row above.
+   - "exact_claims": verbatim equations/values/labels from the image or notes that MUST appear (e.g. domain restrictions, final results). Copy them character-for-character; the validator checks their presence. Only declare claims you will actually PRINT in the visual (scene labels, table cells, composition result/callouts) — do not copy every formula from the notes. Keep these to equations, values, and SHORT labels (max ~60 chars) — NEVER whole prose sentences. A sentence-length claim can only be satisfied by printing that sentence verbatim in the visual, which a clean diagram should not do. For a prose/definition lesson use the term labels instead ("Cell Theory", "Prokaryotic cells"); for a comparison use column/row labels and short values.
+     - Every exact claim MUST be rendered where the scene shows it: concept_map node label/detail, comparison table cell/column/row label, panel vector/arc label, process node, plot label, or the composition result/callout. A formula that appears only in required_elements or the study notes is invisible and fails validation.
+     - If a claim carries an explanation ("Search: O(h) where h = height of tree"), place the printable core in the scene ("Search: O(h)") and exact-claim only that core. Do not exact-claim explanatory clauses.
+   - "acceptable_families": SCENE KINDS allowed for this task, chosen ONLY from this registry — compare_variants: ["comparison"]; multi_step_solution: ["process_flow"]; graph_relationship: ["plot"]; vector_arrangement: ["force_diagram"]; connected_process: ["process_flow"]; coordinate_construction: ["plot"]; interval_solution: ["number_line"]; hierarchy_structure: ["concept_map"]; cyclic_process: ["concept_map"]; chronology: ["concept_map"]; definition_overview: any family. These entries are scene_kind values ("force_diagram" | "process_flow" | "plot" | "generic" | "comparison" | "concept_map" | "number_line") — NEVER task_type names like "definition_overview". Your "scene.scene_kind" MUST appear in acceptable_families, and acceptable_families must never contradict the registry row above.
    - "assumptions": anything you had to assume to draw (empty when nothing assumed). "missing": evidence you needed but could not find.
    - A simple concept gets a simple task (definition_overview with 1-2 elements). Never inflate a simple lesson to justify a fancy scene; never shrink a structured lesson into generic boxes.
 
 THE SCENE PRIMITIVES (deterministic mode):
 Inside "deterministic.scene" you describe WHAT must be shown using universal educational primitives. Python decides HOW to draw everything — you NEVER give coordinates, pixel positions, or SVG. You decide only the SEMANTICS: which objects, which vectors, their directions in degrees, and which relationships to draw.
-  - "scene_kind": "force_diagram" (vectors/forces/angles around a pivot: torque, lever arms, inclined planes, forces on a body) OR "process_flow" (labeled boxes with arrows: control loops, PID, workflows) OR "plot" (2D graphs: functions y=f(x), projectile trajectories, polar curves — rendered as clean axes + curves).
+  - "scene_kind": choose the representation from the INFORMATION STRUCTURE, not the subject name:
+      * "force_diagram" — bodies, forces, velocities, angles, pivots, lever arms, fields.
+      * "process_flow" — a causal/ordered chain where each step produces the next (control loops, pipelines, mechanisms stated as steps).
+      * "plot" — a quantitative relationship y=f(x), trajectory, curve, or ray/axis construction.
+      * "comparison" — 2-3 alternatives judged against shared features: use "panels" for motion/geometry variants, or "table" for conceptual/feature matrices.
+      * "concept_map" — hierarchy/taxonomy/whole-part ("types of", classification, parent/child, tree structure), repeating cycle, or chronology (choose its "layout").
+      * "number_line" — worked inequality/domain with an interval-union answer.
+      * "generic" — ONLY when none of the above can honestly represent the material; never use it as a default for prose.
+  - "concept_map" fields (the relational grammar for classification, cycles and chronology):
+      "layout": "tree" | "cycle" | "timeline"
+      "nodes": 3-12 items, each {"id": "ascii-id", "label": "short exact label", "detail": "optional one-line teaching note", "parent": "parent-id (tree only; empty for the single root)", "marker": "date/phase tag (timeline only)"}
+        - tree: exactly ONE root (empty parent); every other node names an existing parent; depth <= 4. Use it for taxonomies, whole/part breakdowns, classification, tree data structures, "types of X".
+          * Nodes at the same level must be the SAME KIND of thing (all cell types, all tree parts, all phases). Never mix a theory, a person, a formula, or a historical event into a type hierarchy — put those in the detail or in composition, or choose another layout.
+          * If the lesson mainly CONTRASTS 2-3 alternatives (prokaryote vs eukaryote, SN1 vs SN2, Qc < Kc vs Qc > Kc), use a comparison table instead of a tree. A tree that puts the alternatives in one row is a weak visual.
+        - cycle: 3-6 stages in list order; the renderer closes the loop automatically. Use it for repeating biological/chemical cycles and feedback loops.
+        - timeline: 3-6 events in chronological order; put the date/phase in "marker". Use it for history, discovery timelines, evolution, project phases.
+        - Do NOT put a paragraph in a node. Labels are short (<= 48 chars); details are one clause (<= 90 chars).
+      "edges": optional labeled relationships between node ids, e.g. {"source": "root", "target": "branch", "label": "includes"}. For tree layouts the parent field already draws the hierarchy; use edges only for meaningful cross-links.
+      "relation": optional exact relationship/answer to highlight.
+  - "comparison" fields:
+      A scene_kind of "comparison" REQUIRES one of the two payloads below. Emitting scene_kind "comparison" with neither "panels" nor "table" is invalid and will be refused. Use a "table" when the lesson contrasts alternatives across shared features or maps conditions to outcomes; use "panels" only for motion/geometry variants.
+      EITHER motion/geometry panels (2-3 variants of one physical idea, e.g. pure translation | pure rotation | combined rolling):
+        "panels": exactly 2-3 objects, each {"label": "Pure translation", "object": {"kind": "block"|"disk", "label": "CM"}, "points": [...], "vectors": [...], "arcs": [...], "note": "one short line"}.
+          - The object's own label names the centre point (usually "CM"). Put OTHER material points in "points" — do not duplicate CM.
+          - "points": [{"label": "P'", "at": "top"}, {"label": "P", "at": "bottom"}] — labeled material points on the body. "at" is one of center|top|bottom|left|right and is REQUIRED for every point.
+          - "vectors": [{"label": "v = Rω", "angle_deg": 0, "length": 1.0, "at": "top", "color": "red"}] — "at" anchors the vector to a material point (top = P', center = CM, bottom = P). A vector with "length": 0.0 is REAL PHYSICS: the renderer draws a point marker + label and NEVER an arrow. Use 0.0 for a point that is instantaneously at rest (pure rotation at CM, rolling at the contact point); never use 0.4 or a tiny arrow there. Set "color": "red" on velocity vectors so motion reads distinctly from the body; rotation arcs render green.
+          - "arcs": [{"label": "ω", "direction": "ccw"|"cw"}] — one rotation arc ONLY for variants that actually rotate.
+          - "note": one short line under the panel (optional). Put exact equations on the vector labels, not only in the note.
+      OR a feature matrix (alternatives compared across shared dimensions - cell types, SN1/SN2, market structures, data structures):
+        "table": {"rows": [{"label": "Condition"}, {"label": "Direction"}], "columns": [{"label": "Qc < Kc", "values": ["excess reactants", "forward"]}, {"label": "Qc > Kc", "values": ["excess products", "backward"]}], "corner": "FEATURE", "verdict": "optional one-line takeaway"}
+          - 2-6 rows and 2-3 columns are REQUIRED; every column has EXACTLY one value per row, in the same order. A table with one row or one column is invalid.
+          - "corner" names the row axis in the top-left cell: "FEATURE" when rows are shared features, "DISTRIBUTION" / "ALTITUDE" / "STAGE" when the rows are the alternatives themselves, etc. It must describe the rows truthfully.
+          - A matrix may be oriented EITHER way: columns can be the alternatives (rows = shared features, e.g. Qc < Kc | Qc > Kc) OR rows can be the alternatives (columns = shared features, e.g. rows Binomial/Poisson/Normal/Exponential × columns Mean/Variance/MGF). Pick the orientation that keeps rows at 2-6 and columns at 2-3. If the source contrasts MORE than 3 alternatives, transpose so the alternatives are the 4-6 ROWS and the shared metrics are the 2-3 columns — never drop an alternative the lesson is about.
+          - Every cell must be non-empty and short (<= 80 chars); use "-" only when the source truly does not apply.
+          - Use the exact terms/numbers from the image, not generic paraphrases. A condition→outcome contrast belongs in a table, never in a tree.
   - "force_diagram" fields:
       "object": {"kind": "pivot"|"disk"|"point"|"block", "label": "O" (a short name), "caption": "what it is"}
       "ground": true|false — draw the surface the body rolls/rests on (baseline + contact point). ALWAYS true for a rolling disk, a block sliding on a floor/incline, or any body whose contact with the ground is part of the lesson; false otherwise. Without it a rolling body reads as floating.
@@ -578,13 +620,6 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
         - discrete points and polygons: use explicit "points" with a "label" per vertex (e.g. an Argand-plane square: one closed loop [[-2,-2],[2,-2],[2,2],[-2,2],[-2,-2]] plus per-vertex labels like "A z = x + iy"). Vertices belong on the geometry as labels, never only in prose.
         - dimensions: express side lengths as short curve/vertex labels (e.g. "side = 4"), never as decorative text.
         - EQUATION FIDELITY: equation and expression strings must be copied verbatim from the image or notes — especially transformed expressions (e.g. write "z - 2Re(z) = -x + iy" exactly as shown; never rewrite Re(z) as Re(conjugate(z)) or otherwise "simplify"). The renderer prints these strings byte-identical; any mistranscription you emit becomes the student's wrong answer.
-   - "comparison" fields (2-3 variants of one idea, e.g. pure translation | pure rotation | combined rolling):
-       "panels": exactly 2-3 objects, each {"label": "Pure translation", "object": {"kind": "block"|"disk", "label": "CM"}, "points": [...], "vectors": [...], "arcs": [...], "note": "one short line"}.
-         - The object's own label names the centre point (usually "CM"). Put OTHER material points in "points" — do not duplicate CM.
-       "points": [{"label": "P'", "at": "top"}, {"label": "P", "at": "bottom"}] — labeled material points on the body. "at" is one of center|top|bottom|left|right and is REQUIRED for every point.
-       "vectors": [{"label": "v = Rω", "angle_deg": 0, "length": 1.0, "at": "top", "color": "red"}] — "at" anchors the vector to a material point (top = P', center = CM, bottom = P). A vector with "length": 0.0 is REAL PHYSICS: the renderer draws a point marker + label and NEVER an arrow. Use 0.0 for a point that is instantaneously at rest (pure rotation at CM, rolling at the contact point); never use 0.4 or a tiny arrow there. Set "color": "red" on velocity vectors so motion reads distinctly from the body; rotation arcs render green.
-       "arcs": [{"label": "ω", "direction": "ccw"|"cw"}] — one rotation arc ONLY for variants that actually rotate.
-       "note": one short line under the panel (optional). Put exact equations on the vector labels, not only in the note.
    - "number_line" (worked interval mathematics — solving ONE inequality: log inequalities, polynomial/rational inequalities, domains):
      Use this WHENEVER the lesson works through an inequality or a domain whose answer is an interval or union of intervals (log_{x+3}(x² − x) < 1, (x − 2)/(x + 3) ≤ 0, x² − 5x + 6 > 0, "find the domain of ..."). NEVER force such content into "plot", "comparison" or "generic".
        "problem": the ONE inequality exactly as written (plain Unicode, no LaTeX, no words around it), e.g. "log_{x+3}(x² − x) < 1". Copy every symbol/number verbatim.
@@ -604,7 +639,7 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
        - If you cannot derive the exact solution, do NOT emit a number_line scene with a guessed answer — refuse honestly by choosing a different honest representation instead.
    - "caption": ONE sentence under "WHAT THE VISUAL SHOWS" teaching what the diagram means conceptually (never an inventory of parts). Example: "Torque magnitude depends on the lever arm r and the angle θ between r and F."
 
-  When the screenshot shows a graph/plot/trajectory (parabola, sine wave, polar curve, projectile), prefer "plot" with a safe expr. When it shows vectors/forces, prefer "force_diagram". When it shows boxes/arrows, prefer "process_flow". When it SOLVES an inequality or finds a domain (answer = interval union), use "number_line" — never generic, never a forced comparison.
+  When the screenshot shows a graph/plot/trajectory (parabola, sine wave, polar curve, projectile), prefer "plot" with a safe expr. When it shows vectors/forces, prefer "force_diagram". When it shows boxes/arrows, prefer "process_flow". When it SOLVES an inequality or finds a domain (answer = interval union), use "number_line" — never generic, never a forced comparison. When it classifies/types/branches (taxonomy, whole/part, tree), uses a repeating cycle, or narrates a chronology, use "concept_map" with the matching layout. When it contrasts 2-3 alternatives across shared features, use "comparison" with a "table". Use "generic" only when the material truly has no structure to draw.
 
 THE COMPOSITION BLOCK (explicit lesson content):
 Inside "deterministic.composition" you describe the LESSON the visual teaches — title, framing, callout chips, reasoning chain, highlighted result, takeaway. The renderer draws this block verbatim around the scene geometry, so every word must already be grounded.
@@ -623,13 +658,13 @@ Inside "deterministic.composition" you describe the LESSON the visual teaches �
 GROUNDING RULES:
 1. The screenshot is the source of truth. The study notes below are helpful context, but never invent content that conflicts with what the image actually shows.
 2. Never invent formulas, quantities, or relationships that are not in the image or the notes. If something is cut off or ambiguous, leave it out of the visual rather than guessing.
-3. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration.
+3. Keep the visual clean and minimal: white/light background, dark high-contrast text, flat vector style, no photo-realism, no watermark, no decoration. Prefer a real information structure (hierarchy, cycle, timeline, feature matrix, process) over a card grid of sentences. A student should understand MORE from the composition than from a plain text summary.
 4. Write labels as short, plain, readable text. Preserve mathematical symbols VERBATIM: Σ, ∫, ×, ±, √, π, θ, ω, τ and other Greek letters stay exactly as written — never transliterate them into ASCII words or single letters ("Summation S", "Integ", "sqrt"). A student must read the same mathematics they saw on the board.
-5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. An inequality/domain solution should use a number_line. When the lesson explicitly compares 2-3 variants of one idea (e.g. pure translation vs pure rotation vs combined motion), use "comparison" with one panel per variant: each panel has a short label, an object (block for sliding, disk for rolling/spinning), the motion's own velocity vectors, a rotation arc ONLY where the variant actually rotates, and a one-line note. Velocity vectors on rotating bodies must be TANGENTIAL (perpendicular to the radius), never radial. For a rolling-motion board (pure translation vs pure rotation vs combined rolling), the comparison MUST have exactly 3 panels and every disk MUST carry the material points P' (top), CM (center), and P (bottom):
+5. In "scene", only emit primitives you are confident about. A torque/force concept should use a force_diagram (pivot + r vector + F vector + θ angle + τ rotation). A control-loop concept should use a process_flow. A graph/trajectory should use a plot. An inequality/domain solution should use a number_line. A taxonomy/classification/whole-part lesson should use concept_map (tree); a repeating cycle should use concept_map (cycle); a chronology should use concept_map (timeline). A conceptual contrast across features should use comparison (table). Only when none of those structures honestly fits should you use generic. When the lesson explicitly compares 2-3 motion variants of one idea (e.g. pure translation vs pure rotation vs combined motion), use "comparison" with one panel per variant: each panel has a short label, an object (block for sliding, disk for rolling/spinning), the motion's own velocity vectors, a rotation arc ONLY where the variant actually rotates, and a one-line note. Velocity vectors on rotating bodies must be TANGENTIAL (perpendicular to the radius), never radial. For a rolling-motion board (pure translation vs pure rotation vs combined rolling), the comparison MUST have exactly 3 panels and every disk MUST carry the material points P' (top), CM (center), and P (bottom):
        • Pure translation: vectors at top/CM/bottom all point right and are labeled "v_CM"; no arc.
        • Pure rotation: top vector right labeled "v = Rω"; CM vector length 0.0 labeled "v = 0" (a dot, never an arrow); bottom vector left labeled "v = Rω"; one rotation arc.
        • Combined rolling: top vector right labeled "v = v_CM + Rω = 2v_CM"; CM vector right labeled exactly "v = v_CM" (the equality is required — bare "v_CM" belongs only in the pure-translation panel); bottom vector length 0.0 labeled "v = 0" (a dot, never an arrow); one rotation arc.
-       The exact claims v = v_CM + Rω = 2v_CM, v = v_CM, and v = 0 MUST be printed on these panel vector labels and included in task.exact_claims; putting a motion claim only in equations, a note, or a composition callout leaves the diagram physically incomplete. Never omit the third panel or a zero-velocity endpoint. Never use "generic" for a comparison lesson — a central box with formula callouts teaches nothing. If none of those fit, use "generic" with central_label (2-4 words) and 3-5 callouts, each written as "Label: value" — one idea per callout, max ~52 chars, carrying BOTH the symbol/formula and its meaning (e.g. "Σ i = n(n+1)/2: sum of first n integers") so the visual is self-contained. This guarantees every concept gets a labeled diagram. Never leave scene empty if you can make a generic.
+       The exact claims v = v_CM + Rω = 2v_CM, v = v_CM, and v = 0 MUST be printed on these panel vector labels and included in task.exact_claims; putting a motion claim only in equations, a note, or a composition callout leaves the diagram physically incomplete. Never omit the third panel or a zero-velocity endpoint. Never use "generic" for a comparison lesson — use the feature table when the contrast is conceptual rather than motion-based; a central box with formula callouts teaches nothing. Only when no real structure fits may you use "generic" with central_label (2-4 words) and 3-5 callouts, each written as "Label: value" — one idea per callout, max ~52 chars, carrying BOTH the symbol/formula and its meaning (e.g. "Σ i = n(n+1)/2: sum of first n integers") so the visual is self-contained. Never leave scene empty if a real structure can honestly be drawn.
 
 OUTPUT: ONLY a JSON object with exactly this structure:
 {
@@ -640,13 +675,14 @@ OUTPUT: ONLY a JSON object with exactly this structure:
     "title": "short title (2-6 words)",
     "task": {"task_type": "compare_variants", "learning_outcome": "one sentence", "required_elements": ["each entity the visual must show"], "required_relationships": [], "exact_claims": ["verbatim equations/values"], "acceptable_families": ["comparison"], "assumptions": [], "missing": []},
     "scene": {
-      "scene_kind": "force_diagram | process_flow | plot | generic | comparison | number_line",
+      "scene_kind": "force_diagram | process_flow | plot | generic | comparison | concept_map | number_line",
       "caption": "one teaching sentence about what the diagram means",
       "force": { "object": {...}, "ground": false, "vectors": [...], "angles": [...], "arcs": [...], "relation": {...} },
       "flow": { "nodes": [...], "connectors": [...], "relation": {...} },
       "plot": { "x_label": "x", "y_label": "y", "x_min": 0, "x_max": 5, "y_min": 0, "y_max": 5, "show_grid": true, "curves": [{"label": "y=x²", "expr": "x**2", "x_min": 0, "x_max": 2}], "markers": [{"x": 2, "y": 4, "label": "F"}], "segments": [{"x1": 2, "y1": 0, "x2": 2, "y2": 5, "label": "lens", "style": "dashed"}] },
       "generic": { "central_label": "Main idea", "callouts": ["F = ma: force equals mass times acceleration", "Σ i = n(n+1)/2: sum of first n integers"] },
       "comparison": { "panels": [{"label": "Pure translation", "object": {"kind": "disk", "label": "CM"}, "points": [{"label": "P'", "at": "top"}, {"label": "P", "at": "bottom"}], "vectors": [{"label": "v_CM", "angle_deg": 0, "length": 1.0, "at": "top"}, {"label": "v_CM", "angle_deg": 0, "length": 1.0, "at": "center"}, {"label": "v_CM", "angle_deg": 0, "length": 1.0, "at": "bottom"}], "arcs": [], "note": "all points share v_CM"}], "relation": {"expression": "v = ωr", "caption": "rolling link"} },
+      "concept_map": { "layout": "tree", "nodes": [{"id": "root", "label": "Cell", "detail": "basic unit of life", "parent": ""}, {"id": "prok", "label": "Prokaryotic", "detail": "no true nucleus", "parent": "root"}, {"id": "euk", "label": "Eukaryotic", "detail": "true nucleus", "parent": "root"}], "edges": [{"source": "root", "target": "prok", "label": "type"}, {"source": "root", "target": "euk", "label": "type"}], "relation": null },
       "number_line": {
         "problem": "log_{x+3}(x² − x) < 1",
         "domain": {"label": "x² − x > 0, x + 3 > 0, x + 3 ≠ 1", "intervals": [{"lo": "-3", "hi": "-2"}, {"lo": "-2", "hi": "0"}, {"lo": "1", "hi": "inf"}], "points": ["-2"]},
@@ -679,7 +715,7 @@ OUTPUT: ONLY a JSON object with exactly this structure:
 FIELD RULES:
 - "task": ALWAYS emit it (plan first, then scene). The validator enforces that "scene.scene_kind" is in "task.acceptable_families", that every "required_elements" entry is satisfiable by the scene, and that every "exact_claims" string appears verbatim. A spec whose scene cannot do its task is refused.
 - "text_required": true when readable text/symbols are essential to the visual (always true in deterministic mode). false only for a purely conceptual illustration that conveys meaning through pictures alone.
-- "deterministic": ALWAYS populate it. Prefer providing a "scene" (a real diagram) when the concept maps to force_diagram, process_flow or plot; the renderer draws it. IMPORTANT — Explain Visually is a VISUAL ARTIFACT, not a second study sheet: when you emit a scene, keep it geometry-first (objects, vectors, angles, arcs, relationships, labels) and do NOT fill equations/steps/points with the same material that already lives in the study notes. Leave equations/steps/points EMPTY when a scene is present; the only equation allowed inside the visual is the scene's own "relation" (e.g. "τ = r × F") plus the one-line caption. Fill equations/steps/points ONLY when there is no scene (the renderer then falls back to a card layout). In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
+- "deterministic": ALWAYS populate it. Prefer providing a "scene" (a real diagram) when the material has ANY honest structure — force_diagram, process_flow, plot, comparison (panels or table), concept_map (tree/cycle/timeline), or number_line; the renderer draws it. IMPORTANT — Explain Visually is a VISUAL ARTIFACT, not a second study sheet: when you emit a scene, keep it structure-first (objects, relationships, nodes, cells, vectors, labels) and do NOT fill equations/steps/points with the same material that already lives in the study notes. Leave equations/steps/points EMPTY when a scene is present; the only equation allowed inside the visual is the scene's own "relation" (e.g. "τ = r × F") plus the one-line caption. Fill equations/steps/points ONLY when there is no scene (the renderer then falls back to a card layout). In generative mode, still include at least title and any one exact relationship you do not want a generative model to garble (the renderer ignores it, but it keeps the exact content available). If nothing exact applies, keep deterministic.title set and leave the lists empty.
 - Keep each list concise (2-6 items). Ground every item in the image and notes. If the material genuinely cannot benefit from a visual (e.g. pure prose with no structure worth drawing), set render_mode to "generative", concept to the topic, visual_form to "simple illustration", key_elements to one broad item like "the central idea shown as a simple icon", and avoid anything ungrounded — never invent a diagram the material doesn't support.
 - "composition": emit it ONLY when you have enough structured evidence (scene labels + visible equations) to fill callouts/reasoning/result honestly. Omit the block entirely when evidence is thin — the renderer falls back gracefully. Never emit a composition whose values you invented."""
 
@@ -721,7 +757,7 @@ def _normalize_task_enums(data: dict) -> dict:
     from app.models.schemas import VisualTask
 
     valid_tasks = list(VisualTask.model_fields["task_type"].annotation.__args__)  # type: ignore[union-attr]
-    valid_kinds = ["force_diagram", "process_flow", "plot", "generic", "comparison", "number_line"]
+    valid_kinds = ["force_diagram", "process_flow", "plot", "generic", "comparison", "concept_map", "number_line"]
 
     def _recover(value: str, valid: list[str]) -> str:
         folded = unicodedata.normalize("NFKC", value).strip()
@@ -778,6 +814,43 @@ def _normalize_composition_ids(data: dict) -> dict:
     return data
 
 
+def _sanitize_task_claims(spec: VisualSpec) -> int:
+    """Drop prose sentences from the planner's exact-claim list (pure).
+
+    The planner occasionally copies full sentences into ``exact_claims``
+    ("If Qc < Kc, reaction proceeds forward."). Those are summaries, not exact
+    claims: they cannot be printed verbatim in a clean diagram without turning
+    it into a paragraph, and failing the whole visual because of one such
+    entry is a false refusal. Dropping the claim changes no visible content -
+    the grounded condition still lives in the scene/reasoning - and everything
+    that IS a short equation/label/value passes through untouched.
+    """
+    task = spec.deterministic.task
+    if task is None:
+        return 0
+    stopwords = {
+        "the", "a", "an", "is", "are", "of", "to", "in", "for", "with",
+        "where", "when", "which", "that", "this", "and", "or", "as", "by",
+        "from", "on", "at", "it", "its", "be", "can", "will", "must",
+        "should", "may", "proceeds", "occurs", "means", "represents",
+    }
+    kept: list[str] = []
+    dropped = 0
+    for claim in task.exact_claims:
+        norm = " ".join(str(claim).split())
+        if not norm:
+            continue
+        words = re.findall(r"[A-Za-z]+", norm)
+        sentence = norm.endswith((".", "!", "?")) and len(words) >= 5
+        prose = len(words) >= 8 and sum(w.casefold() in stopwords for w in words) >= 3
+        if sentence or prose or len(words) >= 14:
+            dropped += 1
+            continue
+        kept.append(claim)
+    task.exact_claims = kept
+    return dropped
+
+
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:
     """Produce the structured VisualSpec that drives the Explain Visually image.
 
@@ -799,6 +872,12 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
         from app.utils.latex_clean import normalize_spec_math
 
         spec = normalize_spec_math(VisualSpec(**data))
+        dropped_claims = _sanitize_task_claims(spec)
+        if dropped_claims:
+            logger.info(
+                "VisualSpec dropped %d prose sentence(s) from exact_claims",
+                dropped_claims,
+            )
     except (json.JSONDecodeError, ValidationError) as e:
         logger.warning("VisualSpec parse failed: %s", e)
         raise UpstreamError(
@@ -849,6 +928,7 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
             from app.utils.latex_clean import normalize_spec_math
 
             repaired = normalize_spec_math(VisualSpec(**repair_data))
+            _sanitize_task_claims(repaired)
         except (json.JSONDecodeError, ValidationError, UpstreamError) as e:
             logger.warning("VisualSpec contradiction repair failed: %s", e)
             raise UpstreamError(
@@ -898,19 +978,22 @@ def _composition_contradiction(spec: VisualSpec) -> tuple[str, str] | None:
 
 THIN_SCENE_REPAIR_PROMPT = r"""Your previous visual plan was not acceptable: {REASON}. A central box with a few callouts does not teach the lesson, and a wrong mathematical answer is worse than no visual at all.
 
-Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants (use "comparison" with one panel per variant), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), process steps ("process_flow"), or a worked INEQUALITY/DOMAIN whose answer is an interval union ("number_line") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
+Look at the screenshot again together with the grounded context below. If the lesson visibly supports a concrete scene — comparable variants or a feature matrix (use "comparison"), vectors/forces/angles ("force_diagram"), curves or plotted points ("plot"), process steps ("process_flow"), a taxonomy/cycle/chronology (use "concept_map" with layout tree/cycle/timeline), or a worked INEQUALITY/DOMAIN whose answer is an interval union ("number_line") — re-emit the COMPLETE spec JSON with that scene, using labels, values, and equations verbatim from the image or notes.
 
 If the reason mentions a mathematics verification mismatch (phrases like "mathematically wrong", "cannot verify", "correct answer is", "correct domain is", "domain track is required", "case branch", "omits the positivity"), redo the solution carefully and re-emit a corrected "number_line" scene: apply the domain restrictions first (log argument > 0, log base > 0 and ≠ 1, denominators ≠ 0), ALWAYS include the "domain" track whenever any restriction exists, split by case (base > 1 keeps the inequality direction; 0 < base < 1 reverses it — write the condition with its full positivity bound, never a bare "BASE < 1"), intersect EVERY case with the domain, and only then take the union. Use the exact correct sets quoted in the reason when they are given. Never repeat the wrong set.
 
 If the reason mentions "number_line has no number_line payload", the scene kind is right but the payload is empty: emit the COMPLETE "number_line" object (problem + domain when any restriction exists + cases + solution) as the WORKED MATHEMATICS rules describe. Never leave it null.
 
-If the reason mentions "exact claim missing from scene", do NOT edit or drop the claims and do NOT change the scene kind. Repair by putting each claim where it is VISIBLE and physically attached:
-- If the current scene is "comparison": the claims belong to the panels, not to equations or a general callout. Add the missing panel (maximum 3 total) or the missing vector/material point to the correct panel. Anchors are REQUIRED: "points": [{"label": "P'", "at": "top"}, {"label": "P", "at": "bottom"}], and vectors use "at": "top"|"center"|"bottom". A zero velocity is a real vector with "length": 0.0 and label "v = 0" (a dot, never an arrow). For rolling motion, the complete repair is three panels — Pure translation (all three v_CM vectors), Pure rotation (top v = Rω, CM length 0 v = 0, bottom v = Rω, one arc), Combined rolling (top v = v_CM + Rω = 2v_CM, CM v = v_CM, bottom length 0 v = 0, one arc). Never satisfy a missing motion claim with a composition callout while leaving the panel/vector absent.
+If the reason mentions "exact claim missing from scene", do NOT edit or drop short equation/label claims and do NOT change the scene kind. Repair by putting each claim where it is VISIBLE and physically attached:
+- If the current scene is "comparison" and uses motion panels: the claims belong to the panels, not to equations or a general callout. Add the missing panel (maximum 3 total) or the missing vector/material point to the correct panel. Anchors are REQUIRED: "points": [{"label": "P'", "at": "top"}, {"label": "P", "at": "bottom"}], and vectors use "at": "top"|"center"|"bottom". A zero velocity is a real vector with "length": 0.0 and label "v = 0" (a dot, never an arrow). For rolling motion, the complete repair is three panels — Pure translation (all three v_CM vectors), Pure rotation (top v = Rω, CM length 0 v = 0, bottom v = Rω, one arc), Combined rolling (top v = v_CM + Rω = 2v_CM, CM v = v_CM, bottom length 0 v = 0, one arc). Never satisfy a missing motion claim with a composition callout while leaving the panel/vector absent.
+- If the current scene is a comparison feature table: put each missing label/value into the correct table column's "values" (same row order) or into a row label. Every column must keep exactly one value per row.
 - If the current scene is "force_diagram", "plot", or "process_flow": keep the existing scene kind and geometry; add the missing claims to "deterministic.equations" (expression = the claim) and/or a composition callout (short label, claim as value).
+- If the current scene is "concept_map": put the claim into a node label, node detail, edge label, or the relation — whichever is semantically true. Never add a node that the screenshot does not support.
 - If the current scene is already "generic": add the claims as its callouts (3-5 verbatim callouts).
-Switching a force_diagram/plot/process_flow to "generic" or "comparison" is not a repair (a generic scene needs its own central_label and cannot satisfy disk/ground/axes requirements; a comparison with fewer than 2 labeled panels is refused). Never add a motion claim only to a caption, note, or equation while the panel geometry still does not show it.
+Switching a force_diagram/plot/process_flow to "generic" is not a repair. Never add a motion claim only to a caption, note, or equation while the panel geometry still does not show it.
 
-If the reason mentions a comparison panel "without vectors or arcs" (or "comparison needs at least 2 labeled panels"), the comparison scene does not fit this material — a definition/prose lesson has no drawable vectors to put in panels. Re-emit a "generic" scene instead: central_label = the lesson topic and 3-5 callouts carrying the exact terms/claims VERBATIM (short label ≤ 24 chars, value = the claim). Generic IS the correct family for definition/prose lessons; do not re-emit another empty comparison.
+If the reason mentions "comparison has no comparison payload", the scene kind is right but the payload is missing. Re-emit the COMPLETE spec with a populated "comparison": a "table" for a feature/condition contrast (2-6 rows, 2-3 columns, one value per row per column) or "panels" for motion variants. For a source that contrasts MORE than 3 alternatives (e.g. four probability distributions), transpose the matrix: put the alternatives in the 4-6 ROWS and the 2-3 shared metrics in the COLUMNS, with every cell filled from the board. If neither can be grounded, switch to "concept_map" (taxonomy/cycle/timeline) or "generic" — never leave the payload null.
+If the reason mentions a comparison panel "without vectors or arcs" (or "comparison needs at least 2 labeled panels"), do NOT force motion geometry onto a prose lesson. If the material contrasts 2-3 alternatives across shared features, re-emit "comparison" with a "table" (rows = shared dimensions, columns = alternatives, one exact value per cell). If it is a taxonomy/whole-part/cycle/chronology, re-emit "concept_map" with the matching layout. Only if neither structure honestly fits, use "generic" with a central_label and 3-5 exact callouts.
 
 If the lesson is genuinely simple or nothing drawable is honestly supported, return the spec JSON unchanged. Never invent formulas, numbers, vectors, curves, or relationships to fill the page. Return ONLY the JSON object, no other text.
 
@@ -918,10 +1001,11 @@ HARD FIELD CONSTRAINTS (violations fail validation — respect every one):
 - callout ids: plain ASCII lowercase/digits/_/-, max 32 chars (never Unicode subscripts).
 - callout label max 24 chars, value max 80 chars. reasoning expression max 120 chars,
   explanation max 200 chars. result expression max 120 chars. takeaway max 200 chars.
-- scene_kind must be exactly one of: force_diagram, process_flow, plot, generic, comparison, number_line.
+- scene_kind must be exactly one of: force_diagram, process_flow, plot, generic, comparison, concept_map, number_line.
 - task.task_type must be exactly one of: compare_variants, multi_step_solution,
   graph_relationship, vector_arrangement, connected_process,
-  coordinate_construction, definition_overview, interval_solution.
+  coordinate_construction, definition_overview, interval_solution,
+  hierarchy_structure, cyclic_process, chronology.
 - task.acceptable_families must include your scene_kind; every required_elements
   entry must be satisfiable by the scene you emit; every exact_claims string
   must appear verbatim in scene labels or composition.
@@ -938,6 +1022,89 @@ YOUR PREVIOUS RESPONSE:
 {PREVIOUS_JSON}"""
 
 
+COMPARISON_PAYLOAD_PROMPT = r"""The lesson's scene is "comparison", but its payload is empty, so no visual can be drawn. Extract ONLY the comparison payload from the screenshot — do NOT re-emit the whole spec.
+
+Choose exactly ONE shape:
+
+FEATURE MATRIX — when the lesson contrasts alternatives across shared dimensions:
+{"table": {"rows": [{"label": "Binomial"}, {"label": "Poisson"}], "columns": [{"label": "Mean", "values": ["np", "l"]}, {"label": "Variance", "values": ["np(1-p)", "l"]}], "corner": "DISTRIBUTION", "verdict": "one grounded synthesis sentence, or empty"}}
+
+MOTION PANELS — ONLY when the screenshot itself shows motion/geometry variants (translation/rotation/rolling):
+{"panels": [{"label": "Pure translation", "object": {"kind": "disk", "label": "CM"}, "points": [{"label": "P'", "at": "top"}], "vectors": [{"label": "v_CM", "angle_deg": 0, "length": 1.0, "at": "top"}], "arcs": [], "note": "one short line"}]}
+
+Matrix rules (violations make the payload invalid):
+- 2-6 row labels and 2-3 columns; every column has EXACTLY one non-empty value per row, in row order.
+- A matrix may be oriented either way. If the source contrasts MORE than 3 alternatives, put the alternatives in the ROWS and the 2-3 shared metrics in the COLUMNS (e.g. Binomial/Poisson/Normal/Exponential as rows × Mean/Variance/MGF as columns). Never drop an alternative the lesson is about.
+- "corner" names the row axis truthfully: "FEATURE" when rows are shared features, "DISTRIBUTION"/"SPECIES"/"STAGE" when rows are the alternatives.
+- "verdict" states the practical synthesis of the matrix (a decision rule or takeaway), never a glossary definition of a single cell; leave it empty when no synthesis is grounded.
+- Copy every cell verbatim from the screenshot/notes; keep exact symbols/numbers. Use "-" only when the source cell truly does not apply.
+- Labels max 40 chars, cells max 80 chars, verdict max 120 chars.
+
+Return ONLY the JSON object, no prose and no other fields."""
+
+
+def _needs_comparison_payload_repair(reason: str) -> bool:
+    """Whether the repair reason is the empty comparison payload (pure)."""
+    lowered = reason.lower()
+    return (
+        "comparison has no comparison payload" in lowered
+        or "comparison needs at least 2 labeled panels" in lowered
+    )
+
+
+async def _repair_comparison_payload(
+    spec: VisualSpec,
+    image_bytes: bytes,
+    study_notes: StudyNotes | None,
+) -> VisualSpec | None:
+    """One focused call that fills an empty comparison payload (pure merge).
+
+    Re-emitting the complete nested spec to fill one missing object proved
+    unreliable for dense multi-column boards (the model returned the same null
+    payload). A small purpose-built extraction call succeeds because the whole
+    response is the table/panels. This still runs inside the single repair
+    budget; any failure returns None and the caller keeps the honest refusal.
+    """
+    prompt = COMPARISON_PAYLOAD_PROMPT
+    if study_notes is not None:
+        prompt += (
+            "\n\nGROUNDED CONTEXT (use only these plus the screenshot; "
+            "do not contradict the screenshot):\n" + _minimal_notes_context(study_notes)
+        )
+    try:
+        repair_raw = await _call_gemini(
+            prompt,
+            image_bytes,
+            max_retries=0,
+            json_mode=True,
+            timeout_seconds=settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
+        )
+        data = _clean_latex_in_dict(_extract_json(repair_raw))
+        nested = data.get("comparison")
+        payload = nested if isinstance(nested, dict) else data
+        if not isinstance(payload, dict):
+            return None
+        comparison = VisualComparison(**payload)
+    except (json.JSONDecodeError, ValidationError, UpstreamError, ValueError) as e:
+        logger.warning("Comparison payload repair failed: %s", e)
+        return None
+    scene = spec.deterministic.scene
+    if scene is None:
+        return None
+    scene.scene_kind = "comparison"
+    scene.comparison = comparison
+    if comparison.table is not None:
+        rows = [r for r in comparison.table.rows if (r.label or "").strip()]
+        columns = [c for c in comparison.table.columns if (c.label or "").strip()]
+        if len(rows) < 2 or len(columns) < 2:
+            return None
+        if any(len(c.values) != len(rows) for c in columns):
+            return None
+    elif len(comparison.panels) < 2:
+        return None
+    return spec
+
+
 async def repair_thin_spec(
     spec: VisualSpec,
     image_bytes: bytes,
@@ -950,6 +1117,10 @@ async def repair_thin_spec(
     (caller keeps the original). At most one extra Gemini call, tight
     sub-budget, no retry — same discipline as the contradiction repair.
     """
+    if _needs_comparison_payload_repair(reason):
+        # A dense matrix is best repaired by a response that IS the matrix,
+        # not by asking the model to reproduce a large nested spec again.
+        return await _repair_comparison_payload(spec, image_bytes, study_notes)
     prompt = THIN_SCENE_REPAIR_PROMPT.replace("{REASON}", reason).replace(
         "{PREVIOUS_JSON}", spec.model_dump_json(exclude_none=False)
     )

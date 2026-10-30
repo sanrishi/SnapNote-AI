@@ -1,0 +1,158 @@
+{
+  "concept": "Probability Distribution Summary",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "Probability Distribution Summary Table",
+    "task": {
+      "task_type": "compare_variants",
+      "learning_outcome": "Students will be able to recall and compare the mean, variance, and moment generating function (MGF) for Binomial, Poisson, Normal, and Exponential distributions.",
+      "required_elements": [
+        "Binomial(n,p)",
+        "Poisson(l)",
+        "Normal(u,s²)",
+        "Exponential(l)",
+        "Mean (u)",
+        "Variance (s²)",
+        "MGF"
+      ],
+      "required_relationships": [
+        "mapping each distribution to its mean, variance, and MGF"
+      ],
+      "exact_claims": [
+        "Binomial(n,p)",
+        "np",
+        "np(1-p)",
+        "(1-p+peᵗ)ⁿ",
+        "Poisson(l)",
+        "exp(l(eᵗ-1))",
+        "Normal(u,s²)",
+        "u",
+        "s²",
+        "exp(ut+s²t²/2)",
+        "Exponential(l)",
+        "1/l",
+        "1/l²",
+        "l/(l-t)"
+      ],
+      "acceptable_families": [
+        "comparison"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "comparison",
+      "title": "",
+      "caption": "Comparison of fundamental probability distributions by their mean, variance, and moment generating function.",
+      "force": null,
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": {
+        "panels": [],
+        "table": {
+          "rows": [
+            {
+              "label": "Binomial(n,p)"
+            },
+            {
+              "label": "Poisson(l)"
+            },
+            {
+              "label": "Normal(u,s²)"
+            },
+            {
+              "label": "Exponential(l)"
+            }
+          ],
+          "columns": [
+            {
+              "label": "Mean (u)",
+              "values": [
+                "np",
+                "l",
+                "u",
+                "1/l"
+              ]
+            },
+            {
+              "label": "Variance (s²)",
+              "values": [
+                "np(1-p)",
+                "l",
+                "s²",
+                "1/l²"
+              ]
+            },
+            {
+              "label": "MGF",
+              "values": [
+                "(1-p+peᵗ)ⁿ",
+                "exp(l(eᵗ-1))",
+                "exp(ut+s²t²/2)",
+                "l/(l-t)"
+              ]
+            }
+          ],
+          "corner": "DISTRIBUTION",
+          "verdict": "The Moment Generating Function (MGF) is used for deriving moments like mean and variance."
+        },
+        "relation": null
+      },
+      "concept_map": null,
+      "number_line": null
+    },
+    "equations": [],
+    "steps": [],
+    "points": [],
+    "composition": {
+      "title": "Probability Distribution Summary Table",
+      "framing": "Core statistical properties of four fundamental probability distributions.",
+      "callouts": [
+        {
+          "id": "bin",
+          "label": "Binomial",
+          "value": "Mean = np"
+        },
+        {
+          "id": "pois",
+          "label": "Poisson",
+          "value": "Var = l"
+        }
+      ],
+      "reasoning": [
+        {
+          "id": "rs-1",
+          "expression": "Mean(Binomial) = np",
+          "explanation": "Represents expected successes in n trials."
+        }
+      ],
+      "result": {
+        "expression": "MGF = E[e^(tx)]",
+        "emphasis": true
+      },
+      "takeaway": "Each standard probability distribution is fully characterized by its mean, variance, and MGF."
+    }
+  },
+  "visual_form": "feature comparison table",
+  "key_elements": [
+    "Binomial(n,p)",
+    "Poisson(l)",
+    "Normal(u,s²)",
+    "Exponential(l)",
+    "Mean",
+    "Variance",
+    "MGF"
+  ],
+  "key_relationships": [
+    "distributions compared across mean, variance, and moment generating function"
+  ],
+  "must_show": [
+    "table layout contrasting all four distributions across the three metrics"
+  ],
+  "avoid": [
+    "unsupported derivations",
+    "extraneous text outside the table structure"
+  ]
+}

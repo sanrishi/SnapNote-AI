@@ -1,0 +1,129 @@
+{
+  "concept": "Binary Search Trees",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "Data Structures: Binary Search Trees",
+    "task": {
+      "task_type": "hierarchy_structure",
+      "learning_outcome": "Understand the hierarchical structure and properties of Binary Search Trees.",
+      "required_elements": [
+        "BST",
+        "Properties of BST",
+        "Common BST Operations",
+        "Tree Traversals",
+        "Worst-case"
+      ],
+      "required_relationships": [
+        "Hierarchy of BST concepts and properties"
+      ],
+      "exact_claims": [
+        "Search: O(h) where h = height of tree",
+        "In-order (LNR): outputs sorted order",
+        "Worst-case: O(n) for skewed tree, O(log n) for balanced"
+      ],
+      "acceptable_families": [
+        "concept_map"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "concept_map",
+      "title": "",
+      "caption": "Binary Search Trees organize data hierarchically with operations taking O(h) time.",
+      "force": null,
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": null,
+      "concept_map": {
+        "layout": "tree",
+        "nodes": [
+          {
+            "id": "bst",
+            "label": "BST",
+            "detail": "Binary Search Trees",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "props",
+            "label": "Properties",
+            "detail": "Left < parent < right",
+            "parent": "bst",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "ops",
+            "label": "Operations",
+            "detail": "Search: O(h) where h = height of tree",
+            "parent": "bst",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "trav",
+            "label": "Traversals",
+            "detail": "In-order (LNR): outputs sorted order",
+            "parent": "bst",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "perf",
+            "label": "Worst-case",
+            "detail": "O(n) for skewed tree, O(log n) for balanced",
+            "parent": "bst",
+            "marker": "",
+            "color": ""
+          }
+        ],
+        "edges": [],
+        "relation": null
+      },
+      "number_line": null
+    },
+    "equations": [
+      {
+        "expression": "Search: O(h) where h = height of tree",
+        "meaning": "Time complexity proportional to tree height"
+      },
+      {
+        "expression": "In-order (LNR): outputs sorted order",
+        "meaning": "Tree traversal order property"
+      }
+    ],
+    "steps": [
+      "Understand left and right subtree key properties",
+      "Analyze operations taking O(h) time",
+      "Perform tree traversals like In-order LNR"
+    ],
+    "points": [
+      "Left subtree keys are less than parent",
+      "Right subtree keys are greater than parent",
+      "Worst-case: O(n) for skewed tree, O(log n) for balanced"
+    ],
+    "composition": null
+  },
+  "visual_form": "concept map tree structure",
+  "key_elements": [
+    "Binary Search Tree root",
+    "Properties node",
+    "Operations node",
+    "Traversals node",
+    "Worst-case node"
+  ],
+  "key_relationships": [
+    "BST broken down into properties, operations, traversals, and worst-case performance"
+  ],
+  "must_show": [
+    "Hierarchical breakdown of Binary Search Tree concepts from the lecture"
+  ],
+  "avoid": [
+    "Unrelated data structures",
+    "Invented time complexities"
+  ]
+}

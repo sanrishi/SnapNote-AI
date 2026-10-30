@@ -1,0 +1,146 @@
+{
+  "concept": "Cell: The Unit of Life",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "Cell: The Unit of Life",
+    "task": {
+      "task_type": "hierarchy_structure",
+      "learning_outcome": "Students will be able to classify cell types and understand the foundational structure and tenets of cell biology.",
+      "required_elements": [
+        "Cell",
+        "Cell Theory",
+        "Prokaryotic cells",
+        "Eukaryotic cells"
+      ],
+      "required_relationships": [
+        "Cell Theory governs the definition of a cell",
+        "Prokaryotic cells and Eukaryotic cells are types of cells"
+      ],
+      "exact_claims": [
+        "Cell Theory",
+        "Prokaryotic cells",
+        "Eukaryotic cells"
+      ],
+      "acceptable_families": [
+        "concept_map"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "concept_map",
+      "title": "",
+      "caption": "A structural breakdown of cell biology covering core definitions, cell theory tenets, and major cell types.",
+      "force": null,
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": null,
+      "concept_map": {
+        "layout": "tree",
+        "nodes": [
+          {
+            "id": "root",
+            "label": "Cell",
+            "detail": "Structural and functional unit of life",
+            "parent": "",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "theory",
+            "label": "Cell Theory",
+            "detail": "All organisms are composed of cells from pre-existing cells",
+            "parent": "root",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "prok",
+            "label": "Prokaryotic cells",
+            "detail": "Lack a nucleus and membrane-bound organelles",
+            "parent": "root",
+            "marker": "",
+            "color": ""
+          },
+          {
+            "id": "euk",
+            "label": "Eukaryotic cells",
+            "detail": "Have a nucleus and membrane-bound organelles",
+            "parent": "root",
+            "marker": "",
+            "color": ""
+          }
+        ],
+        "edges": [
+          {
+            "source": "root",
+            "target": "theory",
+            "label": "defined by"
+          },
+          {
+            "source": "root",
+            "target": "prok",
+            "label": "type"
+          },
+          {
+            "source": "root",
+            "target": "euk",
+            "label": "type"
+          }
+        ],
+        "relation": null
+      },
+      "number_line": null
+    },
+    "equations": [],
+    "steps": [],
+    "points": [],
+    "composition": {
+      "title": "Cell: The Unit of Life",
+      "framing": "Foundational hierarchy of cell biology principles and classifications.",
+      "callouts": [
+        {
+          "id": "node-theory",
+          "label": "Cell Theory",
+          "value": "Basic unit of structure and organization"
+        },
+        {
+          "id": "node-prok",
+          "label": "Prokaryotic",
+          "value": "No true nucleus (Bacteria)"
+        },
+        {
+          "id": "node-euk",
+          "label": "Eukaryotic",
+          "value": "Membrane-bound nucleus (Plants/Animals)"
+        }
+      ],
+      "reasoning": [],
+      "result": {
+        "expression": "All cells arise from pre-existing cells",
+        "emphasis": true
+      },
+      "takeaway": "Cells are the fundamental building blocks of all living organisms, categorized broadly into prokaryotes and eukaryotes."
+    }
+  },
+  "visual_form": "concept map tree structure",
+  "key_elements": [
+    "Cell",
+    "Cell Theory",
+    "Prokaryotic cells",
+    "Eukaryotic cells"
+  ],
+  "key_relationships": [
+    "Cell types branch from the core biological unit",
+    "Cell Theory defines the fundamental rules governing all cells"
+  ],
+  "must_show": [
+    "Hierarchical tree view separating cell theory from cell types"
+  ],
+  "avoid": [
+    "Prose paragraphs in nodes",
+    "Unrelated historical dates"
+  ]
+}
