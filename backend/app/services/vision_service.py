@@ -20,6 +20,7 @@ from app.utils.diagram_validation import SUPPORTED_DIAGRAM_TYPES, validate_diagr
 from app.utils.diagram_renderer import render_polar_region
 from app.utils.latex_clean import latex_to_unicode
 from app.utils.svg_safe import sanitize_svg
+from app.utils.table_quality import normalize_visual_spec
 from pydantic import BaseModel, ValidationError
 
 logger = logging.getLogger(__name__)
@@ -571,8 +572,9 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
         - tree: exactly ONE root (empty parent); every other node names an existing parent; depth <= 4. Use it for taxonomies, whole/part breakdowns, classification, tree data structures, "types of X".
           * Nodes at the same level must be the SAME KIND of thing (all cell types, all tree parts, all phases). Never mix a theory, a person, a formula, or a historical event into a type hierarchy — put those in the detail or in composition, or choose another layout.
           * If the lesson mainly CONTRASTS 2-3 alternatives (prokaryote vs eukaryote, SN1 vs SN2, Qc < Kc vs Qc > Kc), use a comparison table instead of a tree. A tree that puts the alternatives in one row is a weak visual.
-        - cycle: 3-6 stages in list order; the renderer closes the loop automatically. Use it for repeating biological/chemical cycles and feedback loops.
-        - timeline: 3-6 events in chronological order; put the date/phase in "marker". Use it for history, discovery timelines, evolution, project phases.
+        - cycle: 3-8 stages in list order; the renderer closes the loop automatically. Use it for repeating biological/chemical cycles and feedback loops (the TCA cycle has 8 intermediates).
+        - timeline: 3-6 events in chronological order; put the date/phase in "marker" (<= 28 chars; prefer compact units such as "0.0044 Bya" or "1665"). Use it for history, discovery timelines, evolution, project phases.
+        - HARD CAP: a cycle accepts at most 8 nodes, a timeline at most 6. If the source contains more events, choose the most important ones up to that cap and put ONLY those in "task.required_elements" and "task.exact_claims" — never claim an event you do not draw. A tree may use up to 12 nodes.
         - Do NOT put a paragraph in a node. Labels are short (<= 48 chars); details are one clause (<= 90 chars).
       "edges": optional labeled relationships between node ids, e.g. {"source": "root", "target": "branch", "label": "includes"}. For tree layouts the parent field already draws the hierarchy; use edges only for meaningful cross-links.
       "relation": optional exact relationship/answer to highlight.
@@ -586,10 +588,12 @@ Inside "deterministic.scene" you describe WHAT must be shown using universal edu
           - "arcs": [{"label": "ω", "direction": "ccw"|"cw"}] — one rotation arc ONLY for variants that actually rotate.
           - "note": one short line under the panel (optional). Put exact equations on the vector labels, not only in the note.
       OR a feature matrix (alternatives compared across shared dimensions - cell types, SN1/SN2, market structures, data structures):
-        "table": {"rows": [{"label": "Condition"}, {"label": "Direction"}], "columns": [{"label": "Qc < Kc", "values": ["excess reactants", "forward"]}, {"label": "Qc > Kc", "values": ["excess products", "backward"]}], "corner": "FEATURE", "verdict": "optional one-line takeaway"}
+        "table": {"rows": [{"label": "Condition"}, {"label": "Direction"}], "columns": [{"label": "Qc < Kc", "values": ["excess reactants", "forward"]}, {"label": "Qc > Kc", "values": ["excess products", "backward"]}], "corner": "FEATURE", "verdict": "optional one-line takeaway", "verdict_basis": [{"column": "Qc < Kc", "row": "Direction"}, {"column": "Qc > Kc", "row": "Direction"}]}
           - 2-6 rows and 2-3 columns are REQUIRED; every column has EXACTLY one value per row, in the same order. A table with one row or one column is invalid.
+          - EVERY column must add information. NEVER emit a column whose values merely repeat the row labels (the live failure was a "Condition" column containing "Qc < Kc"/"Qc > Kc" while those exact labels were already the rows) or whose values duplicate another column. A redundant axis is removed; if that leaves only one real dimension the table is refused.
           - "corner" names the row axis in the top-left cell: "FEATURE" when rows are shared features, "DISTRIBUTION" / "ALTITUDE" / "STAGE" when the rows are the alternatives themselves, etc. It must describe the rows truthfully.
           - A matrix may be oriented EITHER way: columns can be the alternatives (rows = shared features, e.g. Qc < Kc | Qc > Kc) OR rows can be the alternatives (columns = shared features, e.g. rows Binomial/Poisson/Normal/Exponential × columns Mean/Variance/MGF). Pick the orientation that keeps rows at 2-6 and columns at 2-3. If the source contrasts MORE than 3 alternatives, transpose so the alternatives are the 4-6 ROWS and the shared metrics are the 2-3 columns — never drop an alternative the lesson is about.
+          - "verdict" is the table's SYNTHESIS (a decision rule or takeaway), never a glossary definition of one cell. It must be traceable: emit "verdict_basis" naming at least TWO real printed cells (column label + row label) that support it, and never put a number in the verdict that is absent from the table. The server verifies the cited cells and drops an untraceable verdict; omit both fields when no synthesis follows from the data.
           - Every cell must be non-empty and short (<= 80 chars); use "-" only when the source truly does not apply.
           - Use the exact terms/numbers from the image, not generic paraphrases. A condition→outcome contrast belongs in a table, never in a tree.
   - "force_diagram" fields:
@@ -851,6 +855,33 @@ def _sanitize_task_claims(spec: VisualSpec) -> int:
     return dropped
 
 
+def _apply_table_quality(spec: VisualSpec) -> VisualSpec:
+    """Deterministically gate comparison axes/verdicts at the model boundary.
+
+    The renderer and validator apply the same normalization defensively; doing
+    it here means repair calls receive the cleaned spec and logs name the
+    exact dimension/verdict the model got wrong.
+    """
+    gated, report = normalize_visual_spec(spec)
+    if report.dropped_columns:
+        logger.info(
+            "VisualSpec removed redundant comparison column(s): %s",
+            ", ".join(report.dropped_columns),
+        )
+    if report.dropped_verdict:
+        logger.warning(
+            "VisualSpec dropped untraceable comparison verdict (%s): %r",
+            report.verdict_reason,
+            report.dropped_verdict,
+        )
+    if report.corrected_corner:
+        logger.info(
+            "VisualSpec corrected comparison corner %r -> 'FEATURE'",
+            report.corrected_corner,
+        )
+    return gated
+
+
 async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) -> VisualSpec:
     """Produce the structured VisualSpec that drives the Explain Visually image.
 
@@ -872,6 +903,7 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
         from app.utils.latex_clean import normalize_spec_math
 
         spec = normalize_spec_math(VisualSpec(**data))
+        spec = _apply_table_quality(spec)
         dropped_claims = _sanitize_task_claims(spec)
         if dropped_claims:
             logger.info(
@@ -929,6 +961,7 @@ async def build_visual_spec(image_bytes: bytes, study_notes: StudyNotes | None) 
 
             repaired = normalize_spec_math(VisualSpec(**repair_data))
             _sanitize_task_claims(repaired)
+            repaired = _apply_table_quality(repaired)
         except (json.JSONDecodeError, ValidationError, UpstreamError) as e:
             logger.warning("VisualSpec contradiction repair failed: %s", e)
             raise UpstreamError(
@@ -986,9 +1019,9 @@ If the reason mentions "number_line has no number_line payload", the scene kind 
 
 If the reason mentions "exact claim missing from scene", do NOT edit or drop short equation/label claims and do NOT change the scene kind. Repair by putting each claim where it is VISIBLE and physically attached:
 - If the current scene is "comparison" and uses motion panels: the claims belong to the panels, not to equations or a general callout. Add the missing panel (maximum 3 total) or the missing vector/material point to the correct panel. Anchors are REQUIRED: "points": [{"label": "P'", "at": "top"}, {"label": "P", "at": "bottom"}], and vectors use "at": "top"|"center"|"bottom". A zero velocity is a real vector with "length": 0.0 and label "v = 0" (a dot, never an arrow). For rolling motion, the complete repair is three panels — Pure translation (all three v_CM vectors), Pure rotation (top v = Rω, CM length 0 v = 0, bottom v = Rω, one arc), Combined rolling (top v = v_CM + Rω = 2v_CM, CM v = v_CM, bottom length 0 v = 0, one arc). Never satisfy a missing motion claim with a composition callout while leaving the panel/vector absent.
-- If the current scene is a comparison feature table: put each missing label/value into the correct table column's "values" (same row order) or into a row label. Every column must keep exactly one value per row.
+- If the current scene is a comparison feature table: put each missing label/value into the correct table column's "values" (same row order) or into a row label. Every column must keep exactly one value per row. Never add a column that repeats the row labels or duplicates another column — remove such an axis instead. A verdict needs "verdict_basis" citing at least two real cells; otherwise leave the verdict empty.
 - If the current scene is "force_diagram", "plot", or "process_flow": keep the existing scene kind and geometry; add the missing claims to "deterministic.equations" (expression = the claim) and/or a composition callout (short label, claim as value).
-- If the current scene is "concept_map": put the claim into a node label, node detail, edge label, or the relation — whichever is semantically true. Never add a node that the screenshot does not support.
+- If the current scene is "concept_map": put the claim into a node label, node detail, edge label, or the relation - whichever is semantically true. Never add a node that the screenshot does not support. A cycle accepts at most 8 nodes and a timeline at most 6: select the most important events up to that cap and make task.required_elements/exact_claims name only those visible events.
 - If the current scene is already "generic": add the claims as its callouts (3-5 verbatim callouts).
 Switching a force_diagram/plot/process_flow to "generic" is not a repair. Never add a motion claim only to a caption, note, or equation while the panel geometry still does not show it.
 
@@ -1027,16 +1060,17 @@ COMPARISON_PAYLOAD_PROMPT = r"""The lesson's scene is "comparison", but its payl
 Choose exactly ONE shape:
 
 FEATURE MATRIX — when the lesson contrasts alternatives across shared dimensions:
-{"table": {"rows": [{"label": "Binomial"}, {"label": "Poisson"}], "columns": [{"label": "Mean", "values": ["np", "l"]}, {"label": "Variance", "values": ["np(1-p)", "l"]}], "corner": "DISTRIBUTION", "verdict": "one grounded synthesis sentence, or empty"}}
+{"table": {"rows": [{"label": "Binomial"}, {"label": "Poisson"}], "columns": [{"label": "Mean", "values": ["np", "l"]}, {"label": "Variance", "values": ["np(1-p)", "l"]}], "corner": "DISTRIBUTION", "verdict": "one grounded synthesis sentence, or empty", "verdict_basis": [{"column": "Mean", "row": "Binomial"}, {"column": "Mean", "row": "Poisson"}]}}
 
 MOTION PANELS — ONLY when the screenshot itself shows motion/geometry variants (translation/rotation/rolling):
 {"panels": [{"label": "Pure translation", "object": {"kind": "disk", "label": "CM"}, "points": [{"label": "P'", "at": "top"}], "vectors": [{"label": "v_CM", "angle_deg": 0, "length": 1.0, "at": "top"}], "arcs": [], "note": "one short line"}]}
 
 Matrix rules (violations make the payload invalid):
 - 2-6 row labels and 2-3 columns; every column has EXACTLY one non-empty value per row, in row order.
+- Every column must add information. Never repeat the row labels inside a column (the observed failure: a "Condition" column whose cells were the row labels themselves), and never duplicate another column. If only one real dimension remains, choose another representation.
 - A matrix may be oriented either way. If the source contrasts MORE than 3 alternatives, put the alternatives in the ROWS and the 2-3 shared metrics in the COLUMNS (e.g. Binomial/Poisson/Normal/Exponential as rows × Mean/Variance/MGF as columns). Never drop an alternative the lesson is about.
 - "corner" names the row axis truthfully: "FEATURE" when rows are shared features, "DISTRIBUTION"/"SPECIES"/"STAGE" when rows are the alternatives.
-- "verdict" states the practical synthesis of the matrix (a decision rule or takeaway), never a glossary definition of a single cell; leave it empty when no synthesis is grounded.
+- "verdict" states the practical synthesis of the matrix (a decision rule or takeaway), never a glossary definition of a single cell; leave it empty when no synthesis is grounded. When present, "verdict_basis" MUST cite at least two real printed cells (column label + row label) that support it, and the verdict must not introduce a number absent from the table.
 - Copy every cell verbatim from the screenshot/notes; keep exact symbols/numbers. Use "-" only when the source cell truly does not apply.
 - Labels max 40 chars, cells max 80 chars, verdict max 120 chars.
 
@@ -1093,14 +1127,17 @@ async def _repair_comparison_payload(
         return None
     scene.scene_kind = "comparison"
     scene.comparison = comparison
-    if comparison.table is not None:
+    spec = _apply_table_quality(spec)
+    scene = spec.deterministic.scene
+    comparison = scene.comparison if scene is not None else None
+    if comparison is not None and comparison.table is not None:
         rows = [r for r in comparison.table.rows if (r.label or "").strip()]
         columns = [c for c in comparison.table.columns if (c.label or "").strip()]
         if len(rows) < 2 or len(columns) < 2:
             return None
         if any(len(c.values) != len(rows) for c in columns):
             return None
-    elif len(comparison.panels) < 2:
+    elif comparison is None or len(comparison.panels) < 2:
         return None
     return spec
 
@@ -1148,4 +1185,4 @@ async def repair_thin_spec(
     except (json.JSONDecodeError, ValidationError, UpstreamError) as e:
         logger.warning("VisualSpec thin-scene repair failed: %s", e)
         return None
-    return repaired
+    return _apply_table_quality(repaired)

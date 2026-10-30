@@ -1,0 +1,132 @@
+{
+  "concept": "Vaccine Timeline and Misconceptions",
+  "render_mode": "deterministic",
+  "text_required": true,
+  "deterministic": {
+    "title": "Vaccine Timeline and Misconceptions",
+    "task": {
+      "task_type": "chronology",
+      "learning_outcome": "Students will be able to trace the chronological development of major vaccines alongside associated historical misconceptions.",
+      "required_elements": [
+        "1796",
+        "Smallpox Vaccine",
+        "1974",
+        "Thimerosal use in vaccine",
+        "1995",
+        "Polio Vaccine",
+        "1998",
+        "MMR Vaccine",
+        "2006",
+        "HPV Vaccine",
+        "2020",
+        "COVID-19 Vaccine"
+      ],
+      "required_relationships": [
+        "Chronological ordering of vaccine milestones from 1796 to 2020"
+      ],
+      "exact_claims": [
+        "1796 Smallpox Vaccine",
+        "1974 Thimerosal use in vaccine",
+        "1995 Polio Vaccine",
+        "1998 MMR Vaccine",
+        "2006 HPV Vaccine",
+        "2020 COVID-19 Vaccine"
+      ],
+      "acceptable_families": [
+        "concept_map"
+      ],
+      "assumptions": [],
+      "missing": []
+    },
+    "scene": {
+      "scene_kind": "concept_map",
+      "title": "",
+      "caption": "Chronological milestones of vaccine development and associated public concerns.",
+      "force": null,
+      "flow": null,
+      "plot": null,
+      "generic": null,
+      "comparison": null,
+      "concept_map": {
+        "layout": "timeline",
+        "nodes": [
+          {
+            "id": "node-1",
+            "label": "Smallpox Vaccine",
+            "detail": "Beginning of vaccine history",
+            "parent": "",
+            "marker": "1796",
+            "color": ""
+          },
+          {
+            "id": "node-2",
+            "label": "Thimerosal use in vaccine",
+            "detail": "Uncertainty of Vaccine's Safety",
+            "parent": "",
+            "marker": "1974",
+            "color": ""
+          },
+          {
+            "id": "node-3",
+            "label": "Polio Vaccine",
+            "detail": "Doubts in changes of internal body system",
+            "parent": "",
+            "marker": "1995",
+            "color": ""
+          },
+          {
+            "id": "node-4",
+            "label": "MMR Vaccine",
+            "detail": "Misbelief of Vaccine causing Typical Disease",
+            "parent": "",
+            "marker": "1998",
+            "color": ""
+          },
+          {
+            "id": "node-5",
+            "label": "HPV Vaccine",
+            "detail": "Appearance of Gender-specific misconception",
+            "parent": "",
+            "marker": "2006",
+            "color": ""
+          },
+          {
+            "id": "node-6",
+            "label": "COVID-19 Vaccine",
+            "detail": "Comparison of Natural Immunity and Acquired Immunity",
+            "parent": "",
+            "marker": "2020",
+            "color": ""
+          }
+        ],
+        "edges": [],
+        "relation": null
+      },
+      "number_line": null
+    },
+    "equations": [],
+    "steps": [],
+    "points": [],
+    "composition": null
+  },
+  "visual_form": "chronology timeline diagram",
+  "key_elements": [
+    "1796 Smallpox Vaccine",
+    "1974 Thimerosal use in vaccine",
+    "1995 Polio Vaccine",
+    "1998 MMR Vaccine",
+    "2006 HPV Vaccine",
+    "2020 COVID-19 Vaccine"
+  ],
+  "key_relationships": [
+    "Timeline mapping vaccine events chronologically"
+  ],
+  "must_show": [
+    "Milestone years from 1796 to 2020",
+    "Corresponding vaccine names"
+  ],
+  "avoid": [
+    "Unrelated medical data",
+    "Decorative non-informative graphics"
+  ]
+}

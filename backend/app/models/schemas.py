@@ -425,7 +425,7 @@ class MapNode(BaseModel):
     label: str = Field(default="", max_length=48)
     detail: str = Field(default="", max_length=90)
     parent: str = Field(default="", max_length=40)
-    marker: str = Field(default="", max_length=18)  # timeline date/phase marker
+    marker: str = Field(default="", max_length=28)  # timeline date/phase marker
     color: str = ""  # ""|accent|red|green|amber|violet
 
 
@@ -474,6 +474,21 @@ class ComparisonRow(BaseModel):
     label: str = Field(default="", max_length=40)
 
 
+class ComparisonVerdictBasis(BaseModel):
+    """One real matrix cell the verdict's synthesis relies on.
+
+    The planner names a column label and a row label (not free-form prose);
+    the gate resolves the pair and refuses evidence that does not exist. This
+    makes the verdict traceable to the printed data instead of merely sounding
+    plausible.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    column: str = Field(default="", max_length=40)
+    row: str = Field(default="", max_length=40)
+
+
 class ComparisonTable(BaseModel):
     """Feature matrix for conceptual subjects that are not motion diagrams.
 
@@ -490,6 +505,11 @@ class ComparisonTable(BaseModel):
     # wide source is transposed, so the axis name must come from the planner.
     corner: str = Field(default="FEATURE", max_length=20)
     verdict: str = Field(default="", max_length=120)
+    # Cells (column label + row label) supporting the verdict. Empty is
+    # allowed; a verdict without traceable evidence is dropped, never shown.
+    verdict_basis: list[ComparisonVerdictBasis] = Field(
+        default_factory=list, max_length=4
+    )
 
 
 class ComparisonPanel(BaseModel):

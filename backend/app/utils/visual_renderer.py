@@ -20,6 +20,7 @@ Design constraints honoured (svg_safe allowlist):
 
 from __future__ import annotations
 
+import html
 import logging
 import math
 import re
@@ -180,6 +181,68 @@ def _wrap(
     if cur:
         lines.append(cur)
     return lines or [""]
+
+
+def _fit_lines(
+    text: str,
+    max_chars: int,
+    max_lines: int,
+    hyphenate: bool = False,
+    break_long_words: bool = True,
+) -> list[str]:
+    """Wrap, then make truncation VISIBLE with an ellipsis.
+
+    A caller that slices wrapped lines without marking the cut hides teaching
+    text from the student while validation (which reads the spec) still counts
+    it as present. The ellipsis is presentation only; the original spec string
+    is never altered.
+    """
+    lines = _wrap(
+        text, max_chars, hyphenate=hyphenate, break_long_words=break_long_words
+    )
+    if max_lines <= 0 or len(lines) <= max_lines:
+        return lines
+    kept = lines[:max_lines]
+    if kept:
+        kept[-1] = kept[-1].rstrip(" .,;:") + "\u2026"
+    return kept
+
+
+def _ellipsize(lines: list[str], max_lines: int) -> list[str]:
+    """Cap already-wrapped lines, marking a cut with an ellipsis."""
+    if max_lines <= 0 or len(lines) <= max_lines:
+        return lines
+    kept = lines[:max_lines]
+    if kept:
+        kept[-1] = kept[-1].rstrip(" .,;:") + "\u2026"
+    return kept
+
+
+def svg_text_content(svg: str) -> str:
+    """The exact text a browser paints from a generated SVG.
+
+    Used by the validation gate instead of the spec strings, so a detail that
+    the renderer wrapped into an ellipsis, sliced away, or never drew cannot
+    satisfy an educational claim. Joining wrapped lines with a space keeps
+    word tokens intact; claim matching normalizes whitespace.
+    """
+    chunks = re.findall(r"<text\b[^>]*>(.*?)</text>", svg, flags=re.S)
+    cleaned = [
+        " ".join(html.unescape(re.sub(r"<[^>]+>", "", chunk)).split())
+        for chunk in chunks
+    ]
+    return " ".join(chunk for chunk in cleaned if chunk)
+
+
+def rendered_scene_text(spec: DeterministicVisual) -> str:
+    """Visible hero text for a deterministic spec (empty when no hero).
+
+    This is the single source of truth for visibility validation: it renders
+    the same geometry-only hero the composition engine embeds, then extracts
+    its <text> nodes. Nothing hidden in the spec can leak into the haystack.
+    """
+    svg = render_hero_geometry(spec)
+    return svg_text_content(svg) if svg else ""
 
 
 def _title(y: int, text: str) -> tuple[str, int]:
@@ -1421,10 +1484,7 @@ def _map_box(
     detail_wrapped: list[str] = []
     if detail:
         max_chars = max(8, int((w - 22) / (detail_size * 0.55)))
-        all_detail = _wrap(detail, max_chars)
-        detail_wrapped = all_detail[:detail_lines]
-        if len(all_detail) > detail_lines and detail_wrapped:
-            detail_wrapped[-1] = detail_wrapped[-1].rstrip(" .,;:") + "…"
+        detail_wrapped = _fit_lines(detail, max_chars, detail_lines)
     gap = 4 if detail_wrapped else 0
     detail_h = len(detail_wrapped) * (detail_size + 3)
     total_h = len(lines) * line_h + gap + detail_h
@@ -1460,14 +1520,12 @@ def _map_box(
 def _map_label_lines(label: str, width: float, font_size: int, max_lines: int = 0) -> list[str]:
     # Word-wrap only. Splitting "Statistical" into "Statistica" + "l" makes a
     # clean concept node look like OCR garbage; a rare over-long token may
-    # overflow by a character instead.
+    # overflow by a character instead. A hard line cap is marked with an
+    # ellipsis so validation never counts text the student cannot read.
     max_chars = max(6, int((width - 18) / (font_size * 0.58)))
     lines = _wrap(label, max_chars, break_long_words=False)
     if max_lines and len(lines) > max_lines:
-        # Presentation only: keep every word by shrinking the font once.
-        size = max(11, font_size - 2)
-        max_chars = max(6, int((width - 18) / (size * 0.58)))
-        lines = _wrap(label, max_chars, break_long_words=False)
+        return _ellipsize(lines, max_lines)
     return lines
 
 
@@ -1820,7 +1878,7 @@ def _render_tree(cmap: VisualConceptMap) -> str:
 
 def _render_cycle(cmap: VisualConceptMap) -> tuple[str, object]:
     """Stages arranged on an ellipse with clockwise arrows."""
-    nodes = [n for n in cmap.nodes if (n.label or "").strip()][:6]
+    nodes = [n for n in cmap.nodes if (n.label or "").strip()][:8]
     if len(nodes) < 3:
         return "", None
     cx, cy = VIEW_W / 2, STAGE_Y + 288
@@ -1918,25 +1976,32 @@ def _render_timeline(cmap: VisualConceptMap) -> str:
                 f'height="{_f(card_h)}" rx="12" fill="{fill}" stroke="{stroke}" stroke-width="1.5"/>'
             )
             marker = (node.marker or f"{index + 1:02d}").strip()
-            tag_w = min(card_w - 20, max(48.0, len(marker) * 7.0 + 18))
+            marker_font = 11 if len(marker) <= 22 else 10
+            tag_w = min(card_w - 20, max(48.0, len(marker) * marker_font * 0.62 + 18))
             parts.append(
                 f'<rect x="{_f(x - tag_w / 2)}" y="{_f(card_top + 10)}" width="{_f(tag_w)}" '
                 f'height="22" rx="11" fill="{stroke}"/>'
             )
             parts.append(
-                f'<text x="{_f(x)}" y="{_f(card_top + 25)}" font-family="{_FONT}" font-size="11" '
+                f'<text x="{_f(x)}" y="{_f(card_top + 25)}" font-family="{_FONT}" font-size="{marker_font}" '
                 f'font-weight="700" fill="white" text-anchor="middle">{_esc(marker)}</text>'
             )
-            label_lines = _map_label_lines(node.label, card_w, 15, max_lines=3)
+            label_lines = _ellipsize(
+                _map_label_lines(node.label, card_w, 15, max_lines=3), 3
+            )
             ly = card_top + 48
-            for line in label_lines[:3]:
+            for line in label_lines:
                 parts.append(
                     f'<text x="{_f(x)}" y="{_f(ly)}" font-family="{_FONT}" font-size="15" '
                     f'font-weight="700" fill="{ink}" text-anchor="middle">{_esc(line)}</text>'
                 )
                 ly += 18
-            detail_lines = _map_label_lines(node.detail, card_w, 11, max_lines=2) if (node.detail or "").strip() else []
-            for line in detail_lines[:2]:
+            detail_lines = (
+                _ellipsize(_map_label_lines(node.detail, card_w, 11, max_lines=2), 2)
+                if (node.detail or "").strip()
+                else []
+            )
+            for line in detail_lines:
                 parts.append(
                     f'<text x="{_f(x)}" y="{_f(ly + 2)}" font-family="{_FONT}" font-size="11" '
                     f'fill="{MUTED}" text-anchor="middle">{_esc(line)}</text>'
@@ -1967,24 +2032,29 @@ def _render_timeline(cmap: VisualConceptMap) -> str:
                 f'height="{_f(card_h)}" rx="12" fill="{fill}" stroke="{stroke}" stroke-width="1.5"/>'
             )
             marker = (node.marker or f"{index + 1:02d}").strip()
-            tag_w = min(84.0, max(46.0, len(marker) * 7.0 + 18))
+            marker_font = 11 if len(marker) <= 20 else 10
+            tag_w = min(170.0, max(46.0, len(marker) * marker_font * 0.62 + 18))
             parts.append(
                 f'<rect x="{_f(card_x + 12)}" y="{_f(y - 11)}" width="{_f(tag_w)}" '
                 f'height="22" rx="11" fill="{stroke}"/>'
             )
             parts.append(
                 f'<text x="{_f(card_x + 12 + tag_w / 2)}" y="{_f(y + 4)}" font-family="{_FONT}" '
-                f'font-size="11" font-weight="700" fill="white" text-anchor="middle">{_esc(marker)}</text>'
+                f'font-size="{marker_font}" font-weight="700" fill="white" text-anchor="middle">{_esc(marker)}</text>'
             )
             text_x = card_x + 12 + tag_w + 12
             text_w = card_w - (text_x - card_x) - 12
-            label_lines = _map_label_lines(node.label, text_w, 14, max_lines=1)
+            label_lines = _ellipsize(
+                _map_label_lines(node.label, text_w, 14, max_lines=1), 1
+            )
             parts.append(
                 f'<text x="{_f(text_x)}" y="{_f(y - 2)}" font-family="{_FONT}" font-size="14" '
                 f'font-weight="700" fill="{ink}" text-anchor="start">{_esc(label_lines[0])}</text>'
             )
             if (node.detail or "").strip():
-                detail = _map_label_lines(node.detail, text_w, 11, max_lines=1)
+                detail = _ellipsize(
+                    _map_label_lines(node.detail, text_w, 11, max_lines=1), 1
+                )
                 parts.append(
                     f'<text x="{_f(text_x)}" y="{_f(y + 17)}" font-family="{_FONT}" font-size="11" '
                     f'fill="{MUTED}" text-anchor="start">{_esc(detail[0])}</text>'
@@ -2070,9 +2140,11 @@ def _render_comparison_table(table: ComparisonTable) -> tuple[str, int]:
     for index, column in enumerate(columns):
         cx = x0 + label_w + col_w * (index + 0.5)
         fill, stroke, ink = MAP_PALETTE[index % len(MAP_PALETTE)]
-        header_lines = _wrap(column.label, max(8, int((col_w - 24) / (14 * 0.58))))
+        header_lines = _fit_lines(
+            column.label, max(8, int((col_w - 24) / (14 * 0.58))), 2
+        )
         hy = y0 + 32 - (len(header_lines) - 1) * 9
-        for line in header_lines[:2]:
+        for line in header_lines:
             parts.append(
                 f'<text x="{_f(cx)}" y="{_f(hy)}" font-family="{_FONT}" font-size="14" '
                 f'font-weight="700" fill="{ink}" text-anchor="middle">{_esc(line)}</text>'
@@ -2090,9 +2162,11 @@ def _render_comparison_table(table: ComparisonTable) -> tuple[str, int]:
             f'<line x1="{_f(x0)}" y1="{_f(ry)}" x2="{_f(x1)}" y2="{_f(ry)}" '
             f'stroke="#e2e8f0" stroke-width="1"/>'
         )
-        label_lines = _wrap(row.label, max(7, int((label_w - 24) / (font * 0.58))))
+        label_lines = _fit_lines(
+            row.label, max(7, int((label_w - 24) / (font * 0.58))), max_lines
+        )
         ly = ry + (row_h - (len(label_lines) - 1) * line_h) / 2 + font * 0.34
-        for line in label_lines[:max_lines]:
+        for line in label_lines:
             parts.append(
                 f'<text x="{_f(x0 + 16)}" y="{_f(ly)}" font-family="{_FONT}" font-size="{font}" '
                 f'font-weight="700" fill="{INK}" text-anchor="start">{_esc(line)}</text>'
@@ -2103,9 +2177,11 @@ def _render_comparison_table(table: ComparisonTable) -> tuple[str, int]:
             if col_index % 1 == 0 and col_index > 0:
                 pass
             value = column.values[row_index] if row_index < len(column.values) else ""
-            cell_lines = _wrap(value, max(8, int((col_w - 22) / (font * 0.55))))
+            cell_lines = _fit_lines(
+                value, max(8, int((col_w - 22) / (font * 0.55))), max_lines
+            )
             cy = ry + (row_h - (len(cell_lines) - 1) * line_h) / 2 + font * 0.34
-            for line in cell_lines[:max_lines]:
+            for line in cell_lines:
                 parts.append(
                     f'<text x="{_f(cx)}" y="{_f(cy)}" font-family="{_FONT}" font-size="{font}" '
                     f'fill="{INK}" text-anchor="middle">{_esc(line)}</text>'
