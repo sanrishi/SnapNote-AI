@@ -862,6 +862,27 @@ def _finite(value: object, what: str, errors: list[str]) -> float | None:
 _RELATION_OPERATORS = ("=", "<", ">", "\u2264", "\u2265", "\u2260", "\u2248", "\u221d", "\u2192", "\u27f6")
 
 
+def _key_result(expression: str) -> str:
+    """Return the expression only when it reads as a result, not a label.
+
+    Observed live defect: the planner put "Qc vs Kc" in ``composition.result``
+    and the composed page printed it as KEY RESULT — a bare comparison label
+    where an equation belongs. A result must contain a math operator or a
+    digit; an empty result section is honest and is omitted by the composer.
+    """
+    value = " ".join((expression or "").split())
+    if not value:
+        return ""
+    lowered = value.casefold()
+    if " vs " in f" {lowered} " or " versus " in f" {lowered} ":
+        return ""
+    if any(op in value for op in _RELATION_OPERATORS):
+        return value
+    if re.search(r"\d", value):
+        return value
+    return ""
+
+
 def _relation_errors(relation: object) -> list[str]:
     """The scene relation renders as the visual's highlighted answer chip.
 
@@ -1459,7 +1480,7 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             # reasoning block below it repeats the same two rows verbatim.
             v3_reasoning = ""
             v3_steps = []
-        result_text = comp.result.expression.strip() if comp.result is not None else ""
+        result_text = _key_result(comp.result.expression) if comp.result is not None else ""
         if (
             scene.scene_kind == "comparison"
             and scene.comparison is not None
@@ -1495,7 +1516,7 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
         for arc in force.arcs:
             reasoning_bits.append(_clean(arc.caption) or f"{arc.label.strip()} {arc.direction}")
         if force.relation is not None and (force.relation.expression or "").strip():
-            result_text = force.relation.expression.strip()
+            result_text = _key_result(force.relation.expression)
             if (force.relation.caption or "").strip():
                 reasoning_bits.append(force.relation.caption.strip())
     elif family == "coordinate":
@@ -1526,7 +1547,7 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             if label and any(not (ch.isalpha() or ch.isspace() or ch == "-") for ch in label):
                 reasoning_bits.append(label)
         if flow.relation is not None and (flow.relation.expression or "").strip():
-            result_text = flow.relation.expression.strip()
+            result_text = _key_result(flow.relation.expression)
     elif family == "generic":
         # The hero already IS the callout box set (central label + satellites).
         # Emitting the same callouts again as Typst chips duplicates every
@@ -1539,7 +1560,7 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
         # note, so repeating them as callout cards below the visual is
         # duplication, not explanation. Arc labels are visual marks, not prose.
         if compa.relation is not None and (compa.relation.expression or "").strip():
-            result_text = compa.relation.expression.strip()
+            result_text = _key_result(compa.relation.expression)
             if (compa.relation.caption or "").strip():
                 reasoning_bits.append(compa.relation.caption.strip())
         elif compa.table is not None and (compa.table.verdict or "").strip():
@@ -1576,7 +1597,7 @@ def extract_lesson_content(spec: VisualSpec, hero_svg: str = "") -> LessonConten
             if label and any(not (ch.isalpha() or ch.isspace() or ch == "-") for ch in label):
                 reasoning_bits.append(label)
         if cmap.relation is not None and (cmap.relation.expression or "").strip():
-            result_text = cmap.relation.expression.strip()
+            result_text = _key_result(cmap.relation.expression)
             if (cmap.relation.caption or "").strip():
                 reasoning_bits.append(cmap.relation.caption.strip())
     elif family == "worked_math":

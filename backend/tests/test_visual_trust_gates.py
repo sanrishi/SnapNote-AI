@@ -30,7 +30,7 @@ from app.utils.table_quality import (
     redundant_column_indices,
     verdict_issue,
 )
-from app.utils.visual_lesson import validate_lesson_spec
+from app.utils.visual_lesson import extract_lesson_content, validate_lesson_spec
 from app.utils.visual_renderer import (
     render_hero_geometry,
     rendered_scene_text,
@@ -291,6 +291,21 @@ def test_mislabelled_corner_is_inferred_from_feature_row_labels() -> None:
     assert report.corrected_corner == "STATE"
 
 
+def test_live_state_direction_corner_is_corrected() -> None:
+    # Production run (Nov 2026): rows State/Direction under corner="CONDITION".
+    table = _table(
+        ["State", "Direction"],
+        [
+            ("Qc < Kc", ["excess reactants", "reaction proceeds forward"]),
+            ("Qc > Kc", ["excess products", "reaction proceeds backward"]),
+        ],
+    )
+    table.corner = "CONDITION"
+    normalized, report = normalize_comparison_table(table)
+    assert normalized.corner == "FEATURE"
+    assert report.corrected_corner == "CONDITION"
+
+
 def test_one_feature_like_alternative_does_not_flip_the_axis() -> None:
     # Newton/Secant are the alternatives (rows); Convergence/Derivative needed
     # are shared features. The word "rate" in one feature label must not flip
@@ -323,6 +338,30 @@ def test_table_claim_printed_as_composition_result_is_visible() -> None:
         result=CompositionResult(expression="Qc = Kc"),
     )
     assert validate_lesson_spec(spec) == []
+
+
+def test_label_like_composition_result_is_not_printed_as_key_result() -> None:
+    # Live production output (Nov 2026): composition.result was "Qc vs Kc",
+    # printed under KEY RESULT as if it were an answer. A label is not a result.
+    table = _table(
+        ["State", "Direction"],
+        [
+            ("Qc < Kc", ["excess reactants", "reaction proceeds forward"]),
+            ("Qc > Kc", ["excess products", "reaction proceeds backward"]),
+        ],
+    )
+    spec = _table_spec(table)
+    spec.deterministic.composition = LessonComposition(
+        title="Reaction direction",
+        result=CompositionResult(expression="Qc vs Kc"),
+    )
+    hero = render_hero_geometry(spec.deterministic)
+    content = extract_lesson_content(spec, hero_svg=hero)
+    assert content.result_text == ""
+
+    spec.deterministic.composition.result = CompositionResult(expression="Qc = Kc")
+    content = extract_lesson_content(spec, hero_svg=hero)
+    assert content.result_text == "Qc = Kc"
 
 
 # ── exact visibility ────────────────────────────────────────────────────────
