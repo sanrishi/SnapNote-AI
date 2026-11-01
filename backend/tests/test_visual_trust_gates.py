@@ -452,3 +452,99 @@ def test_detail_beyond_the_card_cap_cannot_satisfy_a_claim() -> None:
     assert "HIDDEN42" not in hero_text
     errors = validate_lesson_spec(spec)
     assert any("exact claim missing" in error for error in errors)
+
+
+def test_bare_string_verdict_basis_is_ignored_not_fatal() -> None:
+    # Live planner output (Oct 2026) emitted ["Qc < Kc", "Qc > Kc"] for
+    # verdict_basis. A bare label names no cell, so it is dropped; the table
+    # and a self-evident verdict must survive instead of the whole spec dying.
+    table = ComparisonTable.model_validate(
+        {
+            "rows": [{"label": "Condition"}, {"label": "Direction"}],
+            "columns": [
+                {"label": "Qc < Kc", "values": ["excess reactants", "forward"]},
+                {"label": "Qc > Kc", "values": ["excess products", "backward"]},
+            ],
+            "corner": "FEATURE",
+            "verdict": "Qc < Kc proceeds forward, while Qc > Kc proceeds backward.",
+            "verdict_basis": ["Qc < Kc", "Qc > Kc"],
+        }
+    )
+    assert table.verdict_basis == []
+    assert verdict_issue(table) is None
+
+
+def test_comparison_claim_gap_uses_focused_repair(monkeypatch) -> None:
+    import asyncio
+    from unittest.mock import AsyncMock
+
+    from app.services import vision_service
+
+    table = _table(
+        ["Condition", "Direction"],
+        [
+            ("Qc < Kc", ["excess reactants", "forward"]),
+            ("Qc > Kc", ["excess products", "backward"]),
+        ],
+    )
+    spec = _table_spec(table, ["reaction proceeds forward"])
+    focused = AsyncMock(return_value=spec)
+    monkeypatch.setattr(vision_service, "_repair_comparison_payload", focused)
+    out = asyncio.run(
+        vision_service.repair_thin_spec(
+            spec,
+            b"fake-image",
+            None,
+            "exact claim missing from scene: 'reaction proceeds forward'",
+        )
+    )
+    assert out is spec
+    focused.assert_awaited_once()
+
+
+def test_focused_comparison_repair_passes_claims_to_the_model(monkeypatch) -> None:
+    import asyncio
+    import json
+
+    from app.services import vision_service
+
+    captured: dict[str, str] = {}
+
+    async def fake_call(prompt: str, *_args: object, **_kwargs: object) -> str:
+        captured["prompt"] = prompt
+        return json.dumps(
+            {
+                "table": {
+                    "rows": [{"label": "Condition"}, {"label": "Direction"}],
+                    "columns": [
+                        {
+                            "label": "Qc < Kc",
+                            "values": ["excess reactants", "reaction proceeds forward"],
+                        },
+                        {
+                            "label": "Qc > Kc",
+                            "values": ["excess products", "reaction proceeds backward"],
+                        },
+                    ],
+                    "corner": "FEATURE",
+                }
+            }
+        )
+
+    monkeypatch.setattr(vision_service, "_call_gemini", fake_call)
+    spec = _table_spec(
+        _table(
+            ["Condition", "Direction"],
+            [
+                ("Qc < Kc", ["excess reactants", "forward"]),
+                ("Qc > Kc", ["excess products", "backward"]),
+            ],
+        ),
+        ["reaction proceeds forward"],
+    )
+    out = asyncio.run(vision_service._repair_comparison_payload(spec, b"fake-image", None))
+    assert out is not None
+    assert '"reaction proceeds forward"' in captured["prompt"]
+    table = out.deterministic.scene.comparison.table  # type: ignore[union-attr]
+    assert table is not None
+    assert "reaction proceeds forward" in table.columns[0].values

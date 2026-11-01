@@ -511,6 +511,26 @@ class ComparisonTable(BaseModel):
         default_factory=list, max_length=4
     )
 
+    @field_validator("verdict_basis", mode="before")
+    @classmethod
+    def _drop_unaddressable_evidence(cls, value: object) -> object:
+        """Ignore evidence entries that cannot name a cell.
+
+        The planner occasionally emits ``verdict_basis`` as bare labels
+        (``["Qc < Kc", "Qc > Kc"]``). A bare string names one axis only, so it
+        cannot identify a matrix cell; failing the whole spec over that shape
+        would discard a perfectly good table. Such entries are dropped here
+        and the verdict falls back to the self-derived evidence check in
+        ``table_quality.verdict_issue`` — never treated as verified evidence.
+        """
+        if not isinstance(value, list):
+            return value
+        return [
+            item
+            for item in value
+            if isinstance(item, (ComparisonVerdictBasis, dict))
+        ]
+
 
 class ComparisonPanel(BaseModel):
     """One panel of a side-by-side comparison (2-3 panels per scene).
