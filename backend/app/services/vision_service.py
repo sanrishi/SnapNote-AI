@@ -1100,6 +1100,15 @@ async def _repair_comparison_payload(
     budget; any failure returns None and the caller keeps the honest refusal.
     """
     prompt = COMPARISON_PAYLOAD_PROMPT
+    task = spec.deterministic.task
+    claims = [c.strip() for c in (task.exact_claims if task else []) if c.strip()][:8]
+    if claims:
+        prompt += (
+            "\n\nEXACT CLAIMS THAT MUST BE VISIBLE: "
+            + "; ".join(f'"{claim}"' for claim in claims)
+            + "\nIf you emit a table, every claim above must appear verbatim in a "
+            "cell or label while the rest of the matrix stays truthful."
+        )
     if study_notes is not None:
         prompt += (
             "\n\nGROUNDED CONTEXT (use only these plus the screenshot; "
@@ -1157,6 +1166,18 @@ async def repair_thin_spec(
     if _needs_comparison_payload_repair(reason):
         # A dense matrix is best repaired by a response that IS the matrix,
         # not by asking the model to reproduce a large nested spec again.
+        return await _repair_comparison_payload(spec, image_bytes, study_notes)
+    scene = spec.deterministic.scene
+    if (
+        scene is not None
+        and scene.scene_kind == "comparison"
+        and scene.comparison is not None
+        and scene.comparison.table is not None
+    ):
+        # A table exists but a later gate rejected it (most often an exact
+        # claim that is not printed in any cell). Focused re-extraction knows
+        # the claims verbatim, so it can place them without re-emitting the
+        # whole nested spec — the full re-emit failed on real chemistry boards.
         return await _repair_comparison_payload(spec, image_bytes, study_notes)
     prompt = THIN_SCENE_REPAIR_PROMPT.replace("{REASON}", reason).replace(
         "{PREVIOUS_JSON}", spec.model_dump_json(exclude_none=False)
