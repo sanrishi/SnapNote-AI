@@ -363,6 +363,12 @@ def test_label_like_composition_result_is_not_printed_as_key_result() -> None:
     content = extract_lesson_content(spec, hero_svg=hero)
     assert content.result_text == "Qc = Kc"
 
+    # A full conceptual conclusion is a legitimate result in a prose subject.
+    conclusion = "All cells arise from pre-existing cells"
+    spec.deterministic.composition.result = CompositionResult(expression=conclusion)
+    content = extract_lesson_content(spec, hero_svg=hero)
+    assert content.result_text == conclusion
+
 
 # ── exact visibility ────────────────────────────────────────────────────────
 

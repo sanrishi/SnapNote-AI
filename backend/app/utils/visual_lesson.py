@@ -867,20 +867,24 @@ def _key_result(expression: str) -> str:
 
     Observed live defect: the planner put "Qc vs Kc" in ``composition.result``
     and the composed page printed it as KEY RESULT — a bare comparison label
-    where an equation belongs. A result must contain a math operator or a
-    digit; an empty result section is honest and is omitted by the composer.
+    where an equation belongs. Reject that shape and any short bare label
+    (≤ 3 words) without a math operator or digit; keep real equations, values
+    and full conceptual conclusions ("All cells arise from pre-existing
+    cells"), which are legitimate results in prose subjects.
     """
     value = " ".join((expression or "").split())
     if not value:
         return ""
-    lowered = value.casefold()
-    if " vs " in f" {lowered} " or " versus " in f" {lowered} ":
+    padded = f" {value.casefold()} "
+    if " vs " in padded or " versus " in padded:
         return ""
     if any(op in value for op in _RELATION_OPERATORS):
         return value
     if re.search(r"\d", value):
         return value
-    return ""
+    if len(value.split()) <= 3:
+        return ""
+    return value
 
 
 def _relation_errors(relation: object) -> list[str]:
