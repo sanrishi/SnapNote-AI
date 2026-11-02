@@ -40,7 +40,6 @@ from app.models.schemas import (
     DeterministicVisual,
     MapNode,
     StudyNotes,
-    VisualComparison,
     VisualConceptMap,
     VisualRenderMode,
     VisualScene,

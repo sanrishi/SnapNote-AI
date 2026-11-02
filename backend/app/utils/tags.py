@@ -1,12 +1,22 @@
 import json
+import logging
+
+from pydantic import ValidationError
+
 from app.models.schemas import ExtractionContext
+
+logger = logging.getLogger(__name__)
 
 
 def parse_context(raw: str) -> ExtractionContext:
     try:
         data = json.loads(raw)
         return ExtractionContext(**data)
-    except (json.JSONDecodeError, TypeError):
+    except (json.JSONDecodeError, TypeError, ValidationError) as exc:
+        # Client-supplied context is a hint, never required. A JSON object with
+        # wrong field types used to raise ValidationError past this handler and
+        # turn a normal extraction into a 500.
+        logger.info("Ignoring invalid extraction context: %s", exc)
         return ExtractionContext()
 
 

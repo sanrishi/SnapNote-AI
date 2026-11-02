@@ -257,22 +257,29 @@ def _cluster_columns(ocr_results: OCRResult, tolerance: float = 20.0) -> list[li
 
 
 def is_table_layout(ocr_results: OCRResult) -> bool:
+    """True only when the rows actually carry a column structure.
+
+    The previous version clustered token x-centres and accepted evenly spread
+    prose lines ("Introduction to Statistics", "Mean is the average…") as a
+    table. Prose then rendered as a one-column markdown grid, so students got
+    a table with no columns instead of readable notes. A table needs at least
+    two rows with two or more cells and a consistent column count.
+    """
     filtered = [r for r in ocr_results if r[2] > CONF_THRESHOLD]
     if len(filtered) < 4:
         return False
 
-    col_clusters = _cluster_columns(ocr_results)
-    if len(col_clusters) < 2:
+    rows = _cluster_rows(ocr_results)
+    if len(rows) < 2:
+        return False
+    multi_cell_rows = [row for row in rows if len(row) >= 2]
+    if len(multi_cell_rows) < 2 or len(multi_cell_rows) / len(rows) < 0.6:
         return False
 
-    col_centers = [sum(c) / len(c) for c in col_clusters]
-    gaps = [col_centers[i + 1] - col_centers[i] for i in range(len(col_centers) - 1)]
-    if not gaps:
-        return False
-
-    mean_gap = sum(gaps) / len(gaps)
-    aligned = sum(1 for g in gaps if abs(g - mean_gap) < mean_gap * 0.3)
-    return (aligned / len(gaps)) > 0.5
+    counts = [len(row) for row in multi_cell_rows]
+    common = max(set(counts), key=counts.count)
+    consistent = sum(1 for count in counts if abs(count - common) <= 1)
+    return consistent / len(counts) >= 0.6
 
 
 def format_as_markdown(text_lines: list[str]) -> str:
@@ -375,16 +382,20 @@ def format_as_table(ocr_results: OCRResult) -> str:
     if not rows:
         return ""
 
-    md_rows: list[str] = []
-    for cells in rows:
-        md_rows.append("| " + " | ".join(c[1] for c in cells) + " |")
-
-    if not md_rows:
+    # OCR rows are ragged: a missed cell or a merged column yields a different
+    # count than the header. Emitting it verbatim produced invalid markdown
+    # (the grid stops being a table). Pad every row to the widest row instead
+    # of dropping cells.
+    width = max(len(cells) for cells in rows)
+    if width < 2:
         return ""
 
-    header = md_rows[0]
-    col_count = header.count("|") - 1
-    separator = "| " + " | ".join(["---"] * col_count) + " |"
+    def _row(cells: list[tuple[float, str]]) -> str:
+        values = [cell[1] for cell in cells]
+        values.extend([""] * (width - len(values)))
+        return "| " + " | ".join(values) + " |"
 
-    result = [header, separator] + md_rows[1:]
-    return "\n".join(result)
+    md_rows = [_row(cells) for cells in rows]
+    header = md_rows[0]
+    separator = "| " + " | ".join(["---"] * width) + " |"
+    return "\n".join([header, separator, *md_rows[1:]])

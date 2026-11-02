@@ -1,5 +1,4 @@
 import logging
-import os
 import sqlite3
 import threading
 import time
@@ -148,6 +147,37 @@ def get_credits(device_id: str) -> tuple[int, int]:
     return row["credits_remaining"], row["credits_used"]
 
 
+def peek_credits(device_id: str) -> tuple[int, int]:
+    """Read a balance without creating a device row.
+
+    Used on paths that must not have a side effect (e.g. an unknown payment
+    order id supplied by a client): a read-only lookup cannot be used to
+    insert arbitrary device rows.
+    """
+    conn = _get_conn()
+    row = conn.execute(
+        "SELECT credits_remaining, credits_used FROM device_credits WHERE device_id = ?",
+        (device_id,),
+    ).fetchone()
+    if row is None:
+        return settings.FREE_CREDITS_MONTHLY, 0
+    return row["credits_remaining"], row["credits_used"]
+
+
+def reset_device_credits(device_id: str) -> tuple[int, int]:
+    """Give a device its full free allowance again (DEBUG-only endpoint)."""
+    conn = _get_conn()
+    conn.execute(
+        "INSERT INTO device_credits (device_id, credits_remaining, credits_used) "
+        "VALUES (?, ?, 0) "
+        "ON CONFLICT(device_id) DO UPDATE SET "
+        "credits_remaining = excluded.credits_remaining, credits_used = 0",
+        (device_id, settings.FREE_CREDITS_MONTHLY),
+    )
+    conn.commit()
+    return settings.FREE_CREDITS_MONTHLY, 0
+
+
 def add_credits(device_id: str, amount: int) -> int:
     conn = _get_conn()
     init_device(device_id)
@@ -275,6 +305,77 @@ def set_visual_result(
     )
     conn.commit()
     return cur.rowcount > 0
+
+
+def complete_order_and_credit(
+    order_id: str, device_id: str, payment_id: str
+) -> tuple[bool, int]:
+    """Atomically claim a paid order and credit its device exactly once.
+
+    Returns ``(newly_completed, credits_remaining)``. The status claim
+    (``status='created' -> 'completed'``) and the balance update share one
+    ``BEGIN IMMEDIATE`` transaction, so:
+      - two concurrent verifies cannot both add credits (the second sees
+        rowcount 0 and adds nothing);
+      - there is no state where an order is marked completed but unpaid, or
+        paid but still claimable;
+      - the credits always go to the device stored on the order, never to a
+        device id supplied by the caller.
+    """
+    from app.exceptions import InvalidInputError
+
+    conn = _get_conn()
+    init_device(device_id)
+    try:
+        conn.execute("BEGIN IMMEDIATE")
+        row = conn.execute(
+            "SELECT device_id, credits FROM razorpay_orders "
+            "WHERE order_id = ? AND status = 'created'",
+            (order_id,),
+        ).fetchone()
+        if row is None:
+            conn.execute("ROLLBACK")
+            return False, peek_credits(device_id)[0]
+        if row["device_id"] != device_id:
+            conn.execute("ROLLBACK")
+            raise InvalidInputError(message="Order does not belong to this device")
+        claimed = conn.execute(
+            "UPDATE razorpay_orders SET status = 'completed', razorpay_payment_id = ? "
+            "WHERE order_id = ? AND status = 'created'",
+            (payment_id, order_id),
+        )
+        if claimed.rowcount == 0:
+            conn.execute("ROLLBACK")
+            return False, peek_credits(device_id)[0]
+        credits = int(row["credits"])
+        conn.execute(
+            "UPDATE device_credits SET credits_remaining = credits_remaining + ? "
+            "WHERE device_id = ?",
+            (credits, device_id),
+        )
+        balance = conn.execute(
+            "SELECT credits_remaining FROM device_credits WHERE device_id = ?",
+            (device_id,),
+        ).fetchone()
+        conn.execute("COMMIT")
+    except InvalidInputError:
+        raise
+    except sqlite3.Error as exc:
+        try:
+            conn.execute("ROLLBACK")
+        except sqlite3.Error:
+            pass
+        logger.error("Order completion failed for %s: %s", order_id[:12], exc)
+        raise
+    remaining = int(balance["credits_remaining"]) if balance is not None else 0
+    logger.info(
+        "Order %s credited %d for %s (now %d)",
+        order_id[:12],
+        credits,
+        device_id[:8],
+        remaining,
+    )
+    return True, remaining
 
 
 # ── Users (for signup/login — credits stick to email, not clearable localStorage) ──

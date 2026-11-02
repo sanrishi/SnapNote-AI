@@ -59,6 +59,7 @@ from app.utils.validation import validate_image_size
 from app.exceptions import (
     AuthError,
     CreditLimitError,
+    ImageTooLargeError,
     InvalidInputError,
     ServerBusyError,
     UpstreamError,
@@ -92,6 +93,52 @@ _VISUAL_HIGH_DEMAND = (
 def _is_rate_limited(message: str) -> bool:
     """Gemini capacity/quota signature (429 or RESOURCE_EXHAUSTED)."""
     return "429" in message or "RESOURCE_EXHAUSTED" in message
+
+
+async def _read_validated_image(image: UploadFile) -> bytes:
+    """Read an upload without ever materializing more than the size limit.
+
+    ``await image.read()`` loads the whole body first and only then validates
+    it, so a client could push hundreds of MB into a 512 MB container. The
+    declared size is checked first (Starlette records it while parsing) and the
+    read itself is capped at limit + 1 byte, which is enough to detect
+    overflow and still fits the configured budget.
+    """
+    max_bytes = settings.MAX_IMAGE_SIZE_MB * 1024 * 1024
+    declared = getattr(image, "size", None)
+    if isinstance(declared, int) and declared > max_bytes:
+        raise ImageTooLargeError(max_mb=settings.MAX_IMAGE_SIZE_MB)
+    data = await image.read(max_bytes + 1)
+    validate_image_size(data)
+    return data
+
+
+def _existing_visual_response(
+    diagram_id: str,
+    render_mode: str,
+    visual_url: str,
+    visual_svg: str,
+    status: str,
+) -> VisualExplanationResponse:
+    """Build a response for an already-stored visual.
+
+    The stored render mode is authoritative. Legacy rows written before
+    ``render_mode`` existed must be labelled by what they actually contain:
+    a URL is a raster (generative) result, an inline SVG is deterministic.
+    """
+    if visual_url:
+        mode = render_mode or "generative"
+    elif visual_svg:
+        mode = render_mode or "deterministic"
+    else:
+        mode = render_mode or "deterministic"
+    return VisualExplanationResponse(
+        diagramId=diagram_id,
+        renderMode=mode,
+        imageUrl=visual_url or None,
+        imageSvg=visual_svg or None,
+        status=status,
+    )
 
 
 async def image_admission() -> AsyncIterator[None]:
@@ -132,8 +179,14 @@ def _resolve_identity(deviceId: str, authorization: str | None) -> tuple[str, bo
             uid = data.get("sub")
             if uid and get_user_by_id(uid) is not None:
                 return uid, True
-        except Exception:
-            pass
+            logger.info("Bearer token did not resolve to a user; using device identity")
+        except HTTPException as exc:
+            # A stale/invalid session is not fatal: the client still has its
+            # device identity. Log it so auth failures are diagnosable instead
+            # of silently becoming anonymous requests.
+            logger.info("Bearer token rejected (%s); using device identity", exc.detail)
+        except Exception as exc:
+            logger.warning("Bearer token decode failed: %s", exc)
     return deviceId, False
 
 
@@ -184,15 +237,14 @@ def _jee_for_notes(study_notes: StudyNotes) -> tuple[JEEConceptContext | None, s
 async def extract_text_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
-    deviceId: str = Form(...),
+    deviceId: str = Form(..., min_length=1, max_length=128),
     authorization: str | None = Header(default=None),
     _admission: None = Depends(image_admission),
 ) -> ExtractionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
     _check_credits_effective(effective_id, is_user, settings.TEXT_CREDIT_COST)
-    image_bytes = await image.read()
-    validate_image_size(image_bytes)
+    image_bytes = await _read_validated_image(image)
 
     try:
         processed = await run_in_image_window(preprocess, image_bytes)
@@ -218,6 +270,9 @@ async def extract_text_route(
                 raise CreditLimitError()
         try:
             enhanced = await run_in_image_window(enhance_for_vision, image_bytes)
+        except ValueError as e:
+            raise InvalidInputError(message=str(e))
+        try:
             result = await extract_text_with_llm(enhanced)
             markdown = result
             final_cost = settings.DIAGRAM_CREDIT_COST
@@ -256,15 +311,14 @@ async def extract_text_route(
 async def extract_diagram_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
-    deviceId: str = Form(...),
+    deviceId: str = Form(..., min_length=1, max_length=128),
     authorization: str | None = Header(default=None),
     _admission: None = Depends(image_admission),
 ) -> ExtractionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
     _check_credits_effective(effective_id, is_user, settings.DIAGRAM_CREDIT_COST)
-    image_bytes = await image.read()
-    validate_image_size(image_bytes)
+    image_bytes = await _read_validated_image(image)
 
     try:
         enhanced = await run_in_image_window(enhance_for_vision, image_bytes)
@@ -322,15 +376,14 @@ async def extract_diagram_route(
 async def extract_revision_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
-    deviceId: str = Form(...),
+    deviceId: str = Form(..., min_length=1, max_length=128),
     authorization: str | None = Header(default=None),
     _admission: None = Depends(image_admission),
 ) -> RevisionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
     check_rate_limits(effective_id)
     _check_credits_effective(effective_id, is_user, settings.REVISION_CREDIT_COST)
-    image_bytes = await image.read()
-    validate_image_size(image_bytes)
+    image_bytes = await _read_validated_image(image)
 
     context_hint = context.strip()[:2000] if context.strip() not in ("", "{}", "null") else ""
 
@@ -371,9 +424,9 @@ async def extract_revision_route(
 
 @router.post("/visual", response_model=VisualExplanationResponse)
 async def extract_visual_route(
-    image: UploadFile = File(...),
-    deviceId: str = Form(...),
-    diagramId: str = Form(...),
+    deviceId: str = Form(..., min_length=1, max_length=128),
+    diagramId: str = Form(..., min_length=1, max_length=64),
+    image: UploadFile | None = File(default=None),
     authorization: str | None = Header(default=None),
     _admission: None = Depends(image_admission),
 ) -> VisualExplanationResponse:
@@ -400,16 +453,17 @@ async def extract_visual_route(
 
     if visual_url or visual_svg:
         logger.info("Visual already generated for diagram %s (id=%s)", diagramId[:8], effective_id[:8])
-        return VisualExplanationResponse(
-            diagramId=diagramId,
-            renderMode=render_mode or "deterministic",
-            imageUrl=visual_url or None,
-            imageSvg=visual_svg or None,
-            status="already_generated",
+        return _existing_visual_response(
+            diagramId, render_mode, visual_url, visual_svg, "already_generated"
         )
 
-    image_bytes = await image.read()
-    validate_image_size(image_bytes)
+    # The screenshot is only evidence for GENERATION. An already-stored visual
+    # above is returned without one, so a reloaded client can still see it.
+    if image is None:
+        raise InvalidInputError(
+            message="Upload the original screenshot to generate a visual explanation."
+        )
+    image_bytes = await _read_validated_image(image)
 
     try:
         enhanced = await run_in_image_window(enhance_for_vision, image_bytes)
@@ -617,10 +671,17 @@ async def extract_visual_route(
     if mode == "svg":
         visual_svg = payload
         if not set_visual_result(diagramId, effective_id, "deterministic", visual_svg=visual_svg):
+            # Another request (or an earlier click) won the write race. Return
+            # whatever is actually stored — never an empty SVG just because
+            # the stored result happens to be a raster.
             logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
             existing = get_visual_entitlement(diagramId)
             if existing is not None:
-                _, visual_url, render_mode, visual_svg, _ = existing
+                _, stored_url, stored_mode, stored_svg, _ = existing
+                if stored_url or stored_svg:
+                    return _existing_visual_response(
+                        diagramId, stored_mode, stored_url, stored_svg, "already_generated"
+                    )
         return VisualExplanationResponse(
             diagramId=diagramId,
             renderMode="deterministic",
@@ -662,7 +723,11 @@ async def extract_visual_route(
         logger.warning("Visual already set for diagram %s; returning existing", diagramId[:8])
         existing = get_visual_entitlement(diagramId)
         if existing is not None:
-            _, visual_url, render_mode, visual_svg, _ = existing
+            _, stored_url, stored_mode, stored_svg, _ = existing
+            if stored_url or stored_svg:
+                return _existing_visual_response(
+                    diagramId, stored_mode, stored_url, stored_svg, "already_generated"
+                )
 
     return VisualExplanationResponse(
         diagramId=diagramId,

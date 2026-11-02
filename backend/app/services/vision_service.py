@@ -11,7 +11,6 @@ from app.config import settings
 from app.exceptions import UpstreamError
 from app.models.schemas import (
     DiagramRep,
-    DiagramSpec,
     StudyNotes,
     VisualComparison,
     VisualSpec,
@@ -293,7 +292,13 @@ def _extract_json(text: str) -> dict:
     if text.startswith("```"):
         text = re.sub(r"^```[a-zA-Z]*\n?", "", text)
         text = re.sub(r"\n?```$", "", text)
-    return json.loads(text)
+    data = json.loads(text)
+    if not isinstance(data, dict):
+        # A JSON array/string is syntactically valid but cannot become a
+        # pydantic model. Surface it as a decode failure so bounded repair
+        # runs instead of a TypeError escaping as a 500.
+        raise json.JSONDecodeError("Expected a JSON object", text, 0)
+    return data
 
 
 async def _call_gemini(
