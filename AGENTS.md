@@ -188,7 +188,7 @@ docs:     documentation
 Branch → PR → review → merge.
 
 ### Rule 6.3 — Sensitive files in .gitignore
-`.env`, `*.key`, `firebase-credentials.json`, `__pycache__/`, `.vercel/`
+`.env`, `.jwt_secret`, `*.key`, `firebase-credentials.json`, `__pycache__/`, `.vercel/`
 
 ---
 

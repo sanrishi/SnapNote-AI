@@ -1,4 +1,5 @@
 .env
+.jwt_secret
 firebase-credentials.json
 *.key
 __pycache__/
