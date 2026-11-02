@@ -83,6 +83,11 @@ class CreditLimitError(SnapNoteError):
 Register a single handler that catches all `SnapNoteError` instances and returns
 proper JSON: `{"error": "message", "code": status_code}`.
 
+Framework-raised errors MUST use the same envelope: `StarletteHTTPException`
+(404/405 and explicit `HTTPException` raises) and `RequestValidationError`
+(422) are handled centrally in `app/main.py`. Never let Starlette's bare
+`{"detail": ...}` reach the frontend, which reads `error`.
+
 ### Rule 3.3 — Never `try/except: pass`
 Every exception must be logged and either:
 - Re-raised as a domain-specific `SnapNoteError`
@@ -120,6 +125,27 @@ class Settings(BaseSettings):
 ### Rule 4.3 — .env.example is required
 Keep a `.env.example` with dummy values committed to repo.
 Actual `.env` is gitignored.
+
+### Rule 4.4 — JWT signing secret must be durable, never a placeholder
+`JWT_SECRET` must be a random value of at least 32 characters. The committed
+development default and documented placeholders are public knowledge: a token
+forged with them decodes successfully. `Settings._guard_jwt_secret` replaces a
+weak/missing secret outside `DEBUG`; when `CREDITS_DB_PATH` is absolute (the
+production `/data` disk) the generated secret is persisted to
+`<db_dir>/.jwt_secret` so sessions survive cold starts, otherwise it is
+per-process. `/health` exposes `auth_secret_configured` and
+`auth_secret_persisted` (never the value). `DEBUG=true` keeps the documented
+default for local work only.
+
+### Rule 4.5 — Mock payments are development-only
+`PAYMENTS_MOCK` (or `DEBUG=true` with no gateway keys) is the ONLY way mock
+checkout is enabled. Production with missing Razorpay keys returns 503 from
+`/api/payments/create-order`; it must never mint credits from an arbitrary
+`mock_*` order id and a fake signature. Real order creation uses the Razorpay
+REST API through `httpx` (the SDK is not a project dependency). Order
+completion claims `status='created' -> 'completed'` and updates the balance in
+ONE `BEGIN IMMEDIATE` transaction, credits only the device stored on the order,
+and is idempotent under replay/concurrency.
 
 ---
 
@@ -303,4 +329,4 @@ The visual engine chooses a representation from the material's INFORMATION STRUC
 8. Chemistry equilibrium formulas → escalate (untuned, passed cold)
 9. Dark-theme CS BST slide (Unacademy style) → escalate (untuned, passed cold)
 
-*Last updated: November 2026 (worked mathematics is verified or refused — number_line family; safe AST parser with exact-decimal literals; expression-domain preservation; transformed steps verified algebraically; excluded values must be visible; render-time re-verification; permanent hosted CI; OCR engine = RapidOCR with fail-safe degradation + /health observability incl. cgroup memory; gate mixed digit-letter heuristic is word-level; preprocess resolution cap + image-window serialization close the measured 3-way-concurrency OOM; adaptive relational grammars add concept-map tree/cycle/timeline and comparison feature matrices with visibility-first validation, focused table repair that receives the exact claims, tolerant verdict evidence, and a KEY RESULT label guard)
+*Last updated: November 2026 (worked mathematics is verified or refused — number_line family; safe AST parser with exact-decimal literals; expression-domain preservation; transformed steps verified algebraically; excluded values must be visible; render-time re-verification; permanent hosted CI; OCR engine = RapidOCR with fail-safe degradation + /health observability incl. cgroup memory; gate mixed digit-letter heuristic is word-level; preprocess resolution cap + image-window serialization close the measured 3-way-concurrency OOM; adaptive relational grammars add concept-map tree/cycle/timeline and comparison feature matrices with visibility-first validation, focused table repair that receives the exact claims, tolerant verdict evidence, and a KEY RESULT label guard; production audit hardened JWT signing, made mock payments dev-only with atomic order claims, unified the error envelope, removed wildcard CORS credentials, added a decode-time decompression-bomb cap, and fixed prose-vs-table OCR classification)
