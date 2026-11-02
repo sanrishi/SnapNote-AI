@@ -18,8 +18,37 @@ def load_image_bytes(image_bytes: bytes) -> np.ndarray:
     return img
 
 
+def _probe_dimensions(image_bytes: bytes) -> tuple[int, int]:
+    """Read the header-only dimensions; never decode the bitmap."""
+    try:
+        with Image.open(io.BytesIO(image_bytes)) as probe:
+            return probe.size
+    except Exception as exc:
+        # Unidentified/truncated/bomb images are all client input errors, not
+        # server failures. Routes map this ValueError to 422.
+        raise ValueError("Invalid image data") from exc
+
+
+def _validate_resolution(width: int, height: int) -> None:
+    """Refuse decode sizes that would blow the 512 MB instance budget.
+
+    MAX_IMAGE_SIZE_MB caps the compressed bytes only. A small PNG can claim
+    tens of millions of pixels and allocate gigabytes in Pillow/OpenCV before
+    any resize runs, so the pixel count is checked from the header first.
+    """
+    if width <= 0 or height <= 0:
+        raise ValueError("Invalid image data")
+    limit = settings.MAX_SOURCE_MEGAPIXELS * 1_000_000
+    if width * height > limit:
+        raise ValueError(
+            f"Image resolution too large: {width}x{height} exceeds "
+            f"{settings.MAX_SOURCE_MEGAPIXELS} megapixels"
+        )
+
+
 def preprocess(image_bytes: bytes) -> np.ndarray:
     with image_window():
+        _validate_resolution(*_probe_dimensions(image_bytes))
         img = load_image_bytes(image_bytes)
         if img is None:
             raise ValueError("Invalid image data")
@@ -55,8 +84,12 @@ def enhance_for_vision(image_bytes: bytes) -> bytes:
     """
     with image_window():
         orig_size = len(image_bytes)
-        img = Image.open(io.BytesIO(image_bytes))
-        orig_w, orig_h = img.size
+        try:
+            img = Image.open(io.BytesIO(image_bytes))
+            orig_w, orig_h = img.size
+        except Exception as exc:
+            raise ValueError("Invalid image data") from exc
+        _validate_resolution(orig_w, orig_h)
         # JPEG DCT-scaled decode (no-op for PNG/WebP): bounds the source
         # decode buffer of large camera JPEGs before the resize below.
         img.draft("RGB", (settings.MAX_VISION_LONG_EDGE, settings.MAX_VISION_LONG_EDGE))

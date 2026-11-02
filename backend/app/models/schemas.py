@@ -153,8 +153,15 @@ class JEEConceptContext(BaseModel):
 
 
 class JEEMapRequest(BaseModel):
-    topic_title: str = ""
-    key_terms: list[str] = []
+    topic_title: str = Field(default="", max_length=300)
+    key_terms: list[str] = Field(default_factory=list, max_length=50)
+
+    @field_validator("key_terms")
+    @classmethod
+    def _bound_key_terms(cls, terms: list[str]) -> list[str]:
+        if any(len(term) > 120 for term in terms):
+            raise ValueError("each key term must be 120 characters or fewer")
+        return terms
 
 
 class StudyNotes(BaseModel):
@@ -196,7 +203,7 @@ class UserCredits(BaseModel):
 
 
 class GoogleAuthRequest(BaseModel):
-    idToken: str
+    idToken: str = Field(min_length=1, max_length=4096)
 
 
 class AuthResponse(BaseModel):
@@ -209,7 +216,7 @@ class AuthResponse(BaseModel):
 
 
 class DeviceAuthRequest(BaseModel):
-    deviceId: str
+    deviceId: str = Field(min_length=1, max_length=128)
 
 
 class DeviceAuthResponse(BaseModel):

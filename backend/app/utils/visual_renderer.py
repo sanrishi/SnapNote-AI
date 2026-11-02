@@ -29,7 +29,6 @@ from typing import TYPE_CHECKING
 from xml.etree import ElementTree
 
 from app.models.schemas import (
-    ComparisonPanel,
     ComparisonPoint,
     ComparisonTable,
     DeterministicVisual,
@@ -42,8 +41,6 @@ from app.models.schemas import (
     VisualConceptMap,
     VisualCurve,
     VisualGeneric,
-    VisualInterval,
-    VisualNumberLineTrack,
     VisualObject,
     VisualPlot,
     VisualScene,
@@ -51,6 +48,7 @@ from app.models.schemas import (
 )
 
 if TYPE_CHECKING:
+    from app.models.schemas import VisualArc, VisualRelation
     from app.utils.math_intervals import IntervalSet
     from app.utils.math_verify import MathCase, SolveResult
 from app.utils.svg_safe import sanitize_svg

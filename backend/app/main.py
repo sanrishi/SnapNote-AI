@@ -2,9 +2,12 @@ import logging
 import os
 import time
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.config import settings
 from app.routes import auth, extract, jee, payments
@@ -34,10 +37,16 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title=settings.APP_NAME, version=settings.APP_VERSION, lifespan=lifespan)
+_cors_origins = [
+    part.strip() for part in settings.CORS_ALLOW_ORIGINS.split(",") if part.strip()
+] or ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*", "null"],
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    # The API authenticates with an Authorization header, never cookies, so
+    # credentialed CORS is unnecessary. Wildcard + credentials echoed ANY
+    # origin with credentials (verified live), so the two stay exclusive.
+    allow_credentials="*" not in _cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -48,16 +57,49 @@ app.include_router(payments.router, prefix="/api/payments", tags=["payments"])
 app.include_router(jee.router, prefix="/api/jee", tags=["jee"])
 
 
-@app.exception_handler(HTTPException)
-async def http_error_handler(request: Request, exc: HTTPException):
+def _validation_message(exc: RequestValidationError) -> str:
+    """Human-readable first error for the shared ``{error, code}`` contract."""
+    errors = exc.errors()
+    if not errors:
+        return "Invalid request"
+    first = errors[0]
+    location = [
+        str(part)
+        for part in first.get("loc", ())
+        if part not in ("body", "query", "path", "header", "cookie")
+    ]
+    field = ".".join(location) or "request"
+    message = str(first.get("msg") or "invalid value").strip()
+    return f"{field}: {message}"
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_error_handler(request: Request, exc: StarletteHTTPException) -> JSONResponse:
+    # Covers framework-raised 404/405 as well as our own HTTPException raises,
+    # so every error body is the documented {"error", "code"} shape instead of
+    # Starlette's bare {"detail"}. The frontend reads ``error``.
+    detail = exc.detail if isinstance(exc.detail, str) and exc.detail else "Request failed"
     return JSONResponse(
         status_code=exc.status_code,
-        content={"error": exc.detail, "code": exc.status_code},
+        content={"error": detail, "code": exc.status_code},
+        headers=getattr(exc, "headers", None),
     )
 
 
+@app.exception_handler(RequestValidationError)
+async def request_validation_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
+    message = _validation_message(exc)
+    logger.info("Request validation failed at %s: %s", request.url.path, message)
+    content: dict = {"error": message, "code": 422}
+    if settings.DEBUG:
+        content["details"] = jsonable_encoder(exc.errors())
+    return JSONResponse(status_code=422, content=content)
+
+
 @app.exception_handler(SnapNoteError)
-async def snapnote_error_handler(request: Request, exc: SnapNoteError):
+async def snapnote_error_handler(request: Request, exc: SnapNoteError) -> JSONResponse:
     logger.warning(
         "SnapNoteError: %s | path=%s | code=%d",
         exc.message,
@@ -71,7 +113,7 @@ async def snapnote_error_handler(request: Request, exc: SnapNoteError):
 
 
 @app.exception_handler(Exception)
-async def unhandled_error_handler(request: Request, exc: Exception):
+async def unhandled_error_handler(request: Request, exc: Exception) -> JSONResponse:
     logger.exception("Unhandled exception at %s", request.url.path)
     return JSONResponse(
         status_code=500,
@@ -80,7 +122,7 @@ async def unhandled_error_handler(request: Request, exc: Exception):
 
 
 @app.get("/health")
-async def health():
+async def health() -> dict[str, object]:
     ts = typst_status()
     if not ts["available"]:
         logger.warning("health: Typst CLI not available — v3 composition will use bare-hero fallback")
@@ -94,6 +136,8 @@ async def health():
         "typst_available": ts["available"],
         "typst_version": ts["version"],
         "explain_visually_v3": settings.EXPLAIN_VISUALLY_V3,
+        "auth_secret_configured": not settings.JWT_SECRET_GENERATED,
+        "auth_secret_persisted": settings.JWT_SECRET_PERSISTED,
         "ocr_engine": OCR_ENGINE_NAME,
         "ocr_importable": ocr_importable(),
         "rss_mb": rss_mb(),

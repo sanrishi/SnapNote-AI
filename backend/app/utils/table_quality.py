@@ -28,7 +28,6 @@ from app.models.schemas import (
     ComparisonColumn,
     ComparisonRow,
     ComparisonTable,
-    ComparisonVerdictBasis,
     VisualScene,
     VisualSpec,
 )

@@ -47,3 +47,13 @@ class ServerBusyError(SnapNoteError):
         ),
     ):
         super().__init__(message, status_code=503)
+
+
+class PaymentsUnavailableError(SnapNoteError):
+    """Checkout is requested but no payment gateway is configured."""
+
+    def __init__(
+        self,
+        message: str = "Payments are not configured on this deployment yet.",
+    ):
+        super().__init__(message, status_code=503)

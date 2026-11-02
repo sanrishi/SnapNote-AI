@@ -1,4 +1,3 @@
-import time
 import uuid
 from datetime import datetime, timezone, timedelta
 
@@ -16,7 +15,12 @@ def hash_password(password: str) -> str:
 
 
 def verify_password(password: str, hashed: str) -> bool:
-    return pwd_ctx.verify(password, hashed)
+    try:
+        return pwd_ctx.verify(password, hashed)
+    except ValueError:
+        # bcrypt refuses inputs above 72 bytes and malformed stored hashes are
+        # invalid credentials — a failed login (401), never a 500.
+        return False
 
 
 def create_access_token(user_id: str, email: str) -> str:

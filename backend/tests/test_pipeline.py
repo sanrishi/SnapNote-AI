@@ -20,6 +20,10 @@ def seed_credits():
         "UPDATE device_credits SET credits_remaining = 999, credits_used = 0 WHERE device_id = ?",
         (TEST_DEVICE_ID,),
     )
+    # The credits DB persists between local runs, so request_log rows from a
+    # previous run could exhaust the daily limit and turn deterministic endpoint
+    # assertions into 429s. Tests own their device's history.
+    conn.execute("DELETE FROM request_log WHERE device_id = ?", (TEST_DEVICE_ID,))
     conn.commit()
 
 
@@ -41,6 +45,8 @@ async def test_health():
     assert isinstance(body["uptime_s"], int)
     assert body["uptime_s"] >= 0
     assert body["git_commit"] is None or isinstance(body["git_commit"], str)
+    assert isinstance(body["auth_secret_configured"], bool)
+    assert isinstance(body["auth_secret_persisted"], bool)
 
 
 @pytest.mark.asyncio

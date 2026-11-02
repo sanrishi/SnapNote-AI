@@ -1,10 +1,8 @@
 import base64
 import hashlib
 import hmac
-import time
 import logging
 from datetime import datetime, timezone
-from pathlib import Path
 from urllib.parse import quote
 
 logger = logging.getLogger(__name__)
