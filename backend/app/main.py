@@ -2,6 +2,7 @@ import logging
 import os
 import time
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -121,6 +122,19 @@ async def unhandled_error_handler(request: Request, exc: Exception) -> JSONRespo
     )
 
 
+def _db_dir_on_mount() -> bool:
+    """True when the credits DB lives under a filesystem mount point.
+
+    An absolute path alone is not durability: /app/credits.db is absolute but
+    ephemeral in a container. The mount check distinguishes the two.
+    """
+    parent = Path(settings.CREDITS_DB_PATH).expanduser().parent
+    try:
+        return parent.is_dir() and os.path.ismount(parent)
+    except OSError:
+        return False
+
+
 @app.get("/health")
 async def health() -> dict[str, object]:
     ts = typst_status()
@@ -138,6 +152,11 @@ async def health() -> dict[str, object]:
         "explain_visually_v3": settings.EXPLAIN_VISUALLY_V3,
         "auth_secret_configured": not settings.JWT_SECRET_GENERATED,
         "auth_secret_persisted": settings.JWT_SECRET_PERSISTED,
+        "auth_secret_storage": settings.JWT_SECRET_STORAGE,
+        "auth_secret_storage_reason": settings.JWT_SECRET_STORAGE_REASON,
+        "credits_db_absolute": Path(settings.CREDITS_DB_PATH).is_absolute(),
+        "credits_db_on_mount": _db_dir_on_mount(),
+        "credits_db_source": settings.CREDITS_DB_SOURCE,
         "ocr_engine": OCR_ENGINE_NAME,
         "ocr_importable": ocr_importable(),
         "rss_mb": rss_mb(),
