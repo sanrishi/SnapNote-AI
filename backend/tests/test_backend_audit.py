@@ -103,14 +103,47 @@ def test_production_never_signs_with_placeholder_secret():
     assert generated.JWT_SECRET_GENERATED is True
     # Relative DB path: no secret file is written into the working tree.
     assert generated.JWT_SECRET_PERSISTED is False
+    assert generated.JWT_SECRET_STORAGE == "ephemeral"
+    assert generated.JWT_SECRET_STORAGE_REASON == "relative_path"
 
     strong = Settings(_env_file=None, JWT_SECRET="s" * 48, DEBUG=False)
     assert strong.JWT_SECRET == "s" * 48
     assert strong.JWT_SECRET_GENERATED is False
+    assert strong.JWT_SECRET_STORAGE == "environment"
 
     # Local DEBUG keeps the documented default for a familiar dev workflow.
     debug = Settings(_env_file=None, JWT_SECRET=DEV_JWT_SECRET, DEBUG=True)
     assert debug.JWT_SECRET == DEV_JWT_SECRET
+    assert debug.JWT_SECRET_STORAGE == "development"
+
+
+def test_render_relative_default_upgrades_to_mounted_disk(tmp_path, monkeypatch):
+    from app import config as config_module
+
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    monkeypatch.setattr(config_module, "_RENDER_DATA_DIR", data_dir)
+    monkeypatch.setattr(config_module, "_render_disk_available", lambda: True)
+
+    strong = config_module.Settings(
+        _env_file=None,
+        JWT_SECRET="s" * 48,
+        DEBUG=False,
+        CREDITS_DB_PATH="credits.db",
+    )
+    assert strong.CREDITS_DB_PATH == str(data_dir / "credits.db")
+    assert strong.CREDITS_DB_SOURCE == "render_default"
+
+    generated = config_module.Settings(
+        _env_file=None,
+        JWT_SECRET=DEV_JWT_SECRET,
+        DEBUG=False,
+        CREDITS_DB_PATH="credits.db",
+    )
+    assert generated.JWT_SECRET_PERSISTED is True
+    assert generated.JWT_SECRET_STORAGE == "persisted"
+    assert generated.JWT_SECRET_STORAGE_REASON == ""
+    assert (data_dir / ".jwt_secret").exists()
 
 
 def test_generated_secret_persists_beside_mounted_database(tmp_path):

@@ -33,7 +33,29 @@ def is_weak_jwt_secret(secret: str, min_length: int = 32) -> bool:
     return any(marker in lowered for marker in _WEAK_SECRET_MARKERS)
 
 
-def _load_or_create_persisted_secret(db_path: str) -> str | None:
+_RENDER_DATA_DIR = Path("/data")
+
+
+def _render_disk_available() -> bool:
+    """True when running on Render with a writable mounted /data disk.
+
+    The Dockerfile creates /data in the image, so a plain directory check is
+    not enough: only a real mount point survives a redeploy. Render exposes
+    RENDER_GIT_COMMIT (already used by /health); no local/test process has it.
+    """
+    if not (os.environ.get("RENDER") or os.environ.get("RENDER_GIT_COMMIT")):
+        return False
+    try:
+        return (
+            _RENDER_DATA_DIR.is_dir()
+            and os.path.ismount(_RENDER_DATA_DIR)
+            and os.access(_RENDER_DATA_DIR, os.W_OK)
+        )
+    except OSError:
+        return False
+
+
+def _load_or_create_persisted_secret(db_path: str) -> tuple[str | None, str]:
     """Keep a generated signing secret across restarts on a mounted disk.
 
     Production mounts a durable disk (CREDITS_DB_PATH=/data/credits.db), so a
@@ -41,10 +63,13 @@ def _load_or_create_persisted_secret(db_path: str) -> str | None:
     the database instead of invalidating every session on each cold start.
     Relative paths (local development, tests) deliberately never write files
     into the working tree.
+
+    Returns ``(secret, reason)``. ``reason`` is a short, non-sensitive enum
+    used by /health to explain why persistence did not happen.
     """
     db = Path(db_path)
     if not db.is_absolute():
-        return None
+        return None, "relative_path"
     path = db.parent / ".jwt_secret"
     try:
         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
@@ -53,11 +78,13 @@ def _load_or_create_persisted_secret(db_path: str) -> str | None:
             existing = path.read_text(encoding="utf-8").strip()
         except OSError as exc:
             logger.error("Could not read persisted JWT secret %s: %s", path, exc)
-            return None
-        return existing if not is_weak_jwt_secret(existing) else None
+            return None, "read_failed"
+        if is_weak_jwt_secret(existing):
+            return None, "weak_existing_file"
+        return existing, ""
     except OSError as exc:
         logger.error("Could not create persisted JWT secret %s: %s", path, exc)
-        return None
+        return None, "create_failed"
 
     value = secrets.token_urlsafe(48)
     encoded = value.encode("utf-8")
@@ -71,10 +98,10 @@ def _load_or_create_persisted_secret(db_path: str) -> str | None:
             path.unlink()
         except OSError:
             pass
-        return None
+        return None, "write_failed"
     finally:
         os.close(fd)
-    return value
+    return value, ""
 
 
 class Settings(BaseSettings):
@@ -122,6 +149,10 @@ class Settings(BaseSettings):
     RATE_LIMIT_PER_MIN: int = 10
     MAX_IMAGE_SIZE_MB: int = 10
     CREDITS_DB_PATH: str = "credits.db"
+    # How the credits DB path was chosen: "environment" (explicit config or
+    # default) or "render_default" (relative default upgraded to the mounted
+    # /data disk). Exposed on /health so an ephemeral DB is visible.
+    CREDITS_DB_SOURCE: str = "environment"
     # Comma-separated browser origins allowed to call the API. "*" (default)
     # allows any origin WITHOUT credentials — the API authenticates with a
     # bearer header, never cookies. Set explicit origins if credentialed
@@ -176,6 +207,8 @@ class Settings(BaseSettings):
     # Exposed on /health (never the value) so an operator can see the state.
     JWT_SECRET_GENERATED: bool = False
     JWT_SECRET_PERSISTED: bool = False
+    JWT_SECRET_STORAGE: str = "environment"
+    JWT_SECRET_STORAGE_REASON: str = ""
     JWT_EXPIRES_HOURS: int = 168
 
     GOOGLE_CLIENT_ID: str = ""  # for Google Identity Services ID-token verification
@@ -208,11 +241,30 @@ class Settings(BaseSettings):
         secret is persisted next to it, so sessions still survive restarts;
         otherwise it is per-process and /health reports it.
         """
-        if is_weak_jwt_secret(self.JWT_SECRET, self.JWT_SECRET_MIN_LENGTH) and not self.DEBUG:
-            persisted = _load_or_create_persisted_secret(self.CREDITS_DB_PATH)
+        if not self.DEBUG and self.CREDITS_DB_PATH == "credits.db" and _render_disk_available():
+            # A Render service that lost its blueprint env vars would write an
+            # ephemeral /app/credits.db and silently lose users/credits on every
+            # deploy. The mounted disk is the durable location; upgrade only
+            # the untouched default so explicit relative paths stay explicit.
+            self.CREDITS_DB_PATH = str(_RENDER_DATA_DIR / "credits.db")
+            self.CREDITS_DB_SOURCE = "render_default"
+            logger.warning(
+                "CREDITS_DB_PATH was the relative default on a mounted-disk "
+                "deployment — using %s",
+                self.CREDITS_DB_PATH,
+            )
+
+        if is_weak_jwt_secret(self.JWT_SECRET, self.JWT_SECRET_MIN_LENGTH):
+            if self.DEBUG:
+                # Local workflow keeps the documented default.
+                self.JWT_SECRET_STORAGE = "development"
+                return self
+            persisted, reason = _load_or_create_persisted_secret(self.CREDITS_DB_PATH)
             self.JWT_SECRET = persisted or secrets.token_urlsafe(48)
             self.JWT_SECRET_GENERATED = True
             self.JWT_SECRET_PERSISTED = persisted is not None
+            self.JWT_SECRET_STORAGE = "persisted" if persisted else "ephemeral"
+            self.JWT_SECRET_STORAGE_REASON = reason
             logger.critical(
                 "JWT_SECRET is missing or a known placeholder — using a "
                 "generated signing secret (%s). Set a random JWT_SECRET "

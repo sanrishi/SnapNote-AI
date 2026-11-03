@@ -133,9 +133,14 @@ forged with them decodes successfully. `Settings._guard_jwt_secret` replaces a
 weak/missing secret outside `DEBUG`; when `CREDITS_DB_PATH` is absolute (the
 production `/data` disk) the generated secret is persisted to
 `<db_dir>/.jwt_secret` so sessions survive cold starts, otherwise it is
-per-process. `/health` exposes `auth_secret_configured` and
-`auth_secret_persisted` (never the value). `DEBUG=true` keeps the documented
-default for local work only.
+per-process. On Render, the untouched relative default `credits.db` is upgraded
+to `/data/credits.db` only when the disk is a writable mount
+(`CREDITS_DB_SOURCE=render_default`), so a missing blueprint env var cannot
+silently make users/credits ephemeral. `/health` exposes
+`auth_secret_configured`, `auth_secret_persisted`, `auth_secret_storage` +
+`auth_secret_storage_reason` (never the value), and `credits_db_absolute` +
+`credits_db_source`. `DEBUG=true` keeps the documented default for local work
+only.
 
 ### Rule 4.5 — Mock payments are development-only
 `PAYMENTS_MOCK` (or `DEBUG=true` with no gateway keys) is the ONLY way mock

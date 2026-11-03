@@ -2,6 +2,7 @@ import logging
 import os
 import time
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -138,6 +139,10 @@ async def health() -> dict[str, object]:
         "explain_visually_v3": settings.EXPLAIN_VISUALLY_V3,
         "auth_secret_configured": not settings.JWT_SECRET_GENERATED,
         "auth_secret_persisted": settings.JWT_SECRET_PERSISTED,
+        "auth_secret_storage": settings.JWT_SECRET_STORAGE,
+        "auth_secret_storage_reason": settings.JWT_SECRET_STORAGE_REASON,
+        "credits_db_absolute": Path(settings.CREDITS_DB_PATH).is_absolute(),
+        "credits_db_source": settings.CREDITS_DB_SOURCE,
         "ocr_engine": OCR_ENGINE_NAME,
         "ocr_importable": ocr_importable(),
         "rss_mb": rss_mb(),

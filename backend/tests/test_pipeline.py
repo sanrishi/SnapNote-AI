@@ -47,6 +47,10 @@ async def test_health():
     assert body["git_commit"] is None or isinstance(body["git_commit"], str)
     assert isinstance(body["auth_secret_configured"], bool)
     assert isinstance(body["auth_secret_persisted"], bool)
+    assert body["auth_secret_storage"] in ("environment", "development", "persisted", "ephemeral")
+    assert isinstance(body["auth_secret_storage_reason"], str)
+    assert isinstance(body["credits_db_absolute"], bool)
+    assert body["credits_db_source"] in ("environment", "render_default")
 
 
 @pytest.mark.asyncio
