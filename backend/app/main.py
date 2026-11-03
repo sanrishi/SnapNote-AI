@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.config import settings
+from app.config import is_mount_point, settings
 from app.routes import auth, extract, jee, payments
 from app.exceptions import SnapNoteError
 from app.services.ocr_service import OCR_ENGINE_NAME, ocr_importable, rss_mb
@@ -130,7 +130,7 @@ def _db_dir_on_mount() -> bool:
     """
     parent = Path(settings.CREDITS_DB_PATH).expanduser().parent
     try:
-        return parent.is_dir() and os.path.ismount(parent)
+        return parent.is_dir() and is_mount_point(parent)
     except OSError:
         return False
 
