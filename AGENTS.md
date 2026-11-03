@@ -136,7 +136,10 @@ production `/data` disk) the generated secret is persisted to
 per-process. On Render, the untouched relative default `credits.db` is upgraded
 to `/data/credits.db` only when the disk is a writable mount
 (`CREDITS_DB_SOURCE=render_default`), so a missing blueprint env var cannot
-silently make users/credits ephemeral. `/health` exposes
+silently make users/credits ephemeral. Mount detection checks both
+`os.path.ismount` and `/proc/self/mountinfo` (same-device bind mounts), and a
+Render process without any durable path logs a `CRITICAL` data-loss warning.
+`/health` exposes
 `auth_secret_configured`, `auth_secret_persisted`, `auth_secret_storage` +
 `auth_secret_storage_reason` (never the value), and `credits_db_absolute` +
 `credits_db_on_mount` + `credits_db_source`. `DEBUG=true` keeps the documented

@@ -146,6 +146,57 @@ def test_render_relative_default_upgrades_to_mounted_disk(tmp_path, monkeypatch)
     assert (data_dir / ".jwt_secret").exists()
 
 
+def test_mountinfo_detects_same_device_bind_mount(tmp_path, monkeypatch):
+    from app import config as config_module
+
+    data_dir = tmp_path / "data dir"
+    data_dir.mkdir()
+    mountinfo = tmp_path / "mountinfo"
+    mountinfo.write_text(
+        "36 35 98:0 /mnt1 "
+        + str(data_dir).replace(" ", "\\040")
+        + " rw,noatime - ext4 /dev/root rw\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(config_module, "_MOUNTINFO_PATH", mountinfo)
+    monkeypatch.setattr(config_module.os.path, "ismount", lambda path: False)
+
+    assert config_module.is_mount_point(data_dir) is True
+
+
+def test_mountinfo_does_not_treat_plain_directory_as_mount(tmp_path, monkeypatch):
+    from app import config as config_module
+
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    mountinfo = tmp_path / "mountinfo"
+    mountinfo.write_text(
+        "36 35 98:0 / / rw,noatime - ext4 /dev/root rw\n", encoding="utf-8"
+    )
+    monkeypatch.setattr(config_module, "_MOUNTINFO_PATH", mountinfo)
+    monkeypatch.setattr(config_module.os.path, "ismount", lambda path: False)
+
+    assert config_module.is_mount_point(data_dir) is False
+
+
+def test_render_disk_detection_accepts_mountinfo_only(tmp_path, monkeypatch):
+    from app import config as config_module
+
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    mountinfo = tmp_path / "mountinfo"
+    mountinfo.write_text(
+        f"36 35 98:0 /mnt1 {data_dir} rw,noatime - ext4 /dev/root rw\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("RENDER_GIT_COMMIT", "test-commit")
+    monkeypatch.setattr(config_module, "_RENDER_DATA_DIR", data_dir)
+    monkeypatch.setattr(config_module, "_MOUNTINFO_PATH", mountinfo)
+    monkeypatch.setattr(config_module.os.path, "ismount", lambda path: False)
+
+    assert config_module._render_disk_available() is True
+
+
 def test_generated_secret_persists_beside_mounted_database(tmp_path):
     db_path = str(tmp_path / "credits.db")
     first = Settings(

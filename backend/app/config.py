@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 import secrets
 from pathlib import Path
 
@@ -34,14 +35,51 @@ def is_weak_jwt_secret(secret: str, min_length: int = 32) -> bool:
 
 
 _RENDER_DATA_DIR = Path("/data")
+_MOUNTINFO_PATH = Path("/proc/self/mountinfo")
+_OCTAL_ESCAPE = re.compile(r"\\([0-7]{3})")
 
 
-def _is_writable_mount(path: Path) -> bool:
-    """True when ``path`` is a real mount point the process can write to."""
+def _decode_mountinfo_path(value: str) -> str:
+    """Decode the octal escapes the kernel uses in /proc/self/mountinfo."""
+    return _OCTAL_ESCAPE.sub(lambda match: chr(int(match.group(1), 8)), value)
+
+
+def is_mount_point(path: Path) -> bool:
+    """True when ``path`` is a mount point, including same-device bind mounts.
+
+    ``os.path.ismount`` compares the device with the parent, so a bind mount of
+    the same filesystem reads as an ordinary directory. The kernel's mount
+    table is authoritative, so consult it as well. Non-Linux hosts simply have
+    no mountinfo file and fall back to ``os.path.ismount``.
+    """
     try:
-        return path.is_dir() and os.path.ismount(path) and os.access(path, os.W_OK)
+        if os.path.ismount(path):
+            return True
+    except OSError:
+        pass
+    target = os.path.normpath(str(path))
+    try:
+        with _MOUNTINFO_PATH.open(encoding="utf-8") as handle:
+            for line in handle:
+                fields = line.split()
+                if len(fields) >= 5 and _decode_mountinfo_path(fields[4]) == target:
+                    return True
     except OSError:
         return False
+    return False
+
+
+def is_writable_mount(path: Path) -> bool:
+    """True when ``path`` is a real mount point the process can write to."""
+    try:
+        return path.is_dir() and is_mount_point(path) and os.access(path, os.W_OK)
+    except OSError:
+        return False
+
+
+def _on_render() -> bool:
+    """True inside a Render deployment (running locally never sets these)."""
+    return bool(os.environ.get("RENDER") or os.environ.get("RENDER_GIT_COMMIT"))
 
 
 def _render_disk_available() -> bool:
@@ -51,9 +89,9 @@ def _render_disk_available() -> bool:
     not enough: only a real mount point survives a redeploy. Render exposes
     RENDER_GIT_COMMIT (already used by /health); no local/test process has it.
     """
-    if not (os.environ.get("RENDER") or os.environ.get("RENDER_GIT_COMMIT")):
+    if not _on_render():
         return False
-    return _is_writable_mount(_RENDER_DATA_DIR)
+    return is_writable_mount(_RENDER_DATA_DIR)
 
 
 def _load_or_create_persisted_secret(db_path: str) -> tuple[str | None, str]:
@@ -251,9 +289,20 @@ class Settings(BaseSettings):
             self.CREDITS_DB_SOURCE = "render_default"
             logger.warning(
                 "CREDITS_DB_PATH was the relative default on a mounted-disk "
-                "deployment — using %s",
+                "deployment - using %s",
                 self.CREDITS_DB_PATH,
             )
+
+        if not self.DEBUG and _on_render():
+            db_parent = Path(self.CREDITS_DB_PATH).expanduser().parent
+            if not is_mount_point(db_parent):
+                logger.critical(
+                    "Credits DB path %r is not on a mounted disk while running "
+                    "on Render - users, credits, payment orders and sessions "
+                    "will be lost on every deploy. Attach a persistent disk at "
+                    "/data and set CREDITS_DB_PATH=/data/credits.db.",
+                    self.CREDITS_DB_PATH,
+                )
 
         if is_weak_jwt_secret(self.JWT_SECRET, self.JWT_SECRET_MIN_LENGTH):
             if self.DEBUG:
