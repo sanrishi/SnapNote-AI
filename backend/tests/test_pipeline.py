@@ -50,6 +50,7 @@ async def test_health():
     assert body["auth_secret_storage"] in ("environment", "development", "persisted", "ephemeral")
     assert isinstance(body["auth_secret_storage_reason"], str)
     assert isinstance(body["credits_db_absolute"], bool)
+    assert isinstance(body["credits_db_on_mount"], bool)
     assert body["credits_db_source"] in ("environment", "render_default")
 
 

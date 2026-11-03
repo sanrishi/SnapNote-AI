@@ -36,6 +36,14 @@ def is_weak_jwt_secret(secret: str, min_length: int = 32) -> bool:
 _RENDER_DATA_DIR = Path("/data")
 
 
+def _is_writable_mount(path: Path) -> bool:
+    """True when ``path`` is a real mount point the process can write to."""
+    try:
+        return path.is_dir() and os.path.ismount(path) and os.access(path, os.W_OK)
+    except OSError:
+        return False
+
+
 def _render_disk_available() -> bool:
     """True when running on Render with a writable mounted /data disk.
 
@@ -45,14 +53,7 @@ def _render_disk_available() -> bool:
     """
     if not (os.environ.get("RENDER") or os.environ.get("RENDER_GIT_COMMIT")):
         return False
-    try:
-        return (
-            _RENDER_DATA_DIR.is_dir()
-            and os.path.ismount(_RENDER_DATA_DIR)
-            and os.access(_RENDER_DATA_DIR, os.W_OK)
-        )
-    except OSError:
-        return False
+    return _is_writable_mount(_RENDER_DATA_DIR)
 
 
 def _load_or_create_persisted_secret(db_path: str) -> tuple[str | None, str]:

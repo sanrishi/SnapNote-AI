@@ -139,8 +139,8 @@ to `/data/credits.db` only when the disk is a writable mount
 silently make users/credits ephemeral. `/health` exposes
 `auth_secret_configured`, `auth_secret_persisted`, `auth_secret_storage` +
 `auth_secret_storage_reason` (never the value), and `credits_db_absolute` +
-`credits_db_source`. `DEBUG=true` keeps the documented default for local work
-only.
+`credits_db_on_mount` + `credits_db_source`. `DEBUG=true` keeps the documented
+default for local work only.
 
 ### Rule 4.5 — Mock payments are development-only
 `PAYMENTS_MOCK` (or `DEBUG=true` with no gateway keys) is the ONLY way mock
