@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, Form, Header, UploadFile, File, HTTPExce
 
 from app.config import settings
 from app.models.schemas import (
+    ExplanationLanguage,
     ExtractionResponse,
     ExtractionType,
     JEEConceptContext,
@@ -93,6 +94,17 @@ _VISUAL_HIGH_DEMAND = (
 def _is_rate_limited(message: str) -> bool:
     """Gemini capacity/quota signature (429 or RESOURCE_EXHAUSTED)."""
     return "429" in message or "RESOURCE_EXHAUSTED" in message
+
+
+def _parse_explanation_language(value: str) -> ExplanationLanguage:
+    """Validate the student's explanation-language choice before any charge."""
+    normalized = (value or "").strip().lower()
+    try:
+        return ExplanationLanguage(normalized)
+    except ValueError:
+        raise InvalidInputError(
+            message="Explanation language must be 'hinglish' or 'english'."
+        )
 
 
 async def _read_validated_image(image: UploadFile) -> bytes:
@@ -312,10 +324,12 @@ async def extract_diagram_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
     deviceId: str = Form(..., min_length=1, max_length=128),
+    explanationLanguage: str = Form("hinglish"),
     authorization: str | None = Header(default=None),
     _admission: None = Depends(image_admission),
 ) -> ExtractionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
+    explanation_language = _parse_explanation_language(explanationLanguage)
     check_rate_limits(effective_id)
     _check_credits_effective(effective_id, is_user, settings.DIAGRAM_CREDIT_COST)
     image_bytes = await _read_validated_image(image)
@@ -328,7 +342,7 @@ async def extract_diagram_route(
     upload_task = asyncio.create_task(asyncio.to_thread(upload_image, enhanced))
     try:
         study_notes = await asyncio.wait_for(
-            extract_study_notes(enhanced),
+            extract_study_notes(enhanced, explanation_language=explanation_language),
             timeout=settings.DIAGRAM_TIMEOUT_SECONDS,
         )
     except asyncio.TimeoutError:
@@ -377,10 +391,12 @@ async def extract_revision_route(
     image: UploadFile = File(...),
     context: str = Form("{}"),
     deviceId: str = Form(..., min_length=1, max_length=128),
+    explanationLanguage: str = Form("hinglish"),
     authorization: str | None = Header(default=None),
     _admission: None = Depends(image_admission),
 ) -> RevisionResponse:
     effective_id, is_user = _resolve_identity(deviceId, authorization)
+    explanation_language = _parse_explanation_language(explanationLanguage)
     check_rate_limits(effective_id)
     _check_credits_effective(effective_id, is_user, settings.REVISION_CREDIT_COST)
     image_bytes = await _read_validated_image(image)
@@ -394,7 +410,11 @@ async def extract_revision_route(
 
     try:
         study_notes = await asyncio.wait_for(
-            extract_revision_guide(enhanced, context_hint),
+            extract_revision_guide(
+                enhanced,
+                context_hint,
+                explanation_language=explanation_language,
+            ),
             timeout=settings.DIAGRAM_TIMEOUT_SECONDS,
         )
     except asyncio.TimeoutError:
@@ -417,6 +437,7 @@ async def extract_revision_route(
 
     return RevisionResponse(
         study_notes=study_notes,
+        markdown=render_study_notes(study_notes),
         creditsUsed=settings.REVISION_CREDIT_COST,
         jee=jee_ctx,
     )

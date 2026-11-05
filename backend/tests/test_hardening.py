@@ -425,7 +425,7 @@ def test_diagram_timeout_returns_502_and_charges_zero(monkeypatch, sample_diagra
     device = "timeout-test-device-00000000-0000-0000-000000000000"
     _reset_credits(device)
 
-    async def slow_notes(image_bytes):
+    async def slow_notes(image_bytes, **kwargs):
         await asyncio.sleep(30)
         return None
 

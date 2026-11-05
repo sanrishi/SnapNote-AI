@@ -200,6 +200,28 @@
     .mode-toggle button.active { background: var(--grad); color: #fff; box-shadow: 0 6px 16px -6px rgba(139,92,246,.7); }
     .mode-toggle .cost { font-weight: 500; font-size: 12px; opacity: .75; }
 
+    /* ── Explanation language (Hinglish default, English optional) ── */
+    .explain-lang {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin: -4px 0 16px; flex-wrap: wrap;
+    }
+    .explain-lang .lang-label {
+      font-size: 11.5px; font-weight: 700; letter-spacing: .5px;
+      text-transform: uppercase; color: var(--muted-2);
+    }
+    .explain-lang .lang-opt {
+      border: 1px solid var(--border); background: var(--surface); color: var(--muted);
+      padding: 6px 15px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all .15s;
+    }
+    .explain-lang .lang-opt:hover { color: var(--text); border-color: rgba(148,163,184,.45); }
+    .explain-lang .lang-opt.active {
+      color: #c7d2fe; border-color: rgba(99,102,241,.65);
+      background: rgba(99,102,241,.16); box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .explain-lang .lang-hint { font-size: 11.5px; color: var(--muted-2); }
+
+
     /* ── Drop zone ── */
     #drop-zone {
       border: 2px dashed rgba(148,163,184,.28); border-radius: 20px; padding: 56px 24px;
@@ -342,6 +364,68 @@
     .note-card.verify-card h3 { color: var(--danger); }
     .note-card.takeaway-card { border-color: rgba(52,211,153,.4); background: linear-gradient(180deg, rgba(52,211,153,.07), var(--surface)); }
     .note-card.takeaway-card h3 { color: var(--green); }
+
+    /* ── Question-first explanation ── */
+    .note-card.explain-question-card {
+      border-color: rgba(99,102,241,.5);
+      background: linear-gradient(180deg, rgba(99,102,241,.11), var(--surface));
+    }
+    .note-card.explain-question-card h3 { color: #c7d2fe; }
+    .note-card .lang-pill {
+      margin-left: auto; font-size: 10.5px; font-weight: 700; letter-spacing: .5px;
+      text-transform: uppercase; color: #c7d2fe; background: rgba(99,102,241,.16);
+      border: 1px solid rgba(99,102,241,.4); padding: 2px 9px; border-radius: 20px;
+    }
+    .note-card .lang-pill.verified-pill {
+      color: #a7f3d0; background: rgba(52,211,153,.14);
+      border-color: rgba(52,211,153,.45);
+    }
+    .note-card .q-text {
+      font-size: 14.5px; font-weight: 500; color: #e2e8f0; line-height: 1.75;
+      background: rgba(2,6,23,.45); border-left: 3px solid var(--accent);
+      padding: 11px 14px; border-radius: 0 10px 10px 0; white-space: pre-wrap;
+    }
+    .note-card .q-source-note { margin-top: 7px; font-size: 11.5px; color: var(--muted-2); }
+    .note-card .explain-review {
+      margin-top: 10px; padding: 8px 12px; border-radius: 9px; font-size: 12.5px;
+      color: var(--amber); background: rgba(251,191,36,.08);
+      border: 1px solid rgba(251,191,36,.4);
+    }
+    .note-card .explain-steps { list-style: none; padding: 0; margin: 4px 0 0; counter-reset: explain-step; }
+    .note-card .explain-steps li {
+      position: relative; counter-increment: explain-step;
+      padding: 11px 14px 11px 46px; margin-bottom: 9px;
+      border: 1px solid var(--border); border-radius: 11px;
+      background: rgba(148,163,184,.05);
+    }
+    .note-card .explain-steps li:last-child { margin-bottom: 0; }
+    .note-card .explain-steps li::before {
+      content: counter(explain-step); position: absolute; left: 12px; top: 11px;
+      width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+      font-size: 12px; font-weight: 800; color: #c7d2fe;
+      background: rgba(99,102,241,.18); border: 1px solid rgba(99,102,241,.4);
+    }
+    .note-card .step-title { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .note-card .step-eq {
+      display: inline-block; font-family: 'Space Grotesk', ui-monospace, monospace;
+      font-size: 13.5px; color: #c7d2fe; background: rgba(99,102,241,.1);
+      border: 1px solid rgba(99,102,241,.25); border-radius: 7px;
+      padding: 3px 8px; margin: 3px 0 6px; white-space: pre-wrap;
+    }
+    .note-card .explain-steps p { font-size: 13.5px; line-height: 1.7; }
+    .note-card.exam-answer-card {
+      border-color: rgba(52,211,153,.5);
+      background: linear-gradient(180deg, rgba(52,211,153,.09), var(--surface));
+    }
+    .note-card.exam-answer-card h3 { color: var(--green); }
+    .note-card .exam-note { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
+    .note-card .exam-answer-body {
+      font-family: 'Space Grotesk', ui-monospace, monospace;
+      font-size: 14px; line-height: 1.85; color: #d1fae5; white-space: pre-wrap;
+      background: rgba(2,6,23,.5); border: 1px solid rgba(52,211,153,.22);
+      border-radius: 10px; padding: 12px 14px;
+    }
+
     .note-card.diagram-card img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border); margin-top: 8px; }
     .note-card.diagram-card .diagram-wrap {
       margin: 8px 0; padding: 14px; background: var(--bg); border: 1px solid var(--border);
@@ -1453,6 +1537,13 @@
       <button id="mode-diagram" data-mode="diagram"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="6" rx="1.5"/><rect x="14" y="15" width="7" height="6" rx="1.5"/><path d="M10 6h5a2 2 0 0 1 2 2v7"/><path d="m15 13 2 2 2-2"/><path d="M6.5 9v4.5a2 2 0 0 0 2 2H12"/></svg>Diagram <span class="cost">(5 credits)</span></button>
     </div>
 
+    <div class="explain-lang" role="group" aria-label="Explanation language">
+      <span class="lang-label">Explain in</span>
+      <button class="lang-opt active" data-lang="hinglish" aria-pressed="true" title="Natural Hinglish — question first, then the solution">Hinglish</button>
+      <button class="lang-opt" data-lang="english" aria-pressed="false" title="Simple English — question first, then the solution">English</button>
+      <span class="lang-hint">question first, then solution</span>
+    </div>
+
     <div id="drop-zone">
       <div id="drop-content">
         <div class="drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg></div>
@@ -1487,8 +1578,8 @@
       </div>
       <div id="tags-container" class="tags"></div>
       <button id="revise-btn" class="revise-btn">
-        <span>Make This Revision-Ready</span>
-        <em>Turn this into exam-ready learning material (+1 credit)</em>
+        <span>Explain + Make Revision-Ready</span>
+        <em>Question-first explanation + exam-ready sheet (+1 credit)</em>
       </button>
       <div id="revision-cards"></div>
       <div id="notes-cards"></div>
@@ -1558,6 +1649,8 @@
     let currentBlob = null;
     let currentMode = "text";
     let currentContext = "";
+    let currentExplanationLanguage =
+      localStorage.getItem("snapnote-explanation-lang") === "english" ? "english" : "hinglish";
 
     // ── DOM refs ──
     const dropZone = document.getElementById("drop-zone");
@@ -2138,6 +2231,23 @@
       });
     });
 
+    // ── Explanation language (Hinglish default; applies to the next extraction/revision) ──
+    function syncExplanationLanguage() {
+      document.querySelectorAll(".explain-lang .lang-opt").forEach((b) => {
+        const on = b.dataset.lang === currentExplanationLanguage;
+        b.classList.toggle("active", on);
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+    }
+    document.querySelectorAll(".explain-lang .lang-opt").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        currentExplanationLanguage = btn.dataset.lang === "english" ? "english" : "hinglish";
+        localStorage.setItem("snapnote-explanation-lang", currentExplanationLanguage);
+        syncExplanationLanguage();
+      });
+    });
+    syncExplanationLanguage();
+
     // ── Clear ──
     clearBtn.addEventListener("click", () => {
       currentBlob = null;
@@ -2179,6 +2289,7 @@
         week: "",
       }));
       formData.append("deviceId", deviceId);
+      if (isDiagram) formData.append("explanationLanguage", currentExplanationLanguage);
 
       const endpoint = isDiagram ? `${BASE}/api/extract/diagram` : `${BASE}/api/extract/text`;
       const maxRetries = 2;
@@ -2284,6 +2395,7 @@
       formData.append("image", currentBlob, "capture.png");
       formData.append("context", currentContext);
       formData.append("deviceId", deviceId);
+      formData.append("explanationLanguage", currentExplanationLanguage);
 
       try {
         const headers = {};
@@ -2309,6 +2421,10 @@
         }
         const result = await resp.json();
         hideProcessing();
+        if (result.markdown) {
+          currentMarkdown = result.markdown;
+          rawMarkdown.textContent = currentMarkdown;
+        }
         renderRevision(result.study_notes, result.creditsUsed);
         await initDevice();
       } catch (err) {
@@ -2316,14 +2432,98 @@
         showError(err.message || "Enhancement failed. Try again.");
       } finally {
         reviseBtn.disabled = false;
-      reviseBtn.innerHTML = `<span>${ic("sparkles")}Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>`;
+        reviseBtn.innerHTML = `<span>${ic("sparkles")}Explain + Make Revision-Ready</span><em>Question-first explanation + exam-ready sheet (+1 credit)</em>`;
       }
     });
+
+    function renderExplanation(exp) {
+      if (!exp) return "";
+      const hinglish = (exp.language || "hinglish") !== "english";
+      const t = hinglish ? {
+        language: "Hinglish",
+        meaning: "Question ka matlab",
+        asked: "Question humse kya maang raha hai?",
+        concept: "Concept samjho",
+        steps: "Step-by-step solution",
+        exam: "Exam mein kaise likhna hai?",
+        examNote: "Yeh formal English answer exam mein likhna hai.",
+        verifiedNote: "Yeh answer SnapNote ke exact solver se verify hua hai.",
+        qNote: "AI ne screenshot se padha hai — koi value off lage toh original screenshot se compare karo.",
+        recap: "Quick recap",
+        review: "Solution needs a quick check — question ya symbol ambiguous ho sakta hai. Original screenshot se verify karo.",
+      } : {
+        language: "English",
+        meaning: "What the Question Means",
+        asked: "What the Question Asks",
+        concept: "The Concept",
+        steps: "Step-by-Step Solution",
+        exam: "How to Write It in the Exam",
+        examNote: "This is the formal answer to write in your exam.",
+        verifiedNote: "Verified by SnapNote's exact solver.",
+        qNote: "Read from your screenshot — compare with the original image if any value looks off.",
+        recap: "Quick Recap",
+        review: "Solution needs a quick check — the question or a symbol may be ambiguous. Verify it against the original screenshot.",
+      };
+
+      const cards = [];
+      const question = (exp.question_text || "").trim();
+      const review = exp.confidence === "review";
+
+      if (review && !question) {
+        cards.push(`<div class="note-card verify-card" style="animation-delay:0ms"><h3><span class="h-icon red">${ic("alert")}</span>Check This Explanation</h3><p>${esc(t.review)}</p></div>`);
+      }
+
+      if (question) {
+        const langPill = exp.verified
+          ? `<span class="lang-pill verified-pill">✓ ${t.language} · Verified</span>`
+          : `<span class="lang-pill">${t.language}</span>`;
+        cards.push(`<div class="note-card explain-question-card" style="animation-delay:0ms"><h3><span class="h-icon">${ic("file")}</span>Original Question${langPill}</h3><div class="q-text">${esc(question)}</div><div class="q-source-note">${esc(t.qNote)}</div>${review ? `<div class="explain-review">${esc(t.review)}</div>` : ""}</div>`);
+      }
+
+      if (exp.question_meaning && exp.question_meaning.trim()) {
+        cards.push(`<div class="note-card" style="animation-delay:40ms"><h3><span class="h-icon">${ic("brain")}</span>${t.meaning}</h3><p>${esc(exp.question_meaning)}</p></div>`);
+      }
+
+      if (exp.what_is_asked && exp.what_is_asked.length) {
+        cards.push(`<div class="note-card" style="animation-delay:80ms"><h3><span class="h-icon green">${ic("target")}</span>${t.asked}</h3><ul>${exp.what_is_asked.filter((x) => x && x.trim()).map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`);
+      }
+
+      if (exp.concept && exp.concept.length) {
+        cards.push(`<div class="note-card" style="animation-delay:120ms"><h3><span class="h-icon">${ic("book")}</span>${t.concept}</h3><ul>${exp.concept.filter((x) => x && x.trim()).map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`);
+      }
+
+      if (exp.steps && exp.steps.length) {
+        const steps = exp.steps.map((step, i) => {
+          const title = (step.title || `Step ${i + 1}`).trim();
+          const equation = (step.equation || "").trim();
+          const explanation = (step.explanation || "").trim();
+          return `<li>${title ? `<div class="step-title">${esc(title)}</div>` : ""}${equation ? `<div class="step-eq">${esc(equation)}</div>` : ""}${explanation ? `<p>${esc(explanation)}</p>` : ""}</li>`;
+        }).join("");
+        cards.push(`<div class="note-card" style="animation-delay:160ms"><h3><span class="h-icon cyan">${ic("layers")}</span>${t.steps}</h3><ol class="explain-steps">${steps}</ol></div>`);
+      }
+
+      if (exp.exam_answer && exp.exam_answer.trim()) {
+        const examNote = exp.verified ? t.verifiedNote : t.examNote;
+        const verificationNote = exp.verification_note
+          ? `<div class="explain-review">${esc(exp.verification_note)}</div>`
+          : "";
+        cards.push(`<div class="note-card exam-answer-card" style="animation-delay:200ms"><h3><span class="h-icon green">${ic("check")}</span>${t.exam}</h3><div class="exam-note">${esc(examNote)}</div><div class="exam-answer-body">${esc(exp.exam_answer)}</div>${verificationNote}</div>`);
+      } else if (exp.verification_note) {
+        cards.push(`<div class="note-card verify-card" style="animation-delay:200ms"><h3><span class="h-icon red">${ic("alert")}</span>${t.exam}</h3><p>${esc(exp.verification_note)}</p></div>`);
+      }
+
+      if (exp.recap && exp.recap.length) {
+        cards.push(`<div class="note-card takeaway-card" style="animation-delay:240ms"><h3><span class="h-icon green">${ic("clock")}</span>${t.recap}</h3><ul>${exp.recap.filter((x) => x && x.trim()).map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>`);
+      }
+
+      return cards.join("");
+    }
 
     function renderRevision(notes, creditsUsed) {
       if (!notes) return;
       const cards = [];
-      cards.push(`<div class="revision-header">${ic("sparkles")}Make This Revision-Ready</div>`);
+      cards.push(`<div class="revision-header">${ic("sparkles")}${notes.explanation ? "Question-First Explanation + Revision Sheet" : "Make This Revision-Ready"}</div>`);
+      if (notes.explanation) cards.push(renderExplanation(notes.explanation));
 
       if (notes.topic && notes.topic.title) {
         const title = notes.topic.title.toUpperCase();
@@ -2559,7 +2759,7 @@
       const isText = result.type !== "diagram";
       reviseBtn.style.display = (isText && !fromHistory) ? "block" : "none";
       reviseBtn.disabled = false;
-      reviseBtn.innerHTML = `<span>${ic("sparkles")}Make This Revision-Ready</span><em>Turn this into exam-ready learning material (+1 credit)</em>`;
+      reviseBtn.innerHTML = `<span>${ic("sparkles")}Explain + Make Revision-Ready</span><em>Question-first explanation + exam-ready sheet (+1 credit)</em>`;
 
       const topic = (result.studyNotes && result.studyNotes.topic && result.studyNotes.topic.title) || "";
       currentContext = JSON.stringify({
@@ -2581,6 +2781,10 @@
       }
 
       const cards = [];
+
+      if (notes.explanation) {
+        cards.push(renderExplanation(notes.explanation));
+      }
 
       if (notes.topic && notes.topic.title) {
         const title = notes.topic.title.toUpperCase();
