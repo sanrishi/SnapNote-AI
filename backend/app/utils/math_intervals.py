@@ -229,7 +229,7 @@ _UNICODE_FIXUPS = {
     "\u22c3": "U",  # n-ary union
 }
 
-_EMPTY_MARKERS = {"∅", "empty", "none", "no solution", "no solutions"}
+_EMPTY_MARKERS = {"∅", "empty", "none", "no solution", "no solutions", "no real solution", "no real solutions"}
 
 
 def _clean(text: str) -> str:

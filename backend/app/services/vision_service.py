@@ -3,6 +3,7 @@ import io
 import json
 import logging
 import re
+import time
 
 import google.generativeai as genai
 from PIL import Image
@@ -11,12 +12,20 @@ from app.config import settings
 from app.exceptions import UpstreamError
 from app.models.schemas import (
     DiagramRep,
+    ExplanationLanguage,
+    StudyExplanation,
     StudyNotes,
     VisualComparison,
     VisualSpec,
 )
 from app.utils.diagram_validation import SUPPORTED_DIAGRAM_TYPES, validate_diagram_spec
 from app.utils.diagram_renderer import render_polar_region
+from app.utils.explanation_verify import (
+    ExplanationCheck,
+    apply_explanation_check,
+    check_explanation_math,
+    withhold_unverified_solution,
+)
 from app.utils.latex_clean import latex_to_unicode
 from app.utils.svg_safe import sanitize_svg
 from app.utils.table_quality import normalize_visual_spec
@@ -81,6 +90,77 @@ RULE 6 — NEVER output LaTeX commands (no \omega, \hat, \frac, \sin, \, or any 
 RULE 7 — Output ONLY the formatted markdown, no explanations, no greetings.
 RULE 8 — Transcribe only what is visibly written. Do not solve, complete, continue, or extend any problem beyond what is shown. If a derivation is cut off, state that explicitly rather than filling in missing steps."""
 
+EXPLANATION_RULE = r"""
+
+EXPLANATION BLOCK — question first, then solution (field "explanation"):
+- Detect the question. Fill this block ONLY when the screenshot contains a question/exercise the student must answer: Find / Calculate / Determine / Prove / Show / Derive / Explain why / Which of the following, a numerical exercise, or an MCQ. If the screenshot is lecture notes, theory, or a diagram with no question, keep explanation=null. Never invent a question that is not visible.
+- When explanation is not null, emit EXACTLY this object shape (all fields present):
+  {"question_text": "...", "question_meaning": "...", "what_is_asked": ["..."], "concept": ["..."], "steps": [{"title": "...", "explanation": "...", "equation": "..."}], "exam_answer": "...", "recap": ["..."], "confidence": "clear", "problem_expr": "", "solution_set": ""}
+- question_text: the question exactly as visible, in plain Unicode (no LaTeX). Preserve every number, unit, symbol, option and qualifier. Copy every quantity DIGIT FOR DIGIT, including trailing zeros: "0.200 M" must stay "0.200 M", never "0.00 M" or "0.2 M". NEVER alter the question to make it easier. If part is cut off or unreadable, transcribe only the visible part and list the missing part in uncertainties.
+- Before you finish, re-read question_text against the screenshot and check that every value used in the steps and exam_answer matches the value printed in the question. If they disagree, the transcription is wrong: fix question_text from the image, never change the working to fit a misread quantity.
+- question_meaning: what the question is actually saying, in the requested explanation language. Explain difficult English words/phrases inline. 2-4 sentences. Do not solve yet.
+- what_is_asked: 1-3 bullets naming exactly what must be found, proved, calculated or explained.
+- concept: 2-4 short bullets/paragraphs teaching the minimum concept needed, assuming the student may not know it. Define difficult terms; keep technical terms in English.
+- steps: 3-6 ordered steps. Each step has "title" (short), "explanation" (WHY this step is done and what it means — not just the operation), and "equation" (the exact relation for that step, or ""). Adapt the reasoning to the subject:
+  * Maths: domain/conditions, algebraic manipulation with justification, final result.
+  * Chemistry: principle, balanced equation/ICE table, units/states, limiting reagent/equilibrium direction.
+  * Biology: causal mechanism (stimulus -> receptor -> response), correct terminology, no oversimplification.
+  * Physics: given/unknown, law used, substitution with units, direction/sign/limits.
+  * Computer science: definition, mechanism/trace, complexity/edge cases.
+- exam_answer: a SEPARATE, concise formal answer in ENGLISH, using correct mathematical/scientific notation, units and standard terminology. 2-6 lines. This is what the student writes in the exam; never write it in Hinglish, even when the explanation is Hinglish. It must be self-contained.
+- recap: 1-2 bullets with the most important takeaway.
+- confidence: "clear" only when the question is fully readable and you are confident in the solution; "review" when the question/symbol is ambiguous, an assumption affects the result, or the answer could not be verified. When "review", put the exact ambiguity/assumption in uncertainties.
+- problem_expr: ONLY for a single-variable interval inequality in x that can be written exactly. Use this strict machine-readable syntax with no words, units or LaTeX: log_{x+3}(x^2 - x) < 1, (x - 1)/(x + 2) <= 0, x^2 - 3x + 2 > 0. Use ^ for powers, * for multiplication, / for division, and one of < <= > >=. Otherwise "".
+- solution_set: ONLY when problem_expr is non-empty. The final solution in exact interval notation, using "U" for union: (-3, -2) U (-1, 0) U (1, 3), or "no real solutions". Never use decimals for exact fractions. Otherwise "".
+- verified and verification_note are filled by SnapNote's exact solver after you answer — never set them yourself.
+- CORRECTNESS: solve rigorously and preserve every equation, variable, unit, symbol and label. Explain transformations (why they are valid), not just what was done. After solving, VERIFY the result against the original question: substitute back, check domain/units/signs/limiting reagent/complexity. Never let conversational wording weaken an exact result. Never present a guessed answer as verified. If you cannot solve confidently, explain the valid approach, leave exam_answer empty, set confidence="review", and state exactly what is missing in uncertainties.
+- The explanation block is the ONLY place where working through a question is allowed. The study-note fields above remain grounded in what is visible.
+"""
+
+_HINGLISH_LANGUAGE_SUFFIX = r"""
+
+EXPLANATION LANGUAGE — natural Indian Hinglish (Roman script):
+- Write question_meaning, what_is_asked, concept, steps[*].title/explanation and recap in natural conversational Hinglish, the way a knowledgeable friend explains at a study table.
+- Keep technical/scientific terms, formulas, variables, units and notation in English. Explain difficult English words inline in simple Hinglish.
+- Do NOT write formal/textbook Hindi or Devanagari. Do NOT translate technical terms into Hindi.
+- Avoid forced slang, memes, emojis and repetitive "bro/bhai"; never sound childish. Accuracy and clarity come first.
+- Example turn of phrase (style only, never copy content): "Question ye pooch raha hai ki ... Pehle is condition ka matlab samjho, phir equation simplify karte hain."
+- exam_answer must STILL be formal English (see EXPLANATION BLOCK).
+"""
+
+_ENGLISH_LANGUAGE_SUFFIX = r"""
+
+EXPLANATION LANGUAGE — clear simple English:
+- Write question_meaning, what_is_asked, concept, steps[*].title/explanation and recap in clear, natural English. Prefer short sentences over textbook prose.
+- Keep technical/scientific terms, formulas, variables, units and notation exact.
+- exam_answer is formal English with correct notation and terminology.
+"""
+
+
+def _explanation_language_suffix(language: ExplanationLanguage) -> str:
+    if language == ExplanationLanguage.ENGLISH:
+        return _ENGLISH_LANGUAGE_SUFFIX
+    return _HINGLISH_LANGUAGE_SUFFIX
+
+
+EXPLANATION_MATH_REPAIR_PROMPT = r"""SnapNote's exact solver re-solved the maths question below and found that the final solution set in your explanation is wrong.
+
+QUESTION (machine-readable): {problem}
+VERIFIED SOLUTION SET: {expected}
+YOUR CLAIMED SOLUTION SET: {claimed}
+YOUR PREVIOUS EXPLANATION JSON:
+{previous}
+
+Rewrite ONLY the explanation object for the SAME question so that:
+- every reasoning step is consistent with the verified solution set (do not skip the domain intersection or any case split that produces it),
+- solution_set is exactly "{expected}",
+- exam_answer is the formal English answer consistent with it,
+- the question is unchanged,
+- confidence is "clear".
+Follow the EXPLANATION BLOCK rules. Do not mention the repair, the solver or this message. Return ONLY the JSON object with the same explanation fields.
+"""
+
+
 STUDY_NOTES_SYSTEM_PROMPT = r"""You are SnapNote AI. Turn a messy lecture screenshot into exam-ready study material. The student wants to understand and revise what the professor was teaching — NOT a description of what objects the image contains.
 
 FUNDAMENTAL RULES:
@@ -108,7 +188,8 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "diagram": {"present": false, "svg": ""},
   "verify_before_studying": ["specific equation or symbol that may have been misread, with what was ambiguous"],
   "uncertainties": ["anything cropped, unreadable, ambiguous, or missing"],
-  "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
+  "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string",
+  "explanation": null
 }
 
 SECTION RULES:
@@ -135,11 +216,12 @@ SECTION RULES:
 - verify_before_studying: ONLY genuinely uncertain equations/symbols (confidence "possible_extraction_issue"). Empty unless truly needed.
 - uncertainties: only genuinely ambiguous/missing material. Empty if nothing is uncertain.
 - analogy: ALWAYS provide a concise 2-4 sentence everyday analogy that builds intuition for the concept (e.g., for torque: opening a door far from the hinge; for integrals: accumulating area like filling a shape). Only leave empty if the content is purely definitional and no analogy would help. Never invent unsupported facts.
+- explanation: null when the screenshot has no question/exercise. When a question IS visible, replace null with the object described in EXPLANATION BLOCK and solve it there. The study-note fields above stay grounded in the visible material; the explanation block is the only place where solving is allowed.
 
 CRITICAL READING RULES:
 - When a handwritten or blurry symbol could be more than one thing, do NOT silently pick one. Record your best guess, set confidence to "possible_extraction_issue", and list it in verify_before_studying.
 - Common confusion pairs to watch: τ (tau) vs t, ω (omega) vs w, θ (theta) vs 0/O, μ (mu) vs u, α (alpha) vs a, v vs r.
-- If a derivation or equation is partially cut off, transcribe only the visible part and flag the rest as missing context rather than completing it."""
+- If a derivation or equation is partially cut off, transcribe only the visible part and flag the rest as missing context rather than completing it.""" + EXPLANATION_RULE
 
 SEMANTIC_DIAGRAM_RULE = """- diagram_spec: REBUILD the visible diagram as a STRUCTURED SEMANTIC SPEC, NOT as SVG. The student needs the region's exact boundaries so our renderer can draw a clean diagram. You output MATH (radii and angles), never pixels. Never output SVG geometry — no <circle>, no cx/cy, no pixel coordinates.
   * Set diagram_spec.present=true ONLY when the screenshot contains a real polar-coordinate integration region: two concentric circular boundaries, the area between them shaded, radial labels and/or a theta arc. Otherwise present=false and leave bounds empty.
@@ -206,7 +288,8 @@ OUTPUT: ONLY a JSON object with exactly this structure:
   "diagram": {"present": false, "svg": ""},
   "verify_before_studying": ["equation or symbol that may have been misread"],
   "uncertainties": ["anything ambiguous or missing"],
-  "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string"
+  "analogy": "an everyday analogy if one genuinely fits, otherwise an empty string",
+  "explanation": null
 }
 
 SECTION RULES:
@@ -215,16 +298,17 @@ SECTION RULES:
 - thirty_second_revision: 3-5 tight bullets. Include the key formula if visible.
 - visual_context: 1-2 sentences max, only if a diagram exists and helps. Explain what the diagram MEANS conceptually (teach the relationship), never list what objects/axes/labels are visible.
 - diagram: same rules as the main prompt — rebuild the visible diagram as a clean, readable vector SVG (present=true + svg) when the material contains one; else present=false, svg="".
-- analogy: ALWAYS provide a concise 2-4 sentence analogy when it helps intuition (most concepts); only leave empty if no analogy would help."""  # noqa: E501
+- analogy: ALWAYS provide a concise 2-4 sentence analogy when it helps intuition (most concepts); only leave empty if no analogy would help.
+- explanation: null when the screenshot has no question/exercise. When a question IS visible, replace null with the object described in EXPLANATION BLOCK and solve it there. The study-note fields above stay grounded in the visible material; the explanation block is the only place where solving is allowed.""" + EXPLANATION_RULE  # noqa: E501
 
 REVISION_REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
-{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"diagram":{"present":false,"svg":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
+{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"diagram":{"present":false,"svg":""},"verify_before_studying":[],"uncertainties":[],"analogy":"","explanation":null}
 
 Previous (invalid) response:
 {{RAW}}"""
 
 REPAIR_PROMPT = r"""The previous response was not valid JSON matching the required schema. Fix it and return ONLY the corrected JSON object with this schema:
-{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"diagram":{"present":false,"svg":""},"verify_before_studying":[],"uncertainties":[],"analogy":""}
+{"topic":{"title":"","is_probable":false},"what_you_should_remember":"","key_formulas":[{"formula":"","explanation":"","uncertain_symbols":[],"confidence":"clear"}],"understand_it":[],"common_mistakes":[],"thirty_second_revision":[],"visual_context":{"present":false,"summary":""},"diagram":{"present":false,"svg":""},"verify_before_studying":[],"uncertainties":[],"analogy":"","explanation":null}
 
 Previous (invalid) response:
 {{RAW}}"""
@@ -420,9 +504,13 @@ def _sanitize_svg_in_dict(value: object) -> object:
 
 
 async def _extract_structured(
-    primary_prompt: str, repair_prompt: str, image_bytes: bytes, model_cls: type
+    primary_prompt: str,
+    repair_prompt: str,
+    image_bytes: bytes,
+    model_cls: type,
+    prompt_suffix: str = "",
 ) -> BaseModel:
-    raw = await _call_gemini(primary_prompt, image_bytes, json_mode=True)
+    raw = await _call_gemini(primary_prompt + prompt_suffix, image_bytes, json_mode=True)
     try:
         data = _clean_latex_in_dict(_extract_json(raw))
         data = _sanitize_svg_in_dict(data)
@@ -431,7 +519,9 @@ async def _extract_structured(
         logger.warning("%s JSON parse failed (attempt 1): %s", model_cls.__name__, first_err)
         try:
             repaired = await _call_gemini(
-                repair_prompt.replace("{{RAW}}", raw), image_bytes, json_mode=True
+                repair_prompt.replace("{{RAW}}", raw) + prompt_suffix,
+                image_bytes,
+                json_mode=True,
             )
             data = _clean_latex_in_dict(_extract_json(repaired))
             data = _sanitize_svg_in_dict(data)
@@ -444,15 +534,157 @@ async def _extract_structured(
             )
 
 
-async def extract_study_notes(image_bytes: bytes) -> StudyNotes:
+# The routes guard the whole diagram/revision call with
+# ``DIAGRAM_TIMEOUT_SECONDS``. A math repair is an OPTIONAL second Gemini call;
+# it must never push an otherwise successful request past that guard (observed
+# live: a 25s capacity-failover answer + a 12s repair = 36s, which the 28s route
+# guard would cancel and turn into a 502 with zero credits charged). Reserve a
+# small response margin and skip the repair when the budget is gone: the
+# verified final set is still returned, with the worked steps withheld.
+_EXPLANATION_RESPONSE_RESERVE_SECONDS = 1.5
+_EXPLANATION_MIN_REPAIR_SECONDS = 5.0
+
+
+def _explanation_deadline() -> float:
+    return (
+        time.monotonic()
+        + settings.DIAGRAM_TIMEOUT_SECONDS
+        - _EXPLANATION_RESPONSE_RESERVE_SECONDS
+    )
+
+
+def _finalize_explanation(notes: StudyNotes, language: ExplanationLanguage) -> None:
+    """Pin the explanation to the requested language and enforce the trust rule.
+
+    The language is a request property, not something the model gets to choose
+    (a mislabeled block would make the UI lie about what the student is
+    reading). An explanation without a verifiable formal answer is downgraded
+    to "review" so it can never look like a checked solution.
+    """
+    explanation = notes.explanation
+    if explanation is None:
+        return
+    if not explanation.has_content():
+        notes.explanation = None
+        return
+    explanation.language = language
+    # Server-owned trust fields: a model can never mark its own answer verified.
+    explanation.verified = False
+    explanation.verification_note = ""
+    if not explanation.exam_answer.strip() and explanation.confidence == "clear":
+        explanation.confidence = "review"
+
+
+async def _repair_explanation_math(
+    notes: StudyNotes,
+    image_bytes: bytes,
+    check: ExplanationCheck,
+    language: ExplanationLanguage,
+    timeout_seconds: float,
+) -> StudyExplanation | None:
+    """One focused repair when the exact solver contradicts the explanation.
+
+    The prompt receives the verified set and the previous JSON, never the raw
+    image alone: the model must reconcile its reasoning with the exact result.
+    A failed repair returns None so the caller withholds the worked steps.
+    ``timeout_seconds`` is the budget left inside the route guard, so this
+    optional call can never turn a valid request into a timeout.
+    """
+    explanation = notes.explanation
+    if explanation is None:
+        return None
+    prompt = EXPLANATION_MATH_REPAIR_PROMPT.format(
+        problem=explanation.problem_expr.strip(),
+        expected=check.expected,
+        claimed=explanation.solution_set.strip() or "(not stated)",
+        previous=json.dumps(explanation.model_dump(), ensure_ascii=False),
+    ) + _explanation_language_suffix(language)
+    try:
+        raw = await asyncio.wait_for(
+            _call_gemini(prompt, image_bytes, json_mode=True),
+            timeout=timeout_seconds,
+        )
+        data = _clean_latex_in_dict(_extract_json(raw))
+        if isinstance(data, dict) and isinstance(data.get("explanation"), dict):
+            data = data["explanation"]
+        repaired = StudyExplanation(**data)
+    except (asyncio.TimeoutError, json.JSONDecodeError, ValidationError, UpstreamError) as err:
+        logger.warning("Math explanation repair failed: %s", str(err)[:200])
+        return None
+    if not repaired.has_content():
+        return None
+    repaired.language = language
+    repaired.verified = False
+    repaired.verification_note = ""
+    second = check_explanation_math(repaired)
+    if second.status != "verified":
+        logger.warning("Math explanation repair did not verify: %s", second.reason)
+        return None
+    apply_explanation_check(repaired, second)
+    repaired.confidence = "clear"
+    return repaired
+
+
+async def _verify_explanation(
+    notes: StudyNotes,
+    image_bytes: bytes,
+    language: ExplanationLanguage,
+    deadline: float,
+) -> None:
+    """Run the exact math gate after the explanation is otherwise finalized."""
+    explanation = notes.explanation
+    if explanation is None:
+        return
+    check = check_explanation_math(explanation)
+    if check.status != "mismatch":
+        apply_explanation_check(explanation, check)
+        return
+    logger.info("Math explanation mismatch: %s", check.reason)
+    remaining = deadline - time.monotonic()
+    if remaining < _EXPLANATION_MIN_REPAIR_SECONDS:
+        logger.warning(
+            "Skipping math explanation repair: only %.1fs left inside the route budget.",
+            remaining,
+        )
+        withhold_unverified_solution(explanation, check)
+        return
+    repaired = await _repair_explanation_math(
+        notes,
+        image_bytes,
+        check,
+        language,
+        timeout_seconds=min(
+            settings.GEMINI_REPAIR_TIMEOUT_SECONDS,
+            max(1.0, remaining - _EXPLANATION_RESPONSE_RESERVE_SECONDS),
+        ),
+    )
+    if repaired is not None:
+        notes.explanation = repaired
+        return
+    withhold_unverified_solution(explanation, check)
+
+
+async def extract_study_notes(
+    image_bytes: bytes,
+    explanation_language: ExplanationLanguage = ExplanationLanguage.HINGLISH,
+) -> StudyNotes:
     semantic = settings.DIAGRAM_RENDERER_MODE == "semantic"
     primary = STUDY_NOTES_SEMANTIC_PROMPT if semantic else STUDY_NOTES_SYSTEM_PROMPT
     repair = REPAIR_PROMPT_SEMANTIC if semantic else REPAIR_PROMPT
-    result = await _extract_structured(primary, repair, image_bytes, StudyNotes)
+    deadline = _explanation_deadline()
+    result = await _extract_structured(
+        primary,
+        repair,
+        image_bytes,
+        StudyNotes,
+        prompt_suffix=_explanation_language_suffix(explanation_language),
+    )
 
     if semantic and result.diagram_spec is not None:
         await _apply_diagram_spec(result, image_bytes)
     _normalize_confidence(result)
+    _finalize_explanation(result, explanation_language)
+    await _verify_explanation(result, image_bytes, explanation_language, deadline)
     return result
 
 
@@ -526,14 +758,25 @@ async def _apply_diagram_spec(notes: StudyNotes, image_bytes: bytes) -> None:
     notes.diagram_spec = None
 
 
-async def extract_revision_guide(image_bytes: bytes, context_hint: str = "") -> StudyNotes:
+async def extract_revision_guide(
+    image_bytes: bytes,
+    context_hint: str = "",
+    explanation_language: ExplanationLanguage = ExplanationLanguage.HINGLISH,
+) -> StudyNotes:
     prompt = REVISION_SYSTEM_PROMPT
     if context_hint:
         prompt += "\n\nEXTRACTED CONTEXT (use it to focus, but only teach what the image shows):\n" + context_hint
+    deadline = _explanation_deadline()
     result = await _extract_structured(
-        prompt, REVISION_REPAIR_PROMPT, image_bytes, StudyNotes
+        prompt,
+        REVISION_REPAIR_PROMPT,
+        image_bytes,
+        StudyNotes,
+        prompt_suffix=_explanation_language_suffix(explanation_language),
     )
     _normalize_confidence(result)
+    _finalize_explanation(result, explanation_language)
+    await _verify_explanation(result, image_bytes, explanation_language, deadline)
     return result
 
 

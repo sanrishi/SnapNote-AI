@@ -164,6 +164,135 @@ class JEEMapRequest(BaseModel):
         return terms
 
 
+class ExplanationLanguage(str, Enum):
+    """Language of the student-facing question explanation.
+
+    Hinglish is the primary SnapNote experience: natural conversational Hindi
+    mixed with English technical terms, written in Roman script. English stays
+    available as an alternative. The formal exam answer is ALWAYS English.
+    """
+
+    HINGLISH = "hinglish"
+    ENGLISH = "english"
+
+
+class ExplanationStep(BaseModel):
+    """One ordered reasoning step of a worked solution."""
+
+    title: str = ""
+    explanation: str = ""
+    equation: str = ""
+
+    @field_validator("title", "explanation", "equation", mode="before")
+    @classmethod
+    def _coerce_text(cls, value: object) -> object:
+        return "" if value is None else value
+
+
+class StudyExplanation(BaseModel):
+    """Question-first explanation attached to StudyNotes.
+
+    Generated in the SAME Gemini call as the study notes (no extra paid call).
+    The block answers, in order: what the question means, what it asks, the
+    minimum concept, the reasoning steps, the formal exam answer, and a recap.
+    ``question_text`` keeps the source question visible; it is never rewritten
+    to make the solution easier.
+    """
+
+    language: ExplanationLanguage = ExplanationLanguage.HINGLISH
+    question_text: str = ""
+    question_meaning: str = ""
+    what_is_asked: list[str] = []
+    concept: list[str] = []
+    steps: list[ExplanationStep] = []
+    exam_answer: str = ""
+    recap: list[str] = []
+    confidence: Literal["clear", "review"] = "clear"
+    # Exact-verification contract (server-owned for ``verified`` /
+    # ``verification_note``). ``problem_expr`` is the machine-readable interval
+    # inequality (e.g. ``log_{x+3}(x^2 - x) < 1``); ``solution_set`` is the
+    # claimed final set in exact interval notation. Non-maths explanations
+    # leave both empty.
+    problem_expr: str = ""
+    solution_set: str = ""
+    verified: bool = False
+    verification_note: str = ""
+
+    @field_validator("language", mode="before")
+    @classmethod
+    def _normalize_language(cls, value: object) -> object:
+        if isinstance(value, str):
+            folded = value.strip().casefold()
+            if folded in ("hinglish", "english"):
+                return folded
+        return value
+
+    @field_validator(
+        "question_text",
+        "question_meaning",
+        "exam_answer",
+        "problem_expr",
+        "solution_set",
+        "verification_note",
+        mode="before",
+    )
+    @classmethod
+    def _coerce_text(cls, value: object) -> object:
+        return "" if value is None else value
+
+    @field_validator("steps", mode="before")
+    @classmethod
+    def _coerce_steps(cls, value: object) -> object:
+        """Accept a bare string step or null instead of failing the block."""
+        if value is None:
+            return []
+        if isinstance(value, str):
+            return [{"title": "", "explanation": value, "equation": ""}]
+        if isinstance(value, list):
+            return [
+                {"title": "", "explanation": item, "equation": ""}
+                if isinstance(item, str)
+                else item
+                for item in value
+            ]
+        return value
+
+    @field_validator("what_is_asked", "concept", "recap", mode="before")
+    @classmethod
+    def _coerce_list(cls, value: object) -> object:
+        if value is None:
+            return []
+        if isinstance(value, str):
+            return [value] if value.strip() else []
+        return value
+
+    @field_validator("confidence", mode="before")
+    @classmethod
+    def _normalize_confidence(cls, value: object) -> object:
+        if value is None:
+            # An absent confidence is not evidence of a clear solution.
+            return "review"
+        if isinstance(value, str):
+            folded = value.strip().casefold()
+            if "review" in folded or "check" in folded or "uncertain" in folded:
+                return "review"
+            if "clear" in folded or "high" in folded or "verified" in folded:
+                return "clear"
+        return value
+
+    def has_content(self) -> bool:
+        """True when at least one student-facing stage survived parsing."""
+        return bool(
+            self.question_text.strip()
+            or self.question_meaning.strip()
+            or self.what_is_asked
+            or self.concept
+            or self.steps
+            or self.exam_answer.strip()
+            or self.recap
+        )
+
+
 class StudyNotes(BaseModel):
     topic: TopicInfo = TopicInfo()
     what_you_should_remember: str = ""
@@ -177,6 +306,13 @@ class StudyNotes(BaseModel):
     verify_before_studying: list[str] = []
     uncertainties: list[str] = []
     analogy: str = ""
+    explanation: Optional[StudyExplanation] = None
+
+    @model_validator(mode="after")
+    def _drop_empty_explanation(self) -> "StudyNotes":
+        if self.explanation is not None and not self.explanation.has_content():
+            self.explanation = None
+        return self
 
 
 class ExtractionResponse(BaseModel):
@@ -228,6 +364,9 @@ class DeviceAuthResponse(BaseModel):
 
 class RevisionResponse(BaseModel):
     study_notes: StudyNotes
+    # Same study-note markdown as the diagram response, including the
+    # question explanation, so Copy/Download carries the full learning sheet.
+    markdown: str = ""
     creditsUsed: int
     jee: Optional[JEEConceptContext] = None
 

@@ -1,4 +1,4 @@
-from app.models.schemas import JEEConceptContext, StudyNotes
+from app.models.schemas import ExplanationLanguage, JEEConceptContext, StudyNotes
 from app.utils.svg_safe import sanitize_svg, svg_data_uri
 
 
@@ -14,6 +14,85 @@ def _confidence_note(confidence: str) -> str:
     return ""
 
 
+def _render_explanation(notes: StudyNotes) -> list[str]:
+    """Render the question-first Hinglish/English explanation as markdown.
+
+    The formal exam answer stays a separate English block even in Hinglish
+    mode: that is the text a student writes in the exam. The source question
+    is printed before any reasoning so it is never silently rewritten.
+    """
+    explanation = notes.explanation
+    if explanation is None:
+        return []
+
+    hinglish = explanation.language == ExplanationLanguage.HINGLISH
+    labels = {
+        "meaning": "Question ka matlab" if hinglish else "What the Question Means",
+        "asked": (
+            "Question humse kya maang raha hai?"
+            if hinglish
+            else "What the Question Asks"
+        ),
+        "concept": "Concept samjho" if hinglish else "The Concept",
+        "steps": "Step-by-step solution",
+        "exam": (
+            "Exam mein kaise likhna hai? (formal English answer)"
+            if hinglish
+            else "How to Write It in the Exam (formal answer)"
+        ),
+        "recap": "Quick recap" if hinglish else "Quick Recap",
+        "review": (
+            "Solution needs a quick check — question ya symbol ambiguous ho sakta hai. "
+            "Verify against the original screenshot."
+            if hinglish
+            else "Solution needs a quick check — the question or a symbol may be ambiguous. "
+            "Verify against the original screenshot."
+        ),
+    }
+
+    lines: list[str] = []
+    if explanation.question_text.strip():
+        lines.append("\n## 📖 Original Question")
+        lines.append(explanation.question_text.strip())
+    if explanation.question_meaning.strip():
+        lines.append(f"\n## 🧠 {labels['meaning']}")
+        lines.append(explanation.question_meaning.strip())
+    if explanation.what_is_asked:
+        lines.append(f"\n## 🎯 {labels['asked']}")
+        for item in explanation.what_is_asked:
+            if item.strip():
+                lines.append(f"- {item.strip()}")
+    if explanation.concept:
+        lines.append(f"\n## 📚 {labels['concept']}")
+        for item in explanation.concept:
+            if item.strip():
+                lines.append(item.strip())
+    if explanation.steps:
+        lines.append(f"\n## 🪜 {labels['steps']}")
+        for index, step in enumerate(explanation.steps, start=1):
+            title = step.title.strip() or f"Step {index}"
+            lines.append(f"\n### {index}. {title}")
+            if step.equation.strip():
+                lines.append(f"`{step.equation.strip()}`")
+            if step.explanation.strip():
+                lines.append(step.explanation.strip())
+    if explanation.exam_answer.strip():
+        lines.append(f"\n## ✍️ {labels['exam']}")
+        lines.append(explanation.exam_answer.strip())
+    if explanation.verified:
+        lines.append("*✓ Final result verified by SnapNote's exact solver.*")
+    if explanation.verification_note.strip():
+        lines.append(f"*{explanation.verification_note.strip()}*")
+    if explanation.recap:
+        lines.append(f"\n## ⏱️ {labels['recap']}")
+        for item in explanation.recap:
+            if item.strip():
+                lines.append(f"- {item.strip()}")
+    if explanation.confidence == "review":
+        lines.append(f"\n*{labels['review']}*")
+    return lines
+
+
 def render_study_notes(notes: StudyNotes) -> str:
     lines: list[str] = []
 
@@ -23,6 +102,10 @@ def render_study_notes(notes: StudyNotes) -> str:
             lines.append(f"# {title}\n*Topic inferred from screenshot*")
         else:
             lines.append(f"# {title}")
+
+    lines.extend(_render_explanation(notes))
+    if notes.explanation is not None:
+        lines.append("\n---\n## 📝 Revision Sheet")
 
     if notes.what_you_should_remember:
         lines.append("\n## 🎯 What You Should Remember")
