@@ -2869,11 +2869,9 @@
         }
       }
 
-      // Guaranteed explanatory image: auto-generate on every diagram upload so
-      // the student always gets a labeled visual, not a silent empty state.
-      if (canExplain && !currentVisualSvg && !currentVisualUrl && !fromHistory) {
-        setTimeout(() => handleExplainVisual(), 400);
-      }
+      // Explain Visually is lazy: the student clicks the button when they want
+      // it. Never auto-generate here — it is a bundled benefit, not a surprise
+      // background job, and it must be generated at most once per diagram.
     }
 
     async function loadJeeContext(topicTitle, keyTerms) {
