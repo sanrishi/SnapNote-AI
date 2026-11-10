@@ -9,13 +9,16 @@ services:
       generation: automatic
     dockerfilePath: ./Dockerfile
     healthCheckPath: /health
-    disk:
-      name: credits-data
-      mountPath: /data
-      sizeGB: 1
     envVars:
-      - key: CREDITS_DB_PATH
-        value: /data/credits.db
+      # Durable Neon PostgreSQL. Set this in the Render dashboard (sync:false
+      # keeps the secret out of git). Free-plan services cannot mount disks,
+      # so PostgreSQL is the only durable store on the current plan.
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_POOL_MIN_SIZE
+        value: 1
+      - key: DATABASE_POOL_MAX_SIZE
+        value: 5
       - key: APP_NAME
         value: SnapNote AI
       - key: DEBUG

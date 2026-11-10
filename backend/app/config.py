@@ -4,7 +4,9 @@ import re
 import secrets
 from pathlib import Path
 
-from pydantic import model_validator
+from urllib.parse import urlsplit
+
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 logger = logging.getLogger(__name__)
@@ -188,9 +190,19 @@ class Settings(BaseSettings):
     RATE_LIMIT_PER_MIN: int = 10
     MAX_IMAGE_SIZE_MB: int = 10
     CREDITS_DB_PATH: str = "credits.db"
+    # Durable PostgreSQL connection string (Neon in production). Empty keeps
+    # the SQLite backend for local development and emergency rollback. The URL
+    # is never logged or exposed; /health reports only the backend and reachability.
+    DATABASE_URL: str = ""
+    DATABASE_POOL_MIN_SIZE: int = 1
+    DATABASE_POOL_MAX_SIZE: int = 5
+    DATABASE_CONNECT_TIMEOUT_SECONDS: float = 10.0
+    DATABASE_STATEMENT_TIMEOUT_MS: int = 15000
+    DATABASE_APPLICATION_NAME: str = "snapnote"
     # How the credits DB path was chosen: "environment" (explicit config or
     # default) or "render_default" (relative default upgraded to the mounted
-    # /data disk). Exposed on /health so an ephemeral DB is visible.
+    # /data disk). Exposed on /health so an ephemeral DB is visible. When
+    # DATABASE_URL is set, /health reports "postgres" instead.
     CREDITS_DB_SOURCE: str = "environment"
     # Comma-separated browser origins allowed to call the API. "*" (default)
     # allows any origin WITHOUT credentials — the API authenticates with a
@@ -268,6 +280,31 @@ class Settings(BaseSettings):
         "unlimited": {"credits": 1000, "price_paise": 49900},
     }
 
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def _normalize_database_url(cls, value: object) -> str:
+        """Accept libpq URLs only; reject sqlite/file paths and typos early."""
+        if value is None:
+            return ""
+        raw = str(value).strip()
+        if not raw:
+            return ""
+        if raw.startswith("postgres://"):
+            raw = "postgresql://" + raw[len("postgres://") :]
+        parsed = urlsplit(raw)
+        if parsed.scheme not in ("postgresql", "postgres"):
+            raise ValueError(
+                "DATABASE_URL must be a postgresql:// connection string "
+                "(leave it empty to use SQLite)"
+            )
+        if not parsed.hostname or not parsed.path.strip("/"):
+            raise ValueError("DATABASE_URL must include a host and database name")
+        return raw
+
+    @property
+    def database_backend(self) -> str:
+        return "postgres" if self.DATABASE_URL else "sqlite"
+
     @model_validator(mode="after")
     def _guard_jwt_secret(self) -> "Settings":
         """Never sign production sessions with a public placeholder secret.
@@ -280,7 +317,13 @@ class Settings(BaseSettings):
         secret is persisted next to it, so sessions still survive restarts;
         otherwise it is per-process and /health reports it.
         """
-        if not self.DEBUG and self.CREDITS_DB_PATH == "credits.db" and _render_disk_available():
+        using_postgres = bool(self.DATABASE_URL)
+        if (
+            not self.DEBUG
+            and not using_postgres
+            and self.CREDITS_DB_PATH == "credits.db"
+            and _render_disk_available()
+        ):
             # A Render service that lost its blueprint env vars would write an
             # ephemeral /app/credits.db and silently lose users/credits on every
             # deploy. The mounted disk is the durable location; upgrade only
@@ -293,16 +336,19 @@ class Settings(BaseSettings):
                 self.CREDITS_DB_PATH,
             )
 
-        if not self.DEBUG and _on_render():
+        if not self.DEBUG and _on_render() and not using_postgres:
             db_parent = Path(self.CREDITS_DB_PATH).expanduser().parent
             if not is_mount_point(db_parent):
                 logger.critical(
-                    "Credits DB path %r is not on a mounted disk while running "
-                    "on Render - users, credits, payment orders and sessions "
-                    "will be lost on every deploy. Attach a persistent disk at "
-                    "/data and set CREDITS_DB_PATH=/data/credits.db.",
+                    "No durable database is configured on Render: DATABASE_URL "
+                    "is empty and credits DB path %r is not on a mounted disk. "
+                    "Users, credits, payment orders and sessions will be lost "
+                    "on every deploy. Set DATABASE_URL (Neon) or attach a disk "
+                    "and set CREDITS_DB_PATH=/data/credits.db.",
                     self.CREDITS_DB_PATH,
                 )
+        elif using_postgres:
+            logger.info("Durable PostgreSQL storage configured (DATABASE_URL set)")
 
         if is_weak_jwt_secret(self.JWT_SECRET, self.JWT_SECRET_MIN_LENGTH):
             if self.DEBUG:

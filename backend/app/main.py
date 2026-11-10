@@ -14,6 +14,7 @@ from app.config import is_mount_point, settings
 from app.routes import auth, extract, jee, payments
 from app.exceptions import SnapNoteError
 from app.services.ocr_service import OCR_ENGINE_NAME, ocr_importable, rss_mb
+from app.storage.database import database_health, initialize_database
 from app.utils.memory_probe import cgroup_memory_mb, current_rss_mb
 from app.utils.visual_lesson import typst_status
 
@@ -34,6 +35,14 @@ async def lifespan(app: FastAPI):
     logger.info(
         "Storage backend ready: %s", settings.IMAGE_STORAGE_BACKEND.strip().lower()
     )
+    try:
+        backend = initialize_database()
+        logger.info("Durable user/credit storage ready: %s", backend)
+    except Exception:
+        # A configured PostgreSQL database that cannot be reached is a fatal
+        # startup error: serving requests would silently lose credits/orders.
+        logger.exception("Durable user/credit storage initialization failed")
+        raise
     yield
 
 
@@ -143,8 +152,11 @@ async def health() -> dict[str, object]:
     if not ocr_importable():
         logger.warning("health: OCR engine packages not importable — text extraction will escalate to Gemini")
     mem = cgroup_memory_mb()
+    db = database_health()
+    using_postgres = bool(settings.DATABASE_URL)
+    database_reachable = bool(db.get("reachable"))
     return {
-        "status": "ok",
+        "status": "ok" if (not using_postgres or database_reachable) else "degraded",
         "version": settings.APP_VERSION,
         "git_commit": os.environ.get("RENDER_GIT_COMMIT") or os.environ.get("GIT_COMMIT"),
         "typst_available": ts["available"],
@@ -154,9 +166,20 @@ async def health() -> dict[str, object]:
         "auth_secret_persisted": settings.JWT_SECRET_PERSISTED,
         "auth_secret_storage": settings.JWT_SECRET_STORAGE,
         "auth_secret_storage_reason": settings.JWT_SECRET_STORAGE_REASON,
-        "credits_db_absolute": Path(settings.CREDITS_DB_PATH).is_absolute(),
-        "credits_db_on_mount": _db_dir_on_mount(),
-        "credits_db_source": settings.CREDITS_DB_SOURCE,
+        "storage_backend": settings.database_backend,
+        "database_configured": using_postgres,
+        "database_reachable": database_reachable,
+        "database_latency_ms": db.get("latency_ms"),
+        "database_size_bytes": db.get("size_bytes"),
+        "database_connections": db.get("connections"),
+        "database_max_connections": db.get("max_connections"),
+        "database_server_version": db.get("server_version"),
+        "database_error": db.get("error"),
+        "credits_db_absolute": (
+            False if using_postgres else Path(settings.CREDITS_DB_PATH).is_absolute()
+        ),
+        "credits_db_on_mount": False if using_postgres else _db_dir_on_mount(),
+        "credits_db_source": "postgres" if using_postgres else settings.CREDITS_DB_SOURCE,
         "ocr_engine": OCR_ENGINE_NAME,
         "ocr_importable": ocr_importable(),
         "rss_mb": rss_mb(),

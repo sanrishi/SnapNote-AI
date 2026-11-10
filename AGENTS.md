@@ -130,20 +130,48 @@ Actual `.env` is gitignored.
 `JWT_SECRET` must be a random value of at least 32 characters. The committed
 development default and documented placeholders are public knowledge: a token
 forged with them decodes successfully. `Settings._guard_jwt_secret` replaces a
-weak/missing secret outside `DEBUG`; when `CREDITS_DB_PATH` is absolute (the
-production `/data` disk) the generated secret is persisted to
-`<db_dir>/.jwt_secret` so sessions survive cold starts, otherwise it is
-per-process. On Render, the untouched relative default `credits.db` is upgraded
-to `/data/credits.db` only when the disk is a writable mount
-(`CREDITS_DB_SOURCE=render_default`), so a missing blueprint env var cannot
-silently make users/credits ephemeral. Mount detection checks both
-`os.path.ismount` and `/proc/self/mountinfo` (same-device bind mounts), and a
-Render process without any durable path logs a `CRITICAL` data-loss warning.
+weak/missing secret outside `DEBUG`; when SQLite is the backend and
+`CREDITS_DB_PATH` is absolute (the legacy `/data` disk) the generated secret is
+persisted to `<db_dir>/.jwt_secret` so sessions survive cold starts, otherwise
+it is per-process. On Render with SQLite, the untouched relative default
+`credits.db` is upgraded to `/data/credits.db` only when the disk is a writable
+mount (`CREDITS_DB_SOURCE=render_default`). With PostgreSQL (`DATABASE_URL`),
+there is no local disk: `JWT_SECRET` MUST be supplied in the environment so
+sessions survive restarts. Mount detection checks both `os.path.ismount` and
+`/proc/self/mountinfo` (same-device bind mounts), and a Render process with
+neither PostgreSQL nor a mounted SQLite path logs a `CRITICAL` data-loss warning.
 `/health` exposes
 `auth_secret_configured`, `auth_secret_persisted`, `auth_secret_storage` +
-`auth_secret_storage_reason` (never the value), and `credits_db_absolute` +
+`auth_secret_storage_reason` (never the value), `storage_backend`,
+`database_configured`, `database_reachable`, `database_latency_ms`,
+`database_size_bytes`, `database_connections`, and `credits_db_absolute` +
 `credits_db_on_mount` + `credits_db_source`. `DEBUG=true` keeps the documented
 default for local work only.
+
+### Rule 4.6 — Durable user/credit storage is PostgreSQL (Neon Free)
+Production users, credits, payment orders and request history live in
+PostgreSQL via `DATABASE_URL` (Neon Free, pooled URL, `sslmode=require`).
+SQLite is only the local/emergency-rollback backend. No paid plan or disk may
+be added without Sanchit's explicit approval.
+
+- The repository contract lives in `app/utils/credits_store.py`; routes must
+  never open a raw connection. Use `app.storage.database.get_database()`.
+- Credit deduction is ONE conditional
+  `UPDATE ... WHERE credits_remaining >= ?`; payment completion claims the order
+  and updates the balance in ONE `Database.transaction()`. Never reintroduce a
+  read-then-write balance race.
+- PostgreSQL rate limiting locks the device row (`SELECT ... FOR UPDATE`);
+  SQLite relies on `BEGIN IMMEDIATE`.
+- Schema changes go in `app/storage/schema.py` for BOTH engines, and the
+  idempotent initializer must keep old databases upgradeable.
+- Migration/rollback uses the scripts in `backend/scripts/` and must never
+  mutate or delete the source SQLite database until the target has matching
+  count + SHA-256 fingerprints. `backups/` is gitignored and contains PII.
+- `/health` reports the backend, reachability, latency, database size and
+  connection count; `scripts/neon_usage.py` warns at 80% of the Free 0.5 GiB
+  limit and fails at 90%. No credentials in logs or health output.
+- The committed `.env.example` documents `DATABASE_URL` with an empty value;
+  actual credentials only exist in the environment or gitignored `.env`.
 
 ### Rule 4.5 — Mock payments are development-only
 `PAYMENTS_MOCK` (or `DEBUG=true` with no gateway keys) is the ONLY way mock
@@ -152,8 +180,9 @@ checkout is enabled. Production with missing Razorpay keys returns 503 from
 `mock_*` order id and a fake signature. Real order creation uses the Razorpay
 REST API through `httpx` (the SDK is not a project dependency). Order
 completion claims `status='created' -> 'completed'` and updates the balance in
-ONE `BEGIN IMMEDIATE` transaction, credits only the device stored on the order,
-and is idempotent under replay/concurrency.
+ONE `Database.transaction()` (`BEGIN IMMEDIATE` on SQLite, a row-locking
+transaction on PostgreSQL), credits only the device stored on the order, and is
+idempotent under replay/concurrency.
 
 ---
 

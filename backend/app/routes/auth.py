@@ -1,6 +1,5 @@
 import logging
 import secrets
-import sqlite3
 from functools import lru_cache
 
 import httpx
@@ -12,6 +11,7 @@ from app.exceptions import AuthError, InvalidInputError
 from app.models.schemas import AuthResponse, DeviceAuthRequest, DeviceAuthResponse, GoogleAuthRequest
 from app.utils.auth import create_access_token, decode_token, hash_password, verify_password
 from app.utils.credits_store import (
+    UserRecord,
     create_user,
     get_user_by_email,
     get_user_by_id,
@@ -126,7 +126,7 @@ async def _verify_google_access_token(access_token: str) -> dict:
     return data
 
 
-def _user_for_google(email: str, name: str, picture: str) -> sqlite3.Row:
+def _user_for_google(email: str, name: str, picture: str) -> UserRecord:
     """Find or create the local account for a verified Google identity."""
     row = get_user_by_email(email)
     if row is None:
@@ -147,7 +147,7 @@ def _user_for_google(email: str, name: str, picture: str) -> sqlite3.Row:
     return row
 
 
-def _auth_response(row: sqlite3.Row) -> AuthResponse:
+def _auth_response(row: UserRecord) -> AuthResponse:
     return AuthResponse(
         accessToken=create_access_token(row["id"], row["email"]),
         uid=row["id"],

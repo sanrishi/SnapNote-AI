@@ -1,9 +1,28 @@
 import io
 import json
+import os
 from unittest.mock import AsyncMock
 
 import pytest
 from PIL import Image, ImageDraw, ImageFont
+
+# Tests must never touch a real PostgreSQL database, even when backend/.env
+# contains the production DATABASE_URL. The autouse fixture below installs a
+# throwaway SQLite database; clearing the env var here also keeps /health and
+# Settings assertions deterministic.
+os.environ["DATABASE_URL"] = ""
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _isolated_storage(tmp_path_factory):
+    from app.storage.database import SQLiteDatabase, set_database
+
+    db_path = tmp_path_factory.mktemp("snapnote-storage") / "credits.db"
+    database = SQLiteDatabase(db_path)
+    database.initialize()
+    set_database(database)
+    yield
+    set_database(None)
 
 try:
     _font = ImageFont.truetype("arial.ttf", 22)

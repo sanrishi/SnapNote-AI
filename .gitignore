@@ -13,6 +13,9 @@ dist/
 *.log
 .DS_Store
 *.db
+*.db-wal
+*.db-shm
+backups/
 docs/jee-pyq-corpus/index/official_index.json
 docs/jee-pyq-corpus/index/pages/
 docs/jee-pyq-corpus/index/*.local.json

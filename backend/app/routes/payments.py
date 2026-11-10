@@ -12,7 +12,9 @@ from app.config import settings
 from app.exceptions import InvalidInputError, PaymentsUnavailableError, UpstreamError
 from app.utils.credits_store import (
     complete_order_and_credit,
+    get_order as _db_get_order,
     peek_credits,
+    put_order as _db_put_order,
     reset_device_credits,
 )
 
@@ -38,38 +40,9 @@ if MOCK_MODE:
     logger.warning("Razorpay mock payments enabled (development only — no real charges)")
 
 
-def _orders_conn():
-    from app.utils.credits_store import _get_conn
-
-    return _get_conn()
-
-
-def _db_get_order(order_id: str) -> dict | None:
-    row = _orders_conn().execute(
-        "SELECT order_id, device_id, plan, credits, amount, status, razorpay_payment_id "
-        "FROM razorpay_orders WHERE order_id = ?",
-        (order_id,),
-    ).fetchone()
-    if row is None:
-        return None
-    return {
-        "order_id": row["order_id"],
-        "deviceId": row["device_id"],
-        "plan": row["plan"],
-        "credits": row["credits"],
-        "amount": row["amount"],
-        "status": row["status"],
-        "razorpay_payment_id": row["razorpay_payment_id"],
-    }
-
-
-def _db_put_order(order_id: str, device_id: str, plan: str, credits: int, amount: int) -> None:
-    _orders_conn().execute(
-        "INSERT OR IGNORE INTO razorpay_orders (order_id, device_id, plan, credits, amount, status, created_at) "
-        "VALUES (?, ?, ?, ?, ?, 'created', ?)",
-        (order_id, device_id, plan, credits, amount, int(time.time())),
-    )
-    _orders_conn().commit()
+# Kept as module-level aliases because older regression tests seed orders via
+# payments._db_put_order(). The implementation now lives in the repository so
+# the same code runs on SQLite and PostgreSQL.
 
 
 class CreateOrderRequest(BaseModel):
@@ -229,7 +202,7 @@ async def verify_payment(req: VerifyPaymentRequest) -> VerifyPaymentResponse:
         remaining, _ = peek_credits(req.deviceId)
         return VerifyPaymentResponse(success=False, creditsAdded=0, creditsRemaining=remaining)
 
-    if order["deviceId"] != req.deviceId:
+    if order["device_id"] != req.deviceId:
         # Credits belong to the device that created the order. Before this
         # check a valid order id could be replayed against another device.
         logger.warning(
@@ -240,7 +213,7 @@ async def verify_payment(req: VerifyPaymentRequest) -> VerifyPaymentResponse:
         raise InvalidInputError(message="This order does not belong to this device.")
 
     if order["status"] == "completed":
-        remaining, _ = peek_credits(order["deviceId"])
+        remaining, _ = peek_credits(order["device_id"])
         return VerifyPaymentResponse(
             success=True,
             creditsAdded=0,
@@ -249,7 +222,7 @@ async def verify_payment(req: VerifyPaymentRequest) -> VerifyPaymentResponse:
 
     credits = int(order["credits"])
     completed_now, new_remaining = complete_order_and_credit(
-        req.razorpay_order_id, order["deviceId"], req.razorpay_payment_id
+        req.razorpay_order_id, order["device_id"], req.razorpay_payment_id
     )
     if not completed_now:
         # A concurrent verify won the claim (or the order vanished). Report the
@@ -268,7 +241,7 @@ async def verify_payment(req: VerifyPaymentRequest) -> VerifyPaymentResponse:
 
     logger.info(
         "Payment verified: device=%s plan=%s credits=%d id=%s",
-        order["deviceId"][:8],
+        order["device_id"][:8],
         order["plan"],
         credits,
         req.razorpay_payment_id[:12],
