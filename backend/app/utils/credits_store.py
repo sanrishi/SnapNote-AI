@@ -1,191 +1,166 @@
+"""User/credit repository shared by SQLite (local/rollback) and PostgreSQL.
+
+Every balance mutation is a single conditional SQL statement (or one explicit
+transaction for payment claims), so concurrency safety does not depend on the
+engine or on application-level locking. The PostgreSQL adapter translates
+``?`` placeholders and mapping rows; the domain logic below stays identical.
+"""
+
+from __future__ import annotations
+
 import logging
 import sqlite3
-import threading
 import time
+import uuid
+from typing import Mapping, TypedDict
 
 from app.config import settings
+from app.storage.database import SQLiteDatabase, get_database
 
 logger = logging.getLogger(__name__)
 
-_db_path = settings.CREDITS_DB_PATH
-_local = threading.local()
+
+class UserRecord(TypedDict):
+    id: str
+    email: str
+    password_hash: str
+    name: str
+    picture: str
+    credits_remaining: int
+    credits_used: int
+    created_at: int
+
+
+class OrderRecord(TypedDict):
+    order_id: str
+    device_id: str
+    plan: str
+    credits: int
+    amount: int
+    status: str
+    razorpay_payment_id: str | None
+
+
+def _as_int(row: Mapping[str, object], key: str) -> int:
+    value = row.get(key)
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, int):
+        return value
+    return int(str(value or 0))
+
+
+def _as_str(row: Mapping[str, object], key: str) -> str:
+    value = row.get(key)
+    return "" if value is None else str(value)
+
+
+def _as_optional_str(row: Mapping[str, object], key: str) -> str | None:
+    value = row.get(key)
+    return None if value is None else str(value)
+
+
+def _user_record(row: Mapping[str, object]) -> UserRecord:
+    return UserRecord(
+        id=_as_str(row, "id"),
+        email=_as_str(row, "email"),
+        password_hash=_as_str(row, "password_hash"),
+        name=_as_str(row, "name"),
+        picture=_as_str(row, "picture"),
+        credits_remaining=_as_int(row, "credits_remaining"),
+        credits_used=_as_int(row, "credits_used"),
+        created_at=_as_int(row, "created_at"),
+    )
+
+
+def _order_record(row: Mapping[str, object]) -> OrderRecord:
+    return OrderRecord(
+        order_id=_as_str(row, "order_id"),
+        device_id=_as_str(row, "device_id"),
+        plan=_as_str(row, "plan"),
+        credits=_as_int(row, "credits"),
+        amount=_as_int(row, "amount"),
+        status=_as_str(row, "status"),
+        razorpay_payment_id=_as_optional_str(row, "razorpay_payment_id"),
+    )
 
 
 def _get_conn() -> sqlite3.Connection:
-    if not hasattr(_local, "conn") or _local.conn is None:
-        _local.conn = sqlite3.connect(str(_db_path), timeout=30.0, check_same_thread=False, isolation_level=None)
-        _local.conn.row_factory = sqlite3.Row
-        # WAL for concurrent readers/writers on the single Render disk.
-        try:
-            _local.conn.execute("PRAGMA journal_mode=WAL;")
-            _local.conn.execute("PRAGMA synchronous=NORMAL;")
-            _local.conn.execute("PRAGMA foreign_keys=ON;")
-        except sqlite3.Error:
-            pass
-        _local.conn.execute(
-            "CREATE TABLE IF NOT EXISTS device_credits ("
-            "  device_id TEXT PRIMARY KEY,"
-            "  credits_remaining INTEGER NOT NULL DEFAULT 50 CHECK(credits_remaining >= 0),"
-            "  credits_used INTEGER NOT NULL DEFAULT 0 CHECK(credits_used >= 0)"
-            ")"
+    """Legacy raw SQLite handle for tests and one-off migration scripts.
+
+    Production/domain code must use the repository functions below; this helper
+    exists because older regression tests seed balances with direct SQL.
+    """
+    database = get_database()
+    if not isinstance(database, SQLiteDatabase):
+        raise RuntimeError(
+            "Raw _get_conn() is SQLite-only; use the repository functions "
+            "when DATABASE_URL is configured"
         )
-        # Enforce non-negative balance on existing DBs (ALTER cannot add CHECK).
-        try:
-            _local.conn.execute(
-                "CREATE TRIGGER IF NOT EXISTS trg_device_credits_no_negative "
-                "BEFORE UPDATE ON device_credits FOR EACH ROW "
-                "WHEN NEW.credits_remaining < 0 BEGIN "
-                "SELECT RAISE(ABORT, 'credits_remaining cannot be negative'); END;"
-            )
-        except sqlite3.Error:
-            pass
-        _local.conn.execute(
-            "CREATE TABLE IF NOT EXISTS users ("
-            "  id TEXT PRIMARY KEY,"
-            "  email TEXT UNIQUE NOT NULL,"
-            "  password_hash TEXT NOT NULL,"
-            "  name TEXT NOT NULL DEFAULT '',"
-            "  picture TEXT NOT NULL DEFAULT '',"
-            "  credits_remaining INTEGER NOT NULL DEFAULT 50 CHECK(credits_remaining >= 0),"
-            "  credits_used INTEGER NOT NULL DEFAULT 0 CHECK(credits_used >= 0),"
-            "  created_at INTEGER NOT NULL"
-            ")"
-        )
-        # Add picture column to existing DBs (idempotent migration).
-        try:
-            _local.conn.execute("ALTER TABLE users ADD COLUMN picture TEXT NOT NULL DEFAULT ''")
-        except sqlite3.OperationalError:
-            pass
-        try:
-            _local.conn.execute(
-                "CREATE TRIGGER IF NOT EXISTS trg_users_credits_no_negative "
-                "BEFORE UPDATE ON users FOR EACH ROW "
-                "WHEN NEW.credits_remaining < 0 BEGIN "
-                "SELECT RAISE(ABORT, 'credits_remaining cannot be negative'); END;"
-            )
-        except sqlite3.Error:
-            pass
-        _local.conn.execute("CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);")
-        _local.conn.execute(
-            "CREATE TABLE IF NOT EXISTS visual_explanations ("
-            "  diagram_id TEXT PRIMARY KEY,"
-            "  device_id TEXT NOT NULL,"
-            "  study_notes_json TEXT NOT NULL DEFAULT '',"
-            "  visual_url TEXT NOT NULL DEFAULT '',"
-            "  render_mode TEXT NOT NULL DEFAULT '',"
-            "  visual_svg TEXT NOT NULL DEFAULT '',"
-            "  generated_at INTEGER NOT NULL DEFAULT 0"
-            ")"
-        )
-        _local.conn.execute(
-            "CREATE TABLE IF NOT EXISTS razorpay_orders ("
-            "  order_id TEXT PRIMARY KEY,"
-            "  device_id TEXT NOT NULL,"
-            "  plan TEXT NOT NULL,"
-            "  credits INTEGER NOT NULL,"
-            "  amount INTEGER NOT NULL,"
-            "  status TEXT NOT NULL DEFAULT 'created',"
-            "  razorpay_payment_id TEXT,"
-            "  created_at INTEGER NOT NULL"
-            ")"
-        )
-        _local.conn.execute(
-            "CREATE TABLE IF NOT EXISTS request_log ("
-            "  id INTEGER PRIMARY KEY AUTOINCREMENT,"
-            "  device_id TEXT NOT NULL,"
-            "  ts INTEGER NOT NULL"
-            ")"
-        )
-        _local.conn.execute("CREATE INDEX IF NOT EXISTS idx_request_log_device_ts ON request_log(device_id, ts);")
-        _local.conn.execute("CREATE INDEX IF NOT EXISTS idx_visual_device ON visual_explanations(device_id);")
-        try:
-            _local.conn.execute(
-                "ALTER TABLE visual_explanations ADD COLUMN study_notes_json TEXT NOT NULL DEFAULT ''"
-            )
-        except sqlite3.OperationalError:
-            pass
-        try:
-            _local.conn.execute(
-                "ALTER TABLE visual_explanations ADD COLUMN render_mode TEXT NOT NULL DEFAULT ''"
-            )
-        except sqlite3.OperationalError:
-            pass
-        try:
-            _local.conn.execute(
-                "ALTER TABLE visual_explanations ADD COLUMN visual_svg TEXT NOT NULL DEFAULT ''"
-            )
-        except sqlite3.OperationalError:
-            pass
-        _local.conn.commit()
-    return _local.conn
+    return database.raw_sqlite_connection()
+
+
+# ── Device credits ──────────────────────────────────────────────────────────
 
 
 def init_device(device_id: str) -> tuple[int, int]:
-    conn = _get_conn()
-    row = conn.execute(
+    database = get_database()
+    database.execute(
+        "INSERT INTO device_credits (device_id, credits_remaining, credits_used) "
+        "VALUES (?, ?, 0) ON CONFLICT (device_id) DO NOTHING",
+        (device_id, settings.FREE_CREDITS_MONTHLY),
+    )
+    row = database.execute(
         "SELECT credits_remaining, credits_used FROM device_credits WHERE device_id = ?",
         (device_id,),
     ).fetchone()
-    if row is not None:
-        return row["credits_remaining"], row["credits_used"]
-    conn.execute(
-        "INSERT OR IGNORE INTO device_credits (device_id, credits_remaining, credits_used) VALUES (?, ?, 0)",
-        (device_id, settings.FREE_CREDITS_MONTHLY),
-    )
-    conn.commit()
-    return settings.FREE_CREDITS_MONTHLY, 0
+    if row is None:
+        raise RuntimeError("device credits row could not be created")
+    return _as_int(row, "credits_remaining"), _as_int(row, "credits_used")
 
 
 def get_credits(device_id: str) -> tuple[int, int]:
-    conn = _get_conn()
-    row = conn.execute(
+    row = get_database().execute(
         "SELECT credits_remaining, credits_used FROM device_credits WHERE device_id = ?",
         (device_id,),
     ).fetchone()
     if row is None:
         return init_device(device_id)
-    return row["credits_remaining"], row["credits_used"]
+    return _as_int(row, "credits_remaining"), _as_int(row, "credits_used")
 
 
 def peek_credits(device_id: str) -> tuple[int, int]:
-    """Read a balance without creating a device row.
-
-    Used on paths that must not have a side effect (e.g. an unknown payment
-    order id supplied by a client): a read-only lookup cannot be used to
-    insert arbitrary device rows.
-    """
-    conn = _get_conn()
-    row = conn.execute(
+    """Read a balance without creating a device row."""
+    row = get_database().execute(
         "SELECT credits_remaining, credits_used FROM device_credits WHERE device_id = ?",
         (device_id,),
     ).fetchone()
     if row is None:
         return settings.FREE_CREDITS_MONTHLY, 0
-    return row["credits_remaining"], row["credits_used"]
+    return _as_int(row, "credits_remaining"), _as_int(row, "credits_used")
 
 
 def reset_device_credits(device_id: str) -> tuple[int, int]:
     """Give a device its full free allowance again (DEBUG-only endpoint)."""
-    conn = _get_conn()
-    conn.execute(
+    get_database().execute(
         "INSERT INTO device_credits (device_id, credits_remaining, credits_used) "
-        "VALUES (?, ?, 0) "
-        "ON CONFLICT(device_id) DO UPDATE SET "
+        "VALUES (?, ?, 0) ON CONFLICT (device_id) DO UPDATE SET "
         "credits_remaining = excluded.credits_remaining, credits_used = 0",
         (device_id, settings.FREE_CREDITS_MONTHLY),
     )
-    conn.commit()
     return settings.FREE_CREDITS_MONTHLY, 0
 
 
 def add_credits(device_id: str, amount: int) -> int:
-    conn = _get_conn()
+    if amount < 0:
+        raise ValueError("credit amount cannot be negative")
+    database = get_database()
     init_device(device_id)
-    conn.execute(
-        "UPDATE device_credits SET credits_remaining = credits_remaining + ? WHERE device_id = ?",
+    database.execute(
+        "UPDATE device_credits SET credits_remaining = credits_remaining + ? "
+        "WHERE device_id = ?",
         (amount, device_id),
     )
-    conn.commit()
     remaining, _ = get_credits(device_id)
     logger.info("Added %d credits to %s (now %d)", amount, device_id[:8], remaining)
     return remaining
@@ -194,43 +169,24 @@ def add_credits(device_id: str, amount: int) -> int:
 def use_credits(device_id: str, amount: int) -> int:
     """Atomically deduct credits. Raises CreditLimitError if insufficient.
 
-    Uses BEGIN IMMEDIATE so concurrent requests serialize; the DB CHECK +
-    trigger prevents a negative balance even under race.
+    One conditional UPDATE is atomic on both engines: concurrent requests
+    cannot both observe the same balance and overspend.
     """
     from app.exceptions import CreditLimitError
 
-    conn = _get_conn()
-    # Ensure row exists before the atomic block (INSERT OR IGNORE is idempotent).
+    if amount <= 0:
+        raise ValueError("credit amount must be positive")
+    database = get_database()
     init_device(device_id)
-    try:
-        conn.execute("BEGIN IMMEDIATE")
-        row = conn.execute(
-            "SELECT credits_remaining, credits_used FROM device_credits WHERE device_id = ?",
-            (device_id,),
-        ).fetchone()
-        if row is None:
-            conn.execute("ROLLBACK")
-            raise CreditLimitError()
-        remaining = row["credits_remaining"]
-        if remaining < amount:
-            conn.execute("ROLLBACK")
-            raise CreditLimitError()
-        conn.execute(
-            "UPDATE device_credits SET credits_remaining = credits_remaining - ?, credits_used = credits_used + ? WHERE device_id = ?",
-            (amount, amount, device_id),
-        )
-        conn.execute("COMMIT")
-    except CreditLimitError:
-        raise
-    except sqlite3.Error as e:
-        try:
-            conn.execute("ROLLBACK")
-        except sqlite3.Error:
-            pass
-        # CHECK / trigger abort surfaces as OperationalError — map to 429.
-        if "negative" in str(e).lower() or "CHECK" in str(e):
-            raise CreditLimitError() from e
-        raise
+    updated = database.execute(
+        "UPDATE device_credits "
+        "SET credits_remaining = credits_remaining - ?, "
+        "    credits_used = credits_used + ? "
+        "WHERE device_id = ? AND credits_remaining >= ?",
+        (amount, amount, device_id, amount),
+    )
+    if updated.rowcount == 0:
+        raise CreditLimitError()
     new_remaining, _ = get_credits(device_id)
     logger.info("Used %d credits for %s (now %d)", amount, device_id[:8], new_remaining)
     return new_remaining
@@ -247,33 +203,22 @@ def try_use_credits(device_id: str, amount: int) -> bool:
         return False
 
 
-def record_diagram_grant(device_id: str, diagram_id: str, study_notes_json: str) -> None:
-    """Record a freshly completed 5-credit diagram result.
+# ── Explain Visually entitlements ───────────────────────────────────────────
 
-    This is the ONLY way a device earns an Explain Visually entitlement. It is
-    called after a successful 5-credit diagram extraction, never at request
-    start. One generation per purchased result: once visual_url is set it stays
-    immutable and the image model is never called again for that diagram_id.
-    The study notes are stored server-side so the visual route can reuse them
-    without trusting client input.
-    """
-    conn = _get_conn()
-    conn.execute(
-        "INSERT OR IGNORE INTO visual_explanations (diagram_id, device_id, study_notes_json, generated_at) VALUES (?, ?, ?, ?)",
+
+def record_diagram_grant(device_id: str, diagram_id: str, study_notes_json: str) -> None:
+    """Record a completed 5-credit diagram result (idempotent)."""
+    get_database().execute(
+        "INSERT INTO visual_explanations "
+        "(diagram_id, device_id, study_notes_json, generated_at) "
+        "VALUES (?, ?, ?, ?) ON CONFLICT (diagram_id) DO NOTHING",
         (diagram_id, device_id, study_notes_json, int(time.time())),
     )
-    conn.commit()
 
 
 def get_visual_entitlement(diagram_id: str) -> tuple[str, str, str, str, str] | None:
-    """Return (device_id, visual_url, render_mode, visual_svg, study_notes_json).
-
-    visual_url == "" and visual_svg == "" means entitled but not yet generated
-    (lazy on click). A non-empty visual_url/visual_svg is immutable — reuse it,
-    never re-generate. render_mode is "deterministic" | "generative" | "".
-    """
-    conn = _get_conn()
-    row = conn.execute(
+    """Return (device_id, visual_url, render_mode, visual_svg, study_notes_json)."""
+    row = get_database().execute(
         "SELECT device_id, visual_url, render_mode, visual_svg, study_notes_json "
         "FROM visual_explanations WHERE diagram_id = ?",
         (diagram_id,),
@@ -281,11 +226,11 @@ def get_visual_entitlement(diagram_id: str) -> tuple[str, str, str, str, str] | 
     if row is None:
         return None
     return (
-        row["device_id"],
-        row["visual_url"],
-        row["render_mode"],
-        row["visual_svg"],
-        row["study_notes_json"],
+        _as_str(row, "device_id"),
+        _as_str(row, "visual_url"),
+        _as_str(row, "render_mode"),
+        _as_str(row, "visual_svg"),
+        _as_str(row, "study_notes_json"),
     )
 
 
@@ -297,14 +242,35 @@ def set_visual_result(
     visual_svg: str = "",
 ) -> bool:
     """Persist the generated visual result. Refuses to overwrite an existing result."""
-    conn = _get_conn()
-    cur = conn.execute(
+    updated = get_database().execute(
         "UPDATE visual_explanations SET visual_url = ?, render_mode = ?, visual_svg = ? "
         "WHERE diagram_id = ? AND device_id = ? AND visual_url = '' AND visual_svg = ''",
         (visual_url, render_mode, visual_svg, diagram_id, device_id),
     )
-    conn.commit()
-    return cur.rowcount > 0
+    return updated.rowcount > 0
+
+
+# ── Payment orders ──────────────────────────────────────────────────────────
+
+
+def get_order(order_id: str) -> OrderRecord | None:
+    row = get_database().execute(
+        "SELECT order_id, device_id, plan, credits, amount, status, "
+        "razorpay_payment_id FROM razorpay_orders WHERE order_id = ?",
+        (order_id,),
+    ).fetchone()
+    return None if row is None else _order_record(row)
+
+
+def put_order(
+    order_id: str, device_id: str, plan: str, credits: int, amount: int
+) -> None:
+    get_database().execute(
+        "INSERT INTO razorpay_orders "
+        "(order_id, device_id, plan, credits, amount, status, created_at) "
+        "VALUES (?, ?, ?, ?, ?, 'created', ?) ON CONFLICT (order_id) DO NOTHING",
+        (order_id, device_id, plan, credits, amount, int(time.time())),
+    )
 
 
 def complete_order_and_credit(
@@ -312,62 +278,56 @@ def complete_order_and_credit(
 ) -> tuple[bool, int]:
     """Atomically claim a paid order and credit its device exactly once.
 
-    Returns ``(newly_completed, credits_remaining)``. The status claim
-    (``status='created' -> 'completed'``) and the balance update share one
-    ``BEGIN IMMEDIATE`` transaction, so:
-      - two concurrent verifies cannot both add credits (the second sees
-        rowcount 0 and adds nothing);
-      - there is no state where an order is marked completed but unpaid, or
-        paid but still claimable;
-      - the credits always go to the device stored on the order, never to a
-        device id supplied by the caller.
+    The status claim and the balance update share one transaction. A second
+    concurrent verify blocks on the order row, then sees ``status='completed'``
+    and adds nothing. Credits always go to the device stored on the order.
     """
     from app.exceptions import InvalidInputError
 
-    conn = _get_conn()
+    database = get_database()
     init_device(device_id)
     try:
-        conn.execute("BEGIN IMMEDIATE")
-        row = conn.execute(
-            "SELECT device_id, credits FROM razorpay_orders "
-            "WHERE order_id = ? AND status = 'created'",
-            (order_id,),
-        ).fetchone()
-        if row is None:
-            conn.execute("ROLLBACK")
-            return False, peek_credits(device_id)[0]
-        if row["device_id"] != device_id:
-            conn.execute("ROLLBACK")
-            raise InvalidInputError(message="Order does not belong to this device")
-        claimed = conn.execute(
-            "UPDATE razorpay_orders SET status = 'completed', razorpay_payment_id = ? "
-            "WHERE order_id = ? AND status = 'created'",
-            (payment_id, order_id),
-        )
-        if claimed.rowcount == 0:
-            conn.execute("ROLLBACK")
-            return False, peek_credits(device_id)[0]
-        credits = int(row["credits"])
-        conn.execute(
-            "UPDATE device_credits SET credits_remaining = credits_remaining + ? "
-            "WHERE device_id = ?",
-            (credits, device_id),
-        )
-        balance = conn.execute(
-            "SELECT credits_remaining FROM device_credits WHERE device_id = ?",
-            (device_id,),
-        ).fetchone()
-        conn.execute("COMMIT")
+        with database.transaction() as tx:
+            row = tx.execute(
+                "SELECT device_id, credits FROM razorpay_orders "
+                "WHERE order_id = ?",
+                (order_id,),
+            ).fetchone()
+            if row is None:
+                balance = tx.execute(
+                    "SELECT credits_remaining FROM device_credits WHERE device_id = ?",
+                    (device_id,),
+                ).fetchone()
+                return False, _as_int(balance, "credits_remaining") if balance else 0
+            if _as_str(row, "device_id") != device_id:
+                raise InvalidInputError(message="Order does not belong to this device")
+            claimed = tx.execute(
+                "UPDATE razorpay_orders SET status = 'completed', "
+                "razorpay_payment_id = ? WHERE order_id = ? AND status = 'created'",
+                (payment_id, order_id),
+            )
+            if claimed.rowcount == 0:
+                balance = tx.execute(
+                    "SELECT credits_remaining FROM device_credits WHERE device_id = ?",
+                    (device_id,),
+                ).fetchone()
+                return False, _as_int(balance, "credits_remaining") if balance else 0
+            credits = _as_int(row, "credits")
+            tx.execute(
+                "UPDATE device_credits SET credits_remaining = credits_remaining + ? "
+                "WHERE device_id = ?",
+                (credits, device_id),
+            )
+            balance = tx.execute(
+                "SELECT credits_remaining FROM device_credits WHERE device_id = ?",
+                (device_id,),
+            ).fetchone()
+            remaining = _as_int(balance, "credits_remaining") if balance else 0
     except InvalidInputError:
         raise
-    except sqlite3.Error as exc:
-        try:
-            conn.execute("ROLLBACK")
-        except sqlite3.Error:
-            pass
-        logger.error("Order completion failed for %s: %s", order_id[:12], exc)
+    except Exception as exc:
+        logger.error("Order completion failed for %s: %s", order_id[:12], type(exc).__name__)
         raise
-    remaining = int(balance["credits_remaining"]) if balance is not None else 0
     logger.info(
         "Order %s credited %d for %s (now %d)",
         order_id[:12],
@@ -378,43 +338,55 @@ def complete_order_and_credit(
     return True, remaining
 
 
-# ── Users (for signup/login — credits stick to email, not clearable localStorage) ──
+# ── Users (credits stick to email, not clearable localStorage) ──────────────
+
 
 def create_user(email: str, password_hash: str, name: str = "", picture: str = "") -> str:
-    import uuid
-
     user_id = uuid.uuid4().hex
-    conn = _get_conn()
+    database = get_database()
     try:
-        conn.execute(
-            "INSERT INTO users (id, email, password_hash, name, picture, credits_remaining, credits_used, created_at) "
-            "VALUES (?, ?, ?, ?, ?, ?, 0, ?)",
-            (user_id, email.lower().strip(), password_hash, name.strip(), picture.strip(), settings.FREE_CREDITS_MONTHLY, int(time.time())),
+        database.execute(
+            "INSERT INTO users "
+            "(id, email, password_hash, name, picture, credits_remaining, "
+            " credits_used, created_at) VALUES (?, ?, ?, ?, ?, ?, 0, ?)",
+            (
+                user_id,
+                email.lower().strip(),
+                password_hash,
+                name.strip(),
+                picture.strip(),
+                settings.FREE_CREDITS_MONTHLY,
+                int(time.time()),
+            ),
         )
-        conn.commit()
         return user_id
-    except sqlite3.IntegrityError as e:
-        if "UNIQUE" in str(e) or "users.email" in str(e):
+    except Exception as exc:
+        if database.is_unique_violation(exc):
             from app.exceptions import InvalidInputError
 
-            raise InvalidInputError(message="Email already registered. Please log in.")
+            raise InvalidInputError(message="Email already registered. Please log in.") from exc
         raise
 
 
 def set_user_picture(user_id: str, picture: str) -> None:
-    conn = _get_conn()
-    conn.execute("UPDATE users SET picture = ? WHERE id = ? AND picture = ''", (picture.strip(), user_id))
-    conn.commit()
+    get_database().execute(
+        "UPDATE users SET picture = ? WHERE id = ? AND picture = ''",
+        (picture.strip(), user_id),
+    )
 
 
-def get_user_by_email(email: str) -> sqlite3.Row | None:
-    conn = _get_conn()
-    return conn.execute("SELECT * FROM users WHERE email = ?", (email.lower().strip(),)).fetchone()
+def get_user_by_email(email: str) -> UserRecord | None:
+    row = get_database().execute(
+        "SELECT * FROM users WHERE email = ?", (email.lower().strip(),)
+    ).fetchone()
+    return None if row is None else _user_record(row)
 
 
-def get_user_by_id(user_id: str) -> sqlite3.Row | None:
-    conn = _get_conn()
-    return conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+def get_user_by_id(user_id: str) -> UserRecord | None:
+    row = get_database().execute(
+        "SELECT * FROM users WHERE id = ?", (user_id,)
+    ).fetchone()
+    return None if row is None else _user_record(row)
 
 
 def get_user_credits(user_id: str) -> tuple[int, int]:
@@ -427,47 +399,46 @@ def get_user_credits(user_id: str) -> tuple[int, int]:
 
 
 def use_user_credits(user_id: str, amount: int) -> int:
-    from app.exceptions import CreditLimitError
+    from app.exceptions import AuthError, CreditLimitError
 
-    conn = _get_conn()
-    try:
-        conn.execute("BEGIN IMMEDIATE")
-        row = conn.execute("SELECT credits_remaining FROM users WHERE id = ?", (user_id,)).fetchone()
-        if row is None:
-            conn.execute("ROLLBACK")
-            from app.exceptions import AuthError
-
-            raise AuthError(message="User not found")
-        if row["credits_remaining"] < amount:
-            conn.execute("ROLLBACK")
-            raise CreditLimitError()
-        conn.execute(
-            "UPDATE users SET credits_remaining = credits_remaining - ?, credits_used = credits_used + ? WHERE id = ?",
-            (amount, amount, user_id),
-        )
-        conn.execute("COMMIT")
-    except CreditLimitError:
-        raise
-    except sqlite3.Error as e:
-        try:
-            conn.execute("ROLLBACK")
-        except sqlite3.Error:
-            pass
-        if "negative" in str(e).lower() or "CHECK" in str(e):
-            raise CreditLimitError() from e
-        raise
-    row = get_user_by_id(user_id)
-    assert row is not None
-    logger.info("Used %d credits for user %s (now %d)", amount, user_id[:8], row["credits_remaining"])
-    return row["credits_remaining"]
+    if amount <= 0:
+        raise ValueError("credit amount must be positive")
+    database = get_database()
+    row = database.execute(
+        "SELECT credits_remaining FROM users WHERE id = ?", (user_id,)
+    ).fetchone()
+    if row is None:
+        raise AuthError(message="User not found")
+    updated = database.execute(
+        "UPDATE users SET credits_remaining = credits_remaining - ?, "
+        "credits_used = credits_used + ? "
+        "WHERE id = ? AND credits_remaining >= ?",
+        (amount, amount, user_id, amount),
+    )
+    if updated.rowcount == 0:
+        raise CreditLimitError()
+    refreshed = get_user_by_id(user_id)
+    if refreshed is None:
+        raise AuthError(message="User not found")
+    logger.info(
+        "Used %d credits for user %s (now %d)",
+        amount,
+        user_id[:8],
+        refreshed["credits_remaining"],
+    )
+    return refreshed["credits_remaining"]
 
 
 def add_user_credits(user_id: str, amount: int) -> int:
-    conn = _get_conn()
-    conn.execute(
-        "UPDATE users SET credits_remaining = credits_remaining + ? WHERE id = ?", (amount, user_id)
+    if amount < 0:
+        raise ValueError("credit amount cannot be negative")
+    get_database().execute(
+        "UPDATE users SET credits_remaining = credits_remaining + ? WHERE id = ?",
+        (amount, user_id),
     )
-    conn.commit()
     row = get_user_by_id(user_id)
-    assert row is not None
+    if row is None:
+        from app.exceptions import AuthError
+
+        raise AuthError(message="User not found")
     return row["credits_remaining"]

@@ -51,7 +51,12 @@ async def test_health():
     assert isinstance(body["auth_secret_storage_reason"], str)
     assert isinstance(body["credits_db_absolute"], bool)
     assert isinstance(body["credits_db_on_mount"], bool)
-    assert body["credits_db_source"] in ("environment", "render_default")
+    assert body["credits_db_source"] in ("environment", "render_default", "postgres")
+    assert body["storage_backend"] in ("sqlite", "postgres")
+    assert isinstance(body["database_configured"], bool)
+    assert body["database_reachable"] is True
+    assert isinstance(body["database_latency_ms"], (int, float))
+    assert body["database_size_bytes"] is None or body["database_size_bytes"] > 0
 
 
 @pytest.mark.asyncio
